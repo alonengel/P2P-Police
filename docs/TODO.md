@@ -69,10 +69,10 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 
 ## Phase 7 — Reporting + GUI (PRD_07)
 - [x] report/artifacts: all four Table-20 artifacts emitted per game (shared game_uid, game_id-derived names; config archived to config/games/ per rules 3-4)
-- [ ] report/result_report: agreement handshake; infra/email_sender (gmail.send only, real send)
+- [x] infra/email_sender: Gmail REST over httpx, send-only scope, gatekeeper 'email' service, 429 backoff; REAL send verified (4 artifacts attached); scripts/gmail_auth.py mints send-only tokens
 - [ ] gui/live_view: belief heatmap + YOUR TURN/LOCKED banner (LOCAL TRUTH ONLY)
 - [x] verify-log CLI: headless replay verification engine on saved logs (real-log Verified OK; tampered-log TAMPERED proven)
-- [ ] gui/replay viewer (visual wrapper over verify-log + step-through board)
+- [x] gui/replay viewer: verdict banner (Verified OK/TAMPERED), step-through board, hints shown; DPI-aware --screenshot; submission PNG captured (assets/replay_verified_ok.png)
 - [ ] Screenshots of every screen/state → assets/
 
 ## Phase 8 — Submission

@@ -29,6 +29,9 @@ def build_parser() -> argparse.ArgumentParser:
         "verify-log", help="recompute every sealed record in a saved game log"
     )
     verify.add_argument("--log", required=True, help="path to a log_*.json artifact")
+    replay = subcommands.add_parser("replay", help="step through a saved game with verification")
+    replay.add_argument("--log", required=True, help="path to a log_*.json artifact")
+    replay.add_argument("--screenshot", default=None, help="save a PNG and exit")
     return parser
 
 
@@ -47,4 +50,14 @@ def main(argv: list[str] | None = None) -> int:
         verdict = SimulationSdk.verify_log(args.log)
         print(verdict)
         return 0 if verdict == "Verified OK" else 1
+    if args.command == "replay":
+        from p2p_police.gui.replay import ReplayApp
+
+        app = ReplayApp(args.log)
+        if args.screenshot:
+            app.screenshot(args.screenshot)
+            print(f"screenshot saved: {args.screenshot}")
+            return 0
+        app.run()
+        return 0
     return 0
