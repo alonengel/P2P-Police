@@ -108,6 +108,13 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   is the single entry to business logic.
 - **Commit order is negotiated** — an explicit agreement field, because two
   correct-but-different implementations would deadlock forever.
+- **The three classic orchestration failures** (course L09 framing) and our
+  antidotes: *task duplication* — impossible, roles are disjoint by
+  construction; *contradictory outputs* — replicated engines + end-state
+  digests + mutual audit force one truth; *convergence failure* — strict
+  turn alternation with deadlines makes unbounded loops unrepresentable.
+  (MCP is the project's mandated protocol; A2A and ACP are the complementary
+  standards worth knowing for lifecycle handoff and zero-trust fleets.)
 
 ### 3. The chosen strategy
 

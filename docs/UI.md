@@ -4,8 +4,8 @@
 
 | State | Evidence | What the user sees |
 |---|---|---|
-| Live — YOUR TURN | green banner (see live view) | act-enabled; belief heatmap current |
-| Live — LOCKED | gray banner "LOCKED - opponent moving" | input frozen; prevents race conditions (the async FSM made visible) |
+| Live — YOUR TURN | `assets/live_your_turn.png` | green banner; act-enabled; belief heatmap current |
+| Live — LOCKED | `assets/live_locked.png` | gray banner; input frozen; prevents race conditions (the async FSM made visible) |
 | Live — GAME OVER | `assets/live_belief_map.png` | purple banner + final belief state |
 | Replay — Verified OK | `assets/replay_verified_ok.png` | green banner, step controls, hint per step |
 | Replay — TAMPERED | `assets/replay_tampered_demo.png` | red "TAMPERED - game void" (one rewritten move) |
@@ -37,3 +37,5 @@
 High-contrast palette on dark background; color never the sole signal (banner
 TEXT states the mode); keyboard-free replay via large buttons; window scales
 from `[gui]`-configurable cell size; DPI-aware rendering on Windows.
+
+State captures are reproducible: `uv run python scripts/capture_ui_states.py`.
