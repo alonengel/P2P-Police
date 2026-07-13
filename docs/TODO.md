@@ -59,10 +59,13 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [ ] Milestone: full game over public URL
 
 ## Phase 6 — Crypto (PRD_06)
-- [ ] domain/crypto: canonical JSON (pinned field set incl. hint/verdict/step/role/sub_game), SHA-256 commit/verify, secrets nonce
-- [ ] peer/sealing + peer/handshake (step-0: hardware, commit hash, game count)
-- [ ] peer/audit: full nonce reveal + recompute + verdict
-- [ ] Tamper-injection test → TAMPERED
+- [x] domain/crypto: canonical JSON, pinned 7-field sealed record, SHA-256 commit/verify, secrets nonce, binary audit
+- [x] peer/sealing: SealedExchange - 4-phase commit/ack/reveal/audit per half-turn
+- [ ] peer/handshake step-0 (hardware spec, commit hash, game-count declaration) - with Phase 7 declaration artifact
+- [x] peer/audit: nonces ride the end audit message; every rival record recomputed -> Verified OK/TAMPERED in the report
+- [x] Tamper-injection tests -> TAMPERED (payload rewrite, wrong nonce, count mismatch)
+- [x] FSM wired into the runtime (COMPUTING->COMMITTING->AWAITING_REVEAL->VERIFYING; failures -> terminal TECHNICAL_LOSS)
+- [x] MILESTONE: cross-repo match fully sealed - 35 steps, audit Verified OK both sides
 
 ## Phase 7 — Reporting + GUI (PRD_07)
 - [ ] report/schemas + emit: declaration/config/log/result (game_uid naming)

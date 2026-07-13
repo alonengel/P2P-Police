@@ -13,10 +13,12 @@ from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.negotiation import build_agreement, verify_agreement
-from p2p_police.domain.primitives import Move, Outcome, Role
+from p2p_police.domain.primitives import GamePhase, Move, Outcome, Role
+from p2p_police.domain.state_machine import GamePhaseMachine
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
+from p2p_police.peer.sealing import SealedExchange
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.hints import build_hint, parse_claim
 from p2p_police.strategy.talk_providers import build_talk_chain
@@ -49,6 +51,15 @@ class GeometricRuntime:
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.belief = BeliefMap(config.grid_size)
         self.talk = build_talk_chain(config, brain.rng)
+        self.fsm = GamePhaseMachine()
+        self.exchange = SealedExchange(
+            role,
+            int(config.private["game"]["sub_game_number"]),
+            lambda msg: self.transport.send_turn(
+                msg, Deadline(self.config.turn_timeout_seconds)
+            ),
+            lambda what: self._wait(self.inboxes.turns, what),
+        )
 
     def _wait(self, inbox: queue.Queue, what: str) -> dict:
         deadline = Deadline(self.config.turn_timeout_seconds)
@@ -68,27 +79,29 @@ class GeometricRuntime:
         return theirs
 
     def _my_half_turn(self, turn_index: int) -> None:
+        self.fsm.transition(GamePhase.COMPUTING_MOVE)
         action = self.brain.decide(self.engine, self.belief)
-        protocol.apply_action(self.engine, self.role, action)
         moved = action["move"] if action["type"] == "move" else "STAY"
-        _text, claim, _truth = build_hint(
+        _text, claim, truth = build_hint(
             Move[moved],
             self.brain.rng.random() < TRUTH_PROBABILITY,
             self.config.shared["world"]["hint_max_words"],
             self.brain.rng,
         )
         text = self.talk.render(claim, turn_index)
-        message = protocol.turn_message(turn_index, self.role, action, hint=text)
-        self.transport.send_turn(message, Deadline(self.config.turn_timeout_seconds))
+        self.fsm.transition(GamePhase.COMMITTING)
+        self.exchange.send_sealed(self.engine, turn_index, action, text, truth)
+        self.fsm.transition(GamePhase.AWAITING_REVEAL)
+        protocol.apply_action(self.engine, self.role, action)
+        self.fsm.transition(GamePhase.VERIFYING)
+        self.fsm.transition(GamePhase.WAITING_FOR_OPPONENT)
 
     def _their_half_turn(self, turn_index: int) -> None:
-        payload = self._wait(self.inboxes.turns, f"opponent turn {turn_index}")
-        seen_index, actor, action = protocol.parse_turn_message(payload)
-        if actor is self.role or seen_index != turn_index:
-            raise GameRuleError(
-                f"turn desync: expected opponent turn {turn_index}, got {payload!r}"
-            )
-        protocol.apply_action(self.engine, actor, action)
+        payload = self.exchange.receive_sealed(turn_index)
+        actor = Role(payload["role"])
+        if actor is self.role:
+            raise GameRuleError("opponent claimed our role in a sealed record")
+        protocol.apply_action(self.engine, actor, payload["action"])
         self._update_belief(actor, payload.get("hint"))
 
     def _update_belief(self, rival, hint_text) -> None:
@@ -102,15 +115,22 @@ class GeometricRuntime:
             self.belief.observe_hint(claim, rival_scent)
 
     def play(self) -> dict:
-        """Run negotiation and the full lockstep game; return the end report."""
-        self.negotiate()
-        turn_index = 0
-        while self.engine.outcome is Outcome.ONGOING:
-            turn_index += 1
-            if self.engine.next_actor is self.role:
-                self._my_half_turn(turn_index)
-            else:
-                self._their_half_turn(turn_index)
+        """Run negotiation and the full lockstep game; return the end report.
+        Deadline/rule failures route to terminal TECHNICAL_LOSS (rules 4-6)."""
+        try:
+            self.negotiate()
+            turn_index = 0
+            while self.engine.outcome is Outcome.ONGOING:
+                turn_index += 1
+                if self.engine.next_actor is self.role:
+                    self._my_half_turn(turn_index)
+                else:
+                    self._their_half_turn(turn_index)
+        except (DeadlineExpiredError, GameRuleError):
+            if self.fsm.can_transition(GamePhase.TECHNICAL_LOSS):
+                self.fsm.transition(GamePhase.TECHNICAL_LOSS)
+            self.engine.outcome = Outcome.TECHNICAL_LOSS
+            raise
         return self._finish()
 
     def _finish(self) -> dict:
@@ -119,18 +139,27 @@ class GeometricRuntime:
         # reached us, our send may fail although the exchange succeeded.
         with contextlib.suppress(DeadlineExpiredError):
             self.transport.send_audit(
-                {"end_state_digest": digest, "group_id": self.config.group_id},
+                {
+                    "end_state_digest": digest,
+                    "group_id": self.config.group_id,
+                    "nonces": self.exchange.own_nonces(),
+                },
                 Deadline(self.config.turn_timeout_seconds),
             )
+        audit_verdict = "TAMPERED"
+        digest_match = False
         try:
-            theirs = self._wait(self.inboxes.audits, "opponent end-state digest")
+            theirs = self._wait(self.inboxes.audits, "opponent audit (nonces + digest)")
             digest_match = theirs.get("end_state_digest") == digest
+            audit_verdict = self.exchange.audit_theirs(theirs.get("nonces", []))
         except DeadlineExpiredError:
-            digest_match = False
+            pass
         return {
             "role": self.role.value,
             "outcome": self.engine.outcome.value,
             "turns_completed": self.engine.turns_completed,
             "end_state_digest": digest,
             "digest_match": digest_match,
+            "audit": audit_verdict,
+            "steps_sealed": len(self.exchange.own_records),
         }

@@ -1,0 +1,71 @@
+"""SealedExchange: the four-phase commit-reveal flow of one peer (ch. 5).
+
+Per half-turn: COMMIT (hash only) -> opponent's ack locks it -> REVEAL
+(payload, nonce still secret) -> apply. At game end the nonces are revealed
+and every stored record is recomputed (mutual audit, rules 17-21).
+"""
+
+from p2p_police.domain import crypto, protocol
+from p2p_police.domain.engine import GameEngine
+from p2p_police.domain.errors import GameRuleError
+from p2p_police.domain.primitives import Role
+
+
+class SealedExchange:
+    """Input: my role/sub_game + send/wait callables from the runtime.
+    Output: applied opponent actions + audit verdicts. Setup: empty logs."""
+
+    def __init__(self, role: Role, sub_game: int, send_turn, wait_turn) -> None:
+        self.role = role
+        self.sub_game = sub_game
+        self._send = send_turn
+        self._wait = wait_turn
+        self.own_records: list[dict] = []   # {payload, nonce, commit}
+        self.their_records: list[dict] = [] # {payload, commit}
+
+    def send_sealed(
+        self, engine: GameEngine, turn_index: int, action: dict, hint: str, verdict: bool
+    ) -> None:
+        """COMMIT then REVEAL my half-turn; caller applies the action after."""
+        payload = crypto.build_step_payload(
+            turn_index,
+            self.role.value,
+            self.sub_game,
+            protocol.end_state_digest(engine),  # pre-action anchor (ch. 5 State)
+            action,
+            hint,
+            verdict,
+        )
+        nonce = crypto.new_nonce()
+        sealed = crypto.commit_hash(payload, nonce)
+        # phase 1+2: the transport ack of the commit message IS the lock
+        self._send({"kind": "commit", "turn": turn_index, "actor": self.role.value,
+                    "commit": sealed})
+        # phase 3: reveal payload - the nonce stays secret until audit
+        self._send({"kind": "reveal", "turn": turn_index, "actor": self.role.value,
+                    "payload": payload})
+        self.own_records.append({"payload": payload, "nonce": nonce, "commit": sealed})
+
+    def receive_sealed(self, turn_index: int) -> dict:
+        """Wait for the opponent's commit then reveal; store; return payload."""
+        commit_msg = self._wait(f"opponent commit {turn_index}")
+        if commit_msg.get("kind") != "commit" or commit_msg.get("turn") != turn_index:
+            raise GameRuleError(f"protocol desync: expected commit {turn_index}, got {commit_msg!r}")
+        if commit_msg.get("actor") == self.role.value:
+            raise GameRuleError("opponent echoed our own role in a commit")
+        reveal_msg = self._wait(f"opponent reveal {turn_index}")
+        if reveal_msg.get("kind") != "reveal" or reveal_msg.get("turn") != turn_index:
+            raise GameRuleError(f"protocol desync: expected reveal {turn_index}, got {reveal_msg!r}")
+        payload = reveal_msg.get("payload") or {}
+        missing = [f for f in crypto.REQUIRED_RECORD_FIELDS if f not in payload]
+        if missing:
+            raise GameRuleError(f"opponent reveal missing sealed fields: {missing}")
+        self.their_records.append({"payload": payload, "commit": commit_msg["commit"]})
+        return payload
+
+    def own_nonces(self) -> list[str]:
+        return [record["nonce"] for record in self.own_records]
+
+    def audit_theirs(self, revealed_nonces: list[str]) -> str:
+        """'Verified OK' or 'TAMPERED' (binary; one forged step voids all)."""
+        return crypto.audit_records(self.their_records, revealed_nonces)
