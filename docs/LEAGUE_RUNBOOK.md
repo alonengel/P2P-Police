@@ -10,9 +10,16 @@ costs points or disqualifies (rule numbers from the rulebook's Appendix ה/ו).
 2. **Negotiate the shared game.json** — any change to negotiable values, and
    minimums may only go UP (rule 12). Both sides must load a byte-identical
    file (rule 11; the code verifies the sha and refuses otherwise).
-3. **Exchange + lock the scent model** (rule 23): share our scent spec
-   including the numeric example AND the re-emission clamp at 0.9 — the clamp
-   EXTENDS the book's literal formula; an opponent without it will fail audit.
+3. **Exchange + lock the scent model** (rule 23) — and OFFER OUR CODE
+   (book ch. 4.5: "permitted and even recommended"). Attach two files:
+   `src/p2p_police/domain/scent.py` and `tests/vectors/physics_vectors.json`.
+   Ready-to-paste message: *"Our scent model incl. the re-emission clamp at
+   0.9 (extends the book's literal formula — without it you fail our audit).
+   Either run this exact file or verify your implementation reproduces the
+   attached golden vectors bit-for-bit; our negotiation checks
+   scent_model_sha256 before move one either way."*
+   Scent physics is pure dice — zero strategy inside; sharing it eliminates
+   the divergent-float technical-loss class for both teams.
 4. **Warm-up games are allowed and wise** (uncounted); declare which game is
    the counted one BEFORE it starts.
 5. **Truthful game-count declaration** (rules 37-38): the lecturer
