@@ -52,8 +52,9 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] shared/gatekeeper + rate_limiter (token bucket, daily quota threshold, DOS circuit breaker)
 
 ## Phase 5 — Tunneling (PRD_05)
-- [~] Cloudflare quick tunnel VERIFIED reachable (cloudflared 2026.5.2, tunnel registered); FIRST FINDING: per-call MCP client sessions die through the proxy ("Session terminated") -> make McpTransport reuse ONE persistent Client session across calls (ex6 lesson: connection reuse; also a perf win), then retry the public game
-- [ ] Cloudflare quick tunnel flow + named tunnel docs (DEPLOYMENT.md)
+- [x] Persistent single-session McpTransport (dedicated loop thread, session rebuild on failure)
+- [x] MILESTONE: full blind game over https://mcp.alon.website (named tunnel) - 35 turns, digests identical (results/public_tunnel_prd05_2026-07-13.json)
+- [ ] DEPLOYMENT.md: named-tunnel runbook (config.yml ingress -> my_port), quick-tunnel fallback, bearer-token protection
 - [ ] peer/watchdog + reconnect hardening
 - [ ] Milestone: full game over public URL
 

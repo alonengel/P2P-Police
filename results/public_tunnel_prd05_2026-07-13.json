@@ -1,0 +1,20 @@
+{
+  "milestone": "PRD-05: full game over the PUBLIC INTERNET (Cloudflare named tunnel)",
+  "date": "2026-07-13",
+  "public_url": "https://mcp.alon.website/mcp (named tunnel 'copthief' -> localhost:8801)",
+  "police": {
+    "role": "police",
+    "outcome": "survival",
+    "turns_completed": 35,
+    "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+    "digest_match": true
+  },
+  "thief": {
+    "role": "thief",
+    "outcome": "survival",
+    "turns_completed": 35,
+    "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+    "digest_match": true
+  },
+  "notes": "Persistent single MCP session per transport (per-call sessions died through the proxy). 35 blind turns, survival, digests identical."
+}

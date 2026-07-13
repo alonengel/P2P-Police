@@ -78,3 +78,9 @@ gitleaks CI).
   outcome `capture` on BOTH sides, end-state digests identical
   (`results/cross_match_prd02_2026-07-13.json`). Runner:
   workspace `run_cross_match.ps1`.
+- **PRD-05 (2026-07-13):** full BLIND game over the PUBLIC INTERNET - police
+  connected to the thief through `https://mcp.alon.website/mcp` (Cloudflare
+  NAMED tunnel -> localhost:8801). 35 turns, survival, identical digests
+  (`results/public_tunnel_prd05_2026-07-13.json`). Required fix en route:
+  ONE persistent MCP session per transport - per-call sessions are terminated
+  by the proxy (ex6's connection-reuse lesson, re-learned live).
