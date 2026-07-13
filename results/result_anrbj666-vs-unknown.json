@@ -1,0 +1,24 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "audit": "unavailable (technical loss)",
+  "digest_match": false,
+  "end_state_digest": "cf10bd9476faee345e36347146e745355aabe345326927b5d0f9bbaf8f07a5fc",
+  "game_id": "anrbj666-vs-unknown",
+  "game_uid": "b5d397460c6341be844a82507fb24fdf",
+  "github_commit": "c993d3914d9b67469ef4eef8ffa2fe4893e092c1",
+  "group_id": "anrbj666",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "outcome": "technical_loss",
+  "report_type": "result",
+  "reported_at": "2026-07-13T18:15:46+00:00",
+  "schema_version": "1.00",
+  "score": {
+    "cop": 0,
+    "thief": 0
+  },
+  "tokens_total": 0,
+  "turns_completed": 0
+}

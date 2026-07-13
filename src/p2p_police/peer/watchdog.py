@@ -13,6 +13,13 @@ from collections.abc import Callable
 from pathlib import Path
 
 
+class NullWatchdog:
+    """No-op stand-in so callers beat unconditionally (keeps hot paths flat)."""
+
+    def beat(self) -> None:
+        return
+
+
 class Watchdog:
     """Input: heartbeats + a state provider. Output: crash dump + shutdown."""
 

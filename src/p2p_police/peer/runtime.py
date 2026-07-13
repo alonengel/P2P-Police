@@ -19,6 +19,7 @@ from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.peer.perception import Perception
 from p2p_police.peer.sealing import SealedExchange
+from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.hints import build_hint
@@ -53,7 +54,7 @@ class GeometricRuntime:
         self.perception = Perception(role, config.grid_size)
         self.talk = build_talk_chain(config, brain.rng)
         self.fsm = GamePhaseMachine()
-        self.watchdog = None  # optional; SDK wires it (rule 7)
+        self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
 
         self.exchange = SealedExchange(
             role,
@@ -67,6 +68,7 @@ class GeometricRuntime:
     def _wait(self, inbox: queue.Queue, what: str) -> dict:
         deadline = Deadline(self.config.turn_timeout_seconds)
         while True:
+            self.watchdog.beat()  # polling IS liveness; deadlines guard rivals
             deadline.require(what)
             try:
                 return inbox.get(timeout=min(0.25, max(0.01, deadline.remaining())))
@@ -111,15 +113,13 @@ class GeometricRuntime:
 
 
     def play(self) -> dict:
-        """Run negotiation and the full lockstep game; return the end report.
-        Deadline/rule failures route to terminal TECHNICAL_LOSS (rules 4-6)."""
+        """Full lockstep game; failures route to TECHNICAL_LOSS (rules 4-6)."""
         try:
             self.negotiate()
             turn_index = 0
             while self.engine.outcome is Outcome.ONGOING:
                 turn_index += 1
-                if self.watchdog is not None:
-                    self.watchdog.beat()  # heartbeat per half-turn (rule 7)
+                self.watchdog.beat()  # heartbeat per half-turn (rule 7)
                 if self.engine.next_actor is self.role:
                     self._my_half_turn(turn_index)
                 else:

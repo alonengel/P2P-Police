@@ -1,0 +1,52 @@
+{
+  "milestone": "E2E: fully-public BIDIRECTIONAL game - both peers reached only via public URLs",
+  "date": "2026-07-13",
+  "urls": {
+    "thief": "https://mcp.alon.website/mcp",
+    "police": "https://cop-mcp.alon.website/mcp"
+  },
+  "police": {
+    "role": "police",
+    "outcome": "survival",
+    "turns_completed": 35,
+    "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+    "digest_match": true,
+    "audit": "Verified OK",
+    "steps_sealed": 35,
+    "opponent_group_id": "anrbj666",
+    "artifacts": [
+      "results\\declaration_anrbj666-vs-anrbj666.json",
+      "config\\games\\config_anrbj666-vs-anrbj666_g01.json",
+      "results\\log_anrbj666-vs-anrbj666_g01.json",
+      "results\\result_anrbj666-vs-anrbj666.json"
+    ]
+  },
+  "thief": {
+    "role": "thief",
+    "outcome": "survival",
+    "turns_completed": 35,
+    "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+    "digest_match": true,
+    "audit": "Verified OK",
+    "steps_sealed": 35,
+    "opponent_group_id": "anrbj666",
+    "artifacts": [
+      "results\\declaration_anrbj666-vs-anrbj666.json",
+      "config\\games\\config_anrbj666-vs-anrbj666_g01.json",
+      "results\\log_anrbj666-vs-anrbj666_g01.json",
+      "results\\result_anrbj666-vs-anrbj666.json"
+    ]
+  },
+  "fixes_surfaced_by_this_e2e": [
+    "sub-subdomain broke universal TLS cert -> cop-mcp.alon.website (one level)",
+    "cloudflared resolves 'localhost' to IPv6 ::1 while servers bind IPv4 -> ingress pinned to 127.0.0.1",
+    "502/503/504 through a tunnel are retryable (origin peer not up yet)",
+    "watchdog fired during long negotiation waits -> polling now beats (deadlines guard rivals, watchdog guards freezes)"
+  ],
+  "other_e2e_passes": [
+    "technical-loss still reports 4 artifacts",
+    "auto-email rule 32 (msg 19f5cb38b943ba0c)",
+    "series game_uid stable across all artifacts",
+    "RL brain via [strategy] seam"
+  ]
+}

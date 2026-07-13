@@ -15,15 +15,18 @@ One tunnel (`copthief`, from ex6) carries both agents on separate hostnames:
 | Agent | Public URL | Local service |
 |---|---|---|
 | Thief | `https://mcp.alon.website/mcp` | `http://localhost:8801` |
-| Police | `https://cop.mcp.alon.website/mcp` | `http://localhost:8802` |
+| Police | `https://cop-mcp.alon.website/mcp` | `http://localhost:8802` |
 
 Setup (already done on this machine; for a new one):
 ```bash
 cloudflared tunnel login                       # browser auth
 cloudflared tunnel create copthief
 cloudflared tunnel route dns copthief mcp.alon.website
-cloudflared tunnel route dns copthief cop.mcp.alon.website
-# ~/.cloudflared/config.yml: ingress mapping the two hostnames to 8801/8802
+cloudflared tunnel route dns copthief cop-mcp.alon.website
+# ~/.cloudflared/config.yml: ingress mapping the two hostnames to
+#   http://127.0.0.1:8801 / 8802  (NOT 'localhost' - cloudflared resolves it
+#   to IPv6 ::1 while the servers bind IPv4; also: sub-subdomains like
+#   cop.mcp.* break the universal *.alon.website certificate - stay one level)
 cloudflared tunnel run copthief                # keep running during games
 ```
 Credentials JSON + cert.pem live in `~/.cloudflared/` — NEVER in a repo.
