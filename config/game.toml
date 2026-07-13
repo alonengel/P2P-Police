@@ -1,0 +1,32 @@
+# Private per-peer configuration (rulebook Appendix B).
+# Bright-line rule: anything both sides must agree on lives in game.json (signed);
+# NOTHING game-relevant may live here. game.json always overrides on key overlap.
+
+version = "1.10"
+
+[game]
+group_name = "anrbj666"
+group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
+sub_game_number = 1
+members = ["Alon Engel", "Renat Karimov"]
+repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
+
+[network]
+my_port = 8802                                  # police MCP server port
+opponent_url = "http://127.0.0.1:8801/mcp"      # the ONLY thing we know about the opponent
+turn_timeout_seconds = 180
+
+# [strategy]  -- optional: point at your brain subclass (else the shipped heuristic runs)
+# police_class = "p2p_police.strategy.police_brain:PoliceBrain"
+
+[trash_talk]
+provider = "template"           # template (0 tokens) | ollama | claude_api | claude_cli | openrouter
+every_n_steps = 1
+
+[llm]
+model = ""
+step_deadline_seconds = 30      # hard cap on LLM thinking per step
+
+[email]
+recipient = "rmisegal+uoh26finalgame@gmail.com"
+mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)

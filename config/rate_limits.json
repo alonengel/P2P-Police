@@ -1,0 +1,41 @@
+{
+  "version": "1.00",
+  "services": {
+    "default": {
+      "requests_per_minute": 30,
+      "concurrent_max": 2,
+      "retry_after_seconds": 5,
+      "max_retries": 3
+    },
+    "claude": {
+      "requests_per_minute": 30,
+      "concurrent_max": 2,
+      "retry_after_seconds": 5,
+      "max_retries": 3
+    },
+    "openrouter": {
+      "requests_per_minute": 30,
+      "concurrent_max": 2,
+      "retry_after_seconds": 5,
+      "max_retries": 3
+    },
+    "ollama": {
+      "requests_per_minute": 60,
+      "concurrent_max": 2,
+      "retry_after_seconds": 2,
+      "max_retries": 3
+    },
+    "email": {
+      "requests_per_minute": 5,
+      "concurrent_max": 1,
+      "retry_after_seconds": 10,
+      "max_retries": 3,
+      "daily_quota_safety_threshold": 50
+    }
+  },
+  "queue": {
+    "max_depth": 100,
+    "drain_interval_seconds": 0.1,
+    "wait_timeout_seconds": 300
+  }
+}
