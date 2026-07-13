@@ -13,6 +13,7 @@ from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes, build_peer_server, start_peer_server
 from p2p_police.peer.runtime import GeometricRuntime
 from p2p_police.shared.config import Config
+from p2p_police.strategy.brain_base import resolve_brain
 
 MY_ROLE = Role.POLICE  # this repo IS the police agent (twin repo: thief)
 SHUTDOWN_GRACE_SEC = 1.5  # let the opponent's final MCP session close cleanly
@@ -46,14 +47,18 @@ class SimulationSdk:
         inboxes = PeerInboxes()
         server = build_peer_server(inboxes, name=f"p2p_{MY_ROLE.value}_peer")
         start_peer_server(server, self.config.my_port)
-        transport = McpTransport(self.config.opponent_url, self.config.retry_backoff_sec)
+        transport = McpTransport(
+            self.config.opponent_url,
+            self.config.retry_backoff_sec,
+            self.config.response_timeout_sec,
+        )
         runtime = GeometricRuntime(
             MY_ROLE,
             self.config,
             self.build_engine(),
             transport,
             inboxes,
-            random.Random(seed),
+            resolve_brain(self.config, MY_ROLE, random.Random(seed)),
         )
         report = runtime.play()
         # Shutdown grace: our daemon server dies with the process; give the

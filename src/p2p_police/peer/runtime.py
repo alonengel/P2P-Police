@@ -2,24 +2,21 @@
 
 Both peers replicate the SAME GameEngine; each applies its own action locally
 and mirrors the opponent's received action, so the physics never diverges.
-The move policy here is a deliberate random-legal placeholder — real brains
-arrive with PRD 03 through the [strategy] seam.
+Moves come from the configured brain via the [strategy] seam (PRD 03).
 """
 
 import contextlib
 import queue
-import random
 
 from p2p_police.domain import protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.negotiation import build_agreement, verify_agreement
-from p2p_police.domain.primitives import Move, Outcome, Role
+from p2p_police.domain.primitives import Outcome, Role
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
-
-BARRIER_CHANCE = 0.2  # placeholder-policy tunable, superseded by PRD 03 brains
+from p2p_police.strategy.brain_base import BrainBase
 
 
 class GeometricRuntime:
@@ -36,14 +33,14 @@ class GeometricRuntime:
         engine: GameEngine,
         transport: McpTransport,
         inboxes: PeerInboxes,
-        rng: random.Random,
+        brain: BrainBase,
     ) -> None:
         self.role = role
         self.config = config
         self.engine = engine
         self.transport = transport
         self.inboxes = inboxes
-        self.rng = rng
+        self.brain = brain
 
     def _wait(self, inbox: queue.Queue, what: str) -> dict:
         deadline = Deadline(self.config.turn_timeout_seconds)
@@ -62,26 +59,8 @@ class GeometricRuntime:
         verify_agreement(mine, theirs)
         return theirs
 
-    def _choose_action(self) -> dict:
-        my_cell = self.engine.positions[self.role]
-        if self.role is Role.POLICE and self.rng.random() < BARRIER_CHANCE:
-            reachable = [my_cell] + [
-                m.applied_to(my_cell) for m in (Move.N, Move.S, Move.E, Move.W)
-            ]
-            placeable = [
-                c
-                for c in reachable
-                if self.engine.board.in_bounds(c)
-                and not self.engine.board.is_barrier(c)
-                and len(self.engine.board.barriers) < self.engine.rules.max_barriers
-            ]
-            if placeable:
-                return protocol.barrier_action(self.rng.choice(placeable))
-        legal = self.engine.board.legal_moves(my_cell)
-        return protocol.move_action(self.rng.choice(legal))
-
     def _my_half_turn(self, turn_index: int) -> None:
-        action = self._choose_action()
+        action = self.brain.decide(self.engine)
         protocol.apply_action(self.engine, self.role, action)
         message = protocol.turn_message(turn_index, self.role, action)
         self.transport.send_turn(message, Deadline(self.config.turn_timeout_seconds))

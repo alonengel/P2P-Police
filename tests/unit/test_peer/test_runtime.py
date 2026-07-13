@@ -11,6 +11,7 @@ from p2p_police.domain.primitives import Role
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.runtime import GeometricRuntime
 from p2p_police.shared.config import Config
+from p2p_police.strategy.brain_base import RandomBrain
 
 
 class LoopbackTransport:
@@ -36,7 +37,8 @@ def build_runtime(role: Role, config: Config, transport, inboxes, seed: int):
     engine = GameEngine(
         config.grid_size, config.cop_start, config.thief_start, config.rule_set()
     )
-    return GeometricRuntime(role, config, engine, transport, inboxes, random.Random(seed))
+    brain = RandomBrain(role, random.Random(seed))
+    return GeometricRuntime(role, config, engine, transport, inboxes, brain)
 
 
 def test_two_runtimes_reach_identical_end_state(config_dir: Path) -> None:

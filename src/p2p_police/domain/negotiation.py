@@ -23,6 +23,11 @@ FIXED_TERMS: dict[str, object] = {
     "scoring.survival_cop": 5,
     "scoring.survival_thief": 10,
     "scoring.tie_score": 2,
+    "scoring.technical_loss": 0,
+    "movement_and_barriers.move_set": ["N", "S", "E", "W", "STAY"],
+    "network_and_league.diversity_reward": 10,
+    "network_and_league.min_games_to_pass": 2,
+    "network_and_league.max_games_per_team": 10,
 }
 
 # Appendix VI: MINIMUMS - negotiable upward only (rule 12).

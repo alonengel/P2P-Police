@@ -35,12 +35,13 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] peer/deadline: expiry on every awaited request
 - [x] domain/protocol + peer/runtime + sdk + cli peer subcommand
 - [x] Milestone: geometric game vs P2P-Thief process over localhost — MILESTONE OK (results/cross_match_prd02_2026-07-13.json)
-- [ ] Deferred: spec-auditor sweep of Phase 2 at next session start
+- [x] Spec-audit of Phase 2 done — fixes applied: move_set + technical_loss + league constants added to FIXED_TERMS; in-flight MCP calls bounded by response_timeout_sec (rule 6); COMMIT_ORDER/SHUTDOWN_GRACE noted for config promotion
+- [ ] Phase 6 carry-over (audit): wire GamePhaseMachine into the runtime loop (natural fit with commit/reveal phases); route deadline/rule failures to TECHNICAL_LOSS
 
 ## Phase 3 — Blind strategy (PRD_03)
-- [ ] strategy/brain_base (BrainBase seam, [strategy] toml override)
-- [ ] strategy/police_brain: pursuit + barrier placement on full information
-- [ ] Self-play arena harness; milestone: beats random thief
+- [x] strategy/brain_base (BrainBase seam, [strategy] toml override, loud bad-spec failure)
+- [x] strategy/police_brain: BFS pursuit + surgical trap barriers (+ThiefForArena sparring partner)
+- [x] Self-play arena; MILESTONE: pursuit brain captures >=20/25 random thieves
 
 ## Phase 4 — Language + scent (PRD_04)
 - [ ] domain/belief: Bayesian update from scent + hints; (1-rho) lie detection

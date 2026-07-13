@@ -26,16 +26,21 @@ class McpTransport:
         self,
         opponent_url: str,
         retry_backoff_sec: float,
+        response_timeout_sec: float = 30.0,
         sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self.opponent_url = opponent_url
         self.retry_backoff_sec = retry_backoff_sec
+        self.response_timeout_sec = response_timeout_sec
         self._sleep = sleep
 
-    async def _call_async(self, tool: str, payload: dict) -> dict:
-        async with Client(self.opponent_url) as client:
-            result = await client.call_tool(tool, {"payload": payload})
-            return result.data if isinstance(result.data, dict) else {"data": result.data}
+    async def _call_async(self, tool: str, payload: dict, timeout: float) -> dict:
+        # Bound the IN-FLIGHT call too (rule 6): a connected-but-silent
+        # opponent (wedged server, dropped tunnel) must surface, not hang.
+        async with asyncio.timeout(timeout):
+            async with Client(self.opponent_url) as client:
+                result = await client.call_tool(tool, {"payload": payload})
+                return result.data if isinstance(result.data, dict) else {"data": result.data}
 
     def call(self, tool: str, payload: dict, deadline: Deadline) -> dict:
         """Call an opponent tool, retrying connection failures until deadline.
@@ -45,8 +50,9 @@ class McpTransport:
         """
         while True:
             deadline.require(f"opponent tool '{tool}' at {self.opponent_url}")
+            timeout = min(self.response_timeout_sec, max(0.1, deadline.remaining()))
             try:
-                return asyncio.run(self._call_async(tool, payload))
+                return asyncio.run(self._call_async(tool, payload, timeout))
             except (OSError, ConnectionError, TimeoutError) as error:
                 last = error
             except Exception as error:  # fastmcp wraps httpx errors variously
