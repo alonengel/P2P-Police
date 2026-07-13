@@ -1,0 +1,57 @@
+[project]
+name = "p2p-police"
+version = "1.0.0"
+description = "Police (Cop) agent for the P2P Cops-and-Robbers game over FastMCP - commit-reveal integrity, belief-map strategy, league reporting"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Alon Engel", email = "engel.alon@gmail.com" },
+    { name = "Renat Karimov" },
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=3.4.3",
+]
+
+[project.scripts]
+p2p-police = "p2p_police.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0",
+    "pytest-cov>=7.0",
+    "ruff>=0.15",
+    "pre-commit>=4.0",
+    "pillow>=11.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.9,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "slow: integration tests that spin up real MCP servers",
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+    "*/__main__.py",
+    "*/gui/*",
+]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true

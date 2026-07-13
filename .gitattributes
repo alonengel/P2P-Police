@@ -1,0 +1,7 @@
+# Normalize all text to LF in the repository. Critical: the twin-repo physics
+# parity check compares file bytes across P2P-Police and P2P-Thief, and golden
+# vector JSON must hash identically on every machine.
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.jpg binary
