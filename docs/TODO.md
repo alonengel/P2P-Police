@@ -46,12 +46,13 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 ## Phase 4 — Language + scent (PRD_04)
 - [x] domain/belief: diffuse x scent x hint posterior; (1-rho) lie detection (book p.30 example encoded)
 - [x] strategy/hints: template provider (0 tokens), truth/lie claims + intent flag, word cap on every path
-- [ ] infra/llm_provider registry: ollama/claude_api/claude_cli/openrouter clients behind the gatekeeper + every_n_steps throttle
+- [x] infra/llm_provider registry (ollama/claude_api/claude_cli/openrouter) + TalkChain (every_n_steps, unconditional template fallback, TokenMeter)
 - [x] Hints+belief wired into the runtime (hint rides the turn message; diffuse->scent->hint belief update on receive)
 - [x] Belief-driven brains + blind MILESTONE passed; live blind cross-match: thief survived 35 turns (vs capture-in-13 under full info) - uncertainty works as designed
 - [x] shared/gatekeeper + rate_limiter (token bucket, daily quota threshold, DOS circuit breaker)
 
 ## Phase 5 — Tunneling (PRD_05)
+- [~] Cloudflare quick tunnel VERIFIED reachable (cloudflared 2026.5.2, tunnel registered); FIRST FINDING: per-call MCP client sessions die through the proxy ("Session terminated") -> make McpTransport reuse ONE persistent Client session across calls (ex6 lesson: connection reuse; also a perf win), then retry the public game
 - [ ] Cloudflare quick tunnel flow + named tunnel docs (DEPLOYMENT.md)
 - [ ] peer/watchdog + reconnect hardening
 - [ ] Milestone: full game over public URL
