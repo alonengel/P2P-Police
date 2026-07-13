@@ -43,7 +43,14 @@ config.
   max_moves = survival_threshold = 35, so the branch is theoretical).
 - Emission starts at the first full-turn boundary (no turn-0 emission).
 - Re-emission on an occupied cell is capped at center intensity (τ ≤ 0.9,
-  matching the book's stated range and Fig. 5).
+  matching the book's stated range and Fig. 5). ⚠ This clamp EXTENDS the
+  book's literal formula (which only floors at 0) — it MUST be stated
+  explicitly in the human-readable scent model exchanged and SHA-256-locked
+  with each opponent (rule 23, Phase 6 deliverable), or a literal-formula
+  opponent diverges on any dwelt cell.
+- Reaching the max_moves hard cap uncaptured is DEFINED as thief survival;
+  with the default 35/35 config the distinction never arises (spec-audit
+  MINOR-4).
 
 ## Definition of done
 

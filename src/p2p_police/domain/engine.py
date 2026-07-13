@@ -35,15 +35,20 @@ class GameEngine:
         cop_start: Cell,
         thief_start: Cell,
         rules: RuleSet,
+        center_intensity: float = 0.9,
+        decay: float = 0.10,
+        kernel_size: int = 5,
     ) -> None:
         self.board = Board(grid_size)
         if not self.board.is_passable(cop_start) or not self.board.is_passable(thief_start):
             raise ValueError("start cells must be on the board and passable")
         self.positions: dict[Role, Cell] = {Role.POLICE: cop_start, Role.THIEF: thief_start}
         self.rules = rules
+        # Pheromone params flow from the signed config so a malformed config is
+        # rejected here, at construction, by ScentField's fixed-model guard.
         self.scent: dict[Role, ScentField] = {
-            Role.POLICE: ScentField(grid_size),
-            Role.THIEF: ScentField(grid_size),
+            Role.POLICE: ScentField(grid_size, center_intensity, decay, kernel_size),
+            Role.THIEF: ScentField(grid_size, center_intensity, decay, kernel_size),
         }
         self.turns_completed = 0
         self.outcome = Outcome.ONGOING

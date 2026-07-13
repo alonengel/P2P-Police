@@ -40,3 +40,31 @@ seeded PLAN.md/TODO.md.
 strategy, tunneling tool (ex6 evidence: free ngrok unreliable → Cloudflare),
 LLM provider scope (all four modes + OpenRouter), team identity (anrbj666),
 strategy ambition (strongest per role + optional RL).
+
+---
+
+## 2026-07-13 — Session 2: Phase 1 (base game logic), TDD in paired slices
+
+**Context.** First code phase; everything under `domain/` is parity-locked with
+the twin repo.
+
+**Prompt pattern — spec-quoting tests.** Each test module opens by quoting the
+rulebook rule it encodes (e.g. "rules 13-14", "rule 47") and test names state
+the rule (`test_barrier_beyond_quota_is_rejected`,
+`test_stay_does_not_rescue_a_surrounded_cell`). This keeps the suite readable
+as a compliance checklist, not just a regression net.
+
+**Prompt pattern — golden vectors as the twin contract.** Instead of trusting
+two codebases to "look the same", we generated `physics_vectors.json` from the
+implementation once (kernel, 0.9→0.81→0.729 decay series, corner clipping,
+two-turn evolution) and copied it byte-identically to the sibling; both suites
+assert exact equality. Lesson: **behavioral identity is a test artifact, not a
+code-review promise.**
+
+**Workflow lesson.** The pre-commit parity hook (correctly) blocked a commit
+made before the sibling port — the paired-commit order is: port to sibling's
+working tree FIRST, commit here, then commit sibling. Recorded in the
+workspace rules.
+
+**Audit.** A spec-auditor agent re-read the dossier sections (board, pheromones,
+state machine) against every domain file before the phase was closed.

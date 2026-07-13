@@ -17,13 +17,15 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Push to origin (CI verification on GitHub pending gh auth)
 
 ## Phase 1 — Base logic (PRD_01)
-- [ ] domain/board: grid, barriers, legality (orthogonal+STAY, no diagonals)
-- [ ] domain/rules: captures (landing/barrier-on-thief/blocked), survival ≥35, quota-excess rejection
-- [ ] domain/scoring: 20/5/5/10/tie 2/technical 0
-- [ ] domain/scent: 5×5 radial emission (0.9), decay 0.10 once per FULL turn
-- [ ] domain/state_machine: legal transitions only, TECHNICAL_LOSS terminal
-- [ ] Golden physics vectors (tests/vectors/physics_vectors.json — byte-identical with twin)
-- [ ] Self-play driver test: full local game crash-free
+- [x] domain/board: grid, barriers, legality (orthogonal+STAY, no diagonals)
+- [x] domain/rules: captures (landing/barrier-on-thief/blocked), survival ≥35, quota-excess rejection
+- [x] domain/scoring: 20/5/5/10/tie 2/technical 0
+- [x] domain/scent: 5×5 radial emission (0.9), decay 0.10 once per FULL turn
+- [x] domain/state_machine: legal transitions only, TECHNICAL_LOSS terminal
+- [x] domain/engine: cop-first rounds, barrier-forgoes-move, mid-round captures
+- [x] Golden physics vectors (tests/vectors/physics_vectors.json — byte-identical with twin)
+- [x] Self-play driver test: full local game crash-free (20 seeds, both endings)
+- [x] Spec-auditor pass on Phase 1 deliverables
 
 ## Phase 2 — MCP infra (PRD_02)
 - [ ] infra/mcp_server: 4 tools → thread-safe queues; port-busy fail-fast
