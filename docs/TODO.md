@@ -12,9 +12,9 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] config/: game.json (Appendix VI values), game.toml (identity), rate_limits.json, logging_config.json, config/games/
 - [x] Required dirs: data/ results/ assets/ notebooks/
 - [x] CI (gitleaks, line cap, ruff, coverage, smoke) + pre-commit + gate scripts
-- [~] Docs skeletons: PRD, PLAN, TODO, PROMPTS, ADRs 0001-0002
-- [ ] Claude tooling: .claude/agents (code-reviewer, spec-auditor, guidelines-auditor, test-designer, physics-parity), hooks, CLAUDE.md
-- [ ] Push to origin; verify CI green on GitHub
+- [x] Docs skeletons: PRD, PLAN, TODO, PROMPTS, ADRs 0001-0002
+- [x] Claude tooling: .claude/agents (code-reviewer, spec-auditor, guidelines-auditor, test-designer, physics-parity), hooks, CLAUDE.md
+- [x] Push to origin (CI verification on GitHub pending gh auth)
 
 ## Phase 1 — Base logic (PRD_01)
 - [ ] domain/board: grid, barriers, legality (orthogonal+STAY, no diagonals)
