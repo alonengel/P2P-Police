@@ -47,8 +47,8 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] domain/belief: diffuse x scent x hint posterior; (1-rho) lie detection (book p.30 example encoded)
 - [x] strategy/hints: template provider (0 tokens), truth/lie claims + intent flag, word cap on every path
 - [ ] infra/llm_provider registry: ollama/claude_api/claude_cli/openrouter clients behind the gatekeeper + every_n_steps throttle
-- [ ] Wire hints+belief into the runtime turn flow (hint rides the turn message; belief updates on receive)
-- [ ] Belief-driven brains (argmax-belief pursuit/evasion) + blind-arena MILESTONE
+- [x] Hints+belief wired into the runtime (hint rides the turn message; diffuse->scent->hint belief update on receive)
+- [x] Belief-driven brains + blind MILESTONE passed; live blind cross-match: thief survived 35 turns (vs capture-in-13 under full info) - uncertainty works as designed
 - [x] shared/gatekeeper + rate_limiter (token bucket, daily quota threshold, DOS circuit breaker)
 
 ## Phase 5 — Tunneling (PRD_05)

@@ -20,9 +20,10 @@ TRAP_RANGE = 2  # ...and is already this close
 class PoliceBrain(BrainBase):
     """Pursuit + surgical barrier placement."""
 
-    def decide(self, engine: GameEngine) -> dict:
+    def decide(self, engine: GameEngine, belief=None) -> dict:
         me = engine.positions[Role.POLICE]
-        thief = engine.positions[Role.THIEF]
+        # Blind mode (real games): hunt the belief peak, never the true cell.
+        thief = belief.argmax_cell() if belief is not None else engine.positions[Role.THIEF]
         distances = bfs_distances(engine.board, thief)
 
         barrier = self._trap_barrier(engine, me, thief, distances.get(me, UNREACHABLE))
@@ -72,8 +73,8 @@ class ThiefForArena(BrainBase):
     """Evasion sparring partner for OUR self-play arena only (the real thief
     brain lives in the P2P-Thief repo): maximize BFS distance from the cop."""
 
-    def decide(self, engine: GameEngine) -> dict:
-        cop = engine.positions[Role.POLICE]
+    def decide(self, engine: GameEngine, belief=None) -> dict:
+        cop = belief.argmax_cell() if belief is not None else engine.positions[Role.POLICE]
         me = engine.positions[Role.THIEF]
         distances = bfs_distances(engine.board, cop)
         best_move, best = Move.STAY, distances.get(me, 0)

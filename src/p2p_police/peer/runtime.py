@@ -9,14 +9,18 @@ import contextlib
 import queue
 
 from p2p_police.domain import protocol
+from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.negotiation import build_agreement, verify_agreement
-from p2p_police.domain.primitives import Outcome, Role
+from p2p_police.domain.primitives import Move, Outcome, Role
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.strategy.brain_base import BrainBase
+from p2p_police.strategy.hints import build_hint, parse_claim
+
+TRUTH_PROBABILITY = 0.5  # per-hint honesty coin; strategy refinement later
 
 
 class GeometricRuntime:
@@ -41,6 +45,8 @@ class GeometricRuntime:
         self.transport = transport
         self.inboxes = inboxes
         self.brain = brain
+        # Local truth only: belief about the RIVAL, fed by scent + hints.
+        self.belief = BeliefMap(config.grid_size)
 
     def _wait(self, inbox: queue.Queue, what: str) -> dict:
         deadline = Deadline(self.config.turn_timeout_seconds)
@@ -60,9 +66,16 @@ class GeometricRuntime:
         return theirs
 
     def _my_half_turn(self, turn_index: int) -> None:
-        action = self.brain.decide(self.engine)
+        action = self.brain.decide(self.engine, self.belief)
         protocol.apply_action(self.engine, self.role, action)
-        message = protocol.turn_message(turn_index, self.role, action)
+        moved = action["move"] if action["type"] == "move" else "STAY"
+        text, _claim, _truth = build_hint(
+            Move[moved],
+            self.brain.rng.random() < TRUTH_PROBABILITY,
+            self.config.shared["world"]["hint_max_words"],
+            self.brain.rng,
+        )
+        message = protocol.turn_message(turn_index, self.role, action, hint=text)
         self.transport.send_turn(message, Deadline(self.config.turn_timeout_seconds))
 
     def _their_half_turn(self, turn_index: int) -> None:
@@ -73,6 +86,17 @@ class GeometricRuntime:
                 f"turn desync: expected opponent turn {turn_index}, got {payload!r}"
             )
         protocol.apply_action(self.engine, actor, action)
+        self._update_belief(actor, payload.get("hint"))
+
+    def _update_belief(self, rival, hint_text) -> None:
+        """Diffuse (rival moved), weigh the rival's scent trail, then the
+        hint - whose claim the scent evidence may expose as a lie (ch. 4)."""
+        self.belief.diffuse(self.engine.board)
+        rival_scent = self.engine.scent[rival]
+        self.belief.observe_scent(rival_scent, self.engine.board)
+        claim = parse_claim(hint_text) if hint_text else None
+        if claim:
+            self.belief.observe_hint(claim, rival_scent)
 
     def play(self) -> dict:
         """Run negotiation and the full lockstep game; return the end report."""

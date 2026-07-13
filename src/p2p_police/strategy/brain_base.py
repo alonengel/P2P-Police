@@ -24,14 +24,15 @@ class BrainBase:
         self.role = role
         self.rng = rng
 
-    def decide(self, engine: GameEngine) -> dict:
+    def decide(self, engine: GameEngine, belief=None) -> dict:
+        """belief=None -> full information (arena); a BeliefMap when blind."""
         raise NotImplementedError
 
 
 class RandomBrain(BrainBase):
     """Uniform random legal move — the arena baseline every real brain must beat."""
 
-    def decide(self, engine: GameEngine) -> dict:
+    def decide(self, engine: GameEngine, belief=None) -> dict:
         cell = engine.positions[self.role]
         return protocol.move_action(self.rng.choice(engine.board.legal_moves(cell)))
 

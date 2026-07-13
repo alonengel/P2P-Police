@@ -22,8 +22,13 @@ def barrier_action(cell: Cell) -> dict:
     return {"type": "barrier", "cell": [cell[0], cell[1]]}
 
 
-def turn_message(turn_index: int, actor: Role, action: dict) -> dict:
-    return {"turn": turn_index, "actor": actor.value, "action": action}
+def turn_message(
+    turn_index: int, actor: Role, action: dict, hint: str | None = None
+) -> dict:
+    message = {"turn": turn_index, "actor": actor.value, "action": action}
+    if hint is not None:
+        message["hint"] = hint
+    return message
 
 
 def parse_turn_message(payload: dict) -> tuple[int, Role, dict]:
@@ -48,6 +53,9 @@ def parse_turn_message(payload: dict) -> tuple[int, Role, dict]:
             raise GameRuleError(f"malformed barrier cell in turn message: {action!r}")
     else:
         raise GameRuleError(f"unknown action type in turn message: {kind!r}")
+    hint = payload.get("hint")
+    if hint is not None and not isinstance(hint, str):
+        raise GameRuleError(f"malformed hint in turn message: {hint!r}")
     return turn_index, actor, action
 
 
