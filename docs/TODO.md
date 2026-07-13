@@ -44,10 +44,12 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Self-play arena; MILESTONE: pursuit brain captures >=20/25 random thieves
 
 ## Phase 4 — Language + scent (PRD_04)
-- [ ] domain/belief: Bayesian update from scent + hints; (1-rho) lie detection
-- [ ] strategy/hints: truth/lie intent policy, <=15-word enforcement
-- [ ] strategy/talk_providers + infra/llm_provider (template/ollama/claude_api/claude_cli/openrouter) behind gatekeeper
-- [ ] shared/gatekeeper + rate_limiter (token bucket, quota, DOS lock)
+- [x] domain/belief: diffuse x scent x hint posterior; (1-rho) lie detection (book p.30 example encoded)
+- [x] strategy/hints: template provider (0 tokens), truth/lie claims + intent flag, word cap on every path
+- [ ] infra/llm_provider registry: ollama/claude_api/claude_cli/openrouter clients behind the gatekeeper + every_n_steps throttle
+- [ ] Wire hints+belief into the runtime turn flow (hint rides the turn message; belief updates on receive)
+- [ ] Belief-driven brains (argmax-belief pursuit/evasion) + blind-arena MILESTONE
+- [x] shared/gatekeeper + rate_limiter (token bucket, daily quota threshold, DOS circuit breaker)
 
 ## Phase 5 — Tunneling (PRD_05)
 - [ ] Cloudflare quick tunnel flow + named tunnel docs (DEPLOYMENT.md)
