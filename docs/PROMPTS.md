@@ -88,3 +88,18 @@ server mid-HTTP-session; the thief's final send died with httpx.ReadError.
 Fixes: classify read/write/closed errors as retryable, make the audit send
 best-effort, add a shutdown grace period. Lesson: **the last message of a P2P
 session needs the same engineering care as the first.**
+
+---
+
+## 2026-07-13 — Sessions 3-5: phases 3-8 (compressed log)
+
+Patterns that repeated and paid off: (1) spec-quoting tests named after rules;
+(2) port-to-sibling-BEFORE-commit (the parity hook blocks the wrong order);
+(3) probe-the-API-first before writing infra; (4) field failures became
+design notes the same hour (proxy session churn -> persistent sessions;
+expired OAuth tokens -> runbook warning; DPI-skewed screenshots -> aware
+mode). (5) The 150-line cap forced two genuinely better extractions
+(Perception, SealedExchange). (6) A "SUBMISSION READY" claim was challenged
+by the user - a fresh audit against the dossier found two unwired MUSTs
+(watchdog rule 7, auto-email rule 32) and missing PRD files: **checklists
+verify what you told them to; the dossier is the contract.**

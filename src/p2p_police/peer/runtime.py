@@ -52,6 +52,7 @@ class GeometricRuntime:
         self.perception = Perception(role, config.grid_size)
         self.talk = build_talk_chain(config, brain.rng)
         self.fsm = GamePhaseMachine()
+        self.watchdog = None  # optional; SDK wires it (rule 7)
 
         self.exchange = SealedExchange(
             role,
@@ -72,8 +73,10 @@ class GeometricRuntime:
                 continue
 
     def negotiate(self) -> dict:
-        """Exchange and verify agreements before any move (rules 11-12)."""
-        mine = build_agreement(self.config.shared, self.config.group_id)
+        """Agreements before any move: config+scent locks, hardware seal."""
+        from p2p_police.shared.sysinfo import hardware_spec
+
+        mine = build_agreement(self.config.shared, self.config.group_id, hardware_spec())
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
         verify_agreement(mine, theirs)
@@ -117,6 +120,8 @@ class GeometricRuntime:
             turn_index = 0
             while self.engine.outcome is Outcome.ONGOING:
                 turn_index += 1
+                if self.watchdog is not None:
+                    self.watchdog.beat()  # heartbeat per half-turn (rule 7)
                 if self.engine.next_actor is self.role:
                     self._my_half_turn(turn_index)
                 else:

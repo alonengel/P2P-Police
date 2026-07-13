@@ -11,6 +11,7 @@ import hashlib
 import json
 
 from p2p_police.domain.errors import GameRuleError
+from p2p_police.domain.scent import scent_model_spec
 
 # Appendix VI: parameters whose values are FIXED - deviation disqualifies.
 FIXED_TERMS: dict[str, object] = {
@@ -82,15 +83,23 @@ def validate_shared_terms(shared: dict) -> None:
             raise GameRuleError(f"MINIMUM term '{dotted}' may not drop below {floor}, got {actual}")
 
 
-def build_agreement(shared: dict, group_id: str) -> dict:
-    """The negotiate payload sent to the opponent before any move."""
+def build_agreement(shared: dict, group_id: str, hardware_spec: dict | None = None) -> dict:
+    """The negotiate payload sent to the opponent before any move.
+
+    Locks the config (rule 11), the scent model incl. our clamp (rule 23)
+    and - when provided - seals the hardware disclosure (rule 24, step-0).
+    """
     validate_shared_terms(shared)
-    return {
+    agreement = {
         "group_id": group_id,
         "config_sha256": config_sha256(shared),
         "commit_order": COMMIT_ORDER,
         "schema_version": _lookup(shared, "schema_version"),
+        "scent_model_sha256": config_sha256(scent_model_spec()),
     }
+    if hardware_spec is not None:
+        agreement["hardware_spec_sha256"] = config_sha256(hardware_spec)
+    return agreement
 
 
 def verify_agreement(mine: dict, theirs: dict) -> None:
@@ -99,7 +108,7 @@ def verify_agreement(mine: dict, theirs: dict) -> None:
     Raises GameRuleError on sha mismatch (different physics), commit-order
     mismatch (guaranteed deadlock), or schema mismatch.
     """
-    for field in ("config_sha256", "commit_order", "schema_version"):
+    for field in ("config_sha256", "commit_order", "schema_version", "scent_model_sha256"):
         if mine.get(field) != theirs.get(field):
             raise GameRuleError(
                 f"agreement mismatch on '{field}': "

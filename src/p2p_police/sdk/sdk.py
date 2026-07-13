@@ -66,8 +66,23 @@ class SimulationSdk:
             inboxes,
             resolve_brain(self.config, MY_ROLE, random.Random(seed)),
         )
-        report = self._play_with_gui(runtime, gui_screenshot) if gui else runtime.play()
+        from p2p_police.peer.watchdog import Watchdog
+
+        watchdog = Watchdog(
+            float(self.config.shared["network_and_league"]["watchdog_timeout_sec"]),
+            lambda: {"positions": {r.value: list(c) for r, c in runtime.engine.positions.items()},
+                     "turns": runtime.engine.turns_completed,
+                     "outcome": runtime.engine.outcome.value},
+            transport.close,
+        )
+        runtime.watchdog = watchdog
+        watchdog.start()
+        try:
+            report = self._play_with_gui(runtime, gui_screenshot) if gui else runtime.play()
+        finally:
+            watchdog.stop()
         report["artifacts"] = [str(p) for p in self._emit_artifacts(runtime, report)]
+        self._maybe_email(report)
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)
@@ -119,6 +134,23 @@ class SimulationSdk:
                 results, game_ids.result_name(game_id)),
         ]
         return written
+
+    def _maybe_email(self, report: dict) -> None:
+        """Automatic end-of-game report (rule 32) when [email].mode == send."""
+        email_cfg = self.config.private.get("email", {})
+        if email_cfg.get("mode") != "send":
+            return
+        from p2p_police.infra.email_sender import send_report
+        from p2p_police.shared.gatekeeper import ApiGatekeeper
+
+        message_id = send_report(
+            ApiGatekeeper(self.config.rate_limits),
+            email_cfg["recipient"],
+            f"P2P league report - {self.config.group_id} - {report['outcome']}",
+            "Automated end-of-game report (rule 32). JSON artifacts attached.",
+            [Path(p) for p in report["artifacts"]],
+        )
+        report["email_message_id"] = message_id
 
     @staticmethod
     def verify_log(log_path: str) -> str:

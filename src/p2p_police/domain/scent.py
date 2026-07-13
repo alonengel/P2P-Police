@@ -27,6 +27,21 @@ EMISSION_KERNEL: tuple[tuple[float, ...], ...] = (
 KERNEL_RADIUS = 2  # 5x5 kernel => center offset 2
 
 
+def scent_model_spec() -> dict:
+    """The human+machine-readable emission model BOTH sides must lock
+    (rule 23) - includes the numeric example and the re-emission CLAMP,
+    which extends the book's literal formula (PRD-01 disclosure)."""
+    return {
+        "formula": "tau' = clamp((1-rho)*tau + delta, 0, center_intensity)",
+        "center_intensity": 0.9,
+        "decay_rho": 0.10,
+        "kernel_5x5": [list(row) for row in EMISSION_KERNEL],
+        "clamp_note": "re-emission capped at center_intensity (0.9)",
+        "numeric_example": "single deposit at center: 0.9 -> 0.81 -> 0.729",
+        "decay_boundary": "once per FULL turn, after both agents acted",
+    }
+
+
 class ScentField:
     """One agent's scent trail as read by its rival.
 
