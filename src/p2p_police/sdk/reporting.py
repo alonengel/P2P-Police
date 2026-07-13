@@ -28,12 +28,24 @@ def technical_loss_report(my_role, runtime, error: Exception) -> dict:
 
 
 
+def _series_uid(game_id: str) -> str:
+    """ONE game_uid per series (all four artifacts + every sub-game share it;
+    the docstring invariant broke when each sub-game minted a fresh uid)."""
+    marker = Path("results") / f".game_uid_{game_id}"
+    if marker.is_file():
+        return marker.read_text(encoding="utf-8").strip()
+    uid = game_ids.new_game_uid()
+    marker.parent.mkdir(exist_ok=True)
+    marker.write_text(uid, encoding="utf-8")
+    return uid
+
+
 def emit_artifacts(config, runtime, report: dict) -> list:
     """Write the four Table-20 artifacts (results/ + archived config)."""
     game_id = game_ids.build_game_id(
         config.group_id, report.get("opponent_group_id", "unknown")
     )
-    game_uid = game_ids.new_game_uid()
+    game_uid = _series_uid(game_id)
     sub_game = int(config.private["game"]["sub_game_number"])
     from p2p_police.domain.primitives import Outcome
 

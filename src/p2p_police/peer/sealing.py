@@ -22,6 +22,23 @@ class SealedExchange:
         self._wait = wait_turn
         self.own_records: list[dict] = []   # {payload, nonce, commit}
         self.their_records: list[dict] = [] # {payload, commit}
+        self._consumed: set[tuple[str, int]] = set()  # dedup: at-least-once transport
+
+    def _next(self, kind: str, turn_index: int) -> dict:
+        """Wait for (kind, turn), SKIPPING duplicates the retrying transport
+        may deliver twice (a lost HTTP ack must never become a technical
+        loss). Raises only on truly out-of-order traffic."""
+        while True:
+            message = self._wait(f"opponent {kind} {turn_index}")
+            key = (str(message.get("kind")), int(message.get("turn", -1)))
+            if key in self._consumed:
+                continue  # duplicate delivery - drop silently
+            if key != (kind, turn_index):
+                raise GameRuleError(
+                    f"protocol desync: expected {kind} {turn_index}, got {message!r}"
+                )
+            self._consumed.add(key)
+            return message
 
     def send_sealed(
         self, engine: GameEngine, turn_index: int, action: dict, hint: str, verdict: bool
@@ -51,14 +68,10 @@ class SealedExchange:
 
     def receive_sealed(self, turn_index: int) -> dict:
         """Wait for the opponent's commit then reveal; store; return payload."""
-        commit_msg = self._wait(f"opponent commit {turn_index}")
-        if commit_msg.get("kind") != "commit" or commit_msg.get("turn") != turn_index:
-            raise GameRuleError(f"protocol desync: expected commit {turn_index}, got {commit_msg!r}")
+        commit_msg = self._next("commit", turn_index)
         if commit_msg.get("actor") == self.role.value:
             raise GameRuleError("opponent echoed our own role in a commit")
-        reveal_msg = self._wait(f"opponent reveal {turn_index}")
-        if reveal_msg.get("kind") != "reveal" or reveal_msg.get("turn") != turn_index:
-            raise GameRuleError(f"protocol desync: expected reveal {turn_index}, got {reveal_msg!r}")
+        reveal_msg = self._next("reveal", turn_index)
         payload = reveal_msg.get("payload") or {}
         missing = [f for f in crypto.REQUIRED_RECORD_FIELDS
                    if f != "verdict" and f not in payload]

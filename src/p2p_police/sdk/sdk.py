@@ -11,11 +11,9 @@ from pathlib import Path
 
 from p2p_police.domain import crypto
 from p2p_police.domain.engine import GameEngine
-from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import Role
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes, build_peer_server, start_peer_server
-from p2p_police.peer.deadline import DeadlineExpiredError
 from p2p_police.peer.runtime import GeometricRuntime
 from p2p_police.sdk import reporting
 from p2p_police.shared.config import Config
@@ -81,14 +79,16 @@ class SimulationSdk:
         watchdog.start()
         try:
             report = self._play_with_gui(runtime, gui_screenshot) if gui else runtime.play()
-        except (DeadlineExpiredError, GameRuleError) as error:
-            # BLOCKER fix (rules 32/35): a technical loss is a first-class
-            # outcome - it MUST still be reported and emailed, never skipped.
+        except Exception as error:  # noqa: BLE001 - rules 32/35: EVERY game
+            # end (any failure whatsoever) must still be reported and emailed;
+            # an unreported forfeit is the worst outcome the league allows.
             report = reporting.technical_loss_report(MY_ROLE, runtime, error)
         finally:
             watchdog.stop()
-        if report.get("audit") not in (None, "Verified OK"):
-            # Rule 19: a failed mutual audit voids the game - no normal score.
+        if report.get("audit") == "TAMPERED":
+            # Rule 19: a FAILED mutual audit voids the game. A merely MISSING
+            # audit ('not received') is dispute evidence, not tampering - the
+            # played outcome stands and the logs decide.
             report["outcome"] = "technical_loss"
         report["artifacts"] = [
             str(p) for p in reporting.emit_artifacts(self.config, runtime, report)
@@ -108,12 +108,23 @@ class SimulationSdk:
         view = LiveView(self.config.grid_size, MY_ROLE.value)
         runtime.perception.on_snapshot = view.feed
         box: dict = {}
-        worker = threading.Thread(target=lambda: box.update(runtime.play()), daemon=True)
+
+        def play_into_box() -> None:
+            try:
+                box.update(runtime.play())
+            except Exception as error:  # noqa: BLE001 - reported, never lost
+                box.update(reporting.technical_loss_report(MY_ROLE, runtime, error))
+
+        worker = threading.Thread(target=play_into_box, daemon=True)
         worker.start()
         view.run(screenshot_path=screenshot)
-        worker.join(timeout=30)
+        # closing the window must not abandon the game: wait a full turn
+        # window (not an arbitrary 30s) before declaring the run lost
+        worker.join(timeout=self.config.turn_timeout_seconds + SHUTDOWN_GRACE_SEC)
         if not box:
-            raise RuntimeError("game did not finish while the GUI was open")
+            return reporting.technical_loss_report(
+                MY_ROLE, runtime, RuntimeError("GUI closed and game did not finish")
+            )
         return box
 
     @staticmethod

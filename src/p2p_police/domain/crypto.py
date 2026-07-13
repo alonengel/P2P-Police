@@ -63,6 +63,9 @@ def audit_records(their_records: list[dict], revealed_nonces: list[str]) -> str:
     if len(their_records) != len(revealed_nonces):
         return "TAMPERED"
     for record, nonce in zip(their_records, revealed_nonces, strict=True):
-        if not verify_commit(record["payload"], nonce, record["commit"]):
-            return "TAMPERED"
+        try:
+            if not verify_commit(record["payload"], nonce, record["commit"]):
+                return "TAMPERED"
+        except (ValueError, KeyError, TypeError):
+            return "TAMPERED"  # malformed audit material IS a failed audit
     return "Verified OK"

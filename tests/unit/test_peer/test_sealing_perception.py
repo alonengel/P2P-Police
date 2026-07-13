@@ -64,3 +64,26 @@ def test_perception_snapshot_is_local_truth_only() -> None:
     assert "belief" in snap and "barriers" in snap
     assert (3, 3) not in [tuple(v) for k, v in snap.items() if k == "rival_cell"]
     assert "rival_cell" not in snap  # the rival's truth never leaves Perception
+
+
+def test_duplicate_deliveries_are_skipped_not_fatal() -> None:
+    """At-least-once transport: a duplicated commit must never desync."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    alice, a_sent = make_pair()
+    alice.send_sealed(engine, 1, {"type": "move", "move": "E"}, "hi", True)
+    a_sent.insert(1, dict(a_sent[0]))  # duplicate the commit in-queue
+    bob = SealedExchange(Role.THIEF, 1, a_sent.append, lambda what: a_sent.pop(0))
+    payload = bob.receive_sealed(1)
+    assert payload["action"] == {"type": "move", "move": "E"}
+
+
+def test_missing_verdicts_in_audit_yield_tampered_not_crash() -> None:
+    """A foreign opponent that omits our verdict extension fails the audit
+    cleanly (TAMPERED) instead of crashing the peer (rules 32/35)."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    alice, a_sent = make_pair()
+    alice.send_sealed(engine, 1, {"type": "move", "move": "E"}, "hi", True)
+    bob = SealedExchange(Role.THIEF, 1, a_sent.append, lambda what: a_sent.pop(0))
+    bob.receive_sealed(1)
+    bob.apply_revealed_verdicts([])  # opponent never disclosed intents
+    assert bob.audit_theirs(alice.own_nonces()) == "TAMPERED"

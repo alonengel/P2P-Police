@@ -39,6 +39,7 @@ class McpTransport:
         self._sleep = sleep
         self._loop: asyncio.AbstractEventLoop | None = None
         self._client: Client | None = None
+        self._closed = False
 
     def _ensure_loop(self) -> asyncio.AbstractEventLoop:
         if self._loop is None:
@@ -74,6 +75,10 @@ class McpTransport:
         """Call an opponent tool, rebuilding the session and retrying
         connection-flavored failures until the deadline lapses."""
         while True:
+            if self._closed:
+                raise DeadlineExpiredError(
+                    f"transport to {self.opponent_url} closed (watchdog shutdown)"
+                )
             deadline.require(f"opponent tool '{tool}' at {self.opponent_url}")
             timeout = min(self.response_timeout_sec, max(0.1, deadline.remaining()))
             try:
@@ -82,7 +87,8 @@ class McpTransport:
                 if not _is_connection_flavored(error):
                     raise
                 last = error
-            self._submit(self._reset_client(), self.response_timeout_sec)
+            with contextlib.suppress(Exception):  # a wedged loop must not
+                self._submit(self._reset_client(), 2.0)  # escalate past reporting
             if deadline.remaining() < self.retry_backoff_sec:
                 raise DeadlineExpiredError(
                     f"opponent at {self.opponent_url} unreachable until deadline: {last}"
@@ -90,9 +96,10 @@ class McpTransport:
             self._sleep(self.retry_backoff_sec)
 
     def close(self) -> None:
+        """Fast, non-blocking shutdown (watchdog-safe): flag first so callers
+        fail fast, then stop the loop; never block on a wedged in-flight call."""
+        self._closed = True
         if self._loop is not None:
-            if self._client is not None:
-                self._submit(self._reset_client(), self.response_timeout_sec)
             self._loop.call_soon_threadsafe(self._loop.stop)
 
     def send_agreement(self, payload: dict, deadline: Deadline) -> dict:

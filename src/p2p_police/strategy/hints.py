@@ -59,9 +59,8 @@ def parse_claim(text: str) -> str | None:
     text yields None - belief then rests on scent alone, never on a guess.
     """
     for claim, sentences in TEMPLATES.items():
-        for sentence in sentences:
-            if text in sentence or sentence.startswith(text):
-                return claim
+        if text in sentences:  # exact template match only - substrings lie
+            return claim
     lowered = f" {text.lower()} "
     matches = {
         claim

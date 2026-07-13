@@ -74,7 +74,6 @@ class GeometricRuntime:
                 continue
 
     def negotiate(self) -> dict:
-        """Agreements before any move: config+scent locks, hardware seal."""
         mine = build_agreement(self.config.shared, self.config.group_id, hardware_spec())
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
@@ -146,13 +145,14 @@ class GeometricRuntime:
                 },
                 Deadline(self.config.turn_timeout_seconds),
             )
-        audit_verdict, digest_match = "TAMPERED", False
+        audit_verdict, digest_match = "not received", False
         try:
             theirs = self._wait(self.inboxes.audits, "opponent audit (nonces + digest)")
             digest_match = theirs.get("end_state_digest") == digest
             self.exchange.apply_revealed_verdicts(theirs.get("verdicts", []))
-            self.perception.profiler.record_audited_verdicts(self.perception.opponent_id, theirs.get("verdicts", []))
             audit_verdict = self.exchange.audit_theirs(theirs.get("nonces", []))
+            if audit_verdict == "Verified OK":  # never learn from tampered data
+                self.perception.profiler.record_audited_verdicts(self.perception.opponent_id, theirs.get("verdicts", []))
         except DeadlineExpiredError:
             pass
         return {
