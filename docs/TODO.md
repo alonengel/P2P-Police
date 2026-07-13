@@ -76,10 +76,10 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [~] Screenshots: both mandatory images captured (live belief map + replay Verified OK); remaining per-state shots (LOCKED banner, TAMPERED demo) with docs/UI.md in Phase 8
 
 ## Phase 8 — Submission
-- [ ] README: user manual + academic report (Dec-POMDP 8-tuple, FastMCP dilemmas, strategy, RL curves if used, screenshots, sibling link, ISO 25010 mapping, course-connection anchors L02/L04/L05/L08/L09/L11)
+- [x] README: user manual + academic report complete (all six mandatory components + ISO 25010 + course anchors; screenshots embedded)
 - [ ] docs/UI.md (Nielsen 10, per-state screenshots, workflow, accessibility)
 - [ ] notebooks/analysis.ipynb (sensitivity: decay/board/lookahead) + COST.md
-- [ ] docs/LEAGUE_RUNBOOK.md (manual league-day duties incl. commit-ID email per game)
+- [x] docs/LEAGUE_RUNBOOK.md + docs/DEPLOYMENT.md (tunnel URLs per agent, token-expiry gotcha, per-game commit-ID email duty)
 - [ ] Optional RL experiment + learning curves
 - [ ] scripts/check_submission.py PASS; v1.0-submission annotated tag pushed
 - [ ] Moodle: form PDF (unaltered fields), per-member submission, team code anrbj666

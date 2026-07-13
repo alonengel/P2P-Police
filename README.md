@@ -1,38 +1,166 @@
 # P2P-Police — the Cop agent
 
-Autonomous **Police (Cop)** agent for the distributed Cops-and-Robbers game played
-peer-to-peer over FastMCP — no central server, no judge. Integrity is enforced by a
-SHA-256 commit-reveal protocol and a mutual end-of-game audit.
+Autonomous **Police (Cop)** agent for the distributed Cops-and-Robbers game, played
+peer-to-peer over FastMCP with **no central server and no judge**. Integrity comes from
+mathematics: a SHA-256 commit-reveal protocol seals every half-turn, and a mutual
+end-of-game audit exposes any rewriting of history.
 
-> Sibling repository (the Thief agent of team `anrbj666`):
+> **Sibling repository** (the Thief agent of team `anrbj666`):
 > **https://github.com/alonengel/P2P-Thief**
 
 Team: Alon Engel, Renat Karimov · Course: Orchestration of AI Agents (Univ. of Haifa)
 
-## Status
+---
 
-Bootstrap phase — project scaffold, quality gates, and planning documents.
-This README will grow into the full user manual + academic report as development
-progresses (see `docs/PLAN.md` and `docs/TODO.md`).
+## Part I — User manual
 
-## Quick start (will be expanded)
+### Installation
+
+Requirements: Python ≥3.13, [uv](https://docs.astral.sh/uv/). Two supported setups:
 
 ```bash
-uv sync
-uv run p2p-police --help
+# A) fresh machine
+git clone https://github.com/alonengel/P2P-Police && cd P2P-Police
+uv sync                      # creates .venv, installs locked deps
+
+# B) full twin-repo workspace (recommended for development)
+git clone https://github.com/alonengel/P2P-Police
+git clone https://github.com/alonengel/P2P-Thief   # side by side
 ```
 
-## Repository map
+Troubleshooting: `port 8802 is busy` → another peer instance is alive; stop it or
+change `[network].my_port` in `config/game.toml`. `unsupported schema_version` →
+your `game.json` generation is unknown to `shared/version.py` — negotiate a
+supported one. Gmail errors → see `docs/DEPLOYMENT.md` (tokens expire!).
 
-| Path        | Purpose                                              |
-|-------------|------------------------------------------------------|
-| `src/`      | Source (SDK-first architecture, files ≤150 code lines)|
-| `tests/`    | Unit + integration tests (TDD, coverage ≥85%)         |
-| `docs/`     | PRD / PLAN / TODO / PROMPTS / ADRs                    |
-| `config/`   | Shared signed `game.json` + private `game.toml`       |
-| `data/` `results/` `assets/` `notebooks/` | Inputs, run artifacts, figures, analysis |
+### Usage
+
+```bash
+uv run p2p-police peer                 # play one game vs the configured opponent
+uv run p2p-police peer --gui           # + live local-truth view (belief heatmap)
+uv run p2p-police peer --gui --gui-screenshot assets/live.png
+uv run p2p-police verify-log --log results/log_<game>.json   # Verified OK / TAMPERED
+uv run p2p-police replay --log results/log_<game>.json       # visual replay witness
+uv run p2p-police --version
+```
+
+Cross-repo match on one machine: `powershell -File ../run_cross_match.ps1`.
+Public play + Gmail setup: `docs/DEPLOYMENT.md`. League duties: `docs/LEAGUE_RUNBOOK.md`.
+
+### Configuration
+
+| File | Role |
+|---|---|
+| `config/game.json` | THE signed constitution — every agreed value (Appendix ו). Byte-identical on both sides, SHA-256-locked at negotiation; fixed values enforced at load |
+| `config/game.toml` | Private: identity, ports, opponent URL, `[strategy]` brain override, `[trash_talk]` provider, `[email]` mode. JSON always overrides TOML |
+| `config/rate_limits.json` | Gatekeeper triad limits per service (versioned) |
+| `config/games/` | Archived per-game configs (rules 3-4) |
+
+### Quality gates & contribution
+
+TDD; ruff zero-violations; coverage ≥85% (branch); **≤150 code lines per file**
+(`scripts/check_line_cap.py`); twin physics parity (`scripts/check_physics_parity.py`);
+conventional commits; pre-commit hooks + CI enforce all of it. Secrets never enter
+the repo (`.gitignore` + gitleaks in CI; `.env-example` shows the shape).
+
+---
+
+## Part II — Academic report
+
+### 1. The Dec-POMDP model
+
+The race is a decentralized partially observable Markov decision process
+⟨n, S, {Aᵢ}, P, R, {Ωᵢ}, O, γ⟩:
+
+- **n = 2** — every decision is weighed against a single *rational rival*, not nature.
+- **S** — cop and thief coordinates, the barrier layout, and both dynamic scent
+  fields. Brute-force enumeration is infeasible — the fact that drove our
+  algorithm choices (§3).
+- **{Aᵢ}** — movement (orthogonal + STAY), *construction* (the cop's barriers),
+  and *communication* (≤15-word hints that may lie): physics and psychology in
+  one action space.
+- **P** — deterministic physics that both sides must compute identically; with no
+  server, P **is** the signed `game.json` + the parity-locked `domain/` code.
+- **R** — the fixed scoring table (capture 20/5, survival 5/10, tie 2).
+- **{Ωᵢ}** — each side observes only its own state, the rival's decaying scent
+  field, and the rival's hint. Our belief map (§3) lives here.
+- **O** — the observation function is **the only channel of deception**: hints
+  bend O, scent cannot (it is an unforgeable byproduct of movement).
+- **γ** — implicit long-horizon patience: barrier traps pay off many turns later.
+
+### 2. FastMCP orchestration dilemmas
+
+Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`,
+`receive_turn`, `submit_audit`, `receive_control` → thread-safe inboxes) and a
+**client** to the opponent's single known URL. Design decisions and their whys:
+
+- **Replicated engines, lockstep application.** Both sides run the same physics
+  and apply both half-turns locally; end-state digests prove convergence.
+- **Persistent sessions.** Per-call MCP sessions die through tunnels
+  ("Session terminated" — learned live, `docs/DEPLOYMENT.md`); one long-lived
+  session per opponent, rebuilt only on failure.
+- **Deadlines everywhere** (rule 6): every awaited message and every in-flight
+  call is bounded; lapses route the strict turn state machine
+  (WAITING→COMPUTING→COMMITTING→AWAITING_REVEAL→VERIFYING) into terminal
+  TECHNICAL_LOSS instead of deadlock.
+- **Gatekeeper + Orchestrator** (ch. 8/9): ALL external calls (LLM, Gmail) pass
+  one doorway — token bucket, daily quota, DOS circuit breaker; the SDK facade
+  is the single entry to business logic.
+- **Commit order is negotiated** — an explicit agreement field, because two
+  correct-but-different implementations would deadlock forever.
+
+### 3. The chosen strategy
+
+Moves are **always pure Python** (the LLM only writes banter). The shipped
+pursuit brain, `strategy/police_brain.py`:
+
+1. **Bayesian belief map** over the thief (parity-locked `domain/belief.py`):
+   per turn — movement diffusion × scent likelihood × hint likelihood.
+2. **Scent-grounded lie detection** (book ch. 4): a claimed region whose
+   freshest trail falls below the (1−ρ)·0.9 ≈ 0.81 expectation flips the hint's
+   weight — belief re-aims at the *evidence*, not the words.
+3. **Barrier-aware BFS pursuit**: Manhattan distance lies once walls exist; we
+   chase the true shortest path to the belief argmax.
+4. **Surgical barriers**: spent only on a nearly-cornered thief within reach —
+   quota is a resource, and a barrier on the thief's cell is an instant capture.
+
+Measured: full-information pursuit captures a random thief ≥20/25 and beat the
+evasion twin in 13 turns; *blind* (belief-only) pursuit still captures ≥15/25.
+The blind cross-repo match flipped to thief survival — **uncertainty works as
+the rulebook intends**, and our belief machinery demonstrably drives the moves.
+(No RL was used; learning curves are therefore not applicable — the heuristics
+above beat our RL sparring baselines in self-play at far lower complexity.)
+
+### 4. Screenshots (mandatory evidence, from real cross-repo games)
+
+| Live GUI — local truth only | Replay witness |
+|---|---|
+| ![Live belief map](assets/live_belief_map.png) | ![Verified OK](assets/replay_verified_ok.png) |
+| Belief heatmap (deeper red = higher P(thief)), ME marker, turn banner, rival's hint | Green **Verified OK (70 sealed steps)** over the reconstructed game |
+
+`verify-log` on the same log: genuine → `Verified OK`; one rewritten move →
+`TAMPERED` (exit 1).
+
+### 5. Quality mapping (ISO/IEC 25010)
+
+Functional suitability — milestone-gated PRDs 01-07, 150+ tests. Reliability —
+deadlines, watchdog-style FSM exits, session rebuilds, 20-seed self-play.
+Performance — template provider plays whole series at 0 LLM tokens. Security —
+send-only OAuth scope, secrets outside the repo, gitleaks CI, commit-reveal
+integrity. Maintainability — SDK layering, ≤150-line files, per-mechanism PRDs,
+ADRs incl. documented book contradictions. Portability — uv-locked, stdlib+httpx
+core. Compatibility — byte-locked shared config + golden physics vectors across
+twins. Usability — one-command flows, local-truth GUI, actionable errors.
+
+### 6. Course anchors
+
+L09 (two agents over MCP calling external tools) → the peer architecture;
+L11 (stigmergy, no central control) → the scent/belief loop; L05 (orchestrator,
+skills, observability) → SDK + gatekeeper + GUI/replay; L02/L04/L08 → the
+verbal-layer providers (template/Ollama/Claude/OpenRouter).
 
 ## License & credits
 
-MIT — see [LICENSE](LICENSE), including third-party attribution to the official
-course example repository.
+MIT — see [LICENSE](LICENSE). Architectural patterns studied from the official
+course example repo (rmisegal/Game-P2P-Cop-Chase) under its educational terms;
+where they differ, the rulebook and its Appendix ו govern.
