@@ -42,12 +42,19 @@ class Config:
 
     shared: dict
     private: dict
+    rate_limits: dict
 
     @classmethod
     def load(cls, config_dir: str | Path) -> "Config":
         directory = Path(config_dir)
         shared = _read_json(directory / "game.json")
         private = _read_toml(directory / "game.toml")
+        limits_path = directory / "rate_limits.json"
+        rate_limits = (
+            _read_json(limits_path)
+            if limits_path.is_file()
+            else {"services": {"default": dict(shared["rate_limiter_gatekeeper"])}}
+        )
 
         schema = shared.get("schema_version", "")
         if not is_supported_config(schema):
@@ -58,7 +65,7 @@ class Config:
         validate_shared_terms(shared)
         # The signed file always wins on key overlap (Appendix B rule).
         private = {k: v for k, v in private.items() if k not in shared}
-        return cls(shared=shared, private=private)
+        return cls(shared=shared, private=private, rate_limits=rate_limits)
 
     def rule_set(self) -> RuleSet:
         block = self.shared["movement_and_barriers"]

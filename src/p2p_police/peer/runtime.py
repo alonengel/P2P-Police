@@ -19,6 +19,7 @@ from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.hints import build_hint, parse_claim
+from p2p_police.strategy.talk_providers import build_talk_chain
 
 TRUTH_PROBABILITY = 0.5  # per-hint honesty coin; strategy refinement later
 
@@ -47,6 +48,7 @@ class GeometricRuntime:
         self.brain = brain
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.belief = BeliefMap(config.grid_size)
+        self.talk = build_talk_chain(config, brain.rng)
 
     def _wait(self, inbox: queue.Queue, what: str) -> dict:
         deadline = Deadline(self.config.turn_timeout_seconds)
@@ -69,12 +71,13 @@ class GeometricRuntime:
         action = self.brain.decide(self.engine, self.belief)
         protocol.apply_action(self.engine, self.role, action)
         moved = action["move"] if action["type"] == "move" else "STAY"
-        text, _claim, _truth = build_hint(
+        _text, claim, _truth = build_hint(
             Move[moved],
             self.brain.rng.random() < TRUTH_PROBABILITY,
             self.config.shared["world"]["hint_max_words"],
             self.brain.rng,
         )
+        text = self.talk.render(claim, turn_index)
         message = protocol.turn_message(turn_index, self.role, action, hint=text)
         self.transport.send_turn(message, Deadline(self.config.turn_timeout_seconds))
 
