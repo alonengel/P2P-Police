@@ -83,3 +83,11 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [ ] Optional RL experiment + learning curves
 - [ ] scripts/check_submission.py PASS; v1.0-submission annotated tag pushed
 - [ ] Moodle: form PDF (unaltered fields), per-member submission, team code anrbj666
+
+## Phase 8 status (2026-07-13)
+- [x] Series support: --sub-game override + series-result aggregator (per-group totals, sub-games won, tie at tie_score); 2-sub-game local series proven end-to-end
+- [ ] notebooks/analysis.ipynb (sensitivity: decay/board/lookahead) + docs/COST.md
+- [ ] docs/UI.md (Nielsen 10, per-state screenshots incl. TAMPERED demo)
+- [ ] scripts/check_submission.py + final guidelines-auditor sweep
+- [ ] v1.0-submission annotated tags (AFTER the real league games)
+- [ ] REAL league games: >=2 counted vs different teams (LEAGUE_RUNBOOK.md)

@@ -52,6 +52,10 @@ class ScoreTable:
             return (self.technical_loss, self.technical_loss)
         raise ValueError(f"no score for unfinished outcome {outcome}")
 
+    def points_for_name(self, outcome_name: str) -> tuple[int, int]:
+        """Same table keyed by the serialized outcome value (log summaries)."""
+        return self.points_for(Outcome(outcome_name))
+
     def series_tie_points(self) -> tuple[int, int]:
         """Both sides receive the tie score when a series ends level (ch. 9)."""
         return (self.tie_score, self.tie_score)

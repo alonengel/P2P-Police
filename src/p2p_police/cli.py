@@ -27,6 +27,7 @@ def build_parser() -> argparse.ArgumentParser:
     peer.add_argument("--seed", type=int, default=None, help="policy RNG seed")
     peer.add_argument("--gui", action="store_true", help="show the live local-truth view")
     peer.add_argument("--gui-screenshot", default=None, help="save the final GUI frame as PNG")
+    peer.add_argument("--sub-game", type=int, default=None, help="override sub_game_number")
     verify = subcommands.add_parser(
         "verify-log", help="recompute every sealed record in a saved game log"
     )
@@ -34,6 +35,10 @@ def build_parser() -> argparse.ArgumentParser:
     replay = subcommands.add_parser("replay", help="step through a saved game with verification")
     replay.add_argument("--log", required=True, help="path to a log_*.json artifact")
     replay.add_argument("--screenshot", default=None, help="save a PNG and exit")
+    series = subcommands.add_parser("series-result", help="aggregate sub-game logs into the series result")
+    series.add_argument("--game-id", required=True)
+    series.add_argument("--results-dir", default="results")
+    series.add_argument("--config-dir", default="config")
     return parser
 
 
@@ -43,9 +48,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "peer":
         from p2p_police.sdk.sdk import SimulationSdk
 
-        report = SimulationSdk(args.config_dir).run_peer(
-            seed=args.seed, gui=args.gui, gui_screenshot=args.gui_screenshot
-        )
+        sdk = SimulationSdk(args.config_dir)
+        if args.sub_game is not None:
+            sdk.config.private["game"]["sub_game_number"] = args.sub_game
+        report = sdk.run_peer(seed=args.seed, gui=args.gui, gui_screenshot=args.gui_screenshot)
         print(json.dumps(report, indent=2))
         return 0 if report.get("digest_match") else 1
     if args.command == "verify-log":
@@ -63,5 +69,17 @@ def main(argv: list[str] | None = None) -> int:
             print(f"screenshot saved: {args.screenshot}")
             return 0
         app.run()
+        return 0
+    if args.command == "series-result":
+        from p2p_police.domain.game_ids import result_name
+        from p2p_police.report.artifacts import emit
+        from p2p_police.sdk.series import aggregate_series
+        from p2p_police.shared.config import Config
+
+        config = Config.load(args.config_dir)
+        doc = aggregate_series(args.results_dir, args.game_id, config.score_table())
+        path = emit(doc, __import__("pathlib").Path(args.results_dir), result_name(args.game_id))
+        print(json.dumps(doc["final_result"], indent=2))
+        print(f"written: {path}")
         return 0
     return 0

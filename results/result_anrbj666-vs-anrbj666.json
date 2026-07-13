@@ -1,24 +1,41 @@
 {
-  "_schema": "p2p-police-artifacts",
-  "audit": "Verified OK",
-  "digest_match": true,
-  "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+  "final_result": {
+    "series_tie": false,
+    "sub_games_won": {
+      "anrbj666(police)": 0,
+      "anrbj666(thief)": 2
+    },
+    "ties": 0,
+    "total_score": {
+      "anrbj666(police)": 10,
+      "anrbj666(thief)": 20
+    },
+    "winner_group": "anrbj666(thief)"
+  },
   "game_id": "anrbj666-vs-anrbj666",
-  "game_uid": "0fe3de5793fd4b508f54cd126c3658a8",
-  "github_commit": "763bcee34ef76e46e9104c634688a4e2fb01490e",
-  "group_id": "anrbj666",
-  "links": {
-    "cop": "https://github.com/alonengel/P2P-Police",
-    "thief": "https://github.com/alonengel/P2P-Thief"
-  },
-  "outcome": "survival",
-  "report_type": "result",
-  "reported_at": "2026-07-13T15:42:31+00:00",
-  "schema_version": "1.00",
-  "score": {
-    "cop": 5,
-    "thief": 10
-  },
-  "tokens_total": 0,
-  "turns_completed": 35
+  "num_sub_games": 2,
+  "sub_games": [
+    {
+      "audit": "Verified OK",
+      "log_file": "log_anrbj666-vs-anrbj666_g01.json",
+      "outcome": "survival",
+      "scores": {
+        "anrbj666(police)": 5,
+        "anrbj666(thief)": 10
+      },
+      "sub_game_number": 1,
+      "turns_completed": 35
+    },
+    {
+      "audit": "Verified OK",
+      "log_file": "log_anrbj666-vs-anrbj666_g02.json",
+      "outcome": "survival",
+      "scores": {
+        "anrbj666(police)": 5,
+        "anrbj666(thief)": 10
+      },
+      "sub_game_number": 2,
+      "turns_completed": 35
+    }
+  ]
 }
