@@ -46,6 +46,8 @@ def test_roundtrip_audit_verifies() -> None:
     bob = SealedExchange(Role.THIEF, 1, a_sent.append, lambda what: a_sent.pop(0))
     payload = bob.receive_sealed(1)
     assert payload["action"] == {"type": "move", "move": "E"}
+    assert "verdict" not in payload  # intent stays secret until audit
+    bob.apply_revealed_verdicts(alice.own_verdicts())
     assert bob.audit_theirs(alice.own_nonces()) == "Verified OK"
     assert bob.audit_theirs(["deadbeef"]) == "TAMPERED"
 

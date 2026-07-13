@@ -104,12 +104,20 @@ class BeliefMap:
                     self._p[row][col] *= likelihood
         self._normalize()
 
-    def observe_hint(self, claim: str, scent: ScentField) -> None:
-        """Weight the claimed region — inverted when the scent exposes a lie."""
+    def observe_hint(
+        self, claim: str, scent: ScentField,
+        weights: tuple[float, float] | None = None,
+    ) -> None:
+        """Weight the claimed region — inverted when the scent exposes a lie.
+
+        Optional profiler-advised (inside, outside) weights replace the
+        defaults; the per-hint scent check still flips them on a lie —
+        evidence always outranks reputation."""
         region = claimed_region(claim, self.grid_size)
         lie = claim_is_lie(claim, scent, self.grid_size)
-        inside = FALSE_CLAIM_WEIGHT if lie else TRUE_CLAIM_WEIGHT
-        outside = TRUE_CLAIM_WEIGHT if lie else FALSE_CLAIM_WEIGHT
+        true_w, false_w = weights if weights else (TRUE_CLAIM_WEIGHT, FALSE_CLAIM_WEIGHT)
+        inside = false_w if lie else true_w
+        outside = true_w if lie else false_w
         for row in range(self.grid_size):
             for col in range(self.grid_size):
                 self._p[row][col] *= inside if (row, col) in region else outside

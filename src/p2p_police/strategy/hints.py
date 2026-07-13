@@ -40,11 +40,32 @@ def build_hint(
     return text, claim, tell_truth
 
 
+# Free-text direction vocabulary: real rivals speak prose, not our templates.
+DIRECTION_WORDS: dict[str, tuple[str, ...]] = {
+    "N": ("north", "uptown", "upward", "up ", "top"),
+    "S": ("south", "downtown", "downward", "down ", "bottom", "docks"),
+    "E": ("east", "sunrise", "right side", "rightward"),
+    "W": ("west", "sunset", "left side", "leftward"),
+    "STAY": ("stay", "not moving", "right where", "standing still", "same spot",
+             "not an inch", "holding"),
+}
+
+
 def parse_claim(text: str) -> str | None:
-    """Recover the direction claim from OUR template text (opponents' free
-    text gets belief-weighted only when a claim is recognizable)."""
+    """Recover a directional claim from ANY hint text.
+
+    Fast path: our own templates. Fallback: keyword vocabulary over free
+    prose (league rivals speak their own language). Ambiguous or opaque
+    text yields None - belief then rests on scent alone, never on a guess.
+    """
     for claim, sentences in TEMPLATES.items():
         for sentence in sentences:
             if text in sentence or sentence.startswith(text):
                 return claim
-    return None
+    lowered = f" {text.lower()} "
+    matches = {
+        claim
+        for claim, words in DIRECTION_WORDS.items()
+        if any(word in lowered for word in words)
+    }
+    return matches.pop() if len(matches) == 1 else None

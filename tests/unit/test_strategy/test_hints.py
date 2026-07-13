@@ -39,3 +39,14 @@ def test_all_templates_parse_back_to_their_claim() -> None:
 
 def test_unknown_free_text_yields_no_claim() -> None:
     assert parse_claim("You will never find me, copper!") is None
+
+
+def test_free_text_directions_parse() -> None:
+    assert parse_claim("You'll never catch me heading north, copper!") == "N"
+    assert parse_claim("Vanishing into the sunset...") == "W"
+    assert parse_claim("I am not moving an inch today") == "STAY"
+
+
+def test_ambiguous_or_opaque_free_text_yields_none() -> None:
+    assert parse_claim("Going north then doubling back south!") is None
+    assert parse_claim("The pigeons know where I am.") is None

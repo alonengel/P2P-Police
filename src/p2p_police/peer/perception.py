@@ -8,6 +8,7 @@ from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.primitives import Outcome, Role
 from p2p_police.strategy.hints import parse_claim
+from p2p_police.strategy.profiler import OpponentProfiler
 
 
 class Perception:
@@ -18,6 +19,8 @@ class Perception:
         self.belief = BeliefMap(grid_size)
         self.last_hint = ""
         self.on_snapshot = None  # optional live-GUI feed
+        self.profiler = OpponentProfiler()
+        self.opponent_id = "unknown"
 
     def observe(self, engine: GameEngine, rival: Role, hint_text: str | None) -> None:
         """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4)."""
@@ -27,7 +30,9 @@ class Perception:
         self.belief.observe_scent(rival_scent, engine.board)
         claim = parse_claim(hint_text) if hint_text else None
         if claim:
-            self.belief.observe_hint(claim, rival_scent)
+            self.belief.observe_hint(
+                claim, rival_scent, self.profiler.advised_weights(self.opponent_id)
+            )
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:

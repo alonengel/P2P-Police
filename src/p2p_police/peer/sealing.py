@@ -41,9 +41,12 @@ class SealedExchange:
         # phase 1+2: the transport ack of the commit message IS the lock
         self._send({"kind": "commit", "turn": turn_index, "actor": self.role.value,
                     "commit": sealed})
-        # phase 3: reveal payload - the nonce stays secret until audit
+        # phase 3: reveal - the NONCE and the INTENT flag stay secret until
+        # audit (revealing intent live would hand the rival our lie bit and
+        # kill the deception game; ch. 5 separates commitment from disclosure)
+        public = {k: v for k, v in payload.items() if k != "verdict"}
         self._send({"kind": "reveal", "turn": turn_index, "actor": self.role.value,
-                    "payload": payload})
+                    "payload": public})
         self.own_records.append({"payload": payload, "nonce": nonce, "commit": sealed})
 
     def receive_sealed(self, turn_index: int) -> dict:
@@ -57,7 +60,8 @@ class SealedExchange:
         if reveal_msg.get("kind") != "reveal" or reveal_msg.get("turn") != turn_index:
             raise GameRuleError(f"protocol desync: expected reveal {turn_index}, got {reveal_msg!r}")
         payload = reveal_msg.get("payload") or {}
-        missing = [f for f in crypto.REQUIRED_RECORD_FIELDS if f not in payload]
+        missing = [f for f in crypto.REQUIRED_RECORD_FIELDS
+                   if f != "verdict" and f not in payload]
         if missing:
             raise GameRuleError(f"opponent reveal missing sealed fields: {missing}")
         self.their_records.append({"payload": payload, "commit": commit_msg["commit"]})
@@ -65,6 +69,10 @@ class SealedExchange:
 
     def own_nonces(self) -> list[str]:
         return [record["nonce"] for record in self.own_records]
+
+    def own_verdicts(self) -> list[bool]:
+        """Intent flags, disclosed only at audit alongside the nonces."""
+        return [record["payload"]["verdict"] for record in self.own_records]
 
     def audit_theirs(self, revealed_nonces: list[str]) -> str:
         """'Verified OK' or 'TAMPERED' (binary; one forged step voids all).
@@ -76,3 +84,10 @@ class SealedExchange:
             for record, nonce in zip(self.their_records, revealed_nonces, strict=True):
                 record["nonce"] = nonce
         return crypto.audit_records(self.their_records, revealed_nonces)
+
+    def apply_revealed_verdicts(self, verdicts: list[bool]) -> None:
+        """Insert the rival's audited intent flags so their records hash
+        complete - and so the profiler learns their true honesty rate."""
+        if len(verdicts) == len(self.their_records):
+            for record, verdict in zip(self.their_records, verdicts, strict=True):
+                record["payload"]["verdict"] = verdict
