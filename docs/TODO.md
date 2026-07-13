@@ -36,7 +36,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] domain/protocol + peer/runtime + sdk + cli peer subcommand
 - [x] Milestone: geometric game vs P2P-Thief process over localhost — MILESTONE OK (results/cross_match_prd02_2026-07-13.json)
 - [x] Spec-audit of Phase 2 done — fixes applied: move_set + technical_loss + league constants added to FIXED_TERMS; in-flight MCP calls bounded by response_timeout_sec (rule 6); COMMIT_ORDER/SHUTDOWN_GRACE noted for config promotion
-- [ ] Phase 6 carry-over (audit): wire GamePhaseMachine into the runtime loop (natural fit with commit/reveal phases); route deadline/rule failures to TECHNICAL_LOSS
+- [x] (done in Phase 6) GamePhaseMachine wired into the runtime; failures route to TECHNICAL_LOSS
 
 ## Phase 3 — Blind strategy (PRD_03)
 - [x] strategy/brain_base (BrainBase seam, [strategy] toml override, loud bad-spec failure)
@@ -55,8 +55,8 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Persistent single-session McpTransport (dedicated loop thread, session rebuild on failure)
 - [x] MILESTONE: full blind game over https://mcp.alon.website (named tunnel) - 35 turns, digests identical (results/public_tunnel_prd05_2026-07-13.json)
 - [ ] DEPLOYMENT.md: named-tunnel runbook (config.yml ingress -> my_port), quick-tunnel fallback, bearer-token protection
-- [ ] peer/watchdog + reconnect hardening
-- [ ] Milestone: full game over public URL
+- [x] peer/watchdog (rule 7) + persistent-session reconnect hardening
+- [x] Milestone: full game over public URL (PRD-05 evidence)
 
 ## Phase 6 — Crypto (PRD_06)
 - [x] domain/crypto: canonical JSON, pinned 7-field sealed record, SHA-256 commit/verify, secrets nonce, binary audit
