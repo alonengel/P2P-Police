@@ -1,0 +1,76 @@
+{
+  "curve": [
+    {
+      "episode": 0,
+      "eval_win_rate": 0.1,
+      "epsilon": 0.3
+    },
+    {
+      "episode": 50,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.275
+    },
+    {
+      "episode": 100,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.25
+    },
+    {
+      "episode": 150,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.225
+    },
+    {
+      "episode": 200,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.2
+    },
+    {
+      "episode": 250,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.175
+    },
+    {
+      "episode": 300,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.15
+    },
+    {
+      "episode": 350,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.125
+    },
+    {
+      "episode": 400,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.1
+    },
+    {
+      "episode": 450,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.075
+    },
+    {
+      "episode": 500,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 550,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 599,
+      "eval_win_rate": 1.0,
+      "epsilon": 0.05
+    }
+  ],
+  "final_weights": [
+    0.6867249248333065,
+    -0.4501879874539946,
+    -0.0600908382449474,
+    0.19216368924707186,
+    0.0021844142045769257
+  ]
+}

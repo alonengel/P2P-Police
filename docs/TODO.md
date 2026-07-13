@@ -54,7 +54,6 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 ## Phase 5 — Tunneling (PRD_05)
 - [x] Persistent single-session McpTransport (dedicated loop thread, session rebuild on failure)
 - [x] MILESTONE: full blind game over https://mcp.alon.website (named tunnel) - 35 turns, digests identical (results/public_tunnel_prd05_2026-07-13.json)
-- [ ] DEPLOYMENT.md: named-tunnel runbook (config.yml ingress -> my_port), quick-tunnel fallback, bearer-token protection
 - [x] peer/watchdog (rule 7) + persistent-session reconnect hardening
 - [x] Milestone: full game over public URL (PRD-05 evidence)
 
@@ -78,17 +77,14 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 ## Phase 8 — Submission
 - [x] README: user manual + academic report complete (all six mandatory components + ISO 25010 + course anchors; screenshots embedded)
 - [x] docs/UI.md
-- [ ] notebooks/analysis.ipynb (sensitivity: decay/board/lookahead) + COST.md
 - [x] docs/LEAGUE_RUNBOOK.md + docs/DEPLOYMENT.md (tunnel URLs per agent, token-expiry gotcha, per-game commit-ID email duty)
-- [ ] Optional RL experiment + learning curves
+- [x] RL experiment: linear-FA Q-learning + learning curves (1.00 vs random; 0.00 vs perfect evader - theory-confirming negative result in README)
 - [x] scripts/check_submission.py PASS; [ ] v1.0-submission tag AFTER league games
 - [ ] Moodle: form PDF (unaltered fields), per-member submission, team code anrbj666
 
 ## Phase 8 status (2026-07-13)
 - [x] Series support: --sub-game override + series-result aggregator (per-group totals, sub-games won, tie at tie_score); 2-sub-game local series proven end-to-end
 - [x] notebooks/analysis.ipynb + docs/COST.md (see Phase 8 status)
-- [ ] docs/UI.md (Nielsen 10, per-state screenshots incl. TAMPERED demo)
-- [ ] scripts/check_submission.py + final guidelines-auditor sweep
 - [ ] v1.0-submission annotated tags (AFTER the real league games)
 - [ ] REAL league games: >=2 counted vs different teams (LEAGUE_RUNBOOK.md)
 

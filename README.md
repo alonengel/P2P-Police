@@ -128,8 +128,21 @@ Measured: full-information pursuit captures a random thief ≥20/25 and beat the
 evasion twin in 13 turns; *blind* (belief-only) pursuit still captures ≥15/25.
 The blind cross-repo match flipped to thief survival — **uncertainty works as
 the rulebook intends**, and our belief machinery demonstrably drives the moves.
-(No RL was used; learning curves are therefore not applicable — the heuristics
-above beat our RL sparring baselines in self-play at far lower complexity.)
+**Reinforcement learning (optional path, implemented):** a linear
+function-approximation Q-learner (`strategy/rl_brain.py`, features = barrier-
+aware BFS geometry, TD(0), ε-greedy 0.30→0.05) trains by self-play
+(`scripts/train_rl.py`) and converges to a **1.00 greedy win rate** vs the
+random-walker baseline in ~250 episodes — learned weights are interpretable
+(distance −0.45: pursue; openness +0.19: avoid corners):
+
+![RL learning curve](assets/rl_learning_curve.png)
+
+Against the *perfect evader*, movement-only RL captures **0%** — reproducing
+the classic cops-and-robbers result that one cop cannot corner a distance-
+maximizing robber on an open grid. That negative result is exactly why the
+shipped brain keeps its **barrier tactics** (which the RL action space lacks)
+and remains the league default; the RL brain is loadable via
+`[strategy] police_class = "p2p_police.strategy.rl_brain:LinearQBrain"`.
 
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
