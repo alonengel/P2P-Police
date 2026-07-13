@@ -1040,6 +1040,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "jsonschema" },
     { name = "matplotlib" },
     { name = "nbformat" },
     { name = "pillow" },
@@ -1054,6 +1055,7 @@ requires-dist = [{ name = "fastmcp", specifier = ">=3.4.3" }]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "matplotlib", specifier = ">=3.11.0" },
     { name = "nbformat", specifier = ">=5.10.4" },
     { name = "pillow", specifier = ">=11.0" },

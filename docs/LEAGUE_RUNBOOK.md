@@ -20,6 +20,9 @@ costs points or disqualifies (rule numbers from the rulebook's Appendix ה/ו).
    scent_model_sha256 before move one either way."*
    Scent physics is pure dice — zero strategy inside; sharing it eliminates
    the divergent-float technical-loss class for both teams.
+3b. **Disclose interpretation edge cases** (docs/INTEROP_HASHING.md item 7:
+   trapped-thief reading, max_moves-as-survival) and offer the JSON Schema
+   (`config/game.schema.json`) so they can pre-validate their game.json.
 4. **Warm-up games are allowed and wise** (uncounted); declare which game is
    the counted one BEFORE it starts.
 5. **Truthful game-count declaration** (rules 37-38): the lecturer

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "P2P Cops-and-Robbers shared game configuration (signed constitution)",
+  "description": "Interop artifact: any league opponent can validate their game.json against this before negotiation. Const = Appendix VI fixed; minimum = negotiable upward only. Adapted from Renat Karimov's parallel scaffold.",
+  "type": "object",
+  "required": ["schema_version", "agreed_between", "board_and_agents", "world",
+               "movement_and_barriers", "scoring", "pheromones",
+               "network_and_league", "rate_limiter_gatekeeper"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "agreed_between": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+    "board_and_agents": {
+      "type": "object",
+      "required": ["grid_size", "num_agents", "thief_start", "cop_start"],
+      "properties": {
+        "grid_size": {"type": "integer", "minimum": 7},
+        "num_agents": {"const": 2},
+        "thief_start": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+        "cop_start": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+        "axis_origin_corner": {"type": "string"},
+        "axis_start_index": {"type": "integer"}
+      }
+    },
+    "world": {
+      "type": "object",
+      "properties": {"map_area": {"type": "string"}, "hint_max_words": {"type": "integer", "minimum": 1}}
+    },
+    "movement_and_barriers": {
+      "type": "object",
+      "required": ["move_set", "max_barriers", "max_moves", "survival_threshold"],
+      "properties": {
+        "move_set": {"const": ["N", "S", "E", "W", "STAY"]},
+        "max_barriers": {"type": "integer", "minimum": 14},
+        "max_moves": {"type": "integer", "minimum": 35},
+        "survival_threshold": {"type": "integer", "minimum": 35}
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "properties": {
+        "capture_cop": {"const": 20}, "capture_thief": {"const": 5},
+        "survival_cop": {"const": 5}, "survival_thief": {"const": 10},
+        "tie_score": {"const": 2}, "technical_loss": {"const": 0}
+      }
+    },
+    "pheromones": {
+      "type": "object",
+      "properties": {
+        "pheromone_center_intensity": {"const": 0.9},
+        "pheromone_decay": {"const": 0.1},
+        "pheromone_grid_size": {"const": 5}
+      }
+    },
+    "network_and_league": {
+      "type": "object",
+      "properties": {
+        "diversity_reward": {"const": 10}, "min_games_to_pass": {"const": 2},
+        "max_games_per_team": {"const": 10},
+        "token_budget_per_series": {"type": "integer", "minimum": 0},
+        "response_timeout_sec": {"type": "number", "exclusiveMinimum": 0},
+        "watchdog_timeout_sec": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "rate_limiter_gatekeeper": {
+      "type": "object",
+      "properties": {
+        "requests_per_minute": {"type": "integer", "minimum": 30},
+        "concurrent_requests": {"type": "integer", "minimum": 2},
+        "retry_backoff_sec": {"type": "number", "minimum": 5},
+        "max_retries": {"type": "integer", "minimum": 3},
+        "queue_depth": {"type": "integer", "minimum": 100}
+      }
+    }
+  }
+}
