@@ -1,0 +1,35 @@
+# Fast hygiene gates on every commit; pytest deliberately runs in CI, not here.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=600"]
+      - id: detect-private-key
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.0
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+
+  - repo: local
+    hooks:
+      - id: line-cap-150
+        name: 150-code-line file cap
+        entry: uv run python scripts/check_line_cap.py
+        language: system
+        types: [python]
+        pass_filenames: true
+      - id: physics-parity
+        name: twin-repo physics parity
+        entry: uv run python scripts/check_physics_parity.py
+        language: system
+        pass_filenames: false
+        files: ^(src/.*/domain/|tests/vectors/)
