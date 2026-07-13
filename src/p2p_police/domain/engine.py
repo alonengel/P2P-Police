@@ -54,6 +54,11 @@ class GameEngine:
         self.outcome = Outcome.ONGOING
         self._next_actor = Role.POLICE
 
+    @property
+    def next_actor(self) -> Role:
+        """Whose action the engine expects next (police opens every round)."""
+        return self._next_actor
+
     def _require_turn(self, role: Role) -> None:
         if self.outcome is not Outcome.ONGOING:
             raise GameRuleError(f"game is over ({self.outcome.value}); no further actions")

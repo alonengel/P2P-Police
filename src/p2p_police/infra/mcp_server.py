@@ -87,7 +87,13 @@ def start_peer_server(
     ensure_port_free(port, host)
     thread = threading.Thread(
         target=lambda: mcp.run(
-            transport="http", host=host, port=port, show_banner=False
+            transport="http",
+            host=host,
+            port=port,
+            show_banner=False,
+            # keep stdout clean for the CLI's JSON report: uvicorn access logs
+            # are noise at turn cadence
+            log_level="warning",
         ),
         name=f"mcp-server-{port}",
         daemon=True,

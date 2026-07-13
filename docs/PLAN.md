@@ -69,3 +69,12 @@ drift (→ parity script + paired commits), turn deadlock (→ FSM + deadlines +
 watchdog), tunnel drops (→ retry-until-up, warm-up games), Gmail 429/suspension
 (→ token bucket + quota + backoff), secret leakage (→ gitignore-first +
 gitleaks CI).
+
+## 9. Milestone evidence
+
+- **PRD-02 (2026-07-13):** first cross-repo game — `p2p-police peer` (port 8802)
+  vs `p2p-thief peer` (port 8801), two processes from the two repos over
+  localhost FastMCP. Config sha verified, commit order agreed, 20 full turns,
+  outcome `capture` on BOTH sides, end-state digests identical
+  (`results/cross_match_prd02_2026-07-13.json`). Runner:
+  workspace `run_cross_match.ps1`.

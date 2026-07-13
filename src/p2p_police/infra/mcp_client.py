@@ -78,5 +78,16 @@ def _is_connection_flavored(error: Exception) -> bool:
     text = f"{type(error).__name__}: {error}".lower()
     return any(
         marker in text
-        for marker in ("connect", "connection", "refused", "unreachable", "reset", "timeout")
+        for marker in (
+            "connect",
+            "connection",
+            "refused",
+            "unreachable",
+            "reset",
+            "timeout",
+            "readerror",   # httpx: peer died mid-response
+            "writeerror",
+            "closed",
+            "remoteprotocol",
+        )
     )

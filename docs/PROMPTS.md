@@ -68,3 +68,23 @@ workspace rules.
 
 **Audit.** A spec-auditor agent re-read the dossier sections (board, pheromones,
 state machine) against every domain file before the phase was closed.
+
+---
+
+## 2026-07-13 — Session 2 (cont.): Phase 2 MCP infra + first cross-repo game
+
+**Pattern — probe the installed API before writing against it.** One tiny
+script confirmed fastmcp 3.4.4's run()/Client surface before mcp_server.py
+was written; zero API-mismatch rework.
+
+**Pattern — integration test as coverage strategy.** Instead of omitting the
+transports from coverage (demo's approach), a slow-marker test drives a REAL
+FastMCP server on an ephemeral port; both transport modules stay in the 85%
+gate.
+
+**Debugging lesson — shutdown races are protocol design.** First cross-repo
+run: police exited immediately after receiving the thief's audit, killing its
+server mid-HTTP-session; the thief's final send died with httpx.ReadError.
+Fixes: classify read/write/closed errors as retryable, make the audit send
+best-effort, add a shutdown grace period. Lesson: **the last message of a P2P
+session needs the same engineering care as the first.**

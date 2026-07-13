@@ -5,6 +5,7 @@ logic never lives here (SDK-architecture rule from the submission guidelines).
 """
 
 import argparse
+import json
 
 from p2p_police import __version__
 
@@ -18,10 +19,22 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version", action="version", version=f"p2p-police {__version__}"
     )
+    subcommands = parser.add_subparsers(dest="command")
+    peer = subcommands.add_parser(
+        "peer", help="run one geometric game against the configured opponent"
+    )
+    peer.add_argument("--config-dir", default="config", help="config directory")
+    peer.add_argument("--seed", type=int, default=None, help="policy RNG seed")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    """CLI entry point. Subcommands (peer, replay, selfplay) arrive with the SDK."""
-    build_parser().parse_args(argv)
+    """CLI entry point: dispatch to the SDK, print the report as JSON."""
+    args = build_parser().parse_args(argv)
+    if args.command == "peer":
+        from p2p_police.sdk.sdk import SimulationSdk
+
+        report = SimulationSdk(args.config_dir).run_peer(seed=args.seed)
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("digest_match") else 1
     return 0

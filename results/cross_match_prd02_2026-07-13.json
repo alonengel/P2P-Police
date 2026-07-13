@@ -1,0 +1,21 @@
+{
+  "milestone": "PRD-02: cross-repo geometric game over localhost MCP",
+  "date": "2026-07-13",
+  "police_seed": 3,
+  "thief_seed": 5,
+  "police": {
+    "role": "police",
+    "outcome": "capture",
+    "turns_completed": 20,
+    "end_state_digest": "d8f52a2b1a7d77c5f66aefb55c1ea000930344ae4d274a4979d10e7d50dc4514",
+    "digest_match": true
+  },
+  "thief": {
+    "role": "thief",
+    "outcome": "capture",
+    "turns_completed": 20,
+    "end_state_digest": "d8f52a2b1a7d77c5f66aefb55c1ea000930344ae4d274a4979d10e7d50dc4514",
+    "digest_match": true
+  },
+  "verdict": "MILESTONE OK: identical end state across repos"
+}

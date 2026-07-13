@@ -28,12 +28,14 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Spec-auditor pass on Phase 1 deliverables
 
 ## Phase 2 — MCP infra (PRD_02)
-- [ ] infra/mcp_server: 4 tools → thread-safe queues; port-busy fail-fast
-- [ ] infra/mcp_client: retry-until-opponent-up transport
-- [ ] shared/config: JSON-overrides-TOML, version gate wired to startup
-- [ ] domain/negotiation: byte-identity + config_sha256 + commit-order pinning
-- [ ] peer/deadline: expiry on every awaited request
-- [ ] Milestone: geometric game vs P2P-Thief process over localhost
+- [x] infra/mcp_server: 4 tools → thread-safe queues; port-busy fail-fast
+- [x] infra/mcp_client: retry-until-opponent-up transport (+shutdown-race hardening)
+- [x] shared/config: JSON-overrides-TOML, version gate wired to startup
+- [x] domain/negotiation: byte-identity + config_sha256 + commit-order pinning + Appendix-VI limit enforcement
+- [x] peer/deadline: expiry on every awaited request
+- [x] domain/protocol + peer/runtime + sdk + cli peer subcommand
+- [x] Milestone: geometric game vs P2P-Thief process over localhost — MILESTONE OK (results/cross_match_prd02_2026-07-13.json)
+- [ ] Deferred: spec-auditor sweep of Phase 2 at next session start
 
 ## Phase 3 — Blind strategy (PRD_03)
 - [ ] strategy/brain_base (BrainBase seam, [strategy] toml override)
