@@ -25,12 +25,12 @@ processes, two repos).
 |---|---|---|
 | sdk | sdk, series | Single business entry: run_peer/replay/verify_log; sub-game series + role alternation |
 | domain (physics, PURE — parity-locked with twin) | board, rules, scoring, scent, belief, crypto, protocol, negotiation, state_machine, game_ids | Grid+barriers, captures/survival, score table, pheromone emission+decay, Bayesian belief, canonical-JSON SHA-256 commit/verify, message dataclasses, config identity+locks, legal-transition FSM, artifact naming |
-| peer | runtime, handshake, turn_taker, turn_receiver, sealing, deadline, watchdog, audit | Orchestrator (coordinates, never executes), step-0 declaration, my-turn/opponent-turn flows, record sealing, timeouts, freeze recovery, end-of-game mutual audit |
+| peer | runtime, perception, sealing, deadline, watchdog | Orchestrator turn loop + FSM, local-truth belief/snapshots, 4-phase sealed exchange + mutual audit, timeouts, freeze recovery |
 | strategy (role-specific) | brain_base, police_brain, hints, talk_providers | BrainBase seam ([strategy] override), pursuit + barrier tactics, truth/lie hint policy (≤15 words), provider selection |
 | infra | mcp_server, mcp_client, llm_provider, email_sender | FastMCP tools→thread-safe queues; outbound transport w/ retry-until-up; 5 providers behind gatekeeper; gmail.send-only reporting |
 | shared | config, gatekeeper, rate_limiter, version, sysinfo | JSON-overrides-TOML loader + version gate, single doorway for ALL external calls, token bucket+quota+DOS lock, versions, hardware spec |
-| report | schemas, emit, result_report | The four game artifacts; result agreement handshake |
-| gui | window, board_view, live_view, replay, replay_data, replay_controls | Belief heatmap + YOUR TURN/LOCKED banner; replay with per-step SHA-256 re-verification |
+| report | artifacts | The four Table-20 game artifacts (declaration/config/log/result) |
+| gui | live_view, replay | Belief heatmap + YOUR TURN/LOCKED/GAME OVER banner; replay witness with full-log SHA-256 re-verification |
 
 ## 4. Key flows
 

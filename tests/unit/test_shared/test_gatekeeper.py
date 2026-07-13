@@ -92,3 +92,29 @@ def test_gatekeeper_gives_up_after_bounded_retries() -> None:
 def test_unknown_service_falls_back_to_default_limits() -> None:
     gate = ApiGatekeeper(LIMITS, clock=FakeClock(), sleep=lambda _s: None)
     assert gate.execute("mystery", lambda: 42) == 42
+
+
+def test_empty_bucket_queues_instead_of_rejecting() -> None:
+    """Guidelines section 5.3: overflow waits for a refill, never drops."""
+    clock = FakeClock()
+    limits = {"services": {"default": {"requests_per_minute": 60, "max_retries": 0,
+                                       "retry_after_seconds": 0}},
+              "queue": {"max_depth": 5, "drain_interval_seconds": 1, "wait_timeout_seconds": 300}}
+
+    def sleeping(seconds: float) -> None:
+        clock.now += seconds  # sleeping refills the bucket on the fake clock
+
+    gate = ApiGatekeeper(limits, clock=clock, sleep=sleeping)
+    for _ in range(60):
+        gate.execute("default", lambda: "ok")  # drains the burst capacity
+    assert gate.execute("default", lambda: "ok") == "ok"  # queued, then served
+
+
+def test_queue_backpressure_raises_when_full() -> None:
+    from p2p_police.shared.rate_limiter import RateLimitDeniedError, ServiceLimiter
+
+    clock = FakeClock()
+    limiter = ServiceLimiter({"requests_per_minute": 1}, clock)
+    limiter.waiters = 3
+    with pytest.raises(RateLimitDeniedError, match="backpressure"):
+        limiter.wait_for_token("x", {"max_depth": 3}, lambda _s: None)

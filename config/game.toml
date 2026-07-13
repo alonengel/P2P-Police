@@ -9,6 +9,7 @@ group_name = "anrbj666"
 group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
+counted_games_played = 0    # UPDATE before every counted game (rules 37-38)
 repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
 
 [network]

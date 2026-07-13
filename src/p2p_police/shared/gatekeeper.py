@@ -26,6 +26,7 @@ class ApiGatekeeper:
         sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self._services = rate_limits["services"]
+        self._queue_config = rate_limits.get("queue", {})
         self._limiters = {
             name: ServiceLimiter(cfg, clock) for name, cfg in self._services.items()
         }
@@ -41,11 +42,13 @@ class ApiGatekeeper:
         retries = int(config.get("max_retries", 3))
         backoff = float(config.get("retry_after_seconds", 5))
         attempt = 0
+        limiter = self._limiter(service)
         while True:
-            self._limiter(service).check(service)
+            limiter.wait_for_token(service, self._queue_config, self._sleep)
             attempt += 1
             try:
-                result = call()
+                with limiter.concurrency:  # config-driven cap (section 5.1)
+                    result = call()
                 self.call_log.append({"service": service, "attempt": attempt, "ok": True})
                 return result
             except TransientProviderError as error:

@@ -14,7 +14,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] CI (gitleaks, line cap, ruff, coverage, smoke) + pre-commit + gate scripts
 - [x] Docs skeletons: PRD, PLAN, TODO, PROMPTS, ADRs 0001-0002
 - [x] Claude tooling: .claude/agents (code-reviewer, spec-auditor, guidelines-auditor, test-designer, physics-parity), hooks, CLAUDE.md
-- [x] Push to origin (CI verification on GitHub pending gh auth)
+- [x] Pushed to origin continuously; CI green (verified via gh)
 
 ## Phase 1 — Base logic (PRD_01)
 - [x] domain/board: grid, barriers, legality (orthogonal+STAY, no diagonals)
@@ -77,17 +77,26 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 
 ## Phase 8 — Submission
 - [x] README: user manual + academic report complete (all six mandatory components + ISO 25010 + course anchors; screenshots embedded)
-- [ ] docs/UI.md (Nielsen 10, per-state screenshots, workflow, accessibility)
+- [x] docs/UI.md
 - [ ] notebooks/analysis.ipynb (sensitivity: decay/board/lookahead) + COST.md
 - [x] docs/LEAGUE_RUNBOOK.md + docs/DEPLOYMENT.md (tunnel URLs per agent, token-expiry gotcha, per-game commit-ID email duty)
 - [ ] Optional RL experiment + learning curves
-- [ ] scripts/check_submission.py PASS; v1.0-submission annotated tag pushed
+- [x] scripts/check_submission.py PASS; [ ] v1.0-submission tag AFTER league games
 - [ ] Moodle: form PDF (unaltered fields), per-member submission, team code anrbj666
 
 ## Phase 8 status (2026-07-13)
 - [x] Series support: --sub-game override + series-result aggregator (per-group totals, sub-games won, tie at tie_score); 2-sub-game local series proven end-to-end
-- [ ] notebooks/analysis.ipynb (sensitivity: decay/board/lookahead) + docs/COST.md
+- [x] notebooks/analysis.ipynb + docs/COST.md (see Phase 8 status)
 - [ ] docs/UI.md (Nielsen 10, per-state screenshots incl. TAMPERED demo)
 - [ ] scripts/check_submission.py + final guidelines-auditor sweep
 - [ ] v1.0-submission annotated tags (AFTER the real league games)
 - [ ] REAL league games: >=2 counted vs different teams (LEAGUE_RUNBOOK.md)
+
+## Final tri-audit fixes (2026-07-13, full PDF re-validation)
+- [x] BLOCKER: technical loss now still emits artifacts + email (rules 32/35)
+- [x] BLOCKER: TAMPERED/failed audit voids the game -> technical_loss score (rule 19)
+- [x] MAJOR: opponent nonces persisted into the log; verify-log + replay verify BOTH halves (rules 20/36)
+- [x] MAJOR: counted_games_played from config (rules 37-38) - update per counted game
+- [x] Gatekeeper queue-not-reject + concurrency semaphore (guidelines 5.1/5.3); ADR-0003 scopes the peer channel out
+- [x] PLAN module map synced to the shipped tree
+- [ ] League day: share private repos with lecturer (rmisegal) OR make public; flip [email] mode=send; update counted_games_played each game

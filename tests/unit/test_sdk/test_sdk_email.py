@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from p2p_police.sdk import reporting
 from p2p_police.sdk.sdk import SimulationSdk
 
 
@@ -17,7 +18,7 @@ def make_sdk(config_dir: Path, mode: str) -> SimulationSdk:
 def test_disabled_mode_sends_nothing(config_dir: Path) -> None:
     sdk = make_sdk(config_dir, "disabled")
     report = {"outcome": "capture", "artifacts": []}
-    sdk._maybe_email(report)
+    reporting.maybe_email(sdk.config, report)
     assert "email_message_id" not in report
 
 
@@ -33,7 +34,7 @@ def test_send_mode_calls_the_sender(config_dir: Path, monkeypatch, tmp_path: Pat
 
     monkeypatch.setattr("p2p_police.infra.email_sender.send_report", fake_send)
     report = {"outcome": "survival", "artifacts": [str(attachment)]}
-    sdk._maybe_email(report)
+    reporting.maybe_email(sdk.config, report)
     assert report["email_message_id"] == "msg-123"
     assert calls == {"recipient": "nobody@example.com", "n": 1}
 

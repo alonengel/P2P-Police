@@ -21,7 +21,10 @@ def load_steps(log_path: str) -> tuple[dict, list[dict], str]:
     """Merge own+opponent records into step order; verdict from own seals."""
     doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
     verdict = "Verified OK"
-    for record in doc.get("records", []):
+    verifiable = doc.get("records", []) + [
+        r for r in doc.get("opponent_records", []) if "nonce" in r
+    ]
+    for record in verifiable:
         if not crypto.verify_commit(record["payload"], record["nonce"], record["commit"]):
             verdict = "TAMPERED"
     merged = [r["payload"] for r in doc.get("records", [])]

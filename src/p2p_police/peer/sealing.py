@@ -67,5 +67,12 @@ class SealedExchange:
         return [record["nonce"] for record in self.own_records]
 
     def audit_theirs(self, revealed_nonces: list[str]) -> str:
-        """'Verified OK' or 'TAMPERED' (binary; one forged step voids all)."""
+        """'Verified OK' or 'TAMPERED' (binary; one forged step voids all).
+
+        Persists the revealed nonces into their_records so the SUBMITTED log
+        lets any third party re-verify the opponent's half too (rules 20/36).
+        """
+        if len(revealed_nonces) == len(self.their_records):
+            for record, nonce in zip(self.their_records, revealed_nonces, strict=True):
+                record["nonce"] = nonce
         return crypto.audit_records(self.their_records, revealed_nonces)

@@ -81,11 +81,19 @@ class ServiceLimiter:
     def __init__(
         self, service_config: dict, clock: Callable[[], float] = time.monotonic
     ) -> None:
+        import threading
+
         self.bucket = TokenBucket(service_config["requests_per_minute"], clock)
         self.quota = QuotaManager(
             service_config.get("daily_quota_safety_threshold", 10_000), clock
         )
-        self.dos = DosDetector()
+        self.dos = DosDetector(int(service_config.get("dos_trip_after", 10)))
+        # Concurrency cap (guidelines section 5.1) - config, never code.
+        self.concurrency = threading.BoundedSemaphore(
+            int(service_config.get("concurrent_max",
+                                   service_config.get("concurrent_requests", 2)))
+        )
+        self.waiters = 0
 
     def check(self, service: str) -> None:
         """Raise RateLimitDeniedError unless every gate passes (fail fast)."""
@@ -98,3 +106,37 @@ class ServiceLimiter:
         self.dos.record(allowed)
         if not allowed:
             raise RateLimitDeniedError(f"{service}: token bucket empty - back off")
+
+    def wait_for_token(
+        self, service: str, queue_config: dict, sleep: Callable[[float], None]
+    ) -> None:
+        """Guidelines section 5.3: an exhausted bucket QUEUES, never rejects.
+
+        FIFO-ish waiters bounded by max_depth (backpressure raises), draining
+        at drain_interval until wait_timeout. Quota/DOS stops still reject -
+        they protect the account, not the throughput.
+        """
+        deadline = self._deadline(queue_config)
+        if self.waiters >= int(queue_config.get("max_depth", 100)):
+            raise RateLimitDeniedError(f"{service}: queue full - backpressure")
+        self.waiters += 1
+        try:
+            while True:
+                try:
+                    self.check(service)
+                    return
+                except RateLimitDeniedError as denial:
+                    if "token bucket" not in str(denial):
+                        raise
+                    if deadline():
+                        raise RateLimitDeniedError(
+                            f"{service}: queue wait timeout"
+                        ) from denial
+                    sleep(float(queue_config.get("drain_interval_seconds", 0.1)))
+        finally:
+            self.waiters -= 1
+
+    def _deadline(self, queue_config: dict) -> Callable[[], bool]:
+        start = self.bucket._clock()
+        timeout = float(queue_config.get("wait_timeout_seconds", 300))
+        return lambda: self.bucket._clock() - start >= timeout
