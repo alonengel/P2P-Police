@@ -25,6 +25,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     peer.add_argument("--config-dir", default="config", help="config directory")
     peer.add_argument("--seed", type=int, default=None, help="policy RNG seed")
+    verify = subcommands.add_parser(
+        "verify-log", help="recompute every sealed record in a saved game log"
+    )
+    verify.add_argument("--log", required=True, help="path to a log_*.json artifact")
     return parser
 
 
@@ -37,4 +41,10 @@ def main(argv: list[str] | None = None) -> int:
         report = SimulationSdk(args.config_dir).run_peer(seed=args.seed)
         print(json.dumps(report, indent=2))
         return 0 if report.get("digest_match") else 1
+    if args.command == "verify-log":
+        from p2p_police.sdk.sdk import SimulationSdk
+
+        verdict = SimulationSdk.verify_log(args.log)
+        print(verdict)
+        return 0 if verdict == "Verified OK" else 1
     return 0

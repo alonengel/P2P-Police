@@ -61,17 +61,18 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 ## Phase 6 — Crypto (PRD_06)
 - [x] domain/crypto: canonical JSON, pinned 7-field sealed record, SHA-256 commit/verify, secrets nonce, binary audit
 - [x] peer/sealing: SealedExchange - 4-phase commit/ack/reveal/audit per half-turn
-- [ ] peer/handshake step-0 (hardware spec, commit hash, game-count declaration) - with Phase 7 declaration artifact
+- [x] Step-0 data in the declaration artifact (hardware spec via sysinfo, git commit hash, counted-games; sealed exchange next to negotiation TBD for league)
 - [x] peer/audit: nonces ride the end audit message; every rival record recomputed -> Verified OK/TAMPERED in the report
 - [x] Tamper-injection tests -> TAMPERED (payload rewrite, wrong nonce, count mismatch)
 - [x] FSM wired into the runtime (COMPUTING->COMMITTING->AWAITING_REVEAL->VERIFYING; failures -> terminal TECHNICAL_LOSS)
 - [x] MILESTONE: cross-repo match fully sealed - 35 steps, audit Verified OK both sides
 
 ## Phase 7 — Reporting + GUI (PRD_07)
-- [ ] report/schemas + emit: declaration/config/log/result (game_uid naming)
+- [x] report/artifacts: all four Table-20 artifacts emitted per game (shared game_uid, game_id-derived names; config archived to config/games/ per rules 3-4)
 - [ ] report/result_report: agreement handshake; infra/email_sender (gmail.send only, real send)
 - [ ] gui/live_view: belief heatmap + YOUR TURN/LOCKED banner (LOCAL TRUTH ONLY)
-- [ ] gui/replay: per-step re-verification → Verified OK / TAMPERED
+- [x] verify-log CLI: headless replay verification engine on saved logs (real-log Verified OK; tampered-log TAMPERED proven)
+- [ ] gui/replay viewer (visual wrapper over verify-log + step-through board)
 - [ ] Screenshots of every screen/state → assets/
 
 ## Phase 8 — Submission

@@ -4,14 +4,18 @@ Every consumer (CLI now; GUI and league tooling later) goes through here.
 Assembles config, engine, transport and runtime; owns no game logic itself.
 """
 
+import json
 import random
 import time
+from pathlib import Path
 
+from p2p_police.domain import crypto, game_ids
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.primitives import Role
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes, build_peer_server, start_peer_server
 from p2p_police.peer.runtime import GeometricRuntime
+from p2p_police.report import artifacts
 from p2p_police.shared.config import Config
 from p2p_police.strategy.brain_base import resolve_brain
 
@@ -61,7 +65,50 @@ class SimulationSdk:
             resolve_brain(self.config, MY_ROLE, random.Random(seed)),
         )
         report = runtime.play()
+        report["artifacts"] = [str(p) for p in self._emit_artifacts(runtime, report)]
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)
         return report
+
+    def _emit_artifacts(self, runtime: GeometricRuntime, report: dict) -> list:
+        """Write the four Table-20 artifacts (results/ + archived config)."""
+        game_id = game_ids.build_game_id(
+            self.config.group_id, report.get("opponent_group_id", "unknown")
+        )
+        game_uid = game_ids.new_game_uid()
+        sub_game = int(self.config.private["game"]["sub_game_number"])
+        from p2p_police.domain.primitives import Outcome
+
+        score = self.config.score_table().points_for(Outcome(report["outcome"]))
+        results = Path("results")
+        written = [
+            artifacts.emit(
+                artifacts.build_declaration(self.config, game_id, game_uid, 0),
+                results, game_ids.declaration_name(game_id)),
+            artifacts.emit(
+                artifacts.build_config_artifact(self.config, game_id, game_uid, sub_game),
+                Path("config/games"), game_ids.config_name(game_id, sub_game)),
+            artifacts.emit(
+                artifacts.build_log(self.config, game_id, game_uid, sub_game, report,
+                                    runtime.exchange.own_records,
+                                    runtime.exchange.their_records),
+                results, game_ids.log_name(game_id, sub_game)),
+            artifacts.emit(
+                artifacts.build_result(self.config, game_id, game_uid, report, score,
+                                       runtime.talk.meter.total),
+                results, game_ids.result_name(game_id)),
+        ]
+        return written
+
+    @staticmethod
+    def verify_log(log_path: str) -> str:
+        """Headless replay verification engine (mandatory deliverable, ch. 7):
+        recompute every sealed record in a saved log -> Verified OK/TAMPERED."""
+        doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
+        for record in doc.get("records", []):
+            if not crypto.verify_commit(
+                record["payload"], record["nonce"], record["commit"]
+            ):
+                return "TAMPERED"
+        return "Verified OK"

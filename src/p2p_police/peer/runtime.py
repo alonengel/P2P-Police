@@ -76,6 +76,7 @@ class GeometricRuntime:
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
         verify_agreement(mine, theirs)
+        self.opponent_group_id = theirs.get("group_id", "unknown")
         return theirs
 
     def _my_half_turn(self, turn_index: int) -> None:
@@ -105,8 +106,7 @@ class GeometricRuntime:
         self._update_belief(actor, payload.get("hint"))
 
     def _update_belief(self, rival, hint_text) -> None:
-        """Diffuse (rival moved), weigh the rival's scent trail, then the
-        hint - whose claim the scent evidence may expose as a lie (ch. 4)."""
+        """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4)."""
         self.belief.diffuse(self.engine.board)
         rival_scent = self.engine.scent[rival]
         self.belief.observe_scent(rival_scent, self.engine.board)
@@ -162,4 +162,5 @@ class GeometricRuntime:
             "digest_match": digest_match,
             "audit": audit_verdict,
             "steps_sealed": len(self.exchange.own_records),
+            "opponent_group_id": getattr(self, "opponent_group_id", "unknown"),
         }
