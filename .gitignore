@@ -1,0 +1,33 @@
+# --- Secrets (rules 39-40: NEVER commit; rotate immediately if ever leaked) ---
+.env
+credentials.json
+token.json
+*.key
+*.pem
+client_secret*.json
+ngrok.yml
+.cloudflared/
+
+# --- Python / uv ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# --- Tooling caches ---
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Local artifacts (kept out of git; league artifacts live in config/games/ + results/) ---
+results/local/
+logs/
+*.log
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
