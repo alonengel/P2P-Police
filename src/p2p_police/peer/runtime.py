@@ -9,7 +9,6 @@ import contextlib
 import queue
 
 from p2p_police.domain import protocol
-from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.negotiation import build_agreement, verify_agreement
@@ -18,9 +17,10 @@ from p2p_police.domain.state_machine import GamePhaseMachine
 from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
+from p2p_police.peer.perception import Perception
 from p2p_police.peer.sealing import SealedExchange
 from p2p_police.strategy.brain_base import BrainBase
-from p2p_police.strategy.hints import build_hint, parse_claim
+from p2p_police.strategy.hints import build_hint
 from p2p_police.strategy.talk_providers import build_talk_chain
 
 TRUTH_PROBABILITY = 0.5  # per-hint honesty coin; strategy refinement later
@@ -49,9 +49,10 @@ class GeometricRuntime:
         self.inboxes = inboxes
         self.brain = brain
         # Local truth only: belief about the RIVAL, fed by scent + hints.
-        self.belief = BeliefMap(config.grid_size)
+        self.perception = Perception(role, config.grid_size)
         self.talk = build_talk_chain(config, brain.rng)
         self.fsm = GamePhaseMachine()
+
         self.exchange = SealedExchange(
             role,
             int(config.private["game"]["sub_game_number"]),
@@ -81,7 +82,7 @@ class GeometricRuntime:
 
     def _my_half_turn(self, turn_index: int) -> None:
         self.fsm.transition(GamePhase.COMPUTING_MOVE)
-        action = self.brain.decide(self.engine, self.belief)
+        action = self.brain.decide(self.engine, self.perception.belief)
         moved = action["move"] if action["type"] == "move" else "STAY"
         _text, claim, truth = build_hint(
             Move[moved],
@@ -96,6 +97,7 @@ class GeometricRuntime:
         protocol.apply_action(self.engine, self.role, action)
         self.fsm.transition(GamePhase.VERIFYING)
         self.fsm.transition(GamePhase.WAITING_FOR_OPPONENT)
+        self.perception.emit(self.engine, turn_index)
 
     def _their_half_turn(self, turn_index: int) -> None:
         payload = self.exchange.receive_sealed(turn_index)
@@ -103,16 +105,9 @@ class GeometricRuntime:
         if actor is self.role:
             raise GameRuleError("opponent claimed our role in a sealed record")
         protocol.apply_action(self.engine, actor, payload["action"])
-        self._update_belief(actor, payload.get("hint"))
+        self.perception.observe(self.engine, actor, payload.get("hint"))
+        self.perception.emit(self.engine, turn_index)
 
-    def _update_belief(self, rival, hint_text) -> None:
-        """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4)."""
-        self.belief.diffuse(self.engine.board)
-        rival_scent = self.engine.scent[rival]
-        self.belief.observe_scent(rival_scent, self.engine.board)
-        claim = parse_claim(hint_text) if hint_text else None
-        if claim:
-            self.belief.observe_hint(claim, rival_scent)
 
     def play(self) -> dict:
         """Run negotiation and the full lockstep game; return the end report.

@@ -45,9 +45,11 @@ class SimulationSdk:
             kernel_size=pheromones["pheromone_grid_size"],
         )
 
-    def run_peer(self, seed: int | None = None) -> dict:
-        """Start our MCP server, connect to the opponent, play one geometric
-        game to completion, and return the end report."""
+    def run_peer(
+        self, seed: int | None = None, gui: bool = False, gui_screenshot: str | None = None
+    ) -> dict:
+        """Start our MCP server, connect to the opponent, play one game to
+        completion (optionally with the live local-truth GUI) and report."""
         inboxes = PeerInboxes()
         server = build_peer_server(inboxes, name=f"p2p_{MY_ROLE.value}_peer")
         start_peer_server(server, self.config.my_port)
@@ -64,12 +66,29 @@ class SimulationSdk:
             inboxes,
             resolve_brain(self.config, MY_ROLE, random.Random(seed)),
         )
-        report = runtime.play()
+        report = self._play_with_gui(runtime, gui_screenshot) if gui else runtime.play()
         report["artifacts"] = [str(p) for p in self._emit_artifacts(runtime, report)]
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)
         return report
+
+    def _play_with_gui(self, runtime: GeometricRuntime, screenshot: str | None) -> dict:
+        """Tk owns the main thread; the runtime plays in a worker thread."""
+        import threading
+
+        from p2p_police.gui.live_view import LiveView
+
+        view = LiveView(self.config.grid_size, MY_ROLE.value)
+        runtime.perception.on_snapshot = view.feed
+        box: dict = {}
+        worker = threading.Thread(target=lambda: box.update(runtime.play()), daemon=True)
+        worker.start()
+        view.run(screenshot_path=screenshot)
+        worker.join(timeout=30)
+        if not box:
+            raise RuntimeError("game did not finish while the GUI was open")
+        return box
 
     def _emit_artifacts(self, runtime: GeometricRuntime, report: dict) -> list:
         """Write the four Table-20 artifacts (results/ + archived config)."""

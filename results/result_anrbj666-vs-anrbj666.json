@@ -4,8 +4,8 @@
   "digest_match": true,
   "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
   "game_id": "anrbj666-vs-anrbj666",
-  "game_uid": "768c222d775c403080996bc790ca81ab",
-  "github_commit": "8a872a92fc6bdac82d8ebd8473ab42dd052c4451",
+  "game_uid": "0fe3de5793fd4b508f54cd126c3658a8",
+  "github_commit": "763bcee34ef76e46e9104c634688a4e2fb01490e",
   "group_id": "anrbj666",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
@@ -13,7 +13,7 @@
   },
   "outcome": "survival",
   "report_type": "result",
-  "reported_at": "2026-07-13T15:27:21+00:00",
+  "reported_at": "2026-07-13T15:42:31+00:00",
   "schema_version": "1.00",
   "score": {
     "cop": 5,

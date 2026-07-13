@@ -25,6 +25,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     peer.add_argument("--config-dir", default="config", help="config directory")
     peer.add_argument("--seed", type=int, default=None, help="policy RNG seed")
+    peer.add_argument("--gui", action="store_true", help="show the live local-truth view")
+    peer.add_argument("--gui-screenshot", default=None, help="save the final GUI frame as PNG")
     verify = subcommands.add_parser(
         "verify-log", help="recompute every sealed record in a saved game log"
     )
@@ -41,7 +43,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "peer":
         from p2p_police.sdk.sdk import SimulationSdk
 
-        report = SimulationSdk(args.config_dir).run_peer(seed=args.seed)
+        report = SimulationSdk(args.config_dir).run_peer(
+            seed=args.seed, gui=args.gui, gui_screenshot=args.gui_screenshot
+        )
         print(json.dumps(report, indent=2))
         return 0 if report.get("digest_match") else 1
     if args.command == "verify-log":

@@ -70,10 +70,10 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 ## Phase 7 — Reporting + GUI (PRD_07)
 - [x] report/artifacts: all four Table-20 artifacts emitted per game (shared game_uid, game_id-derived names; config archived to config/games/ per rules 3-4)
 - [x] infra/email_sender: Gmail REST over httpx, send-only scope, gatekeeper 'email' service, 429 backoff; REAL send verified (4 artifacts attached); scripts/gmail_auth.py mints send-only tokens
-- [ ] gui/live_view: belief heatmap + YOUR TURN/LOCKED banner (LOCAL TRUTH ONLY)
+- [x] gui/live_view: belief heatmap + YOUR TURN/LOCKED/GAME OVER banner, snapshots via Perception (LOCAL TRUTH ONLY, rules 8-9); live screenshot captured from a real cross-repo game (assets/live_belief_map.png)
 - [x] verify-log CLI: headless replay verification engine on saved logs (real-log Verified OK; tampered-log TAMPERED proven)
 - [x] gui/replay viewer: verdict banner (Verified OK/TAMPERED), step-through board, hints shown; DPI-aware --screenshot; submission PNG captured (assets/replay_verified_ok.png)
-- [ ] Screenshots of every screen/state → assets/
+- [~] Screenshots: both mandatory images captured (live belief map + replay Verified OK); remaining per-state shots (LOCKED banner, TAMPERED demo) with docs/UI.md in Phase 8
 
 ## Phase 8 — Submission
 - [ ] README: user manual + academic report (Dec-POMDP 8-tuple, FastMCP dilemmas, strategy, RL curves if used, screenshots, sibling link, ISO 25010 mapping, course-connection anchors L02/L04/L05/L08/L09/L11)
