@@ -6,6 +6,7 @@ result (the league-scored summary emailed to the lecturer). All four share
 one game_uid; filenames derive from game_id so games never mix.
 """
 
+import hashlib
 import json
 import subprocess
 from datetime import UTC, datetime
@@ -22,6 +23,15 @@ SCHEMA_VERSION = "1.00"
 
 def utc_now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
+
+
+def consensus_signature(body: dict) -> str:
+    """SHA-256 over the report body in the reference's SETTLEMENT form (ADR-0004):
+    sorted keys, native UTF-8, DEFAULT (spaced) separators — deliberately NOT the
+    compact commit-reveal canonical. Verification: pop the signature key,
+    re-serialize spaced, re-hash (sign-then-insert)."""
+    spaced = json.dumps(body, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(spaced.encode("utf-8")).hexdigest()
 
 
 def git_commit_hash() -> str:
@@ -114,6 +124,7 @@ def build_result(config, game_id: str, game_uid: str, report: dict,
             "tokens_total": tokens_total,
         }
     )
+    doc["consensus_signature"] = consensus_signature(doc)  # sign-then-insert
     return doc
 
 
