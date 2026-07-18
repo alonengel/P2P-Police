@@ -115,6 +115,18 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   turn alternation with deadlines makes unbounded loops unrepresentable.
   (MCP is the project's mandated protocol; A2A and ACP are the complementary
   standards worth knowing for lifecycle handoff and zero-trust fleets.)
+- **A cross-team protocol contribution.** Reviewing another team's draft league
+  protocol (ImreEyal's interop kit), we identified that per-step commits —
+  strong against editing one step — leave a whole log re-forgeable offline,
+  and designed the fix: a `prev`/`prev_recv` hash interlock chaining both
+  sides' records into one tamper-evident DAG, making earliest divergence
+  provable from the two committed logs. The kit adopted it as its flagship
+  opt-in enhancement ("Design credit: anrbj666"). We deliberately do NOT run
+  it in counted games: it modifies the sealed record — the most
+  disqualification-sensitive layer (rule 19) — for a guarantee the book does
+  not require and only an opting-in opponent benefits from. The same review
+  exchange surfaced the reference's byte-forms we aligned to (ADR-0004) and
+  its settlement-signature quirk our conformance suite now pins.
 
 ### 3. The chosen strategy
 
