@@ -58,8 +58,8 @@ def _lookup(shared: dict, dotted: str) -> object:
 
 
 def canonical_terms(shared: dict) -> str:
-    """Canonical JSON of the shared terms (sorted keys, tight separators)."""
-    return json.dumps(shared, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    """Canonical JSON of the shared terms (reference form, ADR-0004)."""
+    return json.dumps(shared, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
 def config_sha256(shared: dict) -> str:

@@ -6,13 +6,24 @@ what makes commit-reveal work against FOREIGN implementations.)
 Any opponent implementation must reproduce our bytes exactly:
 
 1. **Canonical JSON**: UTF-8, `sort_keys=true`, separators `(",", ":")`,
-   `ensure_ascii=true`, no insignificant whitespace, no float formatting
-   games (ints stay ints).
+   `ensure_ascii=false` (native UTF-8, the official reference's form —
+   ADR-0004), no insignificant whitespace, no float formatting games
+   (ints stay ints).
 2. **Sealed record fields** (exactly these, no extras): `step`, `role`,
-   `sub_game`, `state_digest`, `action`, `hint`, `verdict`.
-3. **Commitment**: `SHA-256( canonical({"payload": <record>, "nonce": <hex>}) )`,
+   `sub_game`, `state_digest`, `action`, `hint`, `verdict`. (The payload
+   schema is per-team; only the constructions below must match.)
+3. **Commitment**: `SHA-256( canonical(<record>) + "|" + <nonce> )` — the
+   nonce pipe-appended to the canonical string (reference form, ADR-0004);
    nonce = 32 lowercase hex chars; commit(t) precedes reveal(t); nonces and
    verdicts disclosed ONLY in the end-of-game audit message.
+3b. **game_uid**: `UUID( SHA-256( canonical(terms) + "|" + "<gid_a>|<gid_b>"
+   (sorted) )[:16] )` — both peers derive the identical uid with no
+   round-trip; it stamps all four artifacts.
+3c. **Result consensus signature**: SHA-256 over the result body serialized
+   with `sort_keys=true, ensure_ascii=false` and DEFAULT (spaced)
+   separators — a deliberate SECOND canonical form matching the reference's
+   settlement tooling; signature computed BEFORE the `consensus_signature`
+   key is inserted (verify = pop key, re-serialize spaced, re-hash).
 4. **Timestamps**: ISO-8601 UTC with seconds precision.
 5. **Scent model**: locked pre-series via `scent_model_sha256` over the spec
    in `domain/scent.py::scent_model_spec()` — includes the re-emission clamp.
