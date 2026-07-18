@@ -32,14 +32,14 @@ def test_features_are_bounded_and_trap_aware() -> None:
     engine = _engine()
     for action in candidate_actions(engine):
         phi = features(engine, action)
-        assert len(phi) == 8 and all(-1.5 <= f <= 1.5 for f in phi)
+        assert len(phi) == 10 and all(-1.5 <= f <= 1.5 for f in phi)
     barrier = next(a for a in candidate_actions(engine) if a["type"] == "barrier")
     assert features(engine, barrier)[5] == 1.0  # is_barrier flag set
 
 
 def test_mlp_forward_deterministic_and_sgd_reduces_error() -> None:
     net = Mlp(random.Random(3))
-    phi = [1.0, 0.5, -0.1, 0.75, 0.9, 0.0, 1.0, 0.0]
+    phi = [1.0, 0.5, -0.1, 0.75, 0.9, 0.0, 1.0, 0.0, 0.6, 1.0]
     q0, hidden = net.forward(phi)
     assert net.forward(phi)[0] == q0  # deterministic
     target = q0 + 1.0

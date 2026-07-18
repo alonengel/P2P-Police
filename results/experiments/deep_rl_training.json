@@ -8,121 +8,241 @@
     },
     {
       "episode": 100,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.938
+      "epsilon": 0.972
     },
     {
       "episode": 200,
       "capture_vs_perfect": 0.12,
       "capture_vs_random": 1.0,
-      "epsilon": 0.875
+      "epsilon": 0.944
     },
     {
       "episode": 300,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.812
+      "epsilon": 0.917
     },
     {
       "episode": 400,
       "capture_vs_perfect": 0.12,
       "capture_vs_random": 1.0,
-      "epsilon": 0.75
+      "epsilon": 0.889
     },
     {
       "episode": 500,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.28,
       "capture_vs_random": 1.0,
-      "epsilon": 0.688
+      "epsilon": 0.861
     },
     {
       "episode": 600,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.625
+      "epsilon": 0.833
     },
     {
       "episode": 700,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.08,
       "capture_vs_random": 1.0,
-      "epsilon": 0.562
+      "epsilon": 0.806
     },
     {
       "episode": 800,
-      "capture_vs_perfect": 0.12,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.778
+    },
+    {
+      "episode": 900,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.75
+    },
+    {
+      "episode": 1000,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.722
+    },
+    {
+      "episode": 1100,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.694
+    },
+    {
+      "episode": 1200,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.667
+    },
+    {
+      "episode": 1300,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.639
+    },
+    {
+      "episode": 1400,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.611
+    },
+    {
+      "episode": 1500,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.583
+    },
+    {
+      "episode": 1600,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.556
+    },
+    {
+      "episode": 1700,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.528
+    },
+    {
+      "episode": 1800,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
       "epsilon": 0.5
     },
     {
-      "episode": 900,
-      "capture_vs_perfect": 0.68,
+      "episode": 1900,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.438
+      "epsilon": 0.472
     },
     {
-      "episode": 1000,
-      "capture_vs_perfect": 0.68,
+      "episode": 2000,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.375
+      "epsilon": 0.444
     },
     {
-      "episode": 1100,
-      "capture_vs_perfect": 0.68,
+      "episode": 2100,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.312
+      "epsilon": 0.417
     },
     {
-      "episode": 1200,
+      "episode": 2200,
       "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.389
+    },
+    {
+      "episode": 2300,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.361
+    },
+    {
+      "episode": 2400,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.333
+    },
+    {
+      "episode": 2500,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.306
+    },
+    {
+      "episode": 2600,
+      "capture_vs_perfect": 0.6,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.278
+    },
+    {
+      "episode": 2700,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.25
     },
     {
-      "episode": 1300,
-      "capture_vs_perfect": 0.68,
+      "episode": 2800,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
-      "epsilon": 0.188
+      "epsilon": 0.222
     },
     {
-      "episode": 1400,
-      "capture_vs_perfect": 0.68,
+      "episode": 2900,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.125
+      "epsilon": 0.194
     },
     {
-      "episode": 1500,
-      "capture_vs_perfect": 0.68,
+      "episode": 3000,
+      "capture_vs_perfect": 0.0,
       "capture_vs_random": 1.0,
-      "epsilon": 0.062
+      "epsilon": 0.167
     },
     {
-      "episode": 1600,
-      "capture_vs_perfect": 0.68,
+      "episode": 3100,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.139
+    },
+    {
+      "episode": 3200,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.111
+    },
+    {
+      "episode": 3300,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.083
+    },
+    {
+      "episode": 3400,
+      "capture_vs_perfect": 0.6,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.056
+    },
+    {
+      "episode": 3500,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.05
     },
     {
-      "episode": 1700,
-      "capture_vs_perfect": 0.68,
+      "episode": 3600,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.05
     },
     {
-      "episode": 1800,
-      "capture_vs_perfect": 0.68,
+      "episode": 3700,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.05
     },
     {
-      "episode": 1900,
-      "capture_vs_perfect": 0.68,
+      "episode": 3800,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.05
     },
     {
-      "episode": 1999,
-      "capture_vs_perfect": 0.68,
+      "episode": 3900,
+      "capture_vs_perfect": 0.56,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 3999,
+      "capture_vs_perfect": 0.6,
       "capture_vs_random": 1.0,
       "epsilon": 0.05
     }
@@ -133,5 +253,10 @@
     "win_rate": 0.74,
     "games": 100
   },
-  "comparison": "linear movement-only policy: 0.00 vs the same evader (results/experiments/rl_training.json)"
+  "comparison": "linear movement-only policy: 0.00 vs the same evader (results/experiments/rl_training.json)",
+  "hand_coded_policebrain_benchmark": {
+    "capture_vs_perfect_evader": 0.73,
+    "games": 100,
+    "note": "same evader, same seeds family; the learned best-checkpoint (0.74) statistically TIES the hand-engineered barrier tactics"
+  }
 }

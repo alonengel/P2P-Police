@@ -76,9 +76,15 @@ def run_episode(brain, seed: int, buffer=None, opponent=PerfectEvader):
 
 
 def replay_step(net: Mlp, target_net: Mlp, buffer, rng: random.Random) -> None:
+    """Double-DQN target: the ONLINE net picks the next action, the FROZEN
+    net values it - decoupling selection from evaluation curbs the classic
+    max-operator overestimation."""
     for phi, reward, next_phis in rng.sample(list(buffer), k=min(BATCH, len(buffer))):
-        target = reward + (GAMMA * max(target_net.forward(p)[0] for p in next_phis)
-                           if next_phis else 0.0)
+        if next_phis:
+            best = max(next_phis, key=lambda p: net.forward(p)[0])
+            target = reward + GAMMA * target_net.forward(best)[0]
+        else:
+            target = reward
         q, hidden = net.forward(phi)
         net.sgd(phi, hidden, target - q, LR)
 
@@ -96,9 +102,9 @@ def main(episodes: int = 1500) -> None:
     target_net = _clone(net, random.Random(8))
     brain = DeepQBrain(Role.POLICE, rng, net=net)
     buffer: deque = deque(maxlen=BUFFER)
-    curve = []
+    curve, best_eval, best_state = [], -1.0, net.state()
     for episode in range(episodes):
-        brain.epsilon = max(0.05, 1.0 * (1 - episode / (0.8 * episodes)))
+        brain.epsilon = max(0.05, 1.0 * (1 - episode / (0.9 * episodes)))
         run_episode(brain, 10_000 + episode, buffer=buffer)
         if len(buffer) >= BATCH:
             for _ in range(4):  # several replay sweeps per episode
@@ -108,16 +114,21 @@ def main(episodes: int = 1500) -> None:
         if episode % 100 == 0 or episode == episodes - 1:
             vs_perfect = evaluate(net, 50_000, 25, PerfectEvader)
             vs_random = evaluate(net, 70_000, 25, RandomBrain)
+            if vs_perfect > best_eval:  # keep the BEST policy, not the last
+                best_eval = vs_perfect
+                best_state = json.loads(json.dumps(net.state()))
             curve.append({"episode": episode, "capture_vs_perfect": vs_perfect,
                           "capture_vs_random": vs_random,
                           "epsilon": round(brain.epsilon, 3)})
             print(f"ep {episode:5d}  vs_perfect={vs_perfect:.2f} "
                   f"vs_random={vs_random:.2f}  eps={brain.epsilon:.2f}")
+    net.load_state(best_state)  # ship the best checkpoint
     final_perfect = evaluate(net, 90_000, 100, PerfectEvader)
-    print(f"FINAL: capture rate vs perfect evader over 100 games: {final_perfect:.2f}")
+    print(f"FINAL (best checkpoint): capture vs perfect over 100: {final_perfect:.2f}")
     WEIGHTS_PATH.write_text(json.dumps(
         {"net": net.state(), "episodes": episodes, "gamma": GAMMA, "lr": LR,
-         "batch": BATCH, "sync_every": SYNC_EVERY}, indent=2), encoding="utf-8")
+         "batch": BATCH, "sync_every": SYNC_EVERY, "double_dqn": True,
+         "checkpoint": "best-eval"}, indent=2), encoding="utf-8")
     out = Path("results/experiments/deep_rl_training.json")
     out.write_text(json.dumps({
         "curve": curve, "base_seed": 7, "eval_games_per_point": 25,

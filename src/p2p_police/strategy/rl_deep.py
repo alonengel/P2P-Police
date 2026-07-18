@@ -25,7 +25,7 @@ from p2p_police.domain.rules import validate_barrier_placement
 _LOG = logging.getLogger(__name__)
 REPO_ROOT = Path(__file__).resolve().parents[3]
 WEIGHTS_PATH = REPO_ROOT / "results" / "deep_rl_weights.json"
-N_FEATURES, HIDDEN = 8, 10
+N_FEATURES, HIDDEN = 10, 12
 
 
 class _Hypothetical:
@@ -69,12 +69,15 @@ def features(engine: GameEngine, action: dict, thief=None) -> list[float]:
     thief_escapes = sum(
         1 for m in (Move.N, Move.S, Move.E, Move.W) if board.is_passable(m.applied_to(thief))
     )
+    wall = min(thief[0], thief[1], grid - 1 - thief[0], grid - 1 - thief[1])
     return [
         1.0, d_after, d_after - d_before, thief_escapes / 4.0,
         len(from_thief) / float(grid * grid),          # thief's reachable region
         1.0 if action["type"] == "barrier" else 0.0,
         (engine.rules.max_barriers - len(engine.board.barriers)) / engine.rules.max_barriers,
         1.0 if thief_escapes <= 1 else 0.0,            # one exit left: the trap
+        wall / (grid / 2.0),                           # traps close near walls
+        float((landing[0] + landing[1] + thief[0] + thief[1]) % 2),  # chase parity
     ]
 
 
