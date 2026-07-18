@@ -42,6 +42,12 @@ uv run p2p-police peer --gui --gui-screenshot assets/live.png
 uv run p2p-police verify-log --log results/log_<game>.json   # Verified OK / TAMPERED
 uv run p2p-police replay --log results/log_<game>.json       # visual replay witness
 uv run p2p-police --version
+
+# Research reproduction (RL campaign - see Part II section 3 + PRD_08):
+uv run python scripts/train_rl.py          # linear Q-learning + negative result
+uv run python scripts/train_deep_rl.py     # Double-DQN cop (barrier actions)
+uv run python scripts/sweep_deep_rl.py     # hyperparameter sweep (non-destructive)
+uv run python scripts/run_sensitivity.py   # OAT sensitivity experiments
 ```
 
 Cross-repo match on one machine: `powershell -File ../run_cross_match.ps1`.

@@ -5,6 +5,15 @@ from pathlib import Path
 
 import pytest
 
+from p2p_police.strategy import profiler as _profiler
+
+
+@pytest.fixture(autouse=True)
+def _isolated_profiler(tmp_path, monkeypatch):
+    """Tests must never dirty the committed league memory
+    (results/opponent_profiles.json) - point the default at tmp."""
+    monkeypatch.setattr(_profiler, "PROFILE_PATH", tmp_path / "profiles.json")
+
 VALID_SHARED = {
     "schema_version": "1.3",
     "agreed_between": ["anrbj666-police", "anrbj666-thief"],

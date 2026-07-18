@@ -19,11 +19,11 @@ class OpponentProfiler:
     """Input: audited intent flags per opponent. Output: honesty rate and
     advised claim weights. Persists across games (league memory)."""
 
-    def __init__(self, path: Path = PROFILE_PATH) -> None:
-        self._path = path
+    def __init__(self, path: Path | None = None) -> None:
+        self._path = path or PROFILE_PATH  # resolved at CALL time: patchable
         self._profiles: dict[str, dict] = {}
-        if path.is_file():
-            self._profiles = json.loads(path.read_text(encoding="utf-8"))
+        if self._path.is_file():
+            self._profiles = json.loads(self._path.read_text(encoding="utf-8"))
 
     def record_audited_verdicts(self, opponent: str, verdicts: list[bool]) -> None:
         profile = self._profiles.setdefault(opponent, {"truths": 0, "hints": 0})
