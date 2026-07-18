@@ -1,0 +1,16 @@
+{
+  "role": "police",
+  "outcome": "survival",
+  "turns_completed": 35,
+  "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
+  "digest_match": true,
+  "audit": "Verified OK",
+  "steps_sealed": 35,
+  "opponent_group_id": "anrbj666",
+  "artifacts": [
+    "results\\declaration_anrbj666-vs-anrbj666.json",
+    "config\\games\\config_anrbj666-vs-anrbj666_g01.json",
+    "results\\log_anrbj666-vs-anrbj666_g01.json",
+    "results\\result_anrbj666-vs-anrbj666.json"
+  ]
+}
