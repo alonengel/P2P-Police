@@ -103,3 +103,30 @@ mode). (5) The 150-line cap forced two genuinely better extractions
 by the user - a fresh audit against the dossier found two unwired MUSTs
 (watchdog rule 7, auto-email rule 32) and missing PRD files: **checklists
 verify what you told them to; the dossier is the contract.**
+
+---
+
+## 2026-07-18 — Session 6: reference byte-form alignment (interop)
+
+Prompt (paraphrased): *"Review a friend team's interop kit repo + its GitHub
+issues; adopt only what doesn't evade the rules — and show me everything
+before doing anything. Rule for adopting: only if BOTH the official demo AND
+the kit have it. Tag a rollback checkpoint first."*
+
+Process: deep-compared the kit's vectors against our crypto, then verified
+its central claim directly against the official reference in
+`../docs/DemoExamples` (never trust a third party's claim about a source you
+hold yourself). Confirmed the reference uses `ensure_ascii=False`, a
+pipe-appended-nonce commit preimage, a terms-derived game_uid, and a SECOND
+(spaced) serialization for the settlement consensus signature. Our forms were
+legal (the book is self-contradictory and permits a documented choice) but
+non-interoperable — rule 19 makes byte-agreement existential. Adopted the
+reference forms (ADR-0004), kept the book-faithful scent model (book beats
+example), and imported the kit's vectors (MIT, attributed) as a
+foreign-conformance suite so the alignment is *proven*, not assumed.
+
+Lessons: (1) "correct" and "able to play" diverge when the ecosystem
+standardizes on the example, not the spec; (2) a rollback tag + pre-release
+before a breaking alignment makes the decision cheap to reverse; (3) verify
+counterparty claims against primary sources — the kit was right, but now we
+KNOW rather than believe.
