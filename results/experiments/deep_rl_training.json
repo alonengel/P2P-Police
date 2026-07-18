@@ -1,0 +1,137 @@
+{
+  "curve": [
+    {
+      "episode": 0,
+      "capture_vs_perfect": 0.0,
+      "capture_vs_random": 0.0,
+      "epsilon": 1.0
+    },
+    {
+      "episode": 100,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.938
+    },
+    {
+      "episode": 200,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.875
+    },
+    {
+      "episode": 300,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.812
+    },
+    {
+      "episode": 400,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.75
+    },
+    {
+      "episode": 500,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.688
+    },
+    {
+      "episode": 600,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.625
+    },
+    {
+      "episode": 700,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.562
+    },
+    {
+      "episode": 800,
+      "capture_vs_perfect": 0.12,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.5
+    },
+    {
+      "episode": 900,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.438
+    },
+    {
+      "episode": 1000,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.375
+    },
+    {
+      "episode": 1100,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.312
+    },
+    {
+      "episode": 1200,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.25
+    },
+    {
+      "episode": 1300,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.188
+    },
+    {
+      "episode": 1400,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.125
+    },
+    {
+      "episode": 1500,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.062
+    },
+    {
+      "episode": 1600,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 1700,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 1800,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 1900,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    },
+    {
+      "episode": 1999,
+      "capture_vs_perfect": 0.68,
+      "capture_vs_random": 1.0,
+      "epsilon": 0.05
+    }
+  ],
+  "base_seed": 7,
+  "eval_games_per_point": 25,
+  "final_capture_vs_perfect_evader": {
+    "win_rate": 0.74,
+    "games": 100
+  },
+  "comparison": "linear movement-only policy: 0.00 vs the same evader (results/experiments/rl_training.json)"
+}

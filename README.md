@@ -167,6 +167,24 @@ space lacks) and remains the league default; the RL brain is loadable via
 `[strategy] police_class = "p2p_police.strategy.rl_brain:LinearQBrain"`
 (exercised end-to-end by `tests/unit/test_strategy/test_rl_brain.py`).
 
+**Deep RL closes the loop (`strategy/rl_deep.py`):** a hand-rolled MLP
+Q-network (8→tanh(10)→1, pure Python, zero new dependencies) whose action
+space **includes barrier placement**, trained DQN-style — experience replay,
+frozen target network, containment-shaped reward — directly against the
+perfect evader (`scripts/train_deep_rl.py`). Result: the trap strategy that
+movement-only pursuit provably lacks is **learned**: capture rate vs the
+perfect evader goes **0.00 (linear, movement-only) → 0.74 over 100 held-out
+games**, with 1.00 retained vs the random walker
+(`results/experiments/deep_rl_training.json`):
+
+![Deep RL curve](assets/deep_rl_curve.png)
+
+The staircase curve is honest evidence of *discovery*, not smooth
+optimization — capture jumps as barrier sequences click into place. The
+hand-tuned PoliceBrain stays the league default (its barrier tactics are
+engineered, not rediscovered at league-day risk); the deep brain is loadable
+via `[strategy] police_class = "p2p_police.strategy.rl_deep:DeepQBrain"`.
+
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
 | Live GUI — local truth only | Replay witness |
