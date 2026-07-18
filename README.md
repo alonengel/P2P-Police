@@ -214,6 +214,14 @@ the learned evader appears to sit near the game's structural optimum — the
 arms race converges in the evader's favor, exactly as pursuit-evasion
 theory predicts for this barrier budget.
 
+A closing **six-config hyperparameter sweep** (`scripts/sweep_deep_rl.py`,
+`results/experiments/deep_rl_sweep.json`) tested whether 0.74 was a tuning
+artifact: learning rate, width and replay depth barely move the needle; a
+higher exploration floor won at short budget (0.82 at 1200 episodes) but
+**regressed to exactly 0.74 at full budget** and failed the coded promotion
+gate. Three independent 4000-episode runs converge on 0.74 — the ceiling is
+the game's structure, measured, not assumed.
+
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
 | Live GUI — local truth only | Replay witness |
