@@ -135,7 +135,10 @@ class SimulationSdk:
     @staticmethod
     def verify_log(log_path: str) -> str:
         """Headless replay verification engine (mandatory deliverable, ch. 7):
-        recompute every sealed record in a saved log -> Verified OK/TAMPERED."""
+        recompute every sealed record in a saved log -> Verified OK/TAMPERED.
+        When the game's archived config artifact is found, ALSO re-simulate
+        the physics: every action re-applied on a fresh engine (an illegal
+        logged move is tampering) and the end digest recomputed (rule 20)."""
         doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
         own = doc.get("records", [])
         theirs = [r for r in doc.get("opponent_records", []) if "nonce" in r]
@@ -143,5 +146,15 @@ class SimulationSdk:
             if not crypto.verify_commit(
                 record["payload"], record["nonce"], record["commit"]
             ):
+                return "TAMPERED"
+        from p2p_police.report import lookup
+
+        terms = lookup.terms_for_log(doc, log_path)
+        expected = doc.get("summary", {}).get("end_state_digest")
+        if terms is not None and expected:
+            try:
+                if lookup.recompute_digest(doc, terms) != expected:
+                    return "TAMPERED"
+            except Exception:  # illegal move / malformed action IS tampering
                 return "TAMPERED"
         return "Verified OK"

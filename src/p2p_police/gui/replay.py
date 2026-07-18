@@ -57,7 +57,7 @@ def replay_states(steps: list[dict], grid: int, cop, thief) -> list[dict]:
 class ReplayApp:
     """Input: a log artifact + board geometry. Output: an auditable replay."""
 
-    def __init__(self, log_path: str, grid: int = 7, cop=(0, 0), thief=(3, 3)) -> None:
+    def __init__(self, log_path: str, grid=None, cop=None, thief=None) -> None:
         try:  # align Tk logical coords with physical pixels for ImageGrab
             import ctypes
 
@@ -65,6 +65,14 @@ class ReplayApp:
         except Exception:
             pass
         self.doc, steps, self.verdict = load_steps(log_path)
+        # Geometry comes from the game's OWN archived config artifact (rule 20:
+        # a third party must replay negotiated terms, not our defaults).
+        from p2p_police.report import lookup
+
+        auto_grid, auto_cop, auto_thief = lookup.geometry(
+            lookup.terms_for_log(self.doc, log_path))
+        grid = grid or auto_grid
+        cop, thief = cop or auto_cop, thief or auto_thief
         self.states = replay_states(steps, grid, cop, thief)
         self.grid, self.index = grid, len(self.states) - 1
         self.root = tk.Tk()
