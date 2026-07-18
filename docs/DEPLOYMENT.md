@@ -14,14 +14,17 @@ One tunnel (`copthief`, from ex6) carries both agents on separate hostnames:
 
 | Agent | Public URL | Local service |
 |---|---|---|
-| Thief | `https://mcp.alon.website/mcp` | `http://localhost:8801` |
+| Thief | `https://thief-mcp.alon.website/mcp` | `http://localhost:8801` |
 | Police | `https://cop-mcp.alon.website/mcp` | `http://localhost:8802` |
+
+(`mcp.alon.website` remains a legacy alias for the thief — older evidence
+artifacts reference it; the symmetric `thief-mcp`/`cop-mcp` pair is canonical.)
 
 Setup (already done on this machine; for a new one):
 ```bash
 cloudflared tunnel login                       # browser auth
 cloudflared tunnel create copthief
-cloudflared tunnel route dns copthief mcp.alon.website
+cloudflared tunnel route dns copthief thief-mcp.alon.website
 cloudflared tunnel route dns copthief cop-mcp.alon.website
 # ~/.cloudflared/config.yml: ingress mapping the two hostnames to
 #   http://127.0.0.1:8801 / 8802  (NOT 'localhost' - cloudflared resolves it
