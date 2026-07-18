@@ -1,11 +1,12 @@
 {
   "_schema": "p2p-police-artifacts",
   "audit": "Verified OK",
+  "consensus_signature": "e38bffc3e7fbcccf6c32f9f3d7c42687ccaeaefc8ab25dc31ba6070e9f8f63e9",
   "digest_match": true,
-  "end_state_digest": "6e69390f2979f8a926e66cab5b9b37c1c665a5abc9f4ff566b18058dca45c03e",
+  "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
   "game_id": "anrbj666-vs-anrbj666",
-  "game_uid": "35d0fc75db3442d0ad03c0a9005c568b",
-  "github_commit": "c993d3914d9b67469ef4eef8ffa2fe4893e092c1",
+  "game_uid": "23020791-2460-8b05-1491-75c4e2f2551b",
+  "github_commit": "d3c3572d71b37f4ac9736c4cf1b15466cdbd7a6d",
   "group_id": "anrbj666",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
@@ -13,7 +14,7 @@
   },
   "outcome": "survival",
   "report_type": "result",
-  "reported_at": "2026-07-13T18:19:41+00:00",
+  "reported_at": "2026-07-18T13:01:06+00:00",
   "schema_version": "1.00",
   "score": {
     "cop": 5,
