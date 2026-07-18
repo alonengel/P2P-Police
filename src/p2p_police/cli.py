@@ -45,6 +45,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """CLI entry point: dispatch to the SDK, print the report as JSON."""
     args = build_parser().parse_args(argv)
+    from p2p_police.shared.logging_setup import setup_logging
+
+    setup_logging(getattr(args, "config_dir", "config"))
     if args.command == "peer":
         from p2p_police.sdk.sdk import SimulationSdk
 

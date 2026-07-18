@@ -42,14 +42,15 @@ class TalkChain:
             return self._template_text(claim)
 
 
-def build_talk_chain(config, rng: random.Random) -> TalkChain:
-    """Assemble from [trash_talk]/[llm] (private) + world (signed) config."""
+def build_talk_chain(config, rng: random.Random, gatekeeper=None) -> TalkChain:
+    """Assemble from [trash_talk]/[llm] (private) + world (signed) config.
+    ONE gatekeeper per run when the caller passes it (single call_log)."""
     trash = config.private.get("trash_talk", {})
     provider_name = trash.get("provider", "template")
     world = config.shared["world"]
     provider = None
     if provider_name in PROVIDERS:
-        gatekeeper = ApiGatekeeper(config.rate_limits)
+        gatekeeper = gatekeeper or ApiGatekeeper(config.rate_limits)
         model = config.private.get("llm", {}).get("model", "")
         provider = PROVIDERS[provider_name](gatekeeper, TokenMeter(), model)
     return TalkChain(

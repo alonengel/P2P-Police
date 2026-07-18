@@ -74,7 +74,7 @@ def emit_artifacts(config, runtime, report: dict) -> list:
 
 
 
-def maybe_email(config, report: dict) -> None:
+def maybe_email(config, report: dict, gatekeeper=None) -> None:
     """Automatic end-of-game report (rule 32) when [email].mode == send."""
     email_cfg = config.private.get("email", {})
     if email_cfg.get("mode") != "send":
@@ -83,7 +83,7 @@ def maybe_email(config, report: dict) -> None:
     from p2p_police.shared.gatekeeper import ApiGatekeeper
 
     message_id = send_report(
-        ApiGatekeeper(config.rate_limits),
+        gatekeeper or ApiGatekeeper(config.rate_limits),
         email_cfg["recipient"],
         f"P2P league report - {config.group_id} - {report['outcome']}",
         "Automated end-of-game report (rule 32). JSON artifacts attached.",

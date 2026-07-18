@@ -5,10 +5,14 @@ Per half-turn: COMMIT (hash only) -> opponent's ack locks it -> REVEAL
 and every stored record is recomputed (mutual audit, rules 17-21).
 """
 
+import logging
+
 from p2p_police.domain import crypto, protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import Role
+
+_LOG = logging.getLogger(__name__)
 
 
 class SealedExchange:
@@ -32,7 +36,8 @@ class SealedExchange:
             message = self._wait(f"opponent {kind} {turn_index}")
             key = (str(message.get("kind")), int(message.get("turn", -1)))
             if key in self._consumed:
-                continue  # duplicate delivery - drop silently
+                _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)
+                continue
             if key != (kind, turn_index):
                 raise GameRuleError(
                     f"protocol desync: expected {kind} {turn_index}, got {message!r}"

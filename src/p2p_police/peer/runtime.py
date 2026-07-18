@@ -43,16 +43,16 @@ class GeometricRuntime:
         transport: McpTransport,
         inboxes: PeerInboxes,
         brain: BrainBase,
+        gatekeeper=None,
     ) -> None:
         self.role = role
         self.config = config
         self.engine = engine
-        self.transport = transport
-        self.inboxes = inboxes
+        self.transport, self.inboxes = transport, inboxes
         self.brain = brain
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.perception = Perception(role, config.grid_size)
-        self.talk = build_talk_chain(config, brain.rng)
+        self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
         self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
 

@@ -58,6 +58,9 @@ class SimulationSdk:
             self.config.retry_backoff_sec,
             self.config.response_timeout_sec,
         )
+        from p2p_police.shared.gatekeeper import ApiGatekeeper
+
+        gatekeeper = ApiGatekeeper(self.config.rate_limits)  # ONE per run (section 5)
         runtime = GeometricRuntime(
             MY_ROLE,
             self.config,
@@ -65,6 +68,7 @@ class SimulationSdk:
             transport,
             inboxes,
             resolve_brain(self.config, MY_ROLE, random.Random(seed)),
+            gatekeeper=gatekeeper,
         )
         from p2p_police.peer.watchdog import Watchdog
 
@@ -90,10 +94,11 @@ class SimulationSdk:
             # audit ('not received') is dispute evidence, not tampering - the
             # played outcome stands and the logs decide.
             report["outcome"] = "technical_loss"
+        report["gatekeeper"] = gatekeeper.queue_status()  # section-5 monitoring view
         report["artifacts"] = [
             str(p) for p in reporting.emit_artifacts(self.config, runtime, report)
         ]
-        reporting.maybe_email(self.config, report)
+        reporting.maybe_email(self.config, report, gatekeeper)
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)

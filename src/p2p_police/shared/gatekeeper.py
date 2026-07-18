@@ -5,10 +5,13 @@ on transient failures, and a call log for monitoring. Limits come from
 config/rate_limits.json, versioned, never hardcoded.
 """
 
+import logging
 import time
 from collections.abc import Callable
 
 from p2p_police.shared.rate_limiter import RateLimitDeniedError, ServiceLimiter
+
+_LOG = logging.getLogger(__name__)
 
 
 class TransientProviderError(Exception):
@@ -49,11 +52,19 @@ class ApiGatekeeper:
             try:
                 with limiter.concurrency:  # config-driven cap (section 5.1)
                     result = call()
-                self.call_log.append({"service": service, "attempt": attempt, "ok": True})
+                self.call_log.append(
+                    {"service": service, "attempt": attempt, "ok": True, "at": time.time()}
+                )
+                _LOG.debug("gatekeeper ok: service=%s attempt=%d", service, attempt)
                 return result
             except TransientProviderError as error:
                 self.call_log.append(
-                    {"service": service, "attempt": attempt, "ok": False, "error": str(error)}
+                    {"service": service, "attempt": attempt, "ok": False,
+                     "error": str(error), "at": time.time()}
+                )
+                _LOG.warning(
+                    "gatekeeper transient failure: service=%s attempt=%d/%d: %s",
+                    service, attempt, retries + 1, error,
                 )
                 if attempt > retries:
                     raise

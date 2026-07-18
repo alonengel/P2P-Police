@@ -7,10 +7,14 @@ shutdown callback instead of leaving a zombie peer. Clock injectable.
 """
 
 import json
+import logging
 import threading
 import time
 from collections.abc import Callable
+from datetime import UTC, datetime
 from pathlib import Path
+
+_LOG = logging.getLogger(__name__)
 
 
 class NullWatchdog:
@@ -28,7 +32,7 @@ class Watchdog:
         timeout_sec: float,
         state_provider: Callable[[], dict],
         on_shutdown: Callable[[], None],
-        dump_path: str | Path = "results/watchdog_dump.json",
+        dump_path: str | Path = "logs/watchdog_dump.json",  # runtime trace, NOT results/
         clock: Callable[[], float] = time.monotonic,
         poll_interval: float = 1.0,
     ) -> None:
@@ -54,6 +58,8 @@ class Watchdog:
         if self._clock() - self._last_beat <= self.timeout_sec:
             return "ALIVE"
         self.fired = True
+        _LOG.error("watchdog FIRED: no heartbeat for %.1fs - controlled shutdown",
+                   self.timeout_sec)
         self._persist()
         self._on_shutdown()
         return "SHUTDOWN"
@@ -62,12 +68,14 @@ class Watchdog:
         try:
             self._dump_path.parent.mkdir(parents=True, exist_ok=True)
             self._dump_path.write_text(
-                json.dumps({"reason": "watchdog timeout", "state": self._state_provider()},
+                json.dumps({"reason": "watchdog timeout",
+                            "at": datetime.now(UTC).isoformat(timespec="seconds"),
+                            "state": self._state_provider()},
                            indent=2, default=str),
                 encoding="utf-8",
             )
         except Exception:
-            pass  # persistence is best-effort; shutdown must still happen
+            _LOG.exception("watchdog dump failed (best-effort; shutdown continues)")
 
     def start(self) -> None:
         """Run checks on a daemon thread until stop() or a firing."""
