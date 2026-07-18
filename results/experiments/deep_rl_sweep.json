@@ -1,0 +1,87 @@
+{
+  "episodes_per_config": 1200,
+  "base_seed": 7,
+  "ranked": [
+    "explore-16",
+    "lr-hot",
+    "lr-cool",
+    "wide-20",
+    "replay-8",
+    "baseline"
+  ],
+  "table": {
+    "baseline": {
+      "config": {
+        "name": "baseline",
+        "lr": 0.01,
+        "hidden": 12,
+        "sweeps": 4,
+        "eps_lo": 0.05
+      },
+      "vs_perfect_50": 0.32,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.24
+    },
+    "lr-hot": {
+      "config": {
+        "name": "lr-hot",
+        "lr": 0.02,
+        "hidden": 12,
+        "sweeps": 4,
+        "eps_lo": 0.05
+      },
+      "vs_perfect_50": 0.7,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.68
+    },
+    "lr-cool": {
+      "config": {
+        "name": "lr-cool",
+        "lr": 0.005,
+        "hidden": 12,
+        "sweeps": 4,
+        "eps_lo": 0.05
+      },
+      "vs_perfect_50": 0.7,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.68
+    },
+    "wide-20": {
+      "config": {
+        "name": "wide-20",
+        "lr": 0.01,
+        "hidden": 20,
+        "sweeps": 4,
+        "eps_lo": 0.05
+      },
+      "vs_perfect_50": 0.7,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.68
+    },
+    "replay-8": {
+      "config": {
+        "name": "replay-8",
+        "lr": 0.01,
+        "hidden": 12,
+        "sweeps": 8,
+        "eps_lo": 0.05
+      },
+      "vs_perfect_50": 0.7,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.68
+    },
+    "explore-16": {
+      "config": {
+        "name": "explore-16",
+        "lr": 0.01,
+        "hidden": 16,
+        "sweeps": 4,
+        "eps_lo": 0.1
+      },
+      "vs_perfect_50": 0.82,
+      "vs_random_25": 1.0,
+      "best_checkpoint_25": 0.76
+    }
+  },
+  "incumbent": "v3 shipped weights: 0.74 vs perfect over 100 games"
+}
