@@ -194,6 +194,11 @@ retained throughout (`results/experiments/deep_rl_training.json`, incl. the
 hand-coded benchmark). The hand-tuned PoliceBrain stays the league default
 (engineered tactics carry no training-collapse risk); the deep brain is
 loadable via `[strategy] police_class = "p2p_police.strategy.rl_deep:DeepQBrain"`.
+The arms race continues in the twin repo: the thief trains a Double-DQN
+evader against THIS learned trap cop (replayed from copied weight data, no
+cross-repo imports) and fully neutralizes it — survival 1.00 vs the
+hand-coded thief's 0.49 — the classic pursuit-evasion cycle, reproduced
+end-to-end inside the two-repo constraint.
 
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
