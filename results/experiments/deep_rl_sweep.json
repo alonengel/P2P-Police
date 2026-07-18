@@ -83,5 +83,16 @@
       "best_checkpoint_25": 0.76
     }
   },
-  "incumbent": "v3 shipped weights: 0.74 vs perfect over 100 games"
+  "incumbent": "v3 shipped weights: 0.74 vs perfect over 100 games",
+  "promotion_attempt": {
+    "config": "explore-16 at full 4000 episodes",
+    "final_100_game_evals": {
+      "vs_perfect_evader": 0.74,
+      "vs_counter_evader": 0.0,
+      "vs_random": 1.0,
+      "vs_perfect_with_belief_noise": 0.59
+    },
+    "promoted": false,
+    "finding": "the 0.82-at-1200 advantage did not survive scale - a high exploration floor helps early and hurts late. Third independent 4000-episode run converging at 0.74 vs the perfect evader: the ceiling appears STRUCTURAL (the barrier budget + move-forfeit economics), not a tuning artifact. Incumbent v3 kept (also better under belief noise: 0.78 vs 0.59)."
+  }
 }
