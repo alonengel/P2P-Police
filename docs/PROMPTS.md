@@ -130,3 +130,37 @@ standardizes on the example, not the spec; (2) a rollback tag + pre-release
 before a breaking alignment makes the decision cheap to reverse; (3) verify
 counterparty claims against primary sources — the kit was right, but now we
 KNOW rather than believe.
+
+---
+
+## 2026-07-18 — Session 7: logging, verifier, and the deep-RL arms race
+
+Prompts (paraphrased): *"How is my Q-learning support? Use agents to see how
+to improve"* → *"We should have loggings, no? See how the demo and book do
+it"* → *"Go deep learning or something even harder, I want us to be the
+best"* → *"Does it take barriers into account? Training for both roles,
+separately?"* → *"Improve it even more, adjust the weights and such."*
+
+Process: two review agents audited RL and logging against the guidelines;
+research agent pinned the demo/book logging conventions (runtime traces are
+gitignored diagnostics, game artifacts are the committed record — book ch. 8
+Log Manager split). Implemented: wired logging_config.json, timestamped
+single-instance gatekeeper, physics-recomputing verifier (verify-log now
+proves "untampered AND physics-legal"), config-true replay geometry. Then
+the RL campaign: pure-Python MLP Q-networks (no new deps), Double-DQN with
+replay + target nets, barrier actions for the cop, a two-round arms race via
+weight-DATA crossover between the twins (never code imports), a 6-config
+hyperparameter sweep, and two gated promotion attempts — both correctly
+REJECTED by gates coded before the results existed.
+
+Lessons: (1) put promotion gates in code before running the experiment —
+twice an exciting intermediate number (a trivially-passing gate at smoke, a
+0.82 at short budget) would have shipped a worse model on vibes; (2)
+negative results recorded as artifacts (from-scratch collapse, robustness
+collapse, knife-edge information dependence, the structural 0.74 ceiling
+confirmed by three independent runs) carry more academic weight than the
+positive ones; (3) specialist vs generalist is a real trade — the 1.00
+evader is blind-fragile (0.00 under belief noise), which became the
+evidence-backed case for keeping the robust hand-coded brain as league
+default; (4) the 150-line cap and pre-commit hooks caught real drift
+repeatedly — friction that pays.
