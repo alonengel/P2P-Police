@@ -1,7 +1,13 @@
-"""DQN-style training: MLP Q-network cop WITH barrier actions, trained
-directly against the PERFECT evader - the opponent the linear movement-only
-policy provably cannot beat (0% recorded). Experience replay + frozen target
-network + epsilon 1.0->0.05. Every eval is greedy on a dedicated RNG stream.
+"""Double-DQN pursuit training v3: ENSEMBLE adversaries + belief-noise.
+
+Arms-race round 2. The twin's counter-evader fully neutralized the v2 trap
+cop (survival 1.00), so v3 retrains against an ENSEMBLE - the perfect
+BFS-evader, the twin's learned counter-evader (DeepEvader, replayed from
+copied weight data), and a random walker - so the policy cannot overfit one
+fixed rival. Additionally, BELIEF-NOISE domain randomization: part of the
+time the cop is shown a jittered thief position (simulating belief error in
+blind/hidden-move games) instead of the true cell, so the policy survives
+partial observability. Experience replay + frozen target + best checkpoint.
 Outputs: results/deep_rl_weights.json, results/experiments/deep_rl_training.json,
 assets/deep_rl_curve.png. Run: uv run python scripts/train_deep_rl.py [episodes]
 """
@@ -22,39 +28,34 @@ from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.pathfind import bfs_distances
 from p2p_police.domain.primitives import Outcome, Role
 from p2p_police.domain.rules import RuleSet
+from p2p_police.strategy.arena_thief import DeepEvader, PerfectEvader
 from p2p_police.strategy.brain_base import RandomBrain
 from p2p_police.strategy.rl_deep import WEIGHTS_PATH, DeepQBrain, Mlp, candidate_actions, features
 
 RULES = RuleSet(max_barriers=14, max_moves=35, survival_threshold=35)
-GAMMA, LR, BATCH, SYNC_EVERY, BUFFER = 0.97, 0.01, 32, 250, 5000
+GAMMA, LR, BATCH, SYNC_EPISODES, BUFFER = 0.97, 0.01, 32, 10, 5000
+ENSEMBLE = (PerfectEvader, DeepEvader, RandomBrain)
+NOISE_P, NOISE_R = 0.4, 2  # belief-noise: prob + Chebyshev jitter radius
 
 
-class PerfectEvader:
-    """Deterministic upper-bound thief: always maximize BFS distance."""
-
-    def __init__(self, role: Role, rng: random.Random) -> None:
-        self.role = role
-
-    def decide(self, engine: GameEngine, belief=None) -> dict:
-        me = engine.positions[Role.THIEF]
-        distances = bfs_distances(engine.board, engine.positions[Role.POLICE])
-        best = max(engine.board.legal_moves(me),
-                   key=lambda m: distances.get(m.applied_to(me), 0))
-        return protocol.move_action(best)
+def _observed(engine, rng, noisy: bool):
+    true = engine.positions[Role.THIEF]
+    if not noisy or rng.random() >= NOISE_P:
+        return true
+    grid = engine.board.grid_size
+    return (min(grid - 1, max(0, true[0] + rng.randint(-NOISE_R, NOISE_R))),
+            min(grid - 1, max(0, true[1] + rng.randint(-NOISE_R, NOISE_R))))
 
 
-def _clone(net: Mlp, rng: random.Random) -> Mlp:
-    frozen = Mlp(rng)
-    frozen.load_state(json.loads(json.dumps(net.state())))
-    return frozen
-
-
-def run_episode(brain, seed: int, buffer=None, opponent=PerfectEvader):
+def run_episode(brain, seed: int, buffer=None, opponent=PerfectEvader, noisy=False):
     engine = GameEngine(7, (0, 0), (3, 3), RULES)
     thief = opponent(Role.THIEF, random.Random(seed + 9000))
+    noise_rng = random.Random(seed + 5000)
     while engine.outcome is Outcome.ONGOING:
-        action = brain.decide(engine)
-        phi = features(engine, action)
+        target = _observed(engine, noise_rng, noisy)
+        shim = type("T", (), {"argmax_cell": lambda self, c=target: c})()
+        action = brain.decide(engine, belief=shim)  # sees the jittered cell
+        phi = features(engine, action, thief=target) if buffer is not None else None
         protocol.apply_action(engine, Role.POLICE, action)
         if engine.outcome is Outcome.ONGOING:
             protocol.apply_action(engine, Role.THIEF, thief.decide(engine))
@@ -69,18 +70,17 @@ def run_episode(brain, seed: int, buffer=None, opponent=PerfectEvader):
             from_thief = bfs_distances(engine.board, engine.positions[Role.THIEF])
             d = from_thief.get(engine.positions[Role.POLICE], 2 * grid)
             containment = 1.0 - len(from_thief) / float(grid * grid)
-            reward = -0.02 * (d / grid) + 0.1 * containment  # traps pay rent
-            next_phis = [features(engine, a) for a in candidate_actions(engine)]
+            reward = -0.02 * (d / grid) + 0.1 * containment
+            nxt = _observed(engine, noise_rng, noisy)
+            next_phis = [features(engine, a, thief=nxt)
+                         for a in candidate_actions(engine)]
         buffer.append((phi, reward, next_phis))
     return engine.outcome
 
 
-def replay_step(net: Mlp, target_net: Mlp, buffer, rng: random.Random) -> None:
-    """Double-DQN target: the ONLINE net picks the next action, the FROZEN
-    net values it - decoupling selection from evaluation curbs the classic
-    max-operator overestimation."""
+def replay_step(net, target_net, buffer, rng) -> None:
     for phi, reward, next_phis in rng.sample(list(buffer), k=min(BATCH, len(buffer))):
-        if next_phis:
+        if next_phis:  # Double-DQN: online selects, frozen evaluates
             best = max(next_phis, key=lambda p: net.forward(p)[0])
             target = reward + GAMMA * target_net.forward(best)[0]
         else:
@@ -89,66 +89,79 @@ def replay_step(net: Mlp, target_net: Mlp, buffer, rng: random.Random) -> None:
         net.sgd(phi, hidden, target - q, LR)
 
 
-def evaluate(net: Mlp, base_seed: int, games: int, opponent) -> float:
+def _clone(net: Mlp) -> Mlp:
+    frozen = Mlp(random.Random(8))
+    frozen.load_state(json.loads(json.dumps(net.state())))
+    return frozen
+
+
+def evaluate(net, base_seed: int, games: int, opponent, noisy=False) -> float:
     brain = DeepQBrain(Role.POLICE, random.Random(base_seed - 1), net=net)
-    wins = sum(run_episode(brain, base_seed + i, opponent=opponent) is Outcome.CAPTURE
-               for i in range(games))
+    wins = sum(run_episode(brain, base_seed + i, opponent=opponent, noisy=noisy)
+               is Outcome.CAPTURE for i in range(games))
     return wins / games
 
 
-def main(episodes: int = 1500) -> None:
+def main(episodes: int = 4000) -> None:
     rng = random.Random(7)
     net = Mlp(rng)
-    target_net = _clone(net, random.Random(8))
+    target_net = _clone(net)
     brain = DeepQBrain(Role.POLICE, rng, net=net)
     buffer: deque = deque(maxlen=BUFFER)
     curve, best_eval, best_state = [], -1.0, net.state()
     for episode in range(episodes):
         brain.epsilon = max(0.05, 1.0 * (1 - episode / (0.9 * episodes)))
-        run_episode(brain, 10_000 + episode, buffer=buffer)
+        opponent = ENSEMBLE[episode % len(ENSEMBLE)]
+        run_episode(brain, 10_000 + episode, buffer=buffer, opponent=opponent,
+                    noisy=True)
         if len(buffer) >= BATCH:
-            for _ in range(4):  # several replay sweeps per episode
+            for _ in range(4):
                 replay_step(net, target_net, buffer, rng)
-        if (episode + 1) % (SYNC_EVERY // 25) == 0:  # sync target ~every 10 eps
-            target_net = _clone(net, random.Random(8))
+        if (episode + 1) % SYNC_EPISODES == 0:
+            target_net = _clone(net)
         if episode % 100 == 0 or episode == episodes - 1:
             vs_perfect = evaluate(net, 50_000, 25, PerfectEvader)
-            vs_random = evaluate(net, 70_000, 25, RandomBrain)
-            if vs_perfect > best_eval:  # keep the BEST policy, not the last
-                best_eval = vs_perfect
-                best_state = json.loads(json.dumps(net.state()))
+            vs_deep = evaluate(net, 60_000, 25, DeepEvader)
+            score = vs_perfect + vs_deep
+            if score > best_eval:
+                best_eval, best_state = score, json.loads(json.dumps(net.state()))
             curve.append({"episode": episode, "capture_vs_perfect": vs_perfect,
-                          "capture_vs_random": vs_random,
-                          "epsilon": round(brain.epsilon, 3)})
-            print(f"ep {episode:5d}  vs_perfect={vs_perfect:.2f} "
-                  f"vs_random={vs_random:.2f}  eps={brain.epsilon:.2f}")
-    net.load_state(best_state)  # ship the best checkpoint
-    final_perfect = evaluate(net, 90_000, 100, PerfectEvader)
-    print(f"FINAL (best checkpoint): capture vs perfect over 100: {final_perfect:.2f}")
+                          "capture_vs_counter_evader": vs_deep})
+            print(f"ep {episode:5d}  vs_perfect={vs_perfect:.2f} vs_counter={vs_deep:.2f}")
+    net.load_state(best_state)
+    finals = {
+        "vs_perfect_evader": evaluate(net, 90_000, 100, PerfectEvader),
+        "vs_counter_evader": evaluate(net, 91_000, 100, DeepEvader),
+        "vs_random": evaluate(net, 92_000, 100, RandomBrain),
+        "vs_perfect_with_belief_noise": evaluate(net, 93_000, 100, PerfectEvader,
+                                                 noisy=True),
+    }
+    print("FINAL:", {k: round(v, 2) for k, v in finals.items()})
     WEIGHTS_PATH.write_text(json.dumps(
         {"net": net.state(), "episodes": episodes, "gamma": GAMMA, "lr": LR,
-         "batch": BATCH, "sync_every": SYNC_EVERY, "double_dqn": True,
-         "checkpoint": "best-eval"}, indent=2), encoding="utf-8")
-    out = Path("results/experiments/deep_rl_training.json")
-    out.write_text(json.dumps({
+         "double_dqn": True, "checkpoint": "best-eval", "version": "v3-ensemble",
+         "ensemble": [c.__name__ for c in ENSEMBLE],
+         "belief_noise": {"p": NOISE_P, "radius": NOISE_R}}, indent=2),
+        encoding="utf-8")
+    Path("results/experiments/deep_rl_training.json").write_text(json.dumps({
         "curve": curve, "base_seed": 7, "eval_games_per_point": 25,
-        "final_capture_vs_perfect_evader": {"win_rate": final_perfect, "games": 100},
-        "comparison": "linear movement-only policy: 0.00 vs the same evader "
-                      "(results/experiments/rl_training.json)",
+        "final_100_game_evals": finals,
+        "regime": "ensemble adversaries + belief-noise domain randomization "
+                  "(p=0.4, Chebyshev radius 2) - trains under partial "
+                  "observability so the policy survives blind games",
     }, indent=2), encoding="utf-8")
     figure, ax = plt.subplots(figsize=(7, 4))
-    ax.plot([p["episode"] for p in curve], [p["capture_vs_perfect"] for p in curve],
-            marker="o", color="#1f6feb", label="vs perfect evader (barriers learned)")
-    ax.plot([p["episode"] for p in curve], [p["capture_vs_random"] for p in curve],
-            marker=".", color="#8b949e", label="vs random walker")
-    ax.axhline(0.0, color="#cf222e", linestyle="--",
-               label="linear movement-only policy vs perfect (0.00)")
+    for key, color, label in (("capture_vs_perfect", "#1f6feb", "vs perfect evader"),
+                              ("capture_vs_counter_evader", "#d29922",
+                               "vs learned counter-evader")):
+        ax.plot([p["episode"] for p in curve], [p[key] for p in curve],
+                marker="o", color=color, label=label)
     ax.legend(fontsize=8)
     ax.set(xlabel="training episode", ylabel="greedy capture rate",
-           title="DQN cop with barrier actions")
+           title="Double-DQN cop v3: ensemble + belief-noise")
     figure.tight_layout()
     figure.savefig("assets/deep_rl_curve.png", dpi=120)
 
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]) if len(sys.argv) > 1 else 1500)
+    main(int(sys.argv[1]) if len(sys.argv) > 1 else 4000)
