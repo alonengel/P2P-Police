@@ -27,6 +27,14 @@ cloudflared tunnel route dns copthief cop-mcp.alon.website
 #   http://127.0.0.1:8801 / 8802  (NOT 'localhost' - cloudflared resolves it
 #   to IPv6 ::1 while the servers bind IPv4; also: sub-subdomains like
 #   cop.mcp.* break the universal *.alon.website certificate - stay one level)
+# Each ingress entry MUST also rewrite the Host header:
+#     originRequest:
+#       httpHostHeader: 127.0.0.1:<port>
+#   FastMCP's DNS-rebinding protection (version-dependent) answers 421
+#   Misdirected Request to any Host that isn't the bind address - which is
+#   every tunneled request. Observed live against the unmodified official
+#   reference peer; the rewrite makes the origin always see itself.
+#   (ngrok equivalent: --host-header=rewrite)
 cloudflared tunnel run copthief                # keep running during games
 ```
 Credentials JSON + cert.pem live in `~/.cloudflared/` — NEVER in a repo.
