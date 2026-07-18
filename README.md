@@ -149,19 +149,23 @@ The blind cross-repo match flipped to thief survival — **uncertainty works as
 the rulebook intends**, and our belief machinery demonstrably drives the moves.
 **Reinforcement learning (optional path, implemented):** a linear
 function-approximation Q-learner (`strategy/rl_brain.py`, features = barrier-
-aware BFS geometry, TD(0), ε-greedy 0.30→0.05) trains by self-play
-(`scripts/train_rl.py`) and converges to a **1.00 greedy win rate** vs the
-random-walker baseline in ~250 episodes — learned weights are interpretable
-(distance −0.45: pursue; openness +0.19: avoid corners):
+aware BFS geometry, TD(0), ε-greedy 0.30→0.05) trains vs a scripted
+random-walker (`scripts/train_rl.py`) and converges to a **1.00 greedy win
+rate** (50-game evals, dedicated eval RNG) — learned weights are
+interpretable (distance −0.43: pursue; openness +0.21: avoid corners):
 
 ![RL learning curve](assets/rl_learning_curve.png)
 
-Against the *perfect evader*, movement-only RL captures **0%** — reproducing
-the classic cops-and-robbers result that one cop cannot corner a distance-
-maximizing robber on an open grid. That negative result is exactly why the
-shipped brain keeps its **barrier tactics** (which the RL action space lacks)
-and remains the league default; the RL brain is loadable via
-`[strategy] police_class = "p2p_police.strategy.rl_brain:LinearQBrain"`.
+Against the *perfect evader*, the same trained policy captures **0% over 100
+held-out games** — recorded as a first-class artifact
+(`results/experiments/rl_training.json` →
+`negative_result_vs_perfect_evader`) and drawn as the red line in the curve —
+reproducing the classic cops-and-robbers result that one cop cannot corner a
+distance-maximizing robber on an open grid. That negative result is exactly
+why the shipped brain keeps its **barrier tactics** (which the RL action
+space lacks) and remains the league default; the RL brain is loadable via
+`[strategy] police_class = "p2p_police.strategy.rl_brain:LinearQBrain"`
+(exercised end-to-end by `tests/unit/test_strategy/test_rl_brain.py`).
 
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 

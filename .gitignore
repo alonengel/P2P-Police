@@ -31,3 +31,8 @@ logs/
 # --- OS / editor noise ---
 .DS_Store
 Thumbs.db
+
+# Mutable machine state - never evidence (interop review 2026-07-18)
+results/.game_uid_*
+results/watchdog_dump.json
+.ipynb_checkpoints/
