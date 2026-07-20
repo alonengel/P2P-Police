@@ -25,8 +25,12 @@ Any opponent implementation must reproduce our bytes exactly:
    settlement tooling; signature computed BEFORE the `consensus_signature`
    key is inserted (verify = pop key, re-serialize spaced, re-hash).
 4. **Timestamps**: ISO-8601 UTC with seconds precision.
-5. **Scent model**: locked pre-series via `scent_model_sha256` over the spec
-   in `domain/scent.py::scent_model_spec()` — includes the re-emission clamp.
+5. **Scent model**: locked pre-series via `scent_model_sha256` over the
+   LEAGUE-envelope lock document ({family, name, params, example} for
+   `multiplicative_book_v1`, stored at `config/scent_model_lock.json`,
+   loaded by `domain/scent.py::scent_model_spec()`) — hash equals the
+   league registry's pinned value `934c220d…`, making locks comparable
+   across teams; includes the re-emission clamp.
 6. **Config identity**: `config_sha256` over canonical game.json; validate
    against `config/game.schema.json` before proposing changes.
 7. **Known interpretation disclosures** (state at negotiation): trapped-thief

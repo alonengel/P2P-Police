@@ -12,6 +12,9 @@ scent model that gets SHA-256-locked with the opponent before a series
 (rule 23) and is parity-locked with the twin repo.
 """
 
+import json
+from pathlib import Path
+
 from p2p_police.domain.primitives import Cell
 
 # The book's reference emission field (Figure 4): radial Gaussian falloff,
@@ -27,19 +30,23 @@ EMISSION_KERNEL: tuple[tuple[float, ...], ...] = (
 KERNEL_RADIUS = 2  # 5x5 kernel => center offset 2
 
 
+_LOCK_DOC_PATH = Path(__file__).resolve().parents[3] / "config" / "scent_model_lock.json"
+_lock_doc_cache: dict | None = None
+
+
 def scent_model_spec() -> dict:
-    """The human+machine-readable emission model BOTH sides must lock
-    (rule 23) - includes the numeric example and the re-emission CLAMP,
-    which extends the book's literal formula (PRD-01 disclosure)."""
-    return {
-        "formula": "tau' = clamp((1-rho)*tau + delta, 0, center_intensity)",
-        "center_intensity": 0.9,
-        "decay_rho": 0.10,
-        "kernel_5x5": [list(row) for row in EMISSION_KERNEL],
-        "clamp_note": "re-emission capped at center_intensity (0.9)",
-        "numeric_example": "single deposit at center: 0.9 -> 0.81 -> 0.729",
-        "decay_boundary": "once per FULL turn, after both agents acted",
-    }
+    """The locked emission-model document BOTH sides hash (rule 23).
+
+    Since 2026-07-20 this is the LEAGUE-envelope form ({family, name,
+    params, example} for `multiplicative_book_v1`), loaded from
+    config/scent_model_lock.json so the declared scent_model_sha256 is
+    comparable across teams (one shared doc schema, three families). The
+    hash equals the registry's pinned value; a bare ad-hoc dict would make
+    two correct implementations of the same model refuse each other."""
+    global _lock_doc_cache
+    if _lock_doc_cache is None:
+        _lock_doc_cache = json.loads(_LOCK_DOC_PATH.read_text(encoding="utf-8"))
+    return _lock_doc_cache
 
 
 class ScentField:

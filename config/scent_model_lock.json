@@ -1,0 +1,67 @@
+{
+  "family": "scent_model",
+  "name": "multiplicative_book_v1",
+  "params": {
+    "field_size": 5,
+    "center_intensity": 0.9,
+    "decay_rho": 0.1,
+    "kernel": [
+      [
+        0.04,
+        0.14,
+        0.2,
+        0.14,
+        0.04
+      ],
+      [
+        0.14,
+        0.42,
+        0.62,
+        0.42,
+        0.14
+      ],
+      [
+        0.2,
+        0.62,
+        0.9,
+        0.62,
+        0.2
+      ],
+      [
+        0.14,
+        0.42,
+        0.62,
+        0.42,
+        0.14
+      ],
+      [
+        0.04,
+        0.14,
+        0.2,
+        0.14,
+        0.04
+      ]
+    ],
+    "kernel_source": "book v3.0.0 figure 4 — printed values, verbatim lookup",
+    "decay": "multiplicative",
+    "update": "tau' = clamp((1 - rho) * tau + kernel_delta, 0, center_intensity)",
+    "evaluation_order": "(1 - rho) * tau + delta, then clamp",
+    "rounding_decimals": null,
+    "clamp": [
+      0.0,
+      0.9
+    ],
+    "cadence": "per_full_turn",
+    "order": "decay_then_deposit",
+    "receiver_side_decay": false,
+    "initial_field": "empty",
+    "transmitted": false
+  },
+  "example": {
+    "note": "the clamp case: a saturated cell decays, then takes an adjacent deposit",
+    "tau": 0.9,
+    "delta": 0.62,
+    "raw": 1.4300000000000002,
+    "clamped": 0.9
+  }
+}
