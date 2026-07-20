@@ -9,6 +9,39 @@ per-game commit IDs), a Cloudflare tunnel (public exposure), optional LLM
 providers (verbal layer only). There is **no game server**: state lives locally
 in each peer and truth is established cryptographically.
 
+## 1b. C4 diagrams
+
+```mermaid
+C4Context
+  title System context - Police peer (one of two mirrored twins)
+  Person(operator, "Team operator", "Runs games, league duties")
+  System(peer, "Police peer", "FastMCP server + client, replicated engine")
+  System_Ext(opponent, "Thief / rival peer", "Only its MCP URL is known")
+  System_Ext(gmail, "Gmail API", "send-only automatic reports")
+  System_Ext(tunnel, "Cloudflare tunnel", "public exposure (rule 10)")
+  Rel(operator, peer, "CLI / GUI")
+  Rel(peer, opponent, "negotiate, turns, audit", "MCP over HTTPS")
+  Rel(peer, gmail, "end-of-game report", "gatekeeper-gated")
+  Rel(peer, tunnel, "exposed via")
+```
+
+```mermaid
+flowchart LR
+  subgraph shells [Shells]
+    CLI --> SDK
+    GUI --> SDK
+  end
+  SDK[sdk/ single entry] --> RT[peer/runtime orchestrator]
+  RT --> DOM[domain/ physics+crypto - parity-locked]
+  RT --> PER[peer/perception belief]
+  RT --> BR[strategy/ brain seam]
+  RT --> SEAL[peer/sealing commit-reveal]
+  SEAL --> MCPC[infra/mcp_client persistent session]
+  MCPS[infra/mcp_server 4 tools] --> RT
+  SDK --> REP[report/ artifacts+email]
+  REP --> GK[shared/gatekeeper triad]
+```
+
 ## 2. C4: Containers
 
 One Python process per game role. This repo ships the Police process:

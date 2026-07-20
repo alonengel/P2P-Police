@@ -32,3 +32,12 @@ divides these linearly (e.g. =3 → a third).
    costs 0, not a technical loss.
 4. **Budget guard**: series budget 200k tokens (signed config); the meter's
    sealed totals prove compliance in every report.
+
+## Double-proof token accounting
+
+Token claims are provable two independent ways, so a 0-token series is
+auditable rather than asserted: (1) the per-provider meter aggregated into
+every result artifact (`tokens_total`, rule 54), and (2) the gatekeeper's
+timestamped call log (one instance per run) — a series claiming zero
+tokens must show BOTH an empty LLM call log and a zero meter, and the
+template provider's 0-token path is the shipped default.

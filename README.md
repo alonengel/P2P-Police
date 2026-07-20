@@ -66,7 +66,12 @@ Public play + Gmail setup: `docs/DEPLOYMENT.md`. League duties: `docs/LEAGUE_RUN
 
 TDD; ruff zero-violations; coverage ≥85% (branch); **≤150 code lines per file**
 (`scripts/check_line_cap.py`); twin physics parity (`scripts/check_physics_parity.py`);
-conventional commits; pre-commit hooks + CI enforce all of it. Secrets never enter
+conventional commits; pre-commit hooks + CI enforce all of it. Five
+disqualification-class book rules are additionally enforced as CI
+invariants (`tests/unit/test_rule_guards.py`), and every substantive claim
+in this README regenerates from a committed script into a committed
+artifact — the narratives live in [docs/evidence/](docs/evidence/)
+(setup / provenance / observed / what-it-does-NOT-prove, per experiment). Secrets never enter
 the repo (`.gitignore` + gitleaks in CI; `.env-example` shows the shape).
 
 ---
