@@ -23,7 +23,13 @@ half-turn, before the opponent acts at all.
 Anti-peek protection comes from turn order + nonce withholding, not from a
 mutual simultaneous lock. Rule 11's "byte-for-byte" config identity is
 implemented as canonical-hash equality (whitespace-insensitive, semantically
-stronger) - disclosed here for the same completeness reason.
+stronger) - disclosed here for the same completeness reason. Context for
+that reading: the official reference implementation compares the agreed
+terms by DICT EQUALITY (weaker than our canonical hash), so a literal
+file-bytes reading of rule 11 would flag the instructor's own tooling
+before ours; our mechanism sits strictly between the reference's practice
+and the rule's letter, and the runbook still instructs exchanging one
+identical file.
 
 ## Consequences
 

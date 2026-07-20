@@ -11,6 +11,11 @@ comments in `domain/rules.py` and PRD-01 promised a "cryptographic Capture
 Claim (Phase 6)" message; it was never built, and the stale references
 contradicted the code.
 
+Independent re-reading (ch. 3 §3.4) confirms the book mandates the
+claim-time TRUTH DUTY but does not specify any dedicated claim/response
+message structure - the mechanism below subsumes a duty, not a mandated
+wire shape.
+
 ## Decision
 
 No claim/response exchange exists, deliberately. In our wire every
