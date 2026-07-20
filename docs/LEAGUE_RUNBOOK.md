@@ -8,7 +8,9 @@ costs points or disqualifies (rule numbers from the rulebook's Appendix ה/ו).
 1. **Coordinate out-of-band** (WhatsApp): agree schedule, exchange public URLs
    (ours: thief `https://thief-mcp.alon.website/mcp`, cop `https://cop-mcp.alon.website/mcp`;
    `mcp.alon.website` still routes to the thief as a legacy alias).
-2. **Negotiate the shared game.json** — any change to negotiable values, and
+2. **Negotiate the shared game.json** - for a counted series set
+   `network_and_league.num_games = 6` (Table 18 fixed: 6 sub-games per
+   series; the dev default 1 is for single-game testing) - any change to negotiable values, and
    minimums may only go UP (rule 12). Both sides must load a byte-identical
    file (rule 11; the code verifies the sha and refuses otherwise).
 3. **Exchange + lock the scent model** (rule 23) — and OFFER OUR CODE

@@ -23,7 +23,7 @@ this repo by the pre-league MUST-coverage audit.)
 | 18 | Nonce secret until audit | sealing (reveal omits nonce+verdict) | test_sealing (secrecy asserts) | IMPL |
 | 19 | Hash mismatch = technical loss | crypto.audit_records; sdk voids on TAMPERED | tamper tests | IMPL |
 | 20 | Replay + verification | gui/replay.py; verify-log CLI; both halves verified | live TAMPERED demo | IMPL |
-| 21-22 | Truthful capture, no false claims | replicated-engine capture (claim impossible to fake) | test_engine capture paths | IMPL |
+| 21-22 | Truthful capture, no false claims | replicated-engine capture - claim-time truth duty subsumed by sealed records (ADR-0005) | test_engine capture paths | IMPL |
 | 23 | Scent model locked pre-game | scent_model_sha256 in agreement; scent_model_spec() | test_negotiation | IMPL |
 | 24 | Hardware declaration sealed | hardware_spec sha in agreement; declaration artifact | test_artifacts | IMPL |
 | 25 | LLM never decides moves | brains pure Python; TalkChain text-only | test_brains; SECURITY.md | IMPL |

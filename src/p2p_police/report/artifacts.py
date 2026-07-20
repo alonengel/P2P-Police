@@ -57,9 +57,15 @@ def _base(kind: str, game_id: str, game_uid: str, config) -> dict:
     }
 
 
-def build_declaration(config, game_id: str, game_uid: str, games_played: int) -> dict:
-    """Step-0 sealed pre-game data: identity, hardware, commit, game count."""
+def build_declaration(config, game_id: str, game_uid: str, games_played: int,
+                      opponent: dict | None = None) -> dict:
+    """Step-0 sealed pre-game data: identity, hardware, commit, game count.
+
+    SIGNED (sign-then-insert, like the result) and carrying the opponent's
+    negotiated identity + hardware seal so a third party can verify both
+    sides' declarations from OUR artifact alone (rules 24/37-38/49)."""
     doc = _base("declaration", game_id, game_uid, config)
+    spec = hardware_spec()
     doc.update(
         {
             "declared_at": utc_now(),
@@ -69,14 +75,22 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int) ->
                 "code_version": CODE_VERSION,
                 "github_commit": git_commit_hash(),
                 "counted_games_played": games_played,
-                "hardware_spec": hardware_spec(),
+                "hardware_spec": spec,
+                "hardware_spec_sha256": config_sha256(spec),
+                "mcp_servers": config.private["game"].get("mcp_servers", {}),
                 "llm_model": config.private.get("llm", {}).get("model", "template"),
+            },
+            "opponent": {
+                "group_id": (opponent or {}).get("group_id", "unknown"),
+                "identity": (opponent or {}).get("identity", {}),
+                "hardware_spec_sha256": (opponent or {}).get("hardware_spec_sha256", ""),
             },
             "token_budget_per_series": config.shared["network_and_league"][
                 "token_budget_per_series"
             ],
         }
     )
+    doc["consensus_signature"] = consensus_signature(doc)  # sign-then-insert
     return doc
 
 
@@ -107,19 +121,39 @@ def build_log(config, game_id: str, game_uid: str, sub_game: int, report: dict,
     return doc
 
 
+def _winner_group(config, report: dict) -> str:
+    """Which group won this sub-game (A.7 result field). Capture -> the cop
+    side's group; survival -> the thief side's; technical loss -> the rival."""
+    opponent = report.get("opponent_group_id", "unknown")
+    role, outcome = report.get("role", ""), report.get("outcome", "")
+    if outcome == "technical_loss":
+        return opponent
+    we_won = (role == "police") == (outcome == "capture")
+    return config.group_id if we_won else opponent
+
+
 def build_result(config, game_id: str, game_uid: str, report: dict,
                  score: tuple[int, int], tokens_total: int) -> dict:
+    from p2p_police.domain.scent import scent_model_spec
+
     doc = _base("result", game_id, game_uid, config)
     doc.update(
         {
             "reported_at": utc_now(),
             "group_id": config.group_id,
+            "opponent_group_id": report.get("opponent_group_id", "unknown"),
+            "winner_group": _winner_group(config, report),
+            "mcp_servers": config.private["game"].get("mcp_servers", {}),
             "github_commit": git_commit_hash(),
             "outcome": report["outcome"],
             "turns_completed": report["turns_completed"],
             "audit": report.get("audit", ""),
             "end_state_digest": report["end_state_digest"],
             "digest_match": report.get("digest_match", False),
+            "agreement": {  # the SHA-backed mutual-agreement confirmations
+                "config_sha256": config_sha256(config.shared),
+                "scent_model_sha256": config_sha256(scent_model_spec()),
+            },
             "score": {"cop": score[0], "thief": score[1]},
             "tokens_total": tokens_total,
         }

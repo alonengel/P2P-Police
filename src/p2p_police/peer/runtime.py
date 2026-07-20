@@ -45,12 +45,10 @@ class GeometricRuntime:
         brain: BrainBase,
         gatekeeper=None,
     ) -> None:
-        self.role, self.config = role, config
-        self.engine = engine
+        self.role, self.config, self.engine = role, config, engine
         self.transport, self.inboxes = transport, inboxes
-        self.brain = brain
         # Local truth only: belief about the RIVAL, fed by scent + hints.
-        self.perception = Perception(role, config.grid_size)
+        self.brain, self.perception = brain, Perception(role, config.grid_size)
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
         self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
@@ -75,10 +73,13 @@ class GeometricRuntime:
                 continue
 
     def negotiate(self) -> dict:
-        mine = build_agreement(self.config.shared, self.config.group_id, hardware_spec())
+        mine = build_agreement(self.config.shared, self.config.group_id, hardware_spec(),
+                               info_mode=self.config.info_mode(),
+                               identity=self.config.identity_block())
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
         verify_agreement(mine, theirs)
+        self.opponent_info = theirs  # identity + hashes: persisted into artifacts
         self.opponent_group_id = self.perception.opponent_id = theirs.get("group_id", "unknown")
         return theirs
 
@@ -88,18 +89,16 @@ class GeometricRuntime:
         # "exact" - legal ONLY under a pair-locked bookletter wire, where every
         # position arrived via the agreed protocol and is shared local
         # knowledge (joint ADR line). The live UI shows belief either way.
-        exact = self.config.private.get("strategy", {}).get("info_mode") == "exact"
+        exact = self.config.info_mode() == "exact"
         action = self.brain.decide(self.engine, None if exact else self.perception.belief)
         moved = action["move"] if action["type"] == "move" else "STAY"
         _text, claim, truth = build_hint(
-            Move[moved],
-            self.brain.rng.random() < TRUTH_PROBABILITY,
-            self.config.shared["world"]["hint_max_words"],
-            self.brain.rng,
+            Move[moved], self.brain.rng.random() < TRUTH_PROBABILITY,
+            self.config.shared["world"]["hint_max_words"], self.brain.rng,
         )
-        text = self.talk.render(claim, turn_index)
         self.fsm.transition(GamePhase.COMMITTING)
-        self.exchange.send_sealed(self.engine, turn_index, action, text, truth)
+        self.exchange.send_sealed(self.engine, turn_index, action,
+                                  self.talk.render(claim, turn_index), truth)
         self.fsm.transition(GamePhase.AWAITING_REVEAL)
         protocol.apply_action(self.engine, self.role, action)
         self.fsm.transition(GamePhase.VERIFYING)
@@ -168,4 +167,5 @@ class GeometricRuntime:
             "audit": audit_verdict,
             "steps_sealed": len(self.exchange.own_records),
             "opponent_group_id": getattr(self, "opponent_group_id", "unknown"),
+            "opponent_info": getattr(self, "opponent_info", {}),
         }

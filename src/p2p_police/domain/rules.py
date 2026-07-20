@@ -1,10 +1,11 @@
 """Win conditions and the law of barriers (rulebook ch. 3, rules 46-48).
 
-Two capture families with different downstream obligations (PRD 01):
-- AUTOMATIC captures (no claim, no truth-duty): a barrier placed on the
-  thief's cell, or a thief left with all four neighbors impassable.
-- LANDING capture: cop occupies the thief's cell — at the protocol layer this
-  one carries a cryptographic Capture Claim (Phase 6).
+All three capture families resolve AUTOMATICALLY in the replicated engines
+(barrier-on-thief, fully-blocked thief, cop landing on the thief): every
+half-turn is commit-revealed, so the thief's position is cryptographically
+committed and a separate Capture-Claim/response exchange would add nothing
+the audit does not already prove - the book's claim-time truth duty is
+subsumed by the sealed records (ADR-0005).
 
 Parity-locked with the twin repo.
 """
@@ -60,7 +61,7 @@ def validate_barrier_placement(
 
 
 def landing_capture(cop_cell: Cell, thief_cell: Cell) -> bool:
-    """Cop stands on the thief's cell (requires a Capture Claim upstream)."""
+    """Cop stands on the thief's cell (automatic: positions are sealed)."""
     return cop_cell == thief_cell
 
 

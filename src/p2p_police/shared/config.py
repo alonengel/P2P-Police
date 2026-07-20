@@ -96,7 +96,21 @@ class Config:
 
     @property
     def group_id(self) -> str:
-        return self.private["game"]["group_id"]
+        gid = self.private["game"]["group_id"]
+        if len(gid) != 8 or " " in gid:  # rule 45: 8 chars, no spaces
+            raise ConfigError(f"group_id must be exactly 8 chars, no spaces: {gid!r}")
+        return gid
+
+    def info_mode(self) -> str:
+        """[strategy] info_mode: 'belief' (default) | 'exact' (ADR-0006)."""
+        return self.private.get("strategy", {}).get("info_mode", "belief")
+
+    def identity_block(self) -> dict:
+        """Rival-facing identity declaration (rules 37-38/49, ADR-0005/6)."""
+        game = self.private.get("game", {})
+        return {"repos": game.get("repos", {}),
+                "mcp_servers": game.get("mcp_servers", {}),
+                "counted_games_played": int(game.get("counted_games_played", 0))}
 
     @property
     def my_port(self) -> int:

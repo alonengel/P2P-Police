@@ -46,3 +46,35 @@ def test_log_and_result_share_uid_and_emit(config_dir: Path, tmp_path: Path) -> 
     assert result["score"] == {"cop": 20, "thief": 5}
     path = artifacts.emit(result, tmp_path, "result_a-vs-b.json")
     assert path.is_file() and "tokens_total" in path.read_text()
+
+
+def test_declaration_is_signed_and_carries_opponent(config_dir: Path) -> None:
+    """Rules 24/37-38/49: hardware sealed, opponent identity persisted,
+    sign-then-insert signature verifiable by a third party."""
+    config = Config.load(config_dir)
+    opponent = {"group_id": "rival-88", "hardware_spec_sha256": "ab" * 32,
+                "identity": {"repos": {"cop": "u1", "thief": "u2"},
+                             "counted_games_played": 1}}
+    doc = artifacts.build_declaration(config, "a-vs-b", "uid1", 2, opponent=opponent)
+    assert doc["group"]["hardware_spec_sha256"]
+    assert doc["opponent"]["group_id"] == "rival-88"
+    assert doc["opponent"]["identity"]["counted_games_played"] == 1
+    signed = dict(doc)
+    signature = signed.pop("consensus_signature")
+    assert artifacts.consensus_signature(signed) == signature
+
+
+def test_result_winner_group_all_outcomes(config_dir: Path) -> None:
+    config = Config.load(config_dir)
+    gid = config.group_id
+    cases = [  # (role, outcome, expected winner)
+        ("police", "capture", gid), ("police", "survival", "rival-88"),
+        ("thief", "survival", gid), ("thief", "capture", "rival-88"),
+        ("police", "technical_loss", "rival-88"),
+    ]
+    for role, outcome, expected in cases:
+        report = {"role": role, "outcome": outcome, "turns_completed": 1,
+                  "end_state_digest": "d" * 64, "opponent_group_id": "rival-88"}
+        doc = artifacts.build_result(config, "a-vs-b", "uid1", report, (0, 0), 0)
+        assert doc["winner_group"] == expected, (role, outcome)
+        assert doc["agreement"]["config_sha256"] and "mcp_servers" in doc

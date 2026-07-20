@@ -83,11 +83,15 @@ def validate_shared_terms(shared: dict) -> None:
             raise GameRuleError(f"MINIMUM term '{dotted}' may not drop below {floor}, got {actual}")
 
 
-def build_agreement(shared: dict, group_id: str, hardware_spec: dict | None = None) -> dict:
+def build_agreement(shared: dict, group_id: str, hardware_spec: dict | None = None,
+                    info_mode: str = "belief", identity: dict | None = None) -> dict:
     """The negotiate payload sent to the opponent before any move.
 
-    Locks the config (rule 11), the scent model incl. our clamp (rule 23)
-    and - when provided - seals the hardware disclosure (rule 24, step-0).
+    Locks the config (rule 11), the scent model incl. our clamp (rule 23),
+    seals the hardware disclosure when provided (rule 24, step-0), DECLARES
+    the information mode (pair-locked, ADR-0006) and carries the identity
+    block - repos, server addresses, counted-games declaration (rules
+    37-38/49: declared TO THE RIVAL at game start, not just to the lecturer).
     """
     validate_shared_terms(shared)
     agreement = {
@@ -96,6 +100,8 @@ def build_agreement(shared: dict, group_id: str, hardware_spec: dict | None = No
         "commit_order": COMMIT_ORDER,
         "schema_version": _lookup(shared, "schema_version"),
         "scent_model_sha256": config_sha256(scent_model_spec()),
+        "info_mode": info_mode,
+        "identity": identity or {},
     }
     if hardware_spec is not None:
         agreement["hardware_spec_sha256"] = config_sha256(hardware_spec)
@@ -106,7 +112,9 @@ def verify_agreement(mine: dict, theirs: dict) -> None:
     """Fail-fast symmetry check before the first move (rule 11).
 
     Raises GameRuleError on sha mismatch (different physics), commit-order
-    mismatch (guaranteed deadlock), or schema mismatch.
+    mismatch (guaranteed deadlock), or schema mismatch. info_mode follows
+    the both-declare convention (ADR-0006): refuse ONLY when both sides
+    declare and disagree - a peer that omits it is not a refusal.
     """
     for field in ("config_sha256", "commit_order", "schema_version", "scent_model_sha256"):
         if mine.get(field) != theirs.get(field):
@@ -114,3 +122,9 @@ def verify_agreement(mine: dict, theirs: dict) -> None:
                 f"agreement mismatch on '{field}': "
                 f"mine={mine.get(field)!r} theirs={theirs.get(field)!r}"
             )
+    mine_mode, theirs_mode = mine.get("info_mode"), theirs.get("info_mode")
+    if mine_mode is not None and theirs_mode is not None and mine_mode != theirs_mode:
+        raise GameRuleError(
+            f"information-mode mismatch: mine={mine_mode!r} theirs={theirs_mode!r} "
+            "- unilateral exact-information play is forbidden (ADR-0006)"
+        )

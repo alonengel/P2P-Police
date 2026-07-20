@@ -27,7 +27,7 @@ config.
 - Barrier beyond quota rejected; placement only at distance ≤1 (book milestone).
 - Barrier on thief's cell = capture; fully-surrounded thief = capture — both
   AUTOMATIC (no claim) (rules 46–47). Landing capture is a separate event that
-  will carry a Capture Claim at the protocol layer (Phase 6).
+  resolves automatically in the replicated engines - the claim-time truth duty is subsumed by commit-reveal (ADR-0005).
 - Scent decay exactly ONCE per full turn (after both agents acted); silent cell
   = 0.0; values clamped to [0, 0.9].
 - Scoring per the fixed table (rule 48); technical loss = 0/0.

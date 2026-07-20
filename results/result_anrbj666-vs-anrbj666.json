@@ -1,25 +1,35 @@
 {
   "_schema": "p2p-police-artifacts",
+  "agreement": {
+    "config_sha256": "528e4a0068cd41495164cf4e884961f1f0d2f91b1897ef89913ec1d1613825e7",
+    "scent_model_sha256": "cceaeb033a7d80a79775bb1a03ec43d263c769228db34e0220cbbbec251bb7e7"
+  },
   "audit": "Verified OK",
-  "consensus_signature": "9eb7d994563f4183d244b7634e48e8d0fdc82e409fbbc3ae63da8d63613e6525",
+  "consensus_signature": "1eafa45ae19899b32016e2eee30efa4419e6e5198b8bea773d1d04a2e02a3c0b",
   "digest_match": true,
   "end_state_digest": "fc738b42a7f44a4dc4a395cc96f03b5b5b9553af26f602e044577d71342911b1",
   "game_id": "anrbj666-vs-anrbj666",
   "game_uid": "23020791-2460-8b05-1491-75c4e2f2551b",
-  "github_commit": "85fa5201220161c56f80883687cb0fcbd33838b9",
+  "github_commit": "f03696159abd2ef0cc63574751c8aadd020dd5b7",
   "group_id": "anrbj666",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
     "thief": "https://github.com/alonengel/P2P-Thief"
   },
+  "mcp_servers": {
+    "cop": "https://cop-mcp.alon.website/mcp",
+    "thief": "https://thief-mcp.alon.website/mcp"
+  },
+  "opponent_group_id": "anrbj666",
   "outcome": "survival",
   "report_type": "result",
-  "reported_at": "2026-07-18T14:16:32+00:00",
+  "reported_at": "2026-07-20T16:47:25+00:00",
   "schema_version": "1.00",
   "score": {
     "cop": 5,
     "thief": 10
   },
   "tokens_total": 0,
-  "turns_completed": 35
+  "turns_completed": 35,
+  "winner_group": "anrbj666"
 }

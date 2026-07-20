@@ -83,3 +83,28 @@ def test_commit_order_mismatch_fails_verification(shared_terms: dict) -> None:
     theirs = dict(mine, commit_order="thief_first")
     with pytest.raises(GameRuleError, match="commit_order"):
         verify_agreement(mine, theirs)
+
+
+def test_info_mode_both_declare_mismatch_refuses(shared_terms: dict) -> None:
+    """ADR-0006: unilateral exact play is forbidden when both declare."""
+    mine = build_agreement(shared_terms, "anrbj666", info_mode="belief")
+    theirs = build_agreement(shared_terms, "rival-88", info_mode="exact")
+    with pytest.raises(GameRuleError, match="information-mode"):
+        verify_agreement(mine, theirs)
+
+
+def test_info_mode_absent_on_one_side_is_not_a_refusal(shared_terms: dict) -> None:
+    """Foreign peers that omit the field still negotiate (both-declare rule)."""
+    mine = build_agreement(shared_terms, "anrbj666", info_mode="exact")
+    theirs = build_agreement(shared_terms, "rival-88")
+    del theirs["info_mode"]
+    verify_agreement(mine, theirs)  # must not raise
+
+
+def test_agreement_carries_rival_facing_identity(shared_terms: dict) -> None:
+    """Rules 37-38/49: repos + servers + counted-games declared TO THE RIVAL."""
+    identity = {"repos": {"cop": "u1", "thief": "u2"},
+                "mcp_servers": {"cop": "m1", "thief": "m2"},
+                "counted_games_played": 3}
+    mine = build_agreement(shared_terms, "anrbj666", identity=identity)
+    assert mine["identity"] == identity
