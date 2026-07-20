@@ -96,3 +96,15 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Gatekeeper queue-not-reject + concurrency semaphore (guidelines 5.1/5.3); ADR-0003 scopes the peer channel out
 - [x] PLAN module map synced to the shipped tree
 - [ ] League day: share private repos with lecturer (rmisegal) OR make public; flip [email] mode=send; update counted_games_played each game
+
+## DoD-observed ledger (measured evidence per completed phase)
+
+Every "done" above is backed by a regenerable artifact; the deep narratives
+live in `docs/evidence/`:
+
+| Claim | Measured | Evidence |
+|---|---|---|
+| Public P2P games work end-to-end | 35-turn sealed games over the tunnel, identical digests, audits Verified OK both directions | `docs/evidence/public-games.md`, `results/public_bidirectional_e2e_*.json` |
+| Reference interop is proven, not assumed | 13/13 conformance tests over the league kit's vectors; counterparty package re-verified 35/35 | `docs/evidence/interop-alignment.md`, `tests/unit/test_reference_conformance.py` |
+| Disqualification rules are enforced | 5 rule-guard invariants in CI + tamper drills read TAMPERED | `docs/evidence/rule-guards.md`, `tests/unit/test_rule_guards.py` |
+| Strategy claims are measured | full RL campaign incl. four gated promotions (all held) and the wire-shape balance tables | `docs/evidence/rl-campaign.md`, `results/experiments/*.json` |

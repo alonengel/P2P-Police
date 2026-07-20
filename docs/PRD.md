@@ -16,6 +16,28 @@ Normative sources (in priority order):
 2. Software submission guidelines V3 (grading standard).
 3. Official demo repo (learning reference only, attribution in LICENSE).
 
+## 1b. Grade-aligned priorities (effort allocation)
+
+Where the effort deliberately went, in order — mirroring how the rubric
+weighs it:
+
+1. **Interop-reliability floor** — a game that cannot start, audit, or
+   settle scores zero regardless of brains: byte-form alignment, the
+   conformance suite, persistent transport, deadline/watchdog discipline.
+2. **Integrity as enforcement, not prose** — commit-reveal, the
+   physics-recomputing verifier, and the rule-guard tests that turn
+   disqualification-class rules into CI invariants.
+3. **Strategy depth with evidence** — hand-tuned league defaults backed by
+   the full RL campaign (positive AND negative results, all gated).
+4. **League operations** — runbook, tunneling hardening, reporting funnel:
+   the human-error surface minimized before it can cost points.
+5. **Evidence layer** — every substantive claim regenerates from a
+   committed script into a committed artifact (docs/evidence/).
+
+Audience: the course grader first (traceability to the 55 rules +
+guidelines), rival teams second (interop specs they can build against),
+future-us third (runbooks that survive a stressful league day).
+
 ## 2. Goals & KPIs
 
 | Goal | KPI / acceptance criterion |
