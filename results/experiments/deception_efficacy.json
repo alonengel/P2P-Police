@@ -1,0 +1,21 @@
+{
+  "method": "32 games x 35 turns per cell; police Perception vs a thief whose hints are all-truthful vs all-lying on identical seeds; error = Manhattan(belief argmax, true cell); mass = belief on true cell. Parser (domain/belief.py) is parity-locked: applies to both twins.",
+  "per_lying_turn": {
+    "unprofiled_honesty_0.5": {
+      "induced_error_cells": 0.0,
+      "mass_destroyed": 0.0,
+      "why": "neutral reputation -> equal inside/outside weights -> uniform multiplier erased by normalization: hints are structurally ignored until league memory exists"
+    },
+    "profiled_honest_0.9": {
+      "induced_error_cells": 0.906,
+      "mass_destroyed": 0.0468,
+      "why": "trusted opponents CAN convert reputation into belief damage - the deception game the book intends, scent-bounded"
+    },
+    "profiled_liar_0.1": {
+      "induced_error_cells": -0.555,
+      "mass_destroyed": -0.0266,
+      "why": "a known liar lying HELPS us: inverted weights read lies as signal"
+    }
+  },
+  "comparison_context": "counterparty-measured efficacy vs their parser: +0.000042 per lying turn; both parsers make the hidden-arm deception understatement ~zero at first contact"
+}
