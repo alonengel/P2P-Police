@@ -45,8 +45,7 @@ class GeometricRuntime:
         brain: BrainBase,
         gatekeeper=None,
     ) -> None:
-        self.role = role
-        self.config = config
+        self.role, self.config = role, config
         self.engine = engine
         self.transport, self.inboxes = transport, inboxes
         self.brain = brain
@@ -85,7 +84,12 @@ class GeometricRuntime:
 
     def _my_half_turn(self, turn_index: int) -> None:
         self.fsm.transition(GamePhase.COMPUTING_MOVE)
-        action = self.brain.decide(self.engine, self.perception.belief)
+        # [strategy] info_mode: "belief" (default - the Dec-POMDP posture) or
+        # "exact" - legal ONLY under a pair-locked bookletter wire, where every
+        # position arrived via the agreed protocol and is shared local
+        # knowledge (joint ADR line). The live UI shows belief either way.
+        exact = self.config.private.get("strategy", {}).get("info_mode") == "exact"
+        action = self.brain.decide(self.engine, None if exact else self.perception.belief)
         moved = action["move"] if action["type"] == "move" else "STAY"
         _text, claim, truth = build_hint(
             Move[moved],

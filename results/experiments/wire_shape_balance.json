@@ -1,0 +1,19 @@
+{
+  "side": "cop (this repo); thief side in the twin repo",
+  "games_per_cell": 32,
+  "base_seed": 70000,
+  "arms": {
+    "exact": "rival cell as revealed (bookletter lock)",
+    "lag1": "rival cell one move stale - best-case hidden-play scent reading; adversary always fully informed"
+  },
+  "table": {
+    "PoliceBrain vs PerfectEvader [exact]": 0.71875,
+    "PoliceBrain vs PerfectEvader [lag1]": 0.875,
+    "PoliceBrain vs DeepEvader [exact]": 0.0,
+    "PoliceBrain vs DeepEvader [lag1]": 0.0,
+    "DeepQBrain vs PerfectEvader [exact]": 0.75,
+    "DeepQBrain vs PerfectEvader [lag1]": 0.75,
+    "DeepQBrain vs DeepEvader [exact]": 0.0,
+    "DeepQBrain vs DeepEvader [lag1]": 0.0
+  }
+}

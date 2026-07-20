@@ -62,3 +62,36 @@ def test_two_runtimes_reach_identical_end_state(config_dir: Path) -> None:
     assert reports["police"]["end_state_digest"] == reports["thief"]["end_state_digest"]
     assert reports["police"]["digest_match"] and reports["thief"]["digest_match"]
     assert reports["police"]["turns_completed"] == reports["thief"]["turns_completed"]
+
+
+class SpyBrain(RandomBrain):
+    """Records exactly what information the runtime feeds the decision."""
+
+    def decide(self, engine, belief=None):
+        self.saw = belief
+        return super().decide(engine, belief)
+
+
+def _half_turn_feed(config: Config) -> object:
+    inboxes = PeerInboxes()
+    brain = SpyBrain(Role.POLICE, random.Random(5))
+    runtime = GeometricRuntime(
+        Role.POLICE, config,
+        GameEngine(config.grid_size, config.cop_start, config.thief_start,
+                   config.rule_set()),
+        LoopbackTransport(PeerInboxes()), inboxes, brain)
+    runtime._my_half_turn(1)
+    return brain.saw
+
+
+def test_info_mode_default_feeds_belief(config_dir: Path) -> None:
+    config = Config.load(config_dir)
+    assert _half_turn_feed(config) is not None  # the Dec-POMDP posture
+
+
+def test_info_mode_exact_feeds_none(config_dir: Path) -> None:
+    """Bookletter lock: positions are shared local knowledge - brains may
+    read the engine directly (joint-ADR line); the switch is config-driven."""
+    config = Config.load(config_dir)
+    config.private.setdefault("strategy", {})["info_mode"] = "exact"
+    assert _half_turn_feed(config) is None
