@@ -1,0 +1,6 @@
+{"ts": "2026-07-21T16:58:20.106+00:00", "drill": "d3_transport_flap_heal", "stage": "start", "flap_after_full_turns": 2, "flap_seconds": 1.5, "retry_backoff_sec": 0.2}
+{"ts": "2026-07-21T16:58:20.312+00:00", "drill": "d3_transport_flap_heal", "stage": "inject", "fault": "endpoint_down", "heal_planned": true, "at_full_turn": 2}
+{"ts": "2026-07-21T16:58:21.814+00:00", "drill": "d3_transport_flap_heal", "stage": "observe", "healed_after_sec": 1.5, "turns_at_heal": 2}
+{"ts": "2026-07-21T16:58:23.373+00:00", "drill": "d3_transport_flap_heal", "stage": "observe", "retries": 0, "stall_full_turns": 0}
+{"ts": "2026-07-21T16:58:23.374+00:00", "drill": "d3_transport_flap_heal", "stage": "classify", "classification": "survival", "phase": "WAITING_FOR_OPPONENT", "error": null}
+{"ts": "2026-07-21T16:58:23.374+00:00", "drill": "d3_transport_flap_heal", "stage": "outcome", "outcome": "survival", "phase": "WAITING_FOR_OPPONENT", "turns_completed": 35, "digest_match": true, "audit": "Verified OK", "steps_sealed": 35, "elapsed_sec": 3.263, "stub_outcome": "survival", "retries": 0, "stall_full_turns": 0}

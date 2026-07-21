@@ -1,0 +1,6 @@
+{"ts": "2026-07-21T16:58:13.341+00:00", "drill": "d1_duplicate_delivery", "stage": "start", "duplicate_stub_turn": 2, "turn_timeout_sec": 4.0}
+{"ts": "2026-07-21T16:58:13.559+00:00", "drill": "d1_duplicate_delivery", "stage": "inject", "fault": "duplicate", "stub_turn": 4, "message_kind": "commit"}
+{"ts": "2026-07-21T16:58:13.591+00:00", "drill": "d1_duplicate_delivery", "stage": "inject", "fault": "duplicate", "stub_turn": 4, "message_kind": "reveal"}
+{"ts": "2026-07-21T16:58:14.824+00:00", "drill": "d1_duplicate_delivery", "stage": "observe", "duplicates_dropped": 2}
+{"ts": "2026-07-21T16:58:14.825+00:00", "drill": "d1_duplicate_delivery", "stage": "classify", "classification": "survival", "phase": "WAITING_FOR_OPPONENT", "error": null}
+{"ts": "2026-07-21T16:58:14.825+00:00", "drill": "d1_duplicate_delivery", "stage": "outcome", "outcome": "survival", "phase": "WAITING_FOR_OPPONENT", "turns_completed": 35, "digest_match": true, "audit": "Verified OK", "steps_sealed": 35, "elapsed_sec": 1.478, "stub_outcome": "survival", "duplicates_dropped": 2}

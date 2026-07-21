@@ -1,0 +1,5 @@
+{"ts": "2026-07-21T16:58:23.391+00:00", "drill": "d4_budget_exhaustion", "stage": "start", "flap_after_full_turns": 2, "turn_timeout_sec": 4.0}
+{"ts": "2026-07-21T16:58:23.597+00:00", "drill": "d4_budget_exhaustion", "stage": "inject", "fault": "endpoint_down", "heal_planned": false, "at_full_turn": 2}
+{"ts": "2026-07-21T16:58:27.631+00:00", "drill": "d4_budget_exhaustion", "stage": "observe", "seconds_to_classify": 4.034, "retries": 1, "stub_thread_exited": true}
+{"ts": "2026-07-21T16:58:27.631+00:00", "drill": "d4_budget_exhaustion", "stage": "classify", "classification": "technical_loss", "phase": "COMMITTING", "error": "DeadlineExpiredError: opponent at http://127.0.0.1:52179/mcp unreachable until deadline: in-flight call to http://127.0.0.1:52179/mcp timed out"}
+{"ts": "2026-07-21T16:58:27.632+00:00", "drill": "d4_budget_exhaustion", "stage": "outcome", "outcome": "technical_loss", "phase": "COMMITTING", "turns_completed": 3, "digest_match": false, "audit": "unavailable (technical loss)", "steps_sealed": 3, "elapsed_sec": 4.238, "stub_outcome": "technical_loss", "seconds_to_classify": 4.034, "retries": 1}

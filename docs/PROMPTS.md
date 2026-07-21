@@ -194,3 +194,35 @@ policy whose trigger never fires is a silent bug — measure trigger rates,
 not just end results; (3) sealed intent flags make deception audit-honest:
 the verdict trail the audit reveals IS the policy's decision log, asserted
 verbatim in the integration test.
+
+## 2026-07-21 — Session 9: chaos-drill suite (live-path robustness evidence)
+
+Prompt (paraphrased): *"Build a chaos-drill harness proving the robustness of
+the live path, with committed append-only JSONL evidence. Drills over REAL
+HTTP MCP games (our runtime vs an in-process scripted stub opponent): D1
+duplicate delivery (sealing dedup absorbs an at-least-once resend), D2 silent
+opponent (deadline -> clean technical loss + watchdog persist), D3 transport
+flap that heals inside the retry budget, D4 endpoint dead past the whole
+budget (classified, never a hang). Plus a LIVE public-tunnel drill: kill
+cloudflared mid-game and heal on the named tunnel's stable hostnames. Every
+evidence line must be a really-observed event — never fabricated; mirror the
+whole suite in the twin repo."*
+
+Process: reused the integration-test machinery (two real FastMCP servers on
+ephemeral ports) plus a tiny TCP proxy that severs live connections and
+rebinds the same port; all knobs in a private `[chaos]` config table; the
+drills re-run as slow marker-gated tests with evidence redirected to tmp.
+Two wrong assumptions died on contact with reality: (1) the FSM does NOT
+always end in TECHNICAL_LOSS — the book's table has no edge from COMMITTING
+or WAITING_FOR_OPPONENT, so the classification lives in the engine outcome +
+typed error; (2) a severed endpoint does not fail fast — the persistent MCP
+session holds the in-flight call (SDK-internal reconnect) and the outer
+retry loop is the backstop, so D3 asserts the game FROZE and completed
+rather than counting retries.
+
+Lessons: (1) the first live tunnel run found a real gap — a downed Cloudflare
+tunnel answers HTTP 530, which `_is_connection_flavored` did not retry
+(only 502-504): one marker line fixed it and the recorded kill/heal game is
+the end-to-end proof; (2) chaos drills earn their keep by breaking the
+author's model of the system, not the system itself; (3) pass criteria must
+encode observed mechanisms, or the drill tests the assumption, not the code.
