@@ -226,3 +226,32 @@ tunnel answers HTTP 530, which `_is_connection_flavored` did not retry
 the end-to-end proof; (2) chaos drills earn their keep by breaking the
 author's model of the system, not the system itself; (3) pass criteria must
 encode observed mechanisms, or the drill tests the assumption, not the code.
+
+## 2026-07-21 — Session 10: competitive audit & the interop decision brief
+
+**Context.** Ahead of the cross-team wire-shape negotiation, we audited a
+rival league team's PUBLIC repos (their code being public is the league's
+mutual-audit culture; ours is read the same way) and turned the findings
+into build directives for our own repos.
+
+**Prompt pattern — three-axis adversarial audit.** Parallel agents, one per
+rival repo: *"Audit on three axes: (1) rule compliance/evasion — shared live
+state, UI truth leaks, LLM-in-the-move-path, coordinate protocols, Gmail
+scope, secrets, fixed-parameter drift, and anything sneaky (privileged info
+reaching a brain, timeout farming, test rigging); (2) quality vs the course
+guidelines every team is graded on; (3) honest head-to-head vs OUR repo —
+where are they better? Flag DISQUALIFYING/SERIOUS/MINOR with file:line
+evidence; if you can't confirm something, say so explicitly."*
+**Outcome.** No violation found (their compliance engineering is excellent) —
+but the head-to-head axis produced our work list: their committed live-drill
+evidence and 1000-line prompt log exceeded ours; our submission artifacts,
+book-default physics, and RL narrative exceeded theirs. One real cross-team
+protocol hazard surfaced (at-least-once delivery vs strict step continuity)
+that our sealing dedup already handles — it became a joint-ADR agenda item.
+
+**Lessons.** (1) Audit the rival to find YOUR gaps: every "they're ahead
+here" line converted directly into a same-day build (chaos drills, deception
+policy, this log's depth). (2) Insist on the honesty clause in audit prompts
+— "if you can't confirm, say so" is what kept shallow-clone history limits
+from becoming false assurances. (3) Severity-tagged, evidence-cited findings
+are immediately actionable; untagged prose audits are not.
