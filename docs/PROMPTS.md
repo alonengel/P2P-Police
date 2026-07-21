@@ -255,3 +255,75 @@ policy, this log's depth). (2) Insist on the honesty clause in audit prompts
 — "if you can't confirm, say so" is what kept shallow-clone history limits
 from becoming false assurances. (3) Severity-tagged, evidence-cited findings
 are immediately actionable; untagged prose audits are not.
+
+## 2026-07-21 — Session 11: config-range fuzzer + crash-resume (E5/E6)
+
+Prompt (paraphrased): *"Two infrastructure features, mirrored in both repos.
+(E5) A legal-config-range fuzzer: sample the space a counterparty may LEGALLY
+propose — Appendix-VI minimums raised (board 7-11, barriers 14-24,
+max_moves=survival 35-60, valid distinct starts), FIXED values never fuzzed
+(assert it) — and run a full in-process self-play game per sample over the
+roundtrip HTTP-MCP machinery, checking invariants (legal shared outcome,
+matching digests, clean audits, turn/barrier bounds). 40+ samples committed
+to results/experiments/ + docs/evidence/. (E6) Crash-resume: per-half-turn
+atomic snapshots (records incl. nonces, action log, agreement) under
+results/local/, ON by default; a resume path that replays through
+protocol.apply_action and re-arms the SealedExchange; a resume_offer control
+handshake answered by re-sending the last sealed pair (dedup absorbs
+duplicates); a kill-and-resume drill with real JSONL evidence."*
+
+Process: TDD against the loopback-pair pattern from the runtime tests; the
+runtime sat at 149/150 code lines, so ALL resume logic went to a new
+peer/resume.py and the runtime gained only four hook lines (docstrings paid
+the rent). The drill's first run failed honestly: the reused chaos helper
+always calls play() fresh, so the resumed peer re-negotiated into a void and
+ate a deadline — the drill needed its own classified runner that continues
+from the re-armed turn. Deliberate scope line: snapshots are half-turn
+atomic; a crash between commit-send and reveal-send loses that half-turn's
+nonce and MUST NOT be re-committed differently, so recovery is defined from
+the last completed half-turn (documented in docs/evidence/crash-resume.md).
+
+Lessons: (1) a resume feature is really a replay feature — reusing the one
+true apply_action path made engine fidelity a one-line digest assert;
+(2) the at-least-once dedup we built for lost HTTP acks is EXACTLY the
+mechanism that makes resume handshakes safe — new capability, zero new wire
+rules; (3) fuzzing the negotiable ranges (40/40 green) is the cheap proof
+that "nothing hardcoded" is true in the physics, not just in the config
+loader. Fuzzer found no real bug; nothing in domain/ needed touching.
+
+## 2026-07-21 — Session 11: exact endgame solver + info-gain term (keep-gated)
+
+Prompt (paraphrased): *"Build two cop-strength features: (1) an exact endgame
+solver — when the subproblem is small (belief support ≤ K cells, bounded
+horizon) run memoized adversarial search and play the forcing line's first
+action; (2) an information-gain move term rewarding expected belief-entropy
+reduction from the scent reading at each candidate landing. BELIEF-CORRECT
+semantics are rule-critical: a forced capture must hold against EVERY thief
+cell carrying non-negligible mass and every legal reply — never read the
+rival's true cell (add a guard test). Compute hard-capped; tunables in
+[strategy.endgame]/[strategy.info_gain]. Then MEASURE with a keep-gate: ≥60
+seeded games/arm (baseline / +endgame / +info_gain / +both) vs the evader
+pool; keep a feature ONLY if it raises capture rate, else default OFF and
+record the negative result honestly."*
+
+Process: solver = win/loss minimax with memoization (exists/forall early
+exits ARE alpha-beta for boolean payoffs) over (cop, candidate thief,
+barrier delta, turns left), on lightweight `_View` boards — domain stays
+read-only. The first physics-adjudicated rollout test caught a real bug:
+returning ANY forcing action lets the cop dance forever (many actions
+"force within h" every turn without progress; observed 34-turn capture on a
+2-turn coffin). Fix: iterative deepening — return the SHALLOWEST forcing
+depth, which strictly decreases along the line. Guards: source scan (no
+`Role.THIEF` in the solver) + a `GuardedPositions` proxy that trips if the
+blind decide path ever reads the rival's key.
+
+Lessons: (1) the keep-gate did its job — BOTH features failed honestly:
+the scent-floor belief keeps support at 7–10 cells (top-3 ≈ 41% of mass),
+so sound forced-capture windows never occur (0 solver fires in 160 games,
+still 0 at K=8), and the info-gain sweep (w=0.5–4.0) moved capture rate not
+at all; defaults shipped OFF with the probes written up in
+docs/evidence/cop-strength.md. (2) Measure the GATE before the feature:
+one support-size histogram would have predicted the negative result before
+a line of solver code. (3) Adversarial-search tests must adjudicate via the
+engine, not via the search's own logic — the dance bug was invisible to
+every unit test and obvious to the rollout.

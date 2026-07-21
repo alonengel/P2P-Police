@@ -46,10 +46,12 @@ class SimulationSdk:
         )
 
     def run_peer(
-        self, seed: int | None = None, gui: bool = False, gui_screenshot: str | None = None
+        self, seed: int | None = None, gui: bool = False,
+        gui_screenshot: str | None = None, resume: bool = False
     ) -> dict:
         """Start our MCP server, connect to the opponent, play one game to
-        completion (optionally with the live local-truth GUI) and report."""
+        completion (optionally with the live local-truth GUI) and report.
+        resume=True re-arms from the crash-resume snapshot (E6) and continues."""
         inboxes = PeerInboxes()
         server = build_peer_server(inboxes, name=f"p2p_{MY_ROLE.value}_peer")
         start_peer_server(server, self.config.my_port)
@@ -70,6 +72,9 @@ class SimulationSdk:
             resolve_brain(self.config, MY_ROLE, random.Random(seed)),
             gatekeeper=gatekeeper,
         )
+        from p2p_police.peer import resume as resume_mod
+
+        start_turn = resume_mod.attach(runtime, self.config, resume=resume)
         from p2p_police.peer.watchdog import Watchdog
 
         watchdog = Watchdog(
@@ -82,7 +87,8 @@ class SimulationSdk:
         runtime.watchdog = watchdog
         watchdog.start()
         try:
-            report = self._play_with_gui(runtime, gui_screenshot) if gui else runtime.play()
+            report = (self._play_with_gui(runtime, gui_screenshot) if gui
+                      else runtime.play(start_turn))
         except Exception as error:  # noqa: BLE001 - rules 32/35: EVERY game
             # end (any failure whatsoever) must still be reported and emailed;
             # an unreported forfeit is the worst outcome the league allows.
@@ -94,6 +100,8 @@ class SimulationSdk:
             # audit ('not received') is dispute evidence, not tampering - the
             # played outcome stands and the logs decide.
             report["outcome"] = "technical_loss"
+        if report.get("outcome") in ("capture", "survival"):
+            resume_mod.discard(self.config)  # a finished game never resumes
         report["gatekeeper"] = gatekeeper.queue_status()  # section-5 monitoring view
         report["artifacts"] = [
             str(p) for p in reporting.emit_artifacts(self.config, runtime, report)

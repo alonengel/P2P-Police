@@ -15,6 +15,7 @@ from pathlib import Path
 from p2p_police.domain.negotiation import validate_shared_terms
 from p2p_police.domain.rules import RuleSet
 from p2p_police.domain.scoring import ScoreTable
+from p2p_police.shared.tuning import endgame_table, info_gain_table
 from p2p_police.shared.version import is_supported_config
 
 REQUIRED_SHARED_SECTIONS = (
@@ -101,6 +102,14 @@ class Config:
             raise ConfigError(f"group_id must be exactly 8 chars, no spaces: {gid!r}")
         return gid
 
+    def endgame(self) -> dict:
+        """[strategy.endgame] exact-solver gates/caps (defaults: shared/tuning.py)."""
+        return endgame_table(self.private)
+
+    def info_gain(self) -> dict:
+        """[strategy.info_gain] entropy-reduction blend (defaults: shared/tuning.py)."""
+        return info_gain_table(self.private)
+
     def info_mode(self) -> str:
         """[strategy] info_mode: 'belief' (default) | 'exact' (ADR-0006)."""
         return self.private.get("strategy", {}).get("info_mode", "belief")
@@ -119,6 +128,12 @@ class Config:
             "exposure_radius": int(block.get("exposure_radius", 1)),
             "baseline_truth_probability": float(block.get("baseline_truth_probability", 0.5)),
         }
+
+    def resume_enabled(self) -> bool:
+        """[resume] enabled (default ON): per-half-turn crash-resume snapshots
+        are pure local persistence (results/local/, no wire change) — there is
+        no reason to play without them (E6)."""
+        return bool(self.private.get("resume", {}).get("enabled", True))
 
     def identity_block(self) -> dict:
         """Rival-facing identity declaration (rules 37-38/49, ADR-0005/6)."""

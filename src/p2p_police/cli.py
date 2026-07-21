@@ -28,6 +28,8 @@ def build_parser() -> argparse.ArgumentParser:
     peer.add_argument("--gui", action="store_true", help="show the live local-truth view")
     peer.add_argument("--gui-screenshot", default=None, help="save the final GUI frame as PNG")
     peer.add_argument("--sub-game", type=int, default=None, help="override sub_game_number")
+    peer.add_argument("--resume", action="store_true",
+                      help="continue a crashed game from the local resume snapshot")
     verify = subcommands.add_parser(
         "verify-log", help="recompute every sealed record in a saved game log"
     )
@@ -54,7 +56,8 @@ def main(argv: list[str] | None = None) -> int:
         sdk = SimulationSdk(args.config_dir)
         if args.sub_game is not None:
             sdk.config.private["game"]["sub_game_number"] = args.sub_game
-        report = sdk.run_peer(seed=args.seed, gui=args.gui, gui_screenshot=args.gui_screenshot)
+        report = sdk.run_peer(seed=args.seed, gui=args.gui,
+                              gui_screenshot=args.gui_screenshot, resume=args.resume)
         print(json.dumps(report, indent=2))
         return 0 if report.get("digest_match") else 1
     if args.command == "verify-log":

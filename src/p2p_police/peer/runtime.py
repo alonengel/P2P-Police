@@ -1,9 +1,7 @@
 """Geometric peer runtime (PRD 02): negotiate, lockstep turn loop, end check.
-
-Both peers replicate the SAME GameEngine; each applies its own action locally
-and mirrors the opponent's received action, so the physics never diverges.
-Moves come from the configured brain via the [strategy] seam (PRD 03).
-"""
+Both peers replicate the SAME GameEngine and apply both actions locally, so
+the physics never diverges; moves come from the [strategy] seam (PRD 03) and
+per-half-turn crash-resume checkpoints live in peer/resume.py (E6)."""
 
 import contextlib
 import queue
@@ -18,6 +16,7 @@ from p2p_police.infra.mcp_client import McpTransport
 from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.peer.perception import Perception
+from p2p_police.peer.resume import NullResume, handle_controls
 from p2p_police.peer.sealing import SealedExchange
 from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
@@ -27,11 +26,8 @@ from p2p_police.strategy.talk_providers import build_talk_chain
 
 
 class GeometricRuntime:
-    """One peer's game loop for the stage-2 milestone.
-
-    Input: role, loaded config, replicated engine, transport + inboxes.
-    Output: an end report (outcome, digests, turn count).
-    """
+    """One peer's game loop. Input: role, config, replicated engine,
+    transport + inboxes. Output: an end report (outcome, digests, turns)."""
 
     def __init__(
         self,
@@ -50,7 +46,8 @@ class GeometricRuntime:
         self.deceiver = Deceiver(role, config, brain.rng)  # self-mirror lie policy
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
-        self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
+        # SDK swaps in the real watchdog (rule 7) / resume recorder (E6)
+        self.watchdog, self.resume = NullWatchdog(), NullResume()
 
         self.exchange = SealedExchange(
             role,
@@ -65,6 +62,7 @@ class GeometricRuntime:
         deadline = Deadline(self.config.turn_timeout_seconds)
         while True:
             self.watchdog.beat()  # polling IS liveness; deadlines guard rivals
+            handle_controls(self)  # e.g. a resume_offer from a restarted rival
             deadline.require(what)
             try:
                 return inbox.get(timeout=min(0.25, max(0.01, deadline.remaining())))
@@ -113,11 +111,13 @@ class GeometricRuntime:
         self.perception.emit(self.engine, turn_index)
 
 
-    def play(self) -> dict:
-        """Full lockstep game; failures route to TECHNICAL_LOSS (rules 4-6)."""
+    def play(self, resume_from: int = 0) -> dict:
+        """Full lockstep game; failures route to TECHNICAL_LOSS (rules 4-6).
+        resume_from > 0 skips negotiation and continues a re-armed game."""
         try:
-            self.negotiate()
-            turn_index = 0
+            if resume_from == 0:
+                self.negotiate()
+            turn_index = resume_from
             while self.engine.outcome is Outcome.ONGOING:
                 turn_index += 1
                 self.watchdog.beat()  # heartbeat per half-turn (rule 7)
@@ -125,6 +125,7 @@ class GeometricRuntime:
                     self._my_half_turn(turn_index)
                 else:
                     self._their_half_turn(turn_index)
+                self.resume.checkpoint(self, turn_index)  # E6 half-turn snapshot
         except (DeadlineExpiredError, GameRuleError):
             if self.fsm.can_transition(GamePhase.TECHNICAL_LOSS):
                 self.fsm.transition(GamePhase.TECHNICAL_LOSS)

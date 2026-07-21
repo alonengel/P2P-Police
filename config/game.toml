@@ -42,6 +42,23 @@ step_deadline_seconds = 30      # hard cap on LLM thinking per step
 recipient = "rmisegal+uoh26finalgame@gmail.com"
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
 
+[resume]                        # crash-resume snapshots (peer/resume.py) - pure LOCAL persistence
+enabled = true                  # ON by default: per-half-turn snapshot -> results/local/resume_*.json
+drill_turn_timeout_seconds = 15.0   # resume drill turn budget (a resume must fit the rival's window)
+drill_retry_backoff_sec = 0.2       # drill-scale transport backoff
+drill_crash_after_half_turns = 6    # kill-and-resume drill: crash after this many half-turns
+drill_my_seed = 7                   # deterministic brain pair for the drill
+drill_stub_seed = 99
+
+[fuzz]                          # legal-config-range fuzzer knobs (scripts/config_fuzz.py) - dev tooling
+samples = 40                    # committed-artifact sample count
+seed = 20260721                 # reproducible sampling of the LEGAL config space
+turn_timeout_seconds = 30.0     # per-wait budget for the in-process fuzz games
+retry_backoff_sec = 0.2
+grid_size_max = 11              # upper fuzz bounds; lower bounds are the book's minimums
+max_barriers_max = 24
+max_moves_max = 60
+
 [chaos]                         # chaos-drill knobs (scripts/chaos_drills.py) - dev tooling, never game terms
 turn_timeout_seconds = 4.0      # shrunk turn budget so drills classify in seconds, not minutes
 retry_backoff_sec = 0.2         # drill-scale transport backoff (league value stays in game.json)
@@ -59,3 +76,18 @@ tunnel_kill_after_full_turns = 2    # kill cloudflared after this many full turn
 tunnel_downtime_seconds = 6.0       # how long the tunnel stays dead before restart
 tunnel_name = "copthief"            # named tunnel (docs/DEPLOYMENT.md); hostnames from [game].mcp_servers
 cloudflared_exe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
+
+[strategy.endgame]              # exact endgame solver (belief-support minimax; keep-gate: docs/evidence/cop-strength.md)
+enabled = false                 # keep-gate FAILED: 0 solver fires in 160 games -- the scent-floor
+                                # belief never sharpens to a provable support (honest negative result)
+max_support_cells = 3           # run only when the belief support is this sharp
+support_mass_threshold = 0.05   # cells at/above this belief mass form the support
+max_horizon_turns = 5           # lookahead in full turns; effective horizon = min(this, turns left)
+node_cap = 20000                # search states before deferring to the heuristic brain
+time_cap_ms = 150.0             # wall-clock cap -- optimality is never worth the turn deadline
+
+[strategy.info_gain]            # expected belief-entropy-reduction move term (same keep-gate doc)
+enabled = false                 # keep-gate FAILED: capture rate unmoved at every weight swept (0.5-4.0)
+weight = 1.0                    # entropy nats traded per BFS step in the blended score
+match_tolerance = 0.08          # kernel readings this close are indistinguishable
+mismatch_likelihood = 0.15      # belief mass retained by hypotheses the reading refutes

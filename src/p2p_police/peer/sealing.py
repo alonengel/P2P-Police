@@ -85,6 +85,19 @@ class SealedExchange:
         self.their_records.append({"payload": payload, "commit": commit_msg["commit"]})
         return payload
 
+    def export_state(self) -> tuple[list[dict], list[dict], list[list]]:
+        """Crash-resume view (peer/resume.py): records + consumed keys, all
+        JSON-shaped so the snapshot round-trips through disk byte-stably."""
+        return (list(self.own_records), list(self.their_records),
+                sorted([kind, turn] for kind, turn in self._consumed))
+
+    def restore_state(self, own: list[dict], their: list[dict], consumed: list) -> None:
+        """Re-arm a resumed exchange with its persisted records — nonces and
+        commits intact, so the commit-reveal chain and the end-of-game audit
+        continue as if the crash never happened."""
+        self.own_records, self.their_records = list(own), list(their)
+        self._consumed = {(str(kind), int(turn)) for kind, turn in consumed}
+
     def own_nonces(self) -> list[str]:
         return [record["nonce"] for record in self.own_records]
 
