@@ -125,5 +125,6 @@ def _is_connection_flavored(error: Exception) -> bool:
             "timeout", "timed out", "readerror", "writeerror", "closed",
             "remoteprotocol", "session terminated", "oserror",
             "502", "503", "504", "bad gateway",  # tunnel up, origin not yet
+            "530",  # Cloudflare edge up, tunnel down (chaos drill field finding)
         )
     )
