@@ -51,7 +51,7 @@ uv run python scripts/run_sensitivity.py   # OAT sensitivity experiments
 ```
 
 Cross-repo match on one machine: `powershell -File ../run_cross_match.ps1`.
-Public play + Gmail setup: `docs/DEPLOYMENT.md`. League duties: `docs/LEAGUE_RUNBOOK.md`.
+Public play + Gmail setup: `docs/DEPLOYMENT.md`. League duties: `docs/LEAGUE_RUNBOOK.md`. Rival teams: start at `docs/ONBOARDING.md` — play against us in 30 minutes.
 
 ### Configuration
 
