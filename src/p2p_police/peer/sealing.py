@@ -11,6 +11,7 @@ from p2p_police.domain import crypto, protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import Role
+from p2p_police.peer.deadline import Deadline
 
 _LOG = logging.getLogger(__name__)
 
@@ -19,11 +20,13 @@ class SealedExchange:
     """Input: my role/sub_game + send/wait callables from the runtime.
     Output: applied opponent actions + audit verdicts. Setup: empty logs."""
 
-    def __init__(self, role: Role, sub_game: int, send_turn, wait_turn) -> None:
+    def __init__(self, role: Role, sub_game: int, send_turn, wait_turn,
+                 turn_timeout: float | None = None) -> None:
         self.role = role
         self.sub_game = sub_game
         self._send = send_turn
         self._wait = wait_turn
+        self.turn_timeout = turn_timeout  # one deadline per EXPECTED message
         self.own_records: list[dict] = []   # {payload, nonce, commit}
         self.their_records: list[dict] = [] # {payload, commit}
         self._consumed: set[tuple[str, int]] = set()  # dedup: at-least-once transport
@@ -38,9 +41,14 @@ class SealedExchange:
         split or reorder a pair; the deadline still bounds the wait). A
         flooded buffer is the one remaining true desync."""
         expected = (kind, turn_index)
+        # ONE deadline for the whole expectation: junk/duplicate deliveries
+        # must never reset the clock (a stalling rival could hold a lost
+        # game open forever by streaming stale copies every <timeout).
+        deadline = Deadline(self.turn_timeout) if self.turn_timeout else None
+        label = f"opponent {kind} {turn_index}"
         while True:
-            message = self._pending.pop(expected, None) or self._wait(
-                f"opponent {kind} {turn_index}")
+            message = self._pending.pop(expected, None) or (
+                self._wait(label, deadline) if deadline else self._wait(label))
             key = (str(message.get("kind")), int(message.get("turn", -1)))
             if key in self._consumed:
                 _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)

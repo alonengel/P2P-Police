@@ -55,11 +55,12 @@ class GeometricRuntime:
             lambda msg: self.transport.send_turn(
                 msg, Deadline(self.config.turn_timeout_seconds)
             ),
-            lambda what: self._wait(self.inboxes.turns, what),
+            lambda what, deadline=None: self._wait(self.inboxes.turns, what, deadline),
+            turn_timeout=config.turn_timeout_seconds,
         )
 
-    def _wait(self, inbox: queue.Queue, what: str) -> dict:
-        deadline = Deadline(self.config.turn_timeout_seconds)
+    def _wait(self, inbox: queue.Queue, what: str, deadline=None) -> dict:
+        deadline = deadline or Deadline(self.config.turn_timeout_seconds)
         while True:
             self.watchdog.beat()  # polling IS liveness; deadlines guard rivals
             handle_controls(self)  # e.g. a resume_offer from a restarted rival

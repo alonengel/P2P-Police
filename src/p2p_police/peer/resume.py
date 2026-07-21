@@ -56,7 +56,8 @@ def _integrity(doc: dict) -> str:
 
 def snapshot_path(config) -> Path:
     sub_game = int(config.private["game"]["sub_game_number"])
-    return Path("results/local") / f"resume_{config.group_id}_g{sub_game:02d}.json"
+    root = Path(__file__).resolve().parents[3]  # repo root, cwd-independent (rule 18)
+    return root / "results" / "local" / f"resume_{config.group_id}_g{sub_game:02d}.json"
 
 
 def build_snapshot(runtime, turn_index: int) -> dict:
