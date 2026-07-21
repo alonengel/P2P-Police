@@ -72,7 +72,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] gui/live_view: belief heatmap + YOUR TURN/LOCKED/GAME OVER banner, snapshots via Perception (LOCAL TRUTH ONLY, rules 8-9); live screenshot captured from a real cross-repo game (assets/live_belief_map.png)
 - [x] verify-log CLI: headless replay verification engine on saved logs (real-log Verified OK; tampered-log TAMPERED proven)
 - [x] gui/replay viewer: verdict banner (Verified OK/TAMPERED), step-through board, hints shown; DPI-aware --screenshot; submission PNG captured (assets/replay_verified_ok.png)
-- [~] Screenshots: both mandatory images captured (live belief map + replay Verified OK); remaining per-state shots (LOCKED banner, TAMPERED demo) with docs/UI.md in Phase 8
+- [x] Screenshots: both mandatory images captured (live belief map + replay Verified OK); per-state shots (YOUR TURN, LOCKED, TAMPERED demo) captured with docs/UI.md (assets/live_your_turn.png, assets/live_locked.png, assets/replay_tampered_demo.png; reproducible via scripts/capture_ui_states.py)
 
 ## Phase 8 — Submission
 - [x] README: user manual + academic report complete (all six mandatory components + ISO 25010 + course anchors; screenshots embedded)
@@ -94,8 +94,17 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] MAJOR: opponent nonces persisted into the log; verify-log + replay verify BOTH halves (rules 20/36)
 - [x] MAJOR: counted_games_played from config (rules 37-38) - update per counted game
 - [x] Gatekeeper queue-not-reject + concurrency semaphore (guidelines 5.1/5.3); ADR-0003 scopes the peer channel out
-- [x] PLAN module map synced to the shipped tree
+- [x] PLAN module map synced to the shipped tree (re-synced 2026-07-21: sdk/domain/peer/strategy/shared/report rows now cover every shipped module)
 - [ ] League day: share private repos with lecturer (rmisegal) OR make public; flip [email] mode=send; update counted_games_played each game
+
+## Hardening & measured strategy (2026-07-21)
+- [x] Chaos-drill suite (D1-D4 + LIVE tunnel kill/heal) with committed JSONL evidence; HTTP 530 retry fix proven over the real public edge (docs/evidence/chaos-drills.md)
+- [x] Config-range fuzzer: 40/40 sampled Appendix-VI-legal configs pass every invariant (docs/evidence/config-fuzz.md)
+- [x] Crash-resume: per-half-turn snapshots + --resume path; kill-and-resume drill recovers in 45 ms, mutual audits Verified OK (docs/evidence/crash-resume.md)
+- [x] Self-mirror deception policy: lies 18.0 -> 2.0 per game vs the honesty coin, thief tracking error 2.36 -> 1.43 — ON (docs/evidence/deception.md)
+- [x] Keep-gated endgame solver + info-gain term: honest negative results (0 solver fires in 160 games; capture rate unmoved at every weight) — both ship OFF (docs/evidence/cop-strength.md)
+- [x] Third-party pair verifier (one game, two logs, one verdict) + committed-artifact guard over every committed log pair (report/pair_verify.py)
+- [x] Buffer-ahead sealing fix: a split commit+reveal pair no longer reads as desync (peer/sealing.py)
 
 ## DoD-observed ledger (measured evidence per completed phase)
 
@@ -108,3 +117,8 @@ live in `docs/evidence/`:
 | Reference interop is proven, not assumed | 13/13 conformance tests over the league kit's vectors; counterparty package re-verified 35/35 | `docs/evidence/interop-alignment.md`, `tests/unit/test_reference_conformance.py` |
 | Disqualification rules are enforced | 5 rule-guard invariants in CI + tamper drills read TAMPERED | `docs/evidence/rule-guards.md`, `tests/unit/test_rule_guards.py` |
 | Strategy claims are measured | full RL campaign incl. four gated promotions (all held) and the wire-shape balance tables | `docs/evidence/rl-campaign.md`, `results/experiments/*.json` |
+| Faults are survived, not hoped away (2026-07-21) | chaos drills D1-D4 + LIVE tunnel kill/heal all PASS: dedup, bounded waits, clean technical-loss classification, healed public game | `docs/evidence/chaos-drills.md`, `docs/evidence/drills/*.jsonl` |
+| Any legal config plays clean (2026-07-21) | fuzzer: 40/40 sampled legal configs complete with matching digests + Verified OK audits | `docs/evidence/config-fuzz.md`, `results/experiments/config_fuzz.json` |
+| A killed game recovers (2026-07-21) | resume drill: snapshot restored in 45 ms, 6 half-turns replayed, mutual audits Verified OK | `docs/evidence/crash-resume.md`, `docs/evidence/drills/resume_recovery_2026-07-21.jsonl` |
+| Lying is a policy, not a coin (2026-07-21) | 2.0 lies/game vs the coin's 18.0; thief tracking error 2.36 -> 1.43 | `docs/evidence/deception.md`, `results/experiments/deception_policy.json` |
+| Negative results ship honestly (2026-07-21) | endgame solver 0 fires in 160 games; info-gain capture rate unmoved — both OFF by keep-gate | `docs/evidence/cop-strength.md`, `results/experiments/cop_strength.json` |

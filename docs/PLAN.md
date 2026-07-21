@@ -56,13 +56,13 @@ processes, two repos).
 
 | Layer | Modules | Responsibility |
 |---|---|---|
-| sdk | sdk, series | Single business entry: run_peer/replay/verify_log; sub-game series + role alternation |
-| domain (physics, PURE — parity-locked with twin) | board, rules, scoring, scent, belief, crypto, protocol, negotiation, state_machine, game_ids | Grid+barriers, captures/survival, score table, pheromone emission+decay, Bayesian belief, canonical-JSON SHA-256 commit/verify, message dataclasses, config identity+locks, legal-transition FSM, artifact naming |
-| peer | runtime, perception, sealing, deadline, watchdog | Orchestrator turn loop + FSM, local-truth belief/snapshots, 4-phase sealed exchange + mutual audit, timeouts, freeze recovery |
-| strategy (role-specific) | brain_base, police_brain, hints, talk_providers | BrainBase seam ([strategy] override), pursuit + barrier tactics, truth/lie hint policy (≤15 words), provider selection |
+| sdk | sdk, series, reporting | Single business entry: run_peer/replay/verify_log; sub-game series + role alternation; rule-32 report funnel (artifacts+email even on failure) |
+| domain (physics, PURE — parity-locked with twin) | primitives, board, rules, scoring, scent, belief, pathfind, engine, crypto, protocol, negotiation, state_machine, game_ids, errors | Typed cells/moves, grid+barriers, captures/survival, score table, pheromone emission+decay, Bayesian belief, BFS pathfinding, full-round engine, canonical-JSON SHA-256 commit/verify, message dataclasses, config identity+locks, legal-transition FSM, artifact naming, typed domain errors |
+| peer | runtime, perception, sealing, deadline, watchdog, resume | Orchestrator turn loop + FSM, local-truth belief/snapshots, 4-phase sealed exchange + mutual audit, timeouts, freeze recovery, crash-resume snapshots + replay-to-resume |
+| strategy (role-specific) | brain_base, police_brain, hints, talk_providers, profiler, deception, endgame, info_gain, rl_brain, rl_deep, arena_thief | BrainBase seam ([strategy] override), pursuit + barrier tactics, truth/lie hint policy (≤15 words), provider selection, cross-game honesty profiler, self-mirror lie policy (ON), keep-gated exact endgame solver + info-gain term (both OFF), linear-FA + Double-DQN RL brains, arena sparring thief |
 | infra | mcp_server, mcp_client, llm_provider, email_sender | FastMCP tools→thread-safe queues; outbound transport w/ retry-until-up; 5 providers behind gatekeeper; gmail.send-only reporting |
-| shared | config, gatekeeper, rate_limiter, version, sysinfo | JSON-overrides-TOML loader + version gate, single doorway for ALL external calls, token bucket+quota+DOS lock, versions, hardware spec |
-| report | artifacts | The four Table-20 game artifacts (declaration/config/log/result) |
+| shared | config, gatekeeper, rate_limiter, version, sysinfo, logging_setup, tuning | JSON-overrides-TOML loader + version gate, single doorway for ALL external calls, token bucket+quota+DOS lock, versions, hardware spec, logging config, strategy tuning defaults |
+| report | artifacts, lookup, pair_verify | The four Table-20 game artifacts (declaration/config/log/result); game→files lookup; third-party two-log pair verifier |
 | gui | live_view, replay | Belief heatmap + YOUR TURN/LOCKED/GAME OVER banner; replay witness with full-log SHA-256 re-verification |
 
 ## 4. Key flows

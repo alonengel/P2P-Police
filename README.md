@@ -233,6 +233,22 @@ higher exploration floor won at short budget (0.82 at 1200 episodes) but
 gate. Three independent 4000-episode runs converge on 0.74 — the ceiling is
 the game's structure, measured, not assumed.
 
+**Beyond the shipped pursuit stack — three measured add-on modules:**
+
+- `strategy/deception.py` — the self-mirror lie policy (**ON**): a second
+  belief filter fed only by what we ourselves transmit estimates our own
+  exposure, and we lie exactly when the lie pays — lies per game fall
+  18.0 → **2.0** vs the stage-2 honesty coin while the thief's tracking
+  error moves 2.36 → 1.43 (`docs/evidence/deception.md`).
+- `strategy/endgame.py` — exact forced-capture solver (belief-correct
+  minimax over the belief support), keep-gated: **0 solver fires in 160
+  measured games** — the scent-floor belief never sharpens to a provable
+  support — so it ships **OFF** (`[strategy.endgame] enabled = false`;
+  honest negative result in `docs/evidence/cop-strength.md`).
+- `strategy/info_gain.py` — expected belief-entropy-reduction term blended
+  into the pursuit score: capture rate unmoved at every weight swept
+  (0.5-4.0), so it ships **OFF** (same keep-gate document).
+
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
 | Live GUI — local truth only | Replay witness |
@@ -245,7 +261,7 @@ the game's structure, measured, not assumed.
 
 ### 5. Quality mapping (ISO/IEC 25010)
 
-Functional suitability — milestone-gated PRDs 01-07, 150+ tests. Reliability —
+Functional suitability — milestone-gated PRDs 01-08, 293 tests. Reliability —
 deadlines, watchdog-style FSM exits, session rebuilds, 20-seed self-play.
 Performance — template provider plays whole series at 0 LLM tokens. Security —
 send-only OAuth scope, secrets outside the repo, gitleaks CI, commit-reveal

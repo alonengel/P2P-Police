@@ -43,7 +43,7 @@ this repo by the pre-league MUST-coverage audit.)
 | 46-47 | Barrier-capture; trapped-capture | domain/rules.py + engine mid-round checks | test_rules, test_engine | IMPL |
 | 48 | Score every scenario | domain/scoring.py from signed config | test_scoring | IMPL |
 | 49 | Two repos + cross-links | READMEs; links in all artifacts | check_submission | IMPL |
-| 50 | README/config/PRD/PLAN/TODO in repo | docs/ complete incl. PRD_01..07 | check_submission | IMPL |
+| 50 | README/config/PRD/PLAN/TODO in repo | docs/ complete incl. PRD_01..08 | check_submission | IMPL |
 | 51 | Reports to lecturer alias | game.toml recipient | live send path | IMPL+OPER |
 | 52 | One counted game per rival | sdk/series.py; runbook counting rules | test_series | IMPL+OPER |
 | 53 | Commit ID per game | declaration github_commit; manual email duty | runbook step 1 | IMPL+OPER |
