@@ -1,0 +1,825 @@
+{
+  "generated_utc": "2026-07-21T18:42:10+00:00",
+  "role": "police",
+  "seed": 20260721,
+  "samples": 40,
+  "passed": 40,
+  "failed": 0,
+  "bounds": {
+    "grid_size": [
+      7,
+      11
+    ],
+    "max_barriers": [
+      14,
+      24
+    ],
+    "max_moves_and_survival": [
+      35,
+      60
+    ]
+  },
+  "results": [
+    {
+      "sample": 0,
+      "grid_size": 11,
+      "max_barriers": 20,
+      "max_moves": 40,
+      "cop_start": [
+        6,
+        6
+      ],
+      "thief_start": [
+        4,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.199,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 1,
+      "grid_size": 7,
+      "max_barriers": 21,
+      "max_moves": 41,
+      "cop_start": [
+        4,
+        1
+      ],
+      "thief_start": [
+        5,
+        6
+      ],
+      "outcome": "capture",
+      "turns": 6,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.233,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 2,
+      "grid_size": 8,
+      "max_barriers": 20,
+      "max_moves": 42,
+      "cop_start": [
+        1,
+        5
+      ],
+      "thief_start": [
+        4,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 23,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.74,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 3,
+      "grid_size": 7,
+      "max_barriers": 16,
+      "max_moves": 51,
+      "cop_start": [
+        4,
+        2
+      ],
+      "thief_start": [
+        1,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.173,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 4,
+      "grid_size": 8,
+      "max_barriers": 20,
+      "max_moves": 47,
+      "cop_start": [
+        0,
+        3
+      ],
+      "thief_start": [
+        5,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.194,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 5,
+      "grid_size": 9,
+      "max_barriers": 14,
+      "max_moves": 51,
+      "cop_start": [
+        8,
+        4
+      ],
+      "thief_start": [
+        5,
+        5
+      ],
+      "outcome": "capture",
+      "turns": 5,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.213,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 6,
+      "grid_size": 10,
+      "max_barriers": 21,
+      "max_moves": 52,
+      "cop_start": [
+        0,
+        2
+      ],
+      "thief_start": [
+        3,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 18,
+      "barriers_placed": 1,
+      "elapsed_sec": 0.611,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 7,
+      "grid_size": 11,
+      "max_barriers": 14,
+      "max_moves": 59,
+      "cop_start": [
+        5,
+        7
+      ],
+      "thief_start": [
+        10,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 31,
+      "barriers_placed": 0,
+      "elapsed_sec": 1.095,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 8,
+      "grid_size": 11,
+      "max_barriers": 16,
+      "max_moves": 40,
+      "cop_start": [
+        5,
+        0
+      ],
+      "thief_start": [
+        3,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 2,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.107,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 9,
+      "grid_size": 8,
+      "max_barriers": 23,
+      "max_moves": 47,
+      "cop_start": [
+        0,
+        1
+      ],
+      "thief_start": [
+        4,
+        5
+      ],
+      "outcome": "capture",
+      "turns": 10,
+      "barriers_placed": 1,
+      "elapsed_sec": 0.353,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 10,
+      "grid_size": 8,
+      "max_barriers": 14,
+      "max_moves": 58,
+      "cop_start": [
+        2,
+        6
+      ],
+      "thief_start": [
+        6,
+        2
+      ],
+      "outcome": "capture",
+      "turns": 9,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.348,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 11,
+      "grid_size": 7,
+      "max_barriers": 24,
+      "max_moves": 55,
+      "cop_start": [
+        2,
+        4
+      ],
+      "thief_start": [
+        4,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.171,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 12,
+      "grid_size": 10,
+      "max_barriers": 22,
+      "max_moves": 60,
+      "cop_start": [
+        6,
+        6
+      ],
+      "thief_start": [
+        8,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 15,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.54,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 13,
+      "grid_size": 7,
+      "max_barriers": 21,
+      "max_moves": 59,
+      "cop_start": [
+        0,
+        2
+      ],
+      "thief_start": [
+        5,
+        6
+      ],
+      "outcome": "capture",
+      "turns": 27,
+      "barriers_placed": 1,
+      "elapsed_sec": 0.903,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 14,
+      "grid_size": 8,
+      "max_barriers": 19,
+      "max_moves": 50,
+      "cop_start": [
+        6,
+        0
+      ],
+      "thief_start": [
+        1,
+        2
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.167,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 15,
+      "grid_size": 7,
+      "max_barriers": 20,
+      "max_moves": 48,
+      "cop_start": [
+        5,
+        1
+      ],
+      "thief_start": [
+        5,
+        2
+      ],
+      "outcome": "capture",
+      "turns": 2,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.114,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 16,
+      "grid_size": 11,
+      "max_barriers": 21,
+      "max_moves": 50,
+      "cop_start": [
+        6,
+        2
+      ],
+      "thief_start": [
+        1,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 14,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.508,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 17,
+      "grid_size": 11,
+      "max_barriers": 22,
+      "max_moves": 42,
+      "cop_start": [
+        7,
+        1
+      ],
+      "thief_start": [
+        2,
+        4
+      ],
+      "outcome": "capture",
+      "turns": 7,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.269,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 18,
+      "grid_size": 10,
+      "max_barriers": 20,
+      "max_moves": 46,
+      "cop_start": [
+        3,
+        4
+      ],
+      "thief_start": [
+        0,
+        8
+      ],
+      "outcome": "capture",
+      "turns": 27,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.878,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 19,
+      "grid_size": 8,
+      "max_barriers": 20,
+      "max_moves": 40,
+      "cop_start": [
+        1,
+        5
+      ],
+      "thief_start": [
+        2,
+        0
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.179,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 20,
+      "grid_size": 9,
+      "max_barriers": 23,
+      "max_moves": 57,
+      "cop_start": [
+        6,
+        0
+      ],
+      "thief_start": [
+        4,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 8,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.299,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 21,
+      "grid_size": 9,
+      "max_barriers": 24,
+      "max_moves": 53,
+      "cop_start": [
+        7,
+        8
+      ],
+      "thief_start": [
+        2,
+        3
+      ],
+      "outcome": "capture",
+      "turns": 16,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.534,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 22,
+      "grid_size": 7,
+      "max_barriers": 17,
+      "max_moves": 49,
+      "cop_start": [
+        2,
+        2
+      ],
+      "thief_start": [
+        4,
+        5
+      ],
+      "outcome": "capture",
+      "turns": 3,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.149,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 23,
+      "grid_size": 9,
+      "max_barriers": 15,
+      "max_moves": 56,
+      "cop_start": [
+        2,
+        7
+      ],
+      "thief_start": [
+        7,
+        8
+      ],
+      "outcome": "capture",
+      "turns": 6,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.247,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 24,
+      "grid_size": 8,
+      "max_barriers": 20,
+      "max_moves": 48,
+      "cop_start": [
+        0,
+        4
+      ],
+      "thief_start": [
+        1,
+        6
+      ],
+      "outcome": "capture",
+      "turns": 3,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.129,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 25,
+      "grid_size": 10,
+      "max_barriers": 16,
+      "max_moves": 48,
+      "cop_start": [
+        9,
+        7
+      ],
+      "thief_start": [
+        5,
+        3
+      ],
+      "outcome": "capture",
+      "turns": 35,
+      "barriers_placed": 0,
+      "elapsed_sec": 1.191,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 26,
+      "grid_size": 9,
+      "max_barriers": 16,
+      "max_moves": 51,
+      "cop_start": [
+        8,
+        3
+      ],
+      "thief_start": [
+        3,
+        4
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.202,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 27,
+      "grid_size": 8,
+      "max_barriers": 15,
+      "max_moves": 37,
+      "cop_start": [
+        7,
+        3
+      ],
+      "thief_start": [
+        6,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 2,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.107,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 28,
+      "grid_size": 11,
+      "max_barriers": 22,
+      "max_moves": 35,
+      "cop_start": [
+        2,
+        6
+      ],
+      "thief_start": [
+        9,
+        5
+      ],
+      "outcome": "capture",
+      "turns": 15,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.54,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 29,
+      "grid_size": 9,
+      "max_barriers": 22,
+      "max_moves": 42,
+      "cop_start": [
+        1,
+        6
+      ],
+      "thief_start": [
+        3,
+        6
+      ],
+      "outcome": "capture",
+      "turns": 18,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.602,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 30,
+      "grid_size": 11,
+      "max_barriers": 18,
+      "max_moves": 42,
+      "cop_start": [
+        0,
+        4
+      ],
+      "thief_start": [
+        7,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 7,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.276,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 31,
+      "grid_size": 9,
+      "max_barriers": 20,
+      "max_moves": 59,
+      "cop_start": [
+        4,
+        7
+      ],
+      "thief_start": [
+        5,
+        4
+      ],
+      "outcome": "capture",
+      "turns": 3,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.161,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 32,
+      "grid_size": 7,
+      "max_barriers": 15,
+      "max_moves": 45,
+      "cop_start": [
+        6,
+        2
+      ],
+      "thief_start": [
+        4,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 1,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.089,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 33,
+      "grid_size": 7,
+      "max_barriers": 16,
+      "max_moves": 56,
+      "cop_start": [
+        0,
+        2
+      ],
+      "thief_start": [
+        5,
+        1
+      ],
+      "outcome": "capture",
+      "turns": 8,
+      "barriers_placed": 1,
+      "elapsed_sec": 0.301,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 34,
+      "grid_size": 7,
+      "max_barriers": 22,
+      "max_moves": 50,
+      "cop_start": [
+        2,
+        1
+      ],
+      "thief_start": [
+        6,
+        5
+      ],
+      "outcome": "capture",
+      "turns": 15,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.523,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 35,
+      "grid_size": 7,
+      "max_barriers": 20,
+      "max_moves": 47,
+      "cop_start": [
+        2,
+        5
+      ],
+      "thief_start": [
+        6,
+        6
+      ],
+      "outcome": "capture",
+      "turns": 4,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.169,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 36,
+      "grid_size": 11,
+      "max_barriers": 22,
+      "max_moves": 44,
+      "cop_start": [
+        8,
+        9
+      ],
+      "thief_start": [
+        7,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 7,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.271,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 37,
+      "grid_size": 10,
+      "max_barriers": 22,
+      "max_moves": 42,
+      "cop_start": [
+        7,
+        9
+      ],
+      "thief_start": [
+        7,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 25,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.86,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 38,
+      "grid_size": 11,
+      "max_barriers": 15,
+      "max_moves": 59,
+      "cop_start": [
+        5,
+        0
+      ],
+      "thief_start": [
+        8,
+        7
+      ],
+      "outcome": "capture",
+      "turns": 27,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.916,
+      "ok": true,
+      "failures": []
+    },
+    {
+      "sample": 39,
+      "grid_size": 9,
+      "max_barriers": 19,
+      "max_moves": 52,
+      "cop_start": [
+        2,
+        3
+      ],
+      "thief_start": [
+        8,
+        3
+      ],
+      "outcome": "capture",
+      "turns": 5,
+      "barriers_placed": 0,
+      "elapsed_sec": 0.191,
+      "ok": true,
+      "failures": []
+    }
+  ],
+  "failing_configs": []
+}
