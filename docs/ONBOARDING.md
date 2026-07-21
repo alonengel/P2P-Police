@@ -60,3 +60,10 @@ we verify result agreement with you before sending.
 Your `group_id`, both repo links, your two public MCP URLs, your scent-model
 lock hash, and a proposed time window. Everything else is negotiated in the
 handshake itself.
+
+## Third-party verification
+
+After any game — warm-up or counted — either side (or any third party) can
+check the pair of logs: `uv run python scripts/verify_pair.py <log_a> <log_b>`
+verifies both logs independently (commits + physics recompute) and their
+mutual consistency (same game_uid, same end digest, record-for-record match).

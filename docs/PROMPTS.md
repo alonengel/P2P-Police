@@ -327,3 +327,22 @@ one support-size histogram would have predicted the negative result before
 a line of solver code. (3) Adversarial-search tests must adjudicate via the
 engine, not via the search's own logic — the dance bug was invisible to
 every unit test and obvious to the rollout.
+
+## 2026-07-21 — Session 12: public pair-verifier & the stale artifact it caught
+
+**Prompt (paraphrased).** *"Extend the replay verifier into a league tool:
+verify ANY two teams' logs of the same game — each side alone, then mutual
+consistency (uid, end digest, record-for-record commit equality). Offline
+over files only; never touches a live game."*
+
+**Outcome.** `report/pair_verify.py` + `scripts/verify_pair.py`, TDD (6
+tests: consistent pair, tampered record, uid/digest mismatch, missing step
+in the rival's view, forged commit swap, tolerated pre-audit verdict
+absence). First run on our own committed artifacts immediately caught a
+real defect: the g02 self-play logs were sealed under the PRE-migration
+commit byte-form and read TAMPERED to any grader. Regenerated via a fresh
+cross-repo match and added a guard test that replay-verifies EVERY
+committed log artifact, so stale evidence can never linger silently again.
+
+**Lesson.** Point new verification tooling at your own artifacts first —
+the tool paid for itself before it ever saw a rival's log.
