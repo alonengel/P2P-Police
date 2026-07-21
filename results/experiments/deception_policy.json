@@ -1,0 +1,29 @@
+{
+  "description": "cop capture vs belief-driven arena evader, per hint policy",
+  "deception_config": {
+    "max_lies": 2,
+    "cooldown_turns": 6,
+    "exposure_threshold": 0.4,
+    "opponent_distance_threshold": 2,
+    "exposure_radius": 1,
+    "baseline_truth_probability": 0.5
+  },
+  "coin": {
+    "games": 60,
+    "capture": 0,
+    "survival": 60,
+    "capture_rate": 0.0,
+    "mean_lies_per_game": 18.0,
+    "mean_thief_tracking_error": 2.357
+  },
+  "policy": {
+    "games": 60,
+    "capture": 0,
+    "survival": 60,
+    "capture_rate": 0.0,
+    "mean_lies_per_game": 2.0,
+    "mean_thief_tracking_error": 1.429
+  },
+  "capture_delta": 0.0,
+  "lies_saved_per_game": 16.0
+}

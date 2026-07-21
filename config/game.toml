@@ -21,6 +21,15 @@ turn_timeout_seconds = 180
 # [strategy]  -- optional: point at your brain subclass (else the shipped heuristic runs)
 # police_class = "p2p_police.strategy.police_brain:PoliceBrain"
 
+[deception]                       # self-mirror lie policy (intent flags stay sealed until audit)
+max_lies = 2                      # conservative cop budget -- lie only while closing in
+cooldown_turns = 6                # minimum full turns between lies
+exposure_threshold = 0.4          # mirror mass at/near our true cell that arms a lie (a moving
+                                  # cop reads lower than a camper: rivals see us pre-boundary)
+opponent_distance_threshold = 2   # believed thief Manhattan distance: mask the final approach
+exposure_radius = 1               # Manhattan radius of the exposure mass
+baseline_truth_probability = 0.5  # control arm (plain coin) for the policy-vs-coin experiment
+
 [trash_talk]
 provider = "template"           # template (0 tokens) | ollama | claude_api | claude_cli | openrouter
 every_n_steps = 1
@@ -32,3 +41,21 @@ step_deadline_seconds = 30      # hard cap on LLM thinking per step
 [email]
 recipient = "rmisegal+uoh26finalgame@gmail.com"
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
+
+[chaos]                         # chaos-drill knobs (scripts/chaos_drills.py) - dev tooling, never game terms
+turn_timeout_seconds = 4.0      # shrunk turn budget so drills classify in seconds, not minutes
+retry_backoff_sec = 0.2         # drill-scale transport backoff (league value stays in game.json)
+watchdog_timeout_sec = 1.0      # drill-scale watchdog window (league value stays in game.json)
+duplicate_stub_turn = 2         # D1: resend the stub's 2nd commit+reveal pair
+silent_stub_turn = 3            # D2: the stub goes dark before its 3rd own turn
+flap_after_full_turns = 2       # D3/D4: kill the opponent endpoint after this many full turns
+flap_seconds = 1.5              # D3: endpoint downtime (must stay under the turn budget)
+my_seed = 7                     # deterministic RandomBrain pair: 23-turn capture game
+stub_seed = 99
+tunnel_turn_timeout_seconds = 90    # public-tunnel drill needs headroom for edge reconnects
+tunnel_retry_backoff_sec = 1.0      # gentler backoff against the public edge
+tunnel_ready_timeout_seconds = 90   # max wait for the tunnel to publish both hostnames
+tunnel_kill_after_full_turns = 2    # kill cloudflared after this many full turns
+tunnel_downtime_seconds = 6.0       # how long the tunnel stays dead before restart
+tunnel_name = "copthief"            # named tunnel (docs/DEPLOYMENT.md); hostnames from [game].mcp_servers
+cloudflared_exe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'

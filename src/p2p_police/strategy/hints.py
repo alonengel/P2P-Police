@@ -27,15 +27,24 @@ def enforce_word_limit(text: str, hint_max_words: int) -> str:
 
 
 def build_hint(
-    actual_move: Move, tell_truth: bool, hint_max_words: int, rng: random.Random
+    actual_move: Move, tell_truth: bool, hint_max_words: int, rng: random.Random,
+    decoy: str | None = None,
 ) -> tuple[str, str, bool]:
     """Compose (text, claimed_direction, intent_is_truth).
 
-    A lie claims a direction different from the actual move; the intent flag
-    is sealed inside the commit (ch. 5) so 'lying truthfully' is impossible.
+    A lie claims a direction different from the actual move — random by
+    default, or the caller's chosen `decoy` (the deception policy aims it
+    away from the true heading). The intent flag is sealed inside the commit
+    (ch. 5) so 'lying truthfully' is impossible; an invalid or truth-equal
+    decoy falls back to the random pick rather than leak the real heading.
     """
     actual = actual_move.name
-    claim = actual if tell_truth else rng.choice([d for d in TEMPLATES if d != actual])
+    if tell_truth:
+        claim = actual
+    elif decoy and decoy != actual and decoy in TEMPLATES:
+        claim = decoy
+    else:
+        claim = rng.choice([d for d in TEMPLATES if d != actual])
     text = enforce_word_limit(rng.choice(TEMPLATES[claim]), hint_max_words)
     return text, claim, tell_truth
 

@@ -95,3 +95,28 @@ def test_info_mode_exact_feeds_none(config_dir: Path) -> None:
     config = Config.load(config_dir)
     config.private.setdefault("strategy", {})["info_mode"] = "exact"
     assert _half_turn_feed(config) is None
+
+
+def test_verdicts_recorded_match_policy_decisions(config_dir: Path) -> None:
+    """The sealed intent trail IS the deception policy's decision log — the
+    audit reveals exactly what the self-mirror policy chose, hint by hint."""
+    config = Config.load(config_dir)
+    police_in, thief_in = PeerInboxes(), PeerInboxes()
+    police = build_runtime(Role.POLICE, config, LoopbackTransport(thief_in), police_in, 3)
+    thief = build_runtime(Role.THIEF, config, LoopbackTransport(police_in), thief_in, 11)
+
+    reports: dict[str, dict] = {}
+    threads = [
+        threading.Thread(target=lambda r=r, n=n: reports.update({n: r.play()}))
+        for n, r in (("police", police), ("thief", thief))
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join(timeout=30)
+    assert set(reports) == {"police", "thief"}, "a runtime deadlocked"
+
+    assert reports["police"]["outcome"] == reports["thief"]["outcome"]
+    for runtime in (police, thief):
+        assert runtime.deceiver.decisions  # the policy ruled on every own hint
+        assert runtime.exchange.own_verdicts() == runtime.deceiver.decisions

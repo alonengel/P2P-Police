@@ -22,10 +22,8 @@ from p2p_police.peer.sealing import SealedExchange
 from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.brain_base import BrainBase
-from p2p_police.strategy.hints import build_hint
+from p2p_police.strategy.deception import Deceiver
 from p2p_police.strategy.talk_providers import build_talk_chain
-
-TRUTH_PROBABILITY = 0.5  # per-hint honesty coin; strategy refinement later
 
 
 class GeometricRuntime:
@@ -49,6 +47,7 @@ class GeometricRuntime:
         self.transport, self.inboxes = transport, inboxes
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.brain, self.perception = brain, Perception(role, config.grid_size)
+        self.deceiver = Deceiver(role, config, brain.rng)  # self-mirror lie policy
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
         self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
@@ -92,15 +91,14 @@ class GeometricRuntime:
         exact = self.config.info_mode() == "exact"
         action = self.brain.decide(self.engine, None if exact else self.perception.belief)
         moved = action["move"] if action["type"] == "move" else "STAY"
-        _text, claim, truth = build_hint(
-            Move[moved], self.brain.rng.random() < TRUTH_PROBABILITY,
-            self.config.shared["world"]["hint_max_words"], self.brain.rng,
-        )
+        claim, truth = self.deceiver.plan_hint(
+            self.engine, self.perception, Move[moved], turn_index)
         self.fsm.transition(GamePhase.COMMITTING)
         self.exchange.send_sealed(self.engine, turn_index, action,
                                   self.talk.render(claim, turn_index), truth)
         self.fsm.transition(GamePhase.AWAITING_REVEAL)
         protocol.apply_action(self.engine, self.role, action)
+        self.deceiver.observe_own(self.engine, claim)  # mirror sees what leaked
         self.fsm.transition(GamePhase.VERIFYING)
         self.fsm.transition(GamePhase.WAITING_FOR_OPPONENT)
         self.perception.emit(self.engine, turn_index)

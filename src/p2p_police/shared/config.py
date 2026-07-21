@@ -105,6 +105,21 @@ class Config:
         """[strategy] info_mode: 'belief' (default) | 'exact' (ADR-0006)."""
         return self.private.get("strategy", {}).get("info_mode", "belief")
 
+    def deception(self) -> dict:
+        """[deception] self-mirror lie-policy tunables (private, per-peer —
+        never part of the signed game.json; missing keys keep the shipped
+        cop posture: conservative, lying only while closing in to mask the
+        approach direction)."""
+        block = self.private.get("deception", {})
+        return {
+            "max_lies": int(block.get("max_lies", 2)),
+            "cooldown_turns": int(block.get("cooldown_turns", 6)),
+            "exposure_threshold": float(block.get("exposure_threshold", 0.4)),
+            "opponent_distance_threshold": int(block.get("opponent_distance_threshold", 2)),
+            "exposure_radius": int(block.get("exposure_radius", 1)),
+            "baseline_truth_probability": float(block.get("baseline_truth_probability", 0.5)),
+        }
+
     def identity_block(self) -> dict:
         """Rival-facing identity declaration (rules 37-38/49, ADR-0005/6)."""
         game = self.private.get("game", {})

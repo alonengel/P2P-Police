@@ -164,3 +164,33 @@ evader is blind-fragile (0.00 under belief noise), which became the
 evidence-backed case for keeping the robust hand-coded brain as league
 default; (4) the 150-line cap and pre-commit hooks caught real drift
 repeatedly — friction that pays.
+
+## 2026-07-21 — Session 8: deception engineering (self-mirror lie policy)
+
+Prompt (paraphrased): *"Upgrade the deception engineering: replace the
+truth/lie coin in the runtime with a policy that lies exactly when it pays.
+Build a SelfMirror (a second belief filter fed only by our own emissions,
+estimating what the rival can infer about US), a DeceptionClock (lie budget
++ cooldown), and a DeceptionPolicy (lie only when exposed AND the rival is
+believed close AND the clock allows). Decoys point away from the true
+heading. All tunables in a private [deception] config table; roles flipped
+from the sibling — the cop lies conservatively, while closing in, to mask
+the approach; prove the receiving-side profiler still counters it; measure
+policy-vs-coin."*
+
+Process: TDD both repos (16 unit tests + 1 runtime-integration test each,
+red first). The mirror reuses the rival's exact BeliefMap pipeline pointed
+at our own role — no duplicated math; the runtime feeds it at the precise
+point the rival's Perception observes us (pre-boundary for the cop who
+opens every round). Numeric prototyping BEFORE pinning assertions caught
+two traps: corner diffusion shifts the argmax off the true cell, and the
+cop's pre-boundary scent lag caps its exposure (~0.45), which made a 0.5
+threshold silently inert — probed the live exposure/distance distributions
+during pursuit and set the default to 0.4.
+
+Lessons: (1) the reputation economy measures beautifully — same outcomes at
+2.0 vs 18.0 lies/game: truth is cheap when it buys credibility; (2) a
+policy whose trigger never fires is a silent bug — measure trigger rates,
+not just end results; (3) sealed intent flags make deception audit-honest:
+the verdict trail the audit reveals IS the policy's decision log, asserted
+verbatim in the integration test.
