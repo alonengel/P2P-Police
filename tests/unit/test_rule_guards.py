@@ -20,7 +20,7 @@ from p2p_police.strategy.hints import build_hint
 
 STRATEGY = Path("src/p2p_police/strategy")
 DECISION_MODULES = ["brain_base.py", "police_brain.py", "rl_brain.py",
-                    "rl_deep.py", "arena_thief.py"]
+                    "rl_deep.py", "arena_thief.py", "endgame.py", "info_gain.py"]
 LLM_PATHS = {"p2p_police.infra.llm_provider", "p2p_police.strategy.talk_providers"}
 
 

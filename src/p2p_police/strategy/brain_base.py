@@ -5,6 +5,7 @@ empty section runs the shipped heuristic. Moves are ALWAYS decided here in
 pure Python — the LLM never navigates (rule 25 default).
 """
 
+import inspect
 import random
 from importlib import import_module
 
@@ -49,13 +50,15 @@ def resolve_brain(config, role: Role, rng: random.Random) -> BrainBase:
     if spec:
         module_name, _, class_name = spec.partition(":")
         brain_class = getattr(import_module(module_name), class_name)
+        if "config" in inspect.signature(brain_class).parameters:
+            return brain_class(role, rng, config=config)  # tunables flow in
         return brain_class(role, rng)
-    return _shipped_brain(role, rng)
+    return _shipped_brain(role, rng, config)
 
 
-def _shipped_brain(role: Role, rng: random.Random) -> BrainBase:
+def _shipped_brain(role: Role, rng: random.Random, config=None) -> BrainBase:
     if role is Role.POLICE:
         from p2p_police.strategy.police_brain import PoliceBrain
 
-        return PoliceBrain(role, rng)
+        return PoliceBrain(role, rng, config)
     return RandomBrain(role, rng)  # twin repo ships ThiefBrain here

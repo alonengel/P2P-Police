@@ -1,0 +1,123 @@
+{
+  "description": "blind cop capture strength per booster arm, same seeds, 3-evader pool",
+  "games_per_evader_per_arm": 20,
+  "arms": {
+    "baseline": {
+      "games": 80,
+      "capture_rate": 0.237,
+      "mean_turns_to_capture": 9.16,
+      "endgame_fired_turns": 0,
+      "per_evader": {
+        "heuristic": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "random": {
+          "games": 20,
+          "capture_rate": 0.95,
+          "mean_turns_to_capture": 9.16
+        },
+        "perfect": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "deep_rl": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        }
+      }
+    },
+    "endgame": {
+      "games": 80,
+      "capture_rate": 0.237,
+      "mean_turns_to_capture": 9.16,
+      "endgame_fired_turns": 0,
+      "per_evader": {
+        "heuristic": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "random": {
+          "games": 20,
+          "capture_rate": 0.95,
+          "mean_turns_to_capture": 9.16
+        },
+        "perfect": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "deep_rl": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        }
+      }
+    },
+    "info_gain": {
+      "games": 80,
+      "capture_rate": 0.237,
+      "mean_turns_to_capture": 9.11,
+      "endgame_fired_turns": 0,
+      "per_evader": {
+        "heuristic": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "random": {
+          "games": 20,
+          "capture_rate": 0.95,
+          "mean_turns_to_capture": 9.11
+        },
+        "perfect": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "deep_rl": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        }
+      }
+    },
+    "both": {
+      "games": 80,
+      "capture_rate": 0.237,
+      "mean_turns_to_capture": 9.11,
+      "endgame_fired_turns": 0,
+      "per_evader": {
+        "heuristic": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "random": {
+          "games": 20,
+          "capture_rate": 0.95,
+          "mean_turns_to_capture": 9.11
+        },
+        "perfect": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "deep_rl": {
+          "games": 20,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        }
+      }
+    }
+  },
+  "capture_delta_vs_baseline": {
+    "endgame": 0.0,
+    "info_gain": 0.0,
+    "both": 0.0
+  }
+}

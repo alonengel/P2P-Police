@@ -3,24 +3,41 @@
 Policy: close the TRUE (barrier-aware BFS) distance to the thief; when one
 step away, land the capture. Spend a barrier only when it immediately tightens
 a nearly-trapped thief (few escape routes) — barriers are a quota resource,
-not confetti (ch. 3 resource management).
+not confetti (ch. 3 resource management). Two belief-mode boosters, each
+config-gated and keep-gate-measured (docs/evidence/cop-strength.md): an exact
+endgame pre-check (strategy/endgame.py) and an information-gain move term
+(strategy/info_gain.py) blended into the pursuit score.
 """
 
+import random
 
 from p2p_police.domain import protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.pathfind import UNREACHABLE, bfs_distances
 from p2p_police.domain.primitives import Cell, Move, Role
+from p2p_police.shared.tuning import endgame_table, info_gain_table
 from p2p_police.strategy.brain_base import BrainBase
+from p2p_police.strategy.endgame import EndgameSolver
+from p2p_police.strategy.info_gain import expected_gain
 
 TRAP_ESCAPE_LIMIT = 2  # barrier only when the thief has this many escapes or fewer
 TRAP_RANGE = 2  # ...and is already this close
 
 
 class PoliceBrain(BrainBase):
-    """Pursuit + surgical barrier placement."""
+    """Pursuit + surgical barriers + exact endgame + info-gain steering."""
+
+    def __init__(self, role: Role, rng: random.Random, config=None) -> None:
+        super().__init__(role, rng)
+        private = config.private if config is not None else {}
+        self.endgame = EndgameSolver(endgame_table(private))
+        self.info_gain = info_gain_table(private)
 
     def decide(self, engine: GameEngine, belief=None) -> dict:
+        if belief is not None:  # exact pre-check: play a PROVEN forcing line
+            forced = self.endgame.solve(engine, belief)
+            if forced is not None:
+                return forced
         me = engine.positions[Role.POLICE]
         # Blind mode (real games): hunt the belief peak, never the true cell.
         thief = belief.argmax_cell() if belief is not None else engine.positions[Role.THIEF]
@@ -30,15 +47,27 @@ class PoliceBrain(BrainBase):
         if barrier is not None:
             return protocol.barrier_action(barrier)
 
-        best_move, best_distance = Move.STAY, distances.get(me, UNREACHABLE)
+        blend = belief is not None and self.info_gain["enabled"]
+        best_move, best_score = Move.STAY, self._score(me, distances, belief, blend)
         for move in self.rng.sample(list(Move), k=len(Move)):  # tie-break randomly
             target = move.applied_to(me)
             if move is Move.STAY or not engine.board.is_passable(target):
                 continue
-            distance = distances.get(target, UNREACHABLE)
-            if distance != UNREACHABLE and (best_distance == UNREACHABLE or distance < best_distance):
-                best_move, best_distance = move, distance
+            score = self._score(target, distances, belief, blend)
+            if score is not None and (best_score is None or score > best_score):
+                best_move, best_score = move, score
         return protocol.move_action(best_move)
+
+    def _score(self, cell: Cell, distances: dict, belief, blend: bool) -> float | None:
+        """Pursuit score: closer is better; when blind, landings whose scent
+        reading would sharpen the belief earn their information's worth."""
+        distance = distances.get(cell, UNREACHABLE)
+        if distance == UNREACHABLE:
+            return None
+        score = -float(distance)
+        if blend:
+            score += self.info_gain["weight"] * expected_gain(belief, cell, self.info_gain)
+        return score
 
     def _trap_barrier(
         self, engine: GameEngine, me: Cell, thief: Cell, my_distance: int
