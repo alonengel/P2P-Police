@@ -70,7 +70,13 @@ def run_drill(config: Config, evidence: chaos_lib.EvidenceLog,
     my_in, my_port = chaos_net.start_inbox_server("resume_mine")
     stub_in, stub_port = chaos_net.start_inbox_server("resume_stub")
     stub_url, my_url = f"http://127.0.0.1:{stub_port}/mcp", f"http://127.0.0.1:{my_port}/mcp"
-    stub = _runtime(MY_ROLE.rival, config, McpTransport(my_url, backoff), stub_in,
+    # The stub's deadline starts BEFORE our crash; its patience must cover the
+    # crash window plus scheduler load, or the drill races itself. Our own
+    # resume time is still asserted against the REAL one-turn budget below.
+    stub_config = load_config()
+    stub_config.private["network"]["turn_timeout_seconds"] = (
+        config.turn_timeout_seconds * float(knobs["drill_stub_patience_factor"]))
+    stub = _runtime(MY_ROLE.rival, stub_config, McpTransport(my_url, backoff), stub_in,
                     RandomBrain(MY_ROLE.rival, random.Random(int(knobs["drill_stub_seed"]))))
     mine_t = McpTransport(stub_url, backoff)
     mine = _runtime(MY_ROLE, config, mine_t, my_in,

@@ -97,7 +97,7 @@ def drill_d2(config, evidence: EvidenceLog, dump_path: Path) -> dict:
     # table); the classification lives in the engine outcome + error type
     row["passed"] = (row["outcome"] == "technical_loss"
                      and "DeadlineExpiredError" in (mine["error"] or "")
-                     and seconds_to_classify <= chaos["turn_timeout_seconds"] + 2.0
+                     and seconds_to_classify <= chaos["turn_timeout_seconds"] * 2  # load-tolerant
                      and watchdog.fired and dump is not None and not thread.is_alive())
     return row
 

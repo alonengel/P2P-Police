@@ -40,6 +40,9 @@ class FlappyProxy:
 
     def start(self) -> None:
         listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # heal-on-same-port: without SO_REUSEADDR the severed listener's
+        # TIME_WAIT blocks the re-bind on Linux (EADDRINUSE; CI runners)
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         listener.bind((self.host, self.port))
         listener.listen(16)
         self._listener = listener

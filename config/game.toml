@@ -49,6 +49,7 @@ drill_retry_backoff_sec = 0.2       # drill-scale transport backoff
 drill_crash_after_half_turns = 6    # kill-and-resume drill: crash after this many half-turns
 drill_my_seed = 7                   # deterministic brain pair for the drill
 drill_stub_seed = 99
+drill_stub_patience_factor = 3.0    # stub deadline spans the crash window (its clock starts pre-crash)
 
 [fuzz]                          # legal-config-range fuzzer knobs (scripts/config_fuzz.py) - dev tooling
 samples = 40                    # committed-artifact sample count
