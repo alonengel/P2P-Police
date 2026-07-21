@@ -27,23 +27,32 @@ class SealedExchange:
         self.own_records: list[dict] = []   # {payload, nonce, commit}
         self.their_records: list[dict] = [] # {payload, commit}
         self._consumed: set[tuple[str, int]] = set()  # dedup: at-least-once transport
+        self._pending: dict[tuple[str, int], dict] = {}  # out-of-order buffer
+
+    _PENDING_CAP = 8  # ~2 pairs of lookahead is legitimate; more is flooding
 
     def _next(self, kind: str, turn_index: int) -> dict:
         """Wait for (kind, turn), SKIPPING duplicates the retrying transport
         may deliver twice (a lost HTTP ack must never become a technical
-        loss). Raises only on truly out-of-order traffic."""
+        loss) and BUFFERING not-yet-expected messages (a crash+resume can
+        split or reorder a pair; the deadline still bounds the wait). A
+        flooded buffer is the one remaining true desync."""
+        expected = (kind, turn_index)
         while True:
-            message = self._wait(f"opponent {kind} {turn_index}")
+            message = self._pending.pop(expected, None) or self._wait(
+                f"opponent {kind} {turn_index}")
             key = (str(message.get("kind")), int(message.get("turn", -1)))
             if key in self._consumed:
                 _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)
                 continue
-            if key != (kind, turn_index):
+            if key == expected:
+                self._consumed.add(key)
+                return message
+            if len(self._pending) >= self._PENDING_CAP:
                 raise GameRuleError(
-                    f"protocol desync: expected {kind} {turn_index}, got {message!r}"
+                    f"protocol desync: flooded while expecting {kind} {turn_index}"
                 )
-            self._consumed.add(key)
-            return message
+            self._pending[key] = message
 
     def send_sealed(
         self, engine: GameEngine, turn_index: int, action: dict, hint: str, verdict: bool

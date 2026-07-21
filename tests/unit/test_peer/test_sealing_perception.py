@@ -28,12 +28,10 @@ def test_commit_then_reveal_are_sent_and_logged() -> None:
     assert "nonce" not in sent[1]  # nonce secret until audit
 
 
-def test_receive_rejects_desync_and_echoes() -> None:
+def test_receive_rejects_echoes() -> None:
+    """Out-of-order traffic now buffers (see the reorder test); an opponent
+    echoing OUR role in a commit is still an instant violation."""
     exchange, sent = make_pair()
-    sent.append({"kind": "reveal", "turn": 1})
-    with pytest.raises(GameRuleError, match="expected commit"):
-        exchange.receive_sealed(1)
-    sent.clear()
     sent.append({"kind": "commit", "turn": 1, "actor": "police", "commit": "x"})
     with pytest.raises(GameRuleError, match="echoed"):
         exchange.receive_sealed(1)
@@ -87,3 +85,26 @@ def test_missing_verdicts_in_audit_yield_tampered_not_crash() -> None:
     bob.receive_sealed(1)
     bob.apply_revealed_verdicts([])  # opponent never disclosed intents
     assert bob.audit_theirs(alice.own_nonces()) == "TAMPERED"
+
+
+def test_reordered_pair_is_buffered_not_fatal() -> None:
+    """A crash+resume can split a pair: the reveal may arrive while the
+    commit is still expected. Buffer-ahead absorbs it; the resent commit
+    then unblocks the step and the buffered reveal is served in order."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    alice, a_sent = make_pair()
+    alice.send_sealed(engine, 1, {"type": "move", "move": "E"}, "hi", True)
+    commit, reveal = a_sent.pop(0), a_sent.pop(0)
+    a_sent.extend([reveal, commit, dict(reveal)])  # reveal first + resent copy
+    bob = SealedExchange(Role.THIEF, 1, a_sent.append, lambda what: a_sent.pop(0))
+    payload = bob.receive_sealed(1)
+    assert payload["action"] == {"type": "move", "move": "E"}
+
+
+def test_flooded_pending_buffer_is_the_true_desync() -> None:
+    """Unbounded buffering would let a chatty rival stall us forever - the
+    cap converts a flood into a clean protocol violation."""
+    junk = [{"kind": "commit", "turn": 90 + n, "actor": "thief"} for n in range(9)]
+    bob = SealedExchange(Role.POLICE, 1, junk.append, lambda what: junk.pop(0))
+    with pytest.raises(GameRuleError, match="flooded"):
+        bob.receive_sealed(1)
