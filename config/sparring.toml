@@ -1,0 +1,43 @@
+# Sparring posture (uncounted warm-ups): GENERIC play only.
+# Loaded INSTEAD of game.toml by `uv run p2p-police peer --sparring` — warm-up
+# games must not leak our tuned play into a rival's cross-game profiler before
+# a counted series. Identity stays real (never invented); play is the shipped
+# baseline: no [strategy] override or tuned weights, deception disarmed,
+# nothing emailed. The signed game.json constitution is shared with game.toml.
+
+version = "1.10"
+
+[game]
+group_name = "anrbj666"
+group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
+sub_game_number = 1
+members = ["Alon Engel", "Renat Karimov"]
+counted_games_played = 0
+repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
+mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief-mcp.alon.website/mcp" }
+
+[network]
+my_port = 8802                                  # police MCP server port
+opponent_url = "http://127.0.0.1:8801/mcp"      # point at the sparring partner's URL
+turn_timeout_seconds = 180
+wire_shape = "bookletter"       # selectable per warm-up: "bookletter" | "reference"
+                                # (or override with `--wire-shape` on the CLI)
+
+# no [strategy] table: the shipped baseline brain runs — no class override, and
+# [strategy.endgame]/[strategy.info_gain] stay on their disabled code defaults
+
+[deception]                     # DISARMED: zero lie budget -> every hint truthful
+max_lies = 0
+
+[trash_talk]
+provider = "template"           # 0 tokens; generic template banter only
+every_n_steps = 1
+
+[llm]
+model = ""
+step_deadline_seconds = 30      # hard cap on LLM thinking per step
+
+# no [email] table: warm-up reports are never emailed anywhere
+
+[resume]                        # crash-resume is pure local persistence, not play tuning
+enabled = true

@@ -28,6 +28,11 @@ costs points or disqualifies (rule numbers from the rulebook's Appendix ה/ו).
    (`config/game.schema.json`) so they can pre-validate their game.json.
 4. **Warm-up games are allowed and wise** (uncounted); declare which game is
    the counted one BEFORE it starts.
+4b. **Warm-ups run the sparring posture** — `uv run p2p-police peer --sparring`
+   loads `config/sparring.toml` (shipped baseline brain, deception disarmed,
+   no email) so uncounted games never feed our tuned play to a rival's
+   cross-game profiler; counted games use the committed game.toml as usual.
+   `--wire-shape bookletter|reference` selects the warm-up protocol.
 5. **Truthful game-count declaration** (rules 37-38): the lecturer
    cross-verifies from every team's reports — lying disqualifies.
 6. **Re-mint the Gmail token if >5 days old** (Testing-mode tokens die at ~7):

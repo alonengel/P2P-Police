@@ -30,8 +30,8 @@ class SimulationSdk:
     Setup: `SimulationSdk(config_dir)`; heavy resources start per call.
     """
 
-    def __init__(self, config_dir: str = "config") -> None:
-        self.config = Config.load(config_dir)
+    def __init__(self, config_dir: str = "config", private_file: str = "game.toml") -> None:
+        self.config = Config.load(config_dir, private_file)
 
     def build_engine(self) -> GameEngine:
         pheromones = self.config.pheromones
@@ -55,10 +55,15 @@ class SimulationSdk:
         inboxes = PeerInboxes()
         server = build_peer_server(inboxes, name=f"p2p_{MY_ROLE.value}_peer")
         start_peer_server(server, self.config.my_port)
-        transport = McpTransport(
-            self.config.opponent_url,
-            self.config.retry_backoff_sec,
-            self.config.response_timeout_sec,
+        from p2p_police.infra.duplicate_transport import maybe_duplicate_outbound
+
+        transport = maybe_duplicate_outbound(
+            McpTransport(
+                self.config.opponent_url,
+                self.config.retry_backoff_sec,
+                self.config.response_timeout_sec,
+            ),
+            self.config,
         )
         from p2p_police.shared.gatekeeper import ApiGatekeeper
 

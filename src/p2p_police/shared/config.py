@@ -46,10 +46,12 @@ class Config:
     rate_limits: dict
 
     @classmethod
-    def load(cls, config_dir: str | Path) -> "Config":
+    def load(cls, config_dir: str | Path, private_file: str = "game.toml") -> "Config":
+        # private_file seam: `peer --sparring` loads sparring.toml (generic
+        # warm-up posture) against the SAME signed game.json constitution.
         directory = Path(config_dir)
         shared = _read_json(directory / "game.json")
-        private = _read_toml(directory / "game.toml")
+        private = _read_toml(directory / private_file)
         limits_path = directory / "rate_limits.json"
         rate_limits = (
             _read_json(limits_path)

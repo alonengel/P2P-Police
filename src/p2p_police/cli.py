@@ -31,6 +31,14 @@ def build_parser() -> argparse.ArgumentParser:
     peer.add_argument("--sub-game", type=int, default=None, help="override sub_game_number")
     peer.add_argument("--resume", action="store_true",
                       help="continue a crashed game from the local resume snapshot")
+    peer.add_argument("--sparring", action="store_true",
+                      help="uncounted warm-up posture: load config/sparring.toml "
+                           "(shipped baseline brain, deception disarmed, no email)")
+    peer.add_argument("--wire-shape", choices=("bookletter", "reference"), default=None,
+                      help="override [network] wire_shape for this run")
+    peer.add_argument("--duplicate-outbound", action="store_true",
+                      help="chaos drill: send every outbound turn push twice "
+                           "(receiver-dedup demo; JSONL evidence recorded)")
     verify = subcommands.add_parser(
         "verify-log", help="recompute every sealed record in a saved game log"
     )
@@ -54,9 +62,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "peer":
         from p2p_police.sdk.sdk import SimulationSdk
 
-        sdk = SimulationSdk(args.config_dir)
+        sdk = SimulationSdk(args.config_dir,
+                            private_file="sparring.toml" if args.sparring else "game.toml")
         if args.sub_game is not None:
             sdk.config.private["game"]["sub_game_number"] = args.sub_game
+        if args.wire_shape is not None:
+            sdk.config.private.setdefault("network", {})["wire_shape"] = args.wire_shape
+        if args.duplicate_outbound:
+            sdk.config.private.setdefault("chaos", {})["duplicate_outbound_sends"] = True
         report = sdk.run_peer(seed=args.seed, gui=args.gui,
                               gui_screenshot=args.gui_screenshot, resume=args.resume)
         print(json.dumps(report, indent=2))

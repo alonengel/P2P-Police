@@ -72,6 +72,9 @@ flap_after_full_turns = 2       # D3/D4: kill the opponent endpoint after this m
 flap_seconds = 1.5              # D3: endpoint downtime (must stay under the turn budget)
 my_seed = 7                     # deterministic RandomBrain pair (observed: 35-turn survival game)
 stub_seed = 99
+duplicate_outbound_sends = false            # D5 sender half: resend every outbound turn push
+                                            # (also armed by `peer --duplicate-outbound`)
+duplicate_outbound_evidence_dir = "docs/evidence/drills"    # JSONL sink for duplicated sends
 tunnel_turn_timeout_seconds = 90    # public-tunnel drill needs headroom for edge reconnects
 tunnel_retry_backoff_sec = 1.0      # gentler backoff against the public edge
 tunnel_ready_timeout_seconds = 90   # max wait for the tunnel to publish both hostnames
