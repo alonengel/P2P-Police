@@ -76,8 +76,9 @@ def play_in_thread(runtime: GeometricRuntime, label: str) -> tuple[threading.Thr
     return thread, box
 
 
-def wire_pair(config, chaos, stub_wrap=None, use_proxy: bool = False) -> dict:
-    """Two real FastMCP servers + transports; mine optionally via the proxy."""
+def wire_pair(config, chaos, stub_wrap=None, use_proxy: bool = False, my_wrap=None) -> dict:
+    """Two real FastMCP servers + transports; mine optionally via the proxy
+    and/or wrapped (my_wrap) for sender-side fault injection (D5)."""
     my_in, my_port = chaos_net.start_inbox_server(f"chaos_{MY_ROLE.value}")
     stub_in, stub_port = chaos_net.start_inbox_server(f"chaos_{MY_ROLE.rival.value}_stub")
     proxy, target = None, f"http://127.0.0.1:{stub_port}/mcp"
@@ -90,7 +91,8 @@ def wire_pair(config, chaos, stub_wrap=None, use_proxy: bool = False) -> dict:
                           config.response_timeout_sec, sleep=counter.sleep)
     stub_t = McpTransport(f"http://127.0.0.1:{my_port}/mcp", chaos["retry_backoff_sec"],
                           config.response_timeout_sec)
-    return {"mine": build_runtime(MY_ROLE, config, mine_t, my_in, chaos["my_seed"]),
+    return {"mine": build_runtime(MY_ROLE, config, my_wrap(mine_t) if my_wrap else mine_t,
+                                  my_in, chaos["my_seed"]),
             "stub": build_runtime(MY_ROLE.rival, config,
                                   stub_wrap(stub_t) if stub_wrap else stub_t,
                                   stub_in, chaos["stub_seed"]),

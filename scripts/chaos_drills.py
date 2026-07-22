@@ -3,9 +3,10 @@
 D1 duplicate-delivery (sealing dedup absorbs an at-least-once resend),
 D2 silent-opponent (deadline -> clean technical loss + watchdog persist),
 D3 transport-flap-heal (endpoint dies briefly, retrying transport heals),
-D4 budget-exhaustion (endpoint dead past the budget -> classified, no hang).
+D4 budget-exhaustion (endpoint dead past the budget -> classified, no hang),
+D5 outbound-duplicate (WE resend every turn push; the receiver dedup absorbs).
 All knobs live in config/game.toml [chaos]; every JSONL line is an event that
-actually happened. Run: uv run python scripts/chaos_drills.py [d1 d2 d3 d4 tunnel]
+actually happened. Run: uv run python scripts/chaos_drills.py [d1 d2 d3 d4 d5 tunnel]
 """
 
 import json
@@ -17,6 +18,7 @@ from pathlib import Path
 import chaos_lib
 from chaos_lib import EvidenceLog
 from chaos_outage import drill_d3, drill_d4  # noqa: F401 - re-exported for tests
+from chaos_outbound import drill_d5  # noqa: F401 - re-exported for tests
 
 from p2p_police.peer.watchdog import Watchdog
 from p2p_police.shared.config import Config
@@ -106,13 +108,14 @@ DRILLS = {"d1": ("d1_duplicate_delivery", drill_d1),
           "d2": ("d2_silent_opponent",
                  lambda c, e: drill_d2(c, e, ROOT / "logs" / "chaos_watchdog_dump.json")),
           "d3": ("d3_transport_flap_heal", drill_d3),
-          "d4": ("d4_budget_exhaustion", drill_d4)}
+          "d4": ("d4_budget_exhaustion", drill_d4),
+          "d5": ("d5_outbound_duplicate", drill_d5)}
 
 
 def main(argv: list[str]) -> int:
     from p2p_police.strategy import profiler
     profiler.PROFILE_PATH = ROOT / "logs" / "chaos_profiles.json"  # never league memory
-    names = [a for a in argv if not a.startswith("--")] or ["d1", "d2", "d3", "d4"]
+    names = [a for a in argv if not a.startswith("--")] or ["d1", "d2", "d3", "d4", "d5"]
     evidence_dir = ROOT / "docs" / "evidence" / "drills"
     for arg in argv:
         if arg.startswith("--evidence-dir="):
