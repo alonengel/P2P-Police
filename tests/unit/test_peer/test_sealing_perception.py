@@ -130,3 +130,19 @@ def test_junk_deliveries_do_not_reset_the_deadline() -> None:
     # REVEAL expectation - which must keep ONE clock across the skip
     assert seen[1] is not None and seen[1] is seen[2]
     assert seen[0] is not seen[1]  # each expectation gets a fresh deadline
+    assert seen[1] is not None and seen[1] is seen[2]
+    assert seen[0] is not seen[1]  # each expectation gets a fresh deadline
+
+
+def test_conflicting_commit_for_played_step_stays_loud() -> None:
+    """Commit-anchored dedup: a byte-identical redelivery collapses, but a
+    DIFFERENT commit for an already-played step is tampering evidence."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    alice, a_sent = make_pair()
+    alice.send_sealed(engine, 1, {"type": "move", "move": "E"}, "hi", True)
+    forged = dict(a_sent[0], commit="f" * 64)
+    a_sent.extend([forged, {"kind": "commit", "turn": 2, "actor": "police", "commit": "x"}])
+    bob = SealedExchange(Role.THIEF, 1, a_sent.append, lambda what: a_sent.pop(0))
+    bob.receive_sealed(1)  # legit pair consumed
+    with pytest.raises(GameRuleError, match="conflicting commit"):
+        bob.receive_sealed(2)  # the forged step-1 commit surfaces mid-wait

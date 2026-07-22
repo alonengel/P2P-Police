@@ -51,6 +51,13 @@ class SealedExchange:
                 self._wait(label, deadline) if deadline else self._wait(label))
             key = (str(message.get("kind")), int(message.get("turn", -1)))
             if key in self._consumed:
+                # commit-anchored dedup: a retry can't vary the commit, so a
+                # DIFFERENT commit for a played step is tampering evidence,
+                # never transport noise (transport tolerance, no rules tolerance)
+                stored = next((r for r in self.their_records
+                               if r["payload"]["step"] == key[1]), None)
+                if key[0] == "commit" and stored and message.get("commit") != stored["commit"]:
+                    raise GameRuleError(f"conflicting commit for played step {key[1]}")
                 _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)
                 continue
             if key == expected:
