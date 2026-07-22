@@ -75,6 +75,7 @@ class OwnState:
         self.turns_completed = 0
         self.outcome = Outcome.ONGOING
         self.next_actor = Role.POLICE  # police opens every round (PRD 01)
+        self.boundary_cells: list[Cell] = []  # scent-replay history (crash-resume)
 
     @property
     def cell(self) -> Cell:
@@ -119,6 +120,7 @@ class OwnState:
         """Full-turn boundary: MY field updates at MY cell (the rival runs
         its own update and transmits the snapshot); the clock advances."""
         self.scent[self.role].update(self.cell)
+        self.boundary_cells.append(self.cell)  # deterministic scent replay
         self.turns_completed += 1
 
     def survival_reached(self) -> bool:

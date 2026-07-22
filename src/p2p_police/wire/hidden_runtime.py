@@ -18,11 +18,12 @@ from p2p_police.domain.primitives import GamePhase, Outcome, Role
 from p2p_police.domain.state_machine import GamePhaseMachine
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.peer.perception import Perception
+from p2p_police.peer.resume import NullResume
 from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.deception import Deceiver
 from p2p_police.strategy.talk_providers import build_talk_chain
-from p2p_police.wire import hidden_turns, lock
+from p2p_police.wire import hidden_resume, hidden_turns, lock
 from p2p_police.wire.hidden_exchange import HiddenExchange
 from p2p_police.wire.own_state import OwnState
 
@@ -48,7 +49,8 @@ class HiddenRuntime:
         self.deceiver = Deceiver(role, config, brain.rng)
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
-        self.watchdog = NullWatchdog()  # SDK swaps in the real one (rule 7)
+        # SDK swaps in the real watchdog (rule 7) / resume recorder (E6)
+        self.watchdog, self.resume = NullWatchdog(), NullResume()
         self.exchange = HiddenExchange(
             role,
             int(config.private["game"]["sub_game_number"]),
@@ -64,6 +66,7 @@ class HiddenRuntime:
         deadline = deadline or Deadline(self.config.turn_timeout_seconds)
         while True:
             self.watchdog.beat()  # polling IS liveness; deadlines guard rivals
+            hidden_resume.handle_controls(self)  # a restarted rival's offer
             deadline.require(what)
             try:
                 return inbox.get(timeout=min(0.25, max(0.01, deadline.remaining())))
@@ -99,11 +102,13 @@ class HiddenRuntime:
         )
         return theirs
 
-    def play(self) -> dict:
-        """Full hidden-mode game; failures route to TECHNICAL_LOSS (rules 4-6)."""
+    def play(self, resume_from: int = 0) -> dict:
+        """Full hidden-mode game; failures route to TECHNICAL_LOSS (rules 4-6).
+        resume_from > 0 skips negotiation and continues a re-armed game."""
         try:
-            self.negotiate()
-            step = 0
+            if resume_from == 0:
+                self.negotiate()
+            step = resume_from
             while self.own.outcome is Outcome.ONGOING:
                 step += 1
                 self.watchdog.beat()  # heartbeat per half-turn (rule 7)
@@ -111,6 +116,7 @@ class HiddenRuntime:
                     hidden_turns.my_half_turn(self, step)
                 else:
                     step = hidden_turns.their_half_turn(self, step)
+                self.resume.checkpoint(self, step)  # E6 half-turn snapshot
         except (DeadlineExpiredError, GameRuleError):
             if self.fsm.can_transition(GamePhase.TECHNICAL_LOSS):
                 self.fsm.transition(GamePhase.TECHNICAL_LOSS)

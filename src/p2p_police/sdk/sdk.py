@@ -63,25 +63,26 @@ class SimulationSdk:
         from p2p_police.shared.gatekeeper import ApiGatekeeper
 
         gatekeeper = ApiGatekeeper(self.config.rate_limits)  # ONE per run (section 5)
-        runtime = GeometricRuntime(
-            MY_ROLE,
-            self.config,
-            self.build_engine(),
-            transport,
-            inboxes,
-            resolve_brain(self.config, MY_ROLE, random.Random(seed)),
-            gatekeeper=gatekeeper,
-        )
-        from p2p_police.peer import resume as resume_mod
+        from p2p_police.sdk import hidden as hidden_mod
+        from p2p_police.wire import lock
+
+        brain = resolve_brain(self.config, MY_ROLE, random.Random(seed))
+        if lock.wire_shape(self.config) == lock.REFERENCE:
+            # wire_shape seam: same SDK entry, the hidden-information loop
+            runtime = hidden_mod.build_runtime(
+                self.config, transport, inboxes, brain, gatekeeper)
+            resume_mod = hidden_mod
+        else:
+            runtime = GeometricRuntime(MY_ROLE, self.config, self.build_engine(),
+                                       transport, inboxes, brain, gatekeeper=gatekeeper)
+            from p2p_police.peer import resume as resume_mod
 
         start_turn = resume_mod.attach(runtime, self.config, resume=resume)
         from p2p_police.peer.watchdog import Watchdog
 
         watchdog = Watchdog(
             float(self.config.shared["network_and_league"]["watchdog_timeout_sec"]),
-            lambda: {"positions": {r.value: list(c) for r, c in runtime.engine.positions.items()},
-                     "turns": runtime.engine.turns_completed,
-                     "outcome": runtime.engine.outcome.value},
+            reporting.watchdog_state(runtime),
             transport.close,
         )
         runtime.watchdog = watchdog
@@ -145,8 +146,9 @@ class SimulationSdk:
         """Headless replay verification engine (mandatory deliverable, ch. 7):
         recompute every sealed record in a saved log -> Verified OK/TAMPERED.
         When the game's archived config artifact is found, ALSO re-simulate
-        the physics: every action re-applied on a fresh engine (an illegal
-        logged move is tampering) and the end digest recomputed (rule 20)."""
+        the physics and recompute the end digest (rule 20): bookletter logs
+        replay on a fresh engine; logs declaring the hidden wire replay
+        through the audit reconstruction (report/lookup.py, ADR-0008)."""
         doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
         own = doc.get("records", [])
         theirs = [r for r in doc.get("opponent_records", []) if "nonce" in r]
@@ -157,12 +159,4 @@ class SimulationSdk:
                 return "TAMPERED"
         from p2p_police.report import lookup
 
-        terms = lookup.terms_for_log(doc, log_path)
-        expected = doc.get("summary", {}).get("end_state_digest")
-        if terms is not None and expected:
-            try:
-                if lookup.recompute_digest(doc, terms) != expected:
-                    return "TAMPERED"
-            except Exception:  # illegal move / malformed action IS tampering
-                return "TAMPERED"
-        return "Verified OK"
+        return lookup.replay_verdict(doc, log_path)

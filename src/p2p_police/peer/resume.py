@@ -34,14 +34,17 @@ class NullResume:
 
 
 class ResumeRecorder:
-    """Atomic per-half-turn snapshot writer (tmp file + os.replace)."""
+    """Atomic per-half-turn snapshot writer (tmp file + os.replace). The
+    snapshot builder is injectable so the hidden wire (wire/hidden_resume.py)
+    reuses the recorder; the default stays this module's geometric shape."""
 
-    def __init__(self, path: str | Path) -> None:
+    def __init__(self, path: str | Path, builder=None) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._builder = builder or build_snapshot
 
     def checkpoint(self, runtime, turn_index: int) -> None:
-        doc = build_snapshot(runtime, turn_index)
+        doc = self._builder(runtime, turn_index)
         doc["integrity"] = _integrity(doc)
         tmp = self.path.with_suffix(".tmp")
         tmp.write_text(json.dumps(doc), encoding="utf-8")

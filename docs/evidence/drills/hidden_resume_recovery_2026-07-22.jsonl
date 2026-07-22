@@ -1,0 +1,5 @@
+{"ts": "2026-07-22T16:17:17.584+00:00", "drill": "hidden_resume_recovery", "stage": "start", "crash_after_half_turns": 6, "turn_timeout_sec": 15.0, "snapshot": "C:\\Users\\Alon\\Desktop\\projectGmar\\P2P-Police\\results\\local\\hidden_resume_drill_police.json"}
+{"ts": "2026-07-22T16:17:17.861+00:00", "drill": "hidden_resume_recovery", "stage": "crash", "killed_after_half_turns": 6, "undelivered_messages_lost": 0}
+{"ts": "2026-07-22T16:17:17.924+00:00", "drill": "hidden_resume_recovery", "stage": "resume", "seconds_to_resume": 0.062, "half_turns_recovered": 6, "own_digest": "658a72025d27c28ad171303ef01afadcc80d84f2c48dc0a9bcd9e917a781630b"}
+{"ts": "2026-07-22T16:17:18.795+00:00", "drill": "hidden_resume_recovery", "stage": "classify", "classification": "survival", "phase": "WAITING_FOR_OPPONENT", "error": null}
+{"ts": "2026-07-22T16:17:18.795+00:00", "drill": "hidden_resume_recovery", "stage": "outcome", "outcome": "survival", "phase": "WAITING_FOR_OPPONENT", "turns_completed": 35, "digest_match": true, "audit": "Verified OK", "steps_sealed": 35, "elapsed_sec": 0.866, "stub_outcome": "survival", "seconds_to_resume": 0.062, "turns_recovered": 6}

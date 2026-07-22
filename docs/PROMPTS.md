@@ -386,3 +386,51 @@ The audit now proves exactly what the wire can prove — captures created by
 the cop's own action, concessions forced by the truth duty — and the
 documented deviation is itself the strongest argument for keeping the
 reconstruction in wire/, not domain/.
+
+## 2026-07-22 — Session 14: reference-v3 hidden wire (phase 2: SDK, artifacts, resume, live E2E)
+
+**Prompt (paraphrased).** *"Build phase 2 of the reference-v3 hidden-
+information wire client: route `sdk.run_peer` (and the CLI peer command)
+between HiddenRuntime and GeometricRuntime off `wire_shape(config)`; adapt
+the watchdog state provider and technical-loss reporting to a runtime that
+exposes `own`, not `engine`; emit the four league artifacts from a hidden
+game so the log verifies through the existing verify-log AND the pair
+verifier; extend the crash-resume pattern to the hidden wire (snapshot
+own-state + exchange records; the resume offer re-sends the last commit —
+reveals never ride live) with a real-events JSONL drill; run a REAL
+two-process cross-repo hidden game over local HTTP MCP and archive its
+artifacts without touching the g01/g02 bookletter evidence; write ADR-0008.
+Nothing weakened, bookletter untouched, no domain/ edits, mirror both repos."*
+
+**Outcome.** `sdk/hidden.py` (runtime assembly behind the wire-shape seam;
+run_peer stays the single entry) + `sdk/reporting.py` grew a runtime-agnostic
+watchdog provider (the hidden dump's positions dict structurally lacks a
+rival key — rules 8-9 hold in post-mortems) and an own-state technical-loss
+digest. Hidden logs carry `"wire_shape": "reference"`; `verify_log`'s physics
+half moved intact into `report/lookup.py:replay_verdict`, which routes marked
+logs through the audit reconstruction (ADR-0008) and everything else through
+the byte-identical engine replay — guard tests prove relabeling in EITHER
+direction can only invalidate a log, never launder one. `wire/hidden_resume.py`
+snapshots what this peer truly holds (own cell/barriers, boundary-cell
+history for a deterministic scent replay, clock+token, the rival's last scent
+snapshot, sealed records incl. our never-transmitted nonces) atop the
+geometric recorder via an injected builder; the resume_offer answer re-sends
+the last COMMIT-bearing TurnMessage only (rule 18 survives E6, guard-tested).
+Kill-and-resume drill on the hidden wire: crash after 6 half-turns, restored
+in 0.062 s, game finished 35-turn survival, both audits Verified OK
+(docs/evidence/drills/hidden_resume_recovery_2026-07-22.jsonl, real events).
+LIVE cross-repo E2E: two CLI peers (ports 8802/8801), temp config override
+(committed game.toml default untouched), sub-game 3: 35-turn survival, both
+audits Verified OK, identical digest f5b6837b…33eaa, 35 sealed records per
+side, `scripts/verify_pair.py` over the two repos' logs → overall Verified OK
+in both directions; artifacts archived as results/log_…_g03.json +
+config/games/config_…_g03.json (+ declaration/result under
+results/hidden_e2e_g03/ so the bookletter g01/g02 evidence stays pristine).
+15 new tests per repo; coverage 92%; ruff 0; both suites green; parity OK.
+
+**Lesson.** The verifier had to become wire-aware WITHOUT a second code
+path a grader must trust separately: moving the existing physics recompute
+verbatim behind one dispatch keeps bookletter verification byte-identical
+while making "which replay applies" a property of the sealed log itself —
+and the guard tests that relabel logs both ways are what turn that marker
+from a loophole into a commitment.

@@ -30,8 +30,13 @@ class HiddenExchange(SealedExchange):
         self.own_records.append({"payload": payload, "nonce": nonce, "commit": commit})
         return commit
 
+    last_sent: dict | None = None  # commit-only TurnMessage (resume re-send)
+
     def send_message(self, message: dict) -> None:
-        """Push one TurnMessage through the runtime's transport callable."""
+        """Push one TurnMessage through the runtime's transport callable.
+        The message is remembered so a rival's resume_offer can be answered
+        by re-sending it — it carries only the COMMIT, never a reveal."""
+        self.last_sent = message
         self._send(message)
 
     def receive_turn(self, step: int) -> dict:

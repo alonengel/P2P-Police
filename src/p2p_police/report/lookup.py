@@ -59,6 +59,43 @@ def recompute_digest(doc: dict, terms: dict) -> str:
     return protocol.end_state_digest(engine)
 
 
+def recompute_hidden(doc: dict, terms: dict) -> str:
+    """Hidden-wire replay (ADR-0008): reconstruct from the revealed records
+    on Board physics — capture only where the cop's OWN action created it,
+    the thief's concede duty enforced. An engine replay would false-flag
+    honest hidden games (any co-location reads as instant capture there,
+    but a thief crossing the cop's cell is unobservable live). A log whose
+    game never completed (technical loss) has NO revealed rival actions to
+    replay — its digest is the peer's self-only state, so only the commit
+    checks apply, exactly like a bookletter log with no archived terms."""
+    from p2p_police.wire import audit  # local: audit imports this module
+
+    summary = doc.get("summary", {})
+    if summary.get("outcome") not in ("capture", "survival"):
+        return str(summary.get("end_state_digest", ""))
+    reconstruction = audit.reconstruct(
+        doc.get("records", []), doc.get("opponent_records", []), terms)
+    return reconstruction["digest"]
+
+
+def replay_verdict(doc: dict, log_path: str | Path) -> str:
+    """The physics half of verify-log: find the game's archived terms and
+    re-derive the end digest through the wire-appropriate replay. Bookletter
+    logs keep the engine recompute byte-for-byte; only a log that declares
+    the hidden wire routes to the reconstruction (rule 20 both ways)."""
+    terms = terms_for_log(doc, log_path)
+    expected = doc.get("summary", {}).get("end_state_digest")
+    if terms is None or not expected:
+        return "Verified OK"
+    try:
+        recomputed = (recompute_hidden(doc, terms)
+                      if doc.get("wire_shape") == "reference"
+                      else recompute_digest(doc, terms))
+    except Exception:  # illegal move / malformed action IS tampering
+        return "TAMPERED"
+    return "Verified OK" if recomputed == expected else "TAMPERED"
+
+
 def geometry(terms: dict | None) -> tuple[int, tuple, tuple]:
     """(grid, cop_start, thief_start) from terms; book defaults otherwise."""
     if terms is None:

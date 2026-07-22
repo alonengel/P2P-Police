@@ -12,19 +12,43 @@ from p2p_police.report import artifacts
 
 
 def technical_loss_report(my_role, runtime, error: Exception) -> dict:
-    from p2p_police.domain import protocol
+    """Rule-32 classification for BOTH runtimes: the geometric one digests
+    its replicated engine; the hidden one has only OwnState to digest (the
+    rival's half is sealed commits — there is no shared frame to hash)."""
+    own = getattr(runtime, "own", None)
+    if own is not None:
+        turns, digest = own.turns_completed, own.digest()
+    else:
+        from p2p_police.domain import protocol
 
+        turns = runtime.engine.turns_completed
+        digest = protocol.end_state_digest(runtime.engine)
     return {
         "role": my_role.value,
         "outcome": "technical_loss",
-        "turns_completed": runtime.engine.turns_completed,
-        "end_state_digest": protocol.end_state_digest(runtime.engine),
+        "turns_completed": turns,
+        "end_state_digest": digest,
         "digest_match": False,
         "audit": "unavailable (technical loss)",
         "steps_sealed": len(runtime.exchange.own_records),
         "opponent_group_id": getattr(runtime, "opponent_group_id", "unknown"),
         "failure": f"{type(error).__name__}: {error}",
     }
+
+
+def watchdog_state(runtime):
+    """State provider for the watchdog's post-mortem dump. Both runtimes
+    duck-type positions/turns_completed/outcome — and the hidden OwnState's
+    positions dict simply HAS no rival key, so rules 8-9 hold even in a
+    crash dump (nothing secret can leak into logs/watchdog_dump.json)."""
+    def provide() -> dict:
+        holder = getattr(runtime, "engine", None) or runtime.own
+        return {
+            "positions": {r.value: list(c) for r, c in holder.positions.items()},
+            "turns": holder.turns_completed,
+            "outcome": holder.outcome.value,
+        }
+    return provide
 
 
 
@@ -51,6 +75,13 @@ def emit_artifacts(config, runtime, report: dict) -> list:
 
     score = config.score_table().points_for(Outcome(report["outcome"]))
     results = Path("results")
+    log_doc = artifacts.build_log(config, game_id, game_uid, sub_game, report,
+                                  runtime.exchange.own_records,
+                                  runtime.exchange.their_records)
+    if getattr(runtime, "own", None) is not None:
+        # Hidden-wire log: verify-log must replay it through the audit
+        # reconstruction, not the engine (ADR-0008) — the marker routes it.
+        log_doc["wire_shape"] = "reference"
     written = [
         artifacts.emit(
             artifacts.build_declaration(
@@ -61,11 +92,7 @@ def emit_artifacts(config, runtime, report: dict) -> list:
         artifacts.emit(
             artifacts.build_config_artifact(config, game_id, game_uid, sub_game),
             Path("config/games"), game_ids.config_name(game_id, sub_game)),
-        artifacts.emit(
-            artifacts.build_log(config, game_id, game_uid, sub_game, report,
-                                runtime.exchange.own_records,
-                                runtime.exchange.their_records),
-            results, game_ids.log_name(game_id, sub_game)),
+        artifacts.emit(log_doc, results, game_ids.log_name(game_id, sub_game)),
         artifacts.emit(
             artifacts.build_result(config, game_id, game_uid, report, score,
                                    runtime.talk.meter.total),

@@ -21,7 +21,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subcommands = parser.add_subparsers(dest="command")
     peer = subcommands.add_parser(
-        "peer", help="run one geometric game against the configured opponent"
+        "peer", help="run one game against the configured opponent "
+                     "(wire shape from config: bookletter lockstep or hidden reference-v3)"
     )
     peer.add_argument("--config-dir", default="config", help="config directory")
     peer.add_argument("--seed", type=int, default=None, help="policy RNG seed")

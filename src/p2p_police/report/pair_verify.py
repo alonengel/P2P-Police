@@ -19,7 +19,11 @@ def _load(path: str | Path) -> dict:
 
 
 def _by_key(records: list[dict]) -> dict:
-    return {(r["payload"]["step"], r["payload"]["role"]): r for r in records}
+    """Payload-carrying records only: on the hidden wire a failed/absent
+    audit leaves commit-only opponent records — those surface as 'missing
+    from the rival's view' problems instead of crashing the verifier."""
+    return {(r["payload"]["step"], r["payload"]["role"]): r
+            for r in records if "payload" in r}
 
 
 def _public(payload: dict) -> dict:

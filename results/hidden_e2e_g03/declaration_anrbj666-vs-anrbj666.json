@@ -1,0 +1,55 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "63bf3112842c66fdd8947903f01fc676ab993d491314e355334faaf045a3d546",
+  "declared_at": "2026-07-22T16:19:52+00:00",
+  "game_id": "anrbj666-vs-anrbj666",
+  "game_uid": "23020791-2460-8b05-1491-75c4e2f2551b",
+  "group": {
+    "code_version": "1.00",
+    "counted_games_played": 0,
+    "github_commit": "unknown",
+    "group_id": "anrbj666",
+    "hardware_spec": {
+      "cpu_cores": 24,
+      "cpu_freq_mhz": 0,
+      "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+      "gpu_model": "unknown",
+      "os": "Windows 10",
+      "python": "3.13.13",
+      "ram_gb": 32,
+      "vram_gb": 0
+    },
+    "hardware_spec_sha256": "58209ad522fc252de904bc262f9ee1d41336fd31c43ec07d5e38227119837fcd",
+    "llm_model": "",
+    "mcp_servers": {
+      "cop": "https://cop-mcp.alon.website/mcp",
+      "thief": "https://thief-mcp.alon.website/mcp"
+    },
+    "members": [
+      "Alon Engel",
+      "Renat Karimov"
+    ]
+  },
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent": {
+    "group_id": "anrbj666",
+    "hardware_spec_sha256": "58209ad522fc252de904bc262f9ee1d41336fd31c43ec07d5e38227119837fcd",
+    "identity": {
+      "counted_games_played": 0,
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      }
+    }
+  },
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "token_budget_per_series": 200000
+}
