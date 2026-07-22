@@ -17,6 +17,8 @@ mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief
 my_port = 8802                                  # police MCP server port
 opponent_url = "http://127.0.0.1:8801/mcp"      # the ONLY thing we know about the opponent
 turn_timeout_seconds = 180
+wire_shape = "bookletter"       # default lockstep wire; "reference" arms the hidden-information
+                                # (reference-v3) path and declares wire_shape_sha256 at negotiation
 
 # [strategy]  -- optional: point at your brain subclass (else the shipped heuristic runs)
 # police_class = "p2p_police.strategy.police_brain:PoliceBrain"

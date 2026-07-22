@@ -346,3 +346,43 @@ committed log artifact, so stale evidence can never linger silently again.
 
 **Lesson.** Point new verification tooling at your own artifacts first —
 the tool paid for itself before it ever saw a rival's log.
+
+## 2026-07-22 — Session 13: reference-v3 hidden-information wire (phase 1)
+
+**Prompt (paraphrased).** *"Build phase 1 of a reference-v3 (hidden-
+information) wire client as an ADDITIONAL mode behind a config/negotiation
+seam: own-state engine (rival position structurally unknown), demo-shaped
+TurnMessage codec (smell_grid transmitted, commit per step, reveals
+deferred to the audit), capture-claim flow with a structurally-enforced
+truth duty, a hidden-mode runtime reusing the hardened receiver machinery,
+audit-time physics reconstruction, and guard tests for every rule-sensitive
+surface (rules 8-9, 18, 21-22, 25, 27). Bookletter stays the untouched
+default; wire_shape declared via the registry lock-doc hash under the
+both-declare rule. Mirror across both repos; never touch domain/."*
+
+**Outcome.** New `wire/` package (9 modules, mirrored twin): `own_state`
+(engine duck-type whose `positions` dict simply has no rival key — belief-
+only play enforced by shape), `codec` (closed demo key set: step/sender/
+hint/smell_grid/commit/timestamp + the four claim fields; unknown keys
+rejected so a position can never ride along), `claims` (truth duty as pure
+functions of own state — no strategy parameter exists), `hidden_exchange`
+(SealedExchange subclass: commit-only live wire, reveals verified at audit
+against the live-received commits), `lock` (registry doc pinned to
+sha 229ae648…, both-declare refusal table), `hidden_runtime`/`hidden_turns`
+(the loop; thief's boundary before its snapshot ships), `audit` (replay on
+Board physics with an explicit truth-duty check). 76 new tests per repo
+(byte-exact book-model scent fixtures incl. the ordering probe; dedup/
+reorder/flood on the hidden wire; full in-process games: random, survival,
+landing-claim capture, barrier-on-thief — all ending in clean verified
+audits; hidden logs verify through the existing replay machinery
+unchanged). One shared edit: `peer/sealing.py` duplicate-branch lookup made
+payload-tolerant (`r.get("payload", {})`) so the subclass can reuse the
+hardened receiver — bookletter semantics byte-identical, full suite green.
+
+**Lesson.** The engine-replay audit was wrong for this wire: a thief that
+steps onto the cop's cell is unobservable live (capture is claim-mediated),
+so an instant-capture reconstruction would flag honest games as TAMPERED.
+The audit now proves exactly what the wire can prove — captures created by
+the cop's own action, concessions forced by the truth duty — and the
+documented deviation is itself the strongest argument for keeping the
+reconstruction in wire/, not domain/.

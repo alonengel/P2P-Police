@@ -1,0 +1,28 @@
+{
+  "family": "wire_shape",
+  "name": "reference-v3",
+  "params": {
+    "tools": [
+      "negotiate",
+      "receive_turn",
+      "submit_audit",
+      "receive_control"
+    ],
+    "messages_per_half_turn": 1,
+    "smell_grid_on_wire": true,
+    "move_revealed": "at_audit",
+    "replicated_engines": false,
+    "phases": "all four of book ch.5, with Reveal deferred to the audit boundary",
+    "rival_position_computable_live": false
+  },
+  "example": {
+    "note": "one turn message per half-turn; the move is sealed, the field is sent",
+    "turn_message_keys": [
+      "step",
+      "commit",
+      "hint",
+      "smell_grid",
+      "barrier_placed"
+    ]
+  }
+}

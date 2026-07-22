@@ -55,7 +55,7 @@ class SealedExchange:
                 # DIFFERENT commit for a played step is tampering evidence,
                 # never transport noise (transport tolerance, no rules tolerance)
                 stored = next((r for r in self.their_records
-                               if r["payload"]["step"] == key[1]), None)
+                               if r.get("payload", {}).get("step") == key[1]), None)
                 if key[0] == "commit" and stored and message.get("commit") != stored["commit"]:
                     raise GameRuleError(f"conflicting commit for played step {key[1]}")
                 _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)

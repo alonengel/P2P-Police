@@ -1,0 +1,138 @@
+"""Half-turn handlers + audit finish for the HiddenRuntime (split from
+hidden_runtime.py for the 150-code-line cap; `rt` carries all the state).
+
+Cadence (PRD 01): the police opens every round; the thief's half-turn
+closes it. Each peer runs the book-model update on its OWN field at the
+boundary BEFORE serializing it, so every transmitted snapshot shows exactly
+what the replicated engines would show at that moment.
+"""
+
+import contextlib
+
+from p2p_police.domain.errors import GameRuleError
+from p2p_police.domain.primitives import GamePhase, Move, Outcome, Role
+from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
+from p2p_police.wire import audit, claims, codec
+
+
+def my_half_turn(rt, step: int) -> None:
+    rt.fsm.transition(GamePhase.COMPUTING_MOVE)
+    # Belief is the ONLY rival estimate — OwnState holds no rival position,
+    # so "exact" play is structurally impossible on this wire (rules 8-9).
+    action = rt.brain.decide(rt.own, rt.perception.belief)
+    moved = action["move"] if action["type"] == "move" else "STAY"
+    claim, truth = rt.deceiver.plan_hint(rt.own, rt.perception, Move[moved], step)
+    hint = rt.talk.render(claim, step)
+    rt.fsm.transition(GamePhase.COMMITTING)
+    barrier = rt.own.apply_own_action(action)
+    captured = rt.role is Role.THIEF and rt.own.i_am_captured()
+    win = None
+    if rt.role is Role.THIEF and not captured:
+        rt.own.close_full_turn()  # the thief's move closes the round
+        if rt.own.survival_reached():
+            win = {"type": "survival"}
+    response, rt.pending_claim_response = rt.pending_claim_response, None
+    if captured:
+        response = claims.concede_declaration(rt.own)  # honest, automatic
+    commit = rt.exchange.seal_step(rt.own.digest(), step, action, hint, truth)
+    rt.exchange.send_message(codec.build_turn_message(
+        step, rt.role.value, hint, codec.serialize_scent(rt.own.scent[rt.role]),
+        commit,
+        barrier_placed=[barrier[0], barrier[1]] if barrier else None,
+        capture_claim=(claims.capture_claim_for(action, rt.own)
+                       if rt.role is Role.POLICE else None),
+        claim_response=response, win_claim=win))
+    rt.fsm.transition(GamePhase.AWAITING_REVEAL)  # reveal deferred to audit
+    rt.deceiver.observe_own(rt.own, claim)
+    rt.fsm.transition(GamePhase.VERIFYING)
+    rt.fsm.transition(GamePhase.WAITING_FOR_OPPONENT)
+    if captured:
+        rt.own.outcome = Outcome.CAPTURE
+    elif win:
+        rt.own.outcome = Outcome.SURVIVAL
+    rt.perception.emit(rt.own, step)
+
+
+def their_half_turn(rt, step: int) -> int:
+    """Absorb the rival's message; returns the last consumed step index."""
+    message = codec.parse_turn_message(rt.exchange.receive_turn(step))
+    rival = Role(message["sender"])
+    if message["barrier_placed"]:
+        rt.own.note_rival_barrier(message["barrier_placed"])
+    rt.own.scent[rival].absorb(message["smell_grid"])
+    rt.own.note_rival_half_turn()
+    response = message["claim_response"]
+    conceded = bool(response and response.get("caught"))
+    if rt.role is Role.POLICE and not conceded:
+        rt.own.close_full_turn()  # the rival (thief) just closed the round
+    rt.perception.observe(rt.own, rival, message["hint"])
+    if conceded:
+        rt.own.outcome = Outcome.CAPTURE  # rival honestly declared itself caught
+    elif message["win_claim"]:
+        rt.own.outcome = Outcome.SURVIVAL  # re-verified at the audit replay
+    elif rt.role is Role.POLICE and rt.own.survival_reached():
+        rt.own.outcome = Outcome.SURVIVAL  # the boundary verdict is automatic
+    if rt.role is Role.THIEF and rt.own.outcome is Outcome.ONGOING:
+        if message["capture_claim"] is not None:
+            # STRUCTURAL truth duty (rules 21-22): the answer is a pure
+            # function of our own cell; no strategy input can reach it.
+            rt.pending_claim_response = claims.answer_capture_claim(
+                rt.own, message["capture_claim"])
+        hit = bool(rt.pending_claim_response and rt.pending_claim_response["caught"])
+        if hit or rt.own.i_am_captured():
+            if not hit:
+                rt.pending_claim_response = claims.concede_declaration(rt.own)
+            rt.own.outcome = Outcome.CAPTURE
+            step += 1
+            send_concede(rt, step)
+    rt.perception.emit(rt.own, step)
+    return step
+
+
+def send_concede(rt, step: int) -> None:
+    """The mandatory sealed 'you got me' closure: action-free (STAY), the
+    honest caught=True response attached; no boundary fires (mid-round)."""
+    response, rt.pending_claim_response = rt.pending_claim_response, None
+    action = {"type": "move", "move": "STAY"}
+    commit = rt.exchange.seal_step(
+        rt.own.digest(), step, action, codec.FINAL_CAUGHT_HINT, True)
+    rt.exchange.send_message(codec.build_turn_message(
+        step, rt.role.value, codec.FINAL_CAUGHT_HINT,
+        codec.serialize_scent(rt.own.scent[rt.role]), commit,
+        claim_response=response))
+
+
+def finish(rt) -> dict:
+    """Mutual audit: transmit our reveals, verify theirs against the live
+    commits, reconstruct the physics from BOTH revealed halves (rule 20)."""
+    own_digest = rt.own.digest()
+    with contextlib.suppress(DeadlineExpiredError):
+        rt.transport.send_audit(
+            audit.build_audit_payload(
+                rt.exchange, rt.config.group_id, rt.own.outcome.value, own_digest),
+            Deadline(rt.config.turn_timeout_seconds))
+    verdict, digest_match, end_digest = "not received", False, own_digest
+    try:
+        theirs = rt._wait(rt.inboxes.audits, "opponent audit (records + nonces)")
+        verdict = rt.exchange.audit_reveals(theirs.get("records", []))
+        if verdict == "Verified OK":
+            reconstruction = audit.reconstruct(
+                rt.exchange.own_records, rt.exchange.their_records, rt.config.shared)
+            end_digest = reconstruction["digest"]
+            digest_match = audit.consistent(
+                reconstruction, rt.own.outcome, rt.own.turns_completed)
+    except DeadlineExpiredError:
+        pass
+    except GameRuleError:
+        verdict = "TAMPERED"  # illegal revealed physics voids the audit
+    return {
+        "role": rt.role.value,
+        "outcome": rt.own.outcome.value,
+        "turns_completed": rt.own.turns_completed,
+        "end_state_digest": end_digest,
+        "digest_match": digest_match,
+        "audit": verdict,
+        "steps_sealed": len(rt.exchange.own_records),
+        "opponent_group_id": getattr(rt, "opponent_group_id", "unknown"),
+        "opponent_info": getattr(rt, "opponent_info", {}),
+    }
