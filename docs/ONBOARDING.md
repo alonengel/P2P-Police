@@ -48,16 +48,15 @@ sides get full audit logs to debug against. Bring a flaky tunnel on purpose —
 we drill failure modes (see `docs/evidence/chaos-drills.md`) and would rather
 find interop issues before anything counts.
 
-### Sparring posture
+### Sparring posture (optional)
 
-Our warm-up peer runs a committed generic posture — `config/sparring.toml`,
-launched with `uv run p2p-police peer --sparring [--wire-shape reference]` —
-instead of our league configuration: the shipped baseline brain only (no
-strategy overrides or tuned weights), the deception policy disarmed, and no
-email reporting. Uncounted games stay representative of the protocol without
-revealing tuned play to a cross-game profiler before the counted series; we
-recommend the same discipline to you. The wire shape stays selectable so
-either protocol (bookletter lockstep or hidden reference-v3) can be warmed up.
+Warm-ups run our normal configuration with email reporting disabled (the
+committed default) — nothing reaches the league before a counted game. A
+committed generic posture also exists — `config/sparring.toml`, launched with
+`uv run p2p-police peer --sparring [--wire-shape reference]` — baseline brain,
+no tuned terms, for teams that prefer strategy-neutral warm-ups; we are happy
+to play either way, your choice. The wire shape stays selectable so either
+protocol (bookletter lockstep or hidden reference-v3) can be warmed up.
 
 ## Counted series
 
