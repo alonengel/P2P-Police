@@ -37,6 +37,8 @@ class McpTransport:
         self.retry_backoff_sec = retry_backoff_sec
         self.response_timeout_sec = response_timeout_sec
         self._sleep = sleep
+        self.beat: Callable[[], None] = lambda: None  # watchdog liveness: a
+        # legal retry-until-up wait is WORK, not a hang (live-session finding)
         self._loop: asyncio.AbstractEventLoop | None = None
         self._client: Client | None = None
         self._closed = False
@@ -75,6 +77,7 @@ class McpTransport:
         """Call an opponent tool, rebuilding the session and retrying
         connection-flavored failures until the deadline lapses."""
         while True:
+            self.beat()  # retrying IS liveness - the deadline judges the rival
             if self._closed:
                 raise DeadlineExpiredError(
                     f"transport to {self.opponent_url} closed (watchdog shutdown)"

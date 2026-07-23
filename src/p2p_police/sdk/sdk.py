@@ -91,6 +91,7 @@ class SimulationSdk:
             transport.close,
         )
         runtime.watchdog = watchdog
+        runtime.transport.beat = watchdog.beat  # send-retry liveness (live-session finding)
         watchdog.start()
         try:
             report = (self._play_with_gui(runtime, gui_screenshot) if gui
