@@ -434,3 +434,51 @@ verbatim behind one dispatch keeps bookletter verification byte-identical
 while making "which replay applies" a property of the sealed log itself —
 and the guard tests that relabel logs both ways are what turn that marker
 from a loophole into a commitment.
+
+## 2026-07-23 — Session 15: reference-v3 flat-terms negotiate handshake
+
+**Prompt (paraphrased).** *"The registered reference-v3 wire shape uses the
+REFERENCE's literal negotiate form — a flat 14-key `terms` dict + `nonce` +
+`signature = SHA256(canonical(terms)+'|'+nonce)` (league-kit CORE vector
+terms_signature.json) — not the bookletter agreement's config_sha256
+substitution, which is registered as a bookletter-v3 property. Build the
+flat-terms derivation FROM the signed game.json (derive, never duplicate),
+byte-test it against the kit vector, switch HiddenRuntime.negotiate to send
+{terms, nonce, signature} with our model-hash declarations
+(scent_model_sha256, wire_shape_sha256, info_mode) riding alongside, verify
+the rival's signature AND value-equality key-by-key with a diagnostic that
+names every differing key and both values, keep the both-declare lock
+verification unchanged, and keep the bookletter path byte-untouched."*
+
+**What was built.** `wire/terms.py`: `terms_from_shared` derives the
+reference's exact 14-key set from game.json (max_steps maps from
+survival_threshold — the reference's own overlay — with a refuse-guard if
+max_moves ever diverges, since the flat form has one step field);
+`sign_terms` reproduces the kit CORE vector byte-for-byte (canonical form
+AND signature, pinned by test from a config patched to the vector's
+values); `build_negotiate_message` assembles the wire payload (identity
+block + hardware seal + locked-model hashes ride as extras a reference
+peer ignores; `config_sha256` never appears); `verify_terms_message`
+enforces signature-recompute + key-by-key value equality, refusing with
+EVERY differing key and both values named (interop debugging quality);
+`verify_declarations` applies the registry both-declare rule to
+scent/info_mode (wire_shape stays in wire/lock.py, called unchanged);
+`peer_group_id` reads our top-level id or the reference's identity.group_id
+— also adopted by hidden_resume.rearm. HiddenRuntime.negotiate now sends
+and verifies this shape; a minimal reference-form message (terms + nonce +
+signature + identity only) negotiates cleanly (omission is never refusal).
+Derived-terms audit vs the kit example: 13/14 values identical; `setting`
+differs (ours 'New York', kit example 'Haifa') — the official demo's own
+default is 'New York', so a reference-DEFAULT team value-matches on all 14;
+the kit example's setting is synthetic. 43 new tests per repo (kit-vector
+bytes, 14-key refusal matrix, garbled-message guards, both-declare truth
+table, in-process negotiate round-trip, minimal-reference acceptance,
+named-diagnostic refusal drill); full suite 492 green, coverage 92%, ruff
+0, line cap OK, physics parity OK (domain/ and tests/vectors/ untouched).
+
+**Lesson.** A handshake meant for foreign peers is defined by what it
+REFUSES and how it says so: signing their exact bytes back at them and
+naming every diverging term turns a dead game into a one-line fix on
+either side — and the derive-don't-duplicate rule (terms are a projection
+of the signed config, never a second copy) is what keeps the wire shape
+honest when the constitution changes.

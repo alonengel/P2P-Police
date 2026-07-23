@@ -13,7 +13,6 @@ Deceiver and the template hint chain (moves stay pure Python, rule 25).
 import queue
 
 from p2p_police.domain.errors import GameRuleError
-from p2p_police.domain.negotiation import build_agreement, verify_agreement
 from p2p_police.domain.primitives import GamePhase, Outcome, Role
 from p2p_police.domain.state_machine import GamePhaseMachine
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
@@ -23,7 +22,7 @@ from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.deception import Deceiver
 from p2p_police.strategy.talk_providers import build_talk_chain
-from p2p_police.wire import hidden_resume, hidden_turns, lock
+from p2p_police.wire import hidden_resume, hidden_turns, lock, terms
 from p2p_police.wire.hidden_exchange import HiddenExchange
 from p2p_police.wire.own_state import OwnState
 
@@ -84,22 +83,22 @@ class HiddenRuntime:
         return {**message, "kind": "turn", "turn": step}
 
     def negotiate(self) -> dict:
-        mine = build_agreement(
-            self.config.shared,
-            self.config.group_id,
+        """Reference-v3 flat-terms handshake: signed {terms, nonce, signature}
+        (kit CORE vector form — never the bookletter config_sha256), our
+        declarations riding alongside under the both-declare refusal rule."""
+        mine = terms.build_negotiate_message(
+            self.config,
             hardware_spec(),
             info_mode="belief",  # structural under this wire (registry note)
-            identity=self.config.identity_block(),
         )
         lock.extend_agreement(mine, self.config)
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
-        verify_agreement(mine, theirs)
+        terms.verify_terms_message(mine["terms"], theirs)
+        terms.verify_declarations(mine, theirs)
         lock.verify_wire_shape(mine, theirs)
         self.opponent_info = theirs
-        self.opponent_group_id = self.perception.opponent_id = theirs.get(
-            "group_id", "unknown"
-        )
+        self.opponent_group_id = self.perception.opponent_id = terms.peer_group_id(theirs)
         return theirs
 
     def play(self, resume_from: int = 0) -> dict:

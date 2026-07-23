@@ -16,7 +16,7 @@ import queue
 from pathlib import Path
 
 from p2p_police.peer import resume as base
-from p2p_police.wire import codec
+from p2p_police.wire import codec, terms
 
 
 def snapshot_path(config) -> Path:
@@ -73,8 +73,8 @@ def rearm(rt, snapshot: dict) -> int:
     rt.exchange.last_sent = snapshot.get("last_sent")
     rt.pending_claim_response = snapshot.get("pending_claim_response")
     rt.opponent_info = snapshot["opponent_agreement"]
-    rt.opponent_group_id = rt.perception.opponent_id = snapshot[
-        "opponent_agreement"].get("group_id", "unknown")
+    rt.opponent_group_id = rt.perception.opponent_id = terms.peer_group_id(
+        snapshot["opponent_agreement"])
     return int(snapshot["turn"])
 
 

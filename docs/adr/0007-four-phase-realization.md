@@ -37,3 +37,16 @@ All four phases occur, per step, in order; the deviation from the book's
 simultaneous framing is this documented interpretation. A pairing that
 demands the deferred-Reveal (hidden) realization is a different wire shape
 (issue-#6 registration) and out of this ADR's scope.
+
+## Addendum (2026-07-23): each wire shape carries its registered handshake
+
+Live warm-up finding: rule 11's lock has two REGISTERED realizations — the
+config_sha256 substitution (a bookletter-v3 property) and the reference's
+literal flat-terms form (`terms` 14-key + `nonce` + `signature =
+SHA256(canonical(terms)|nonce)`, pinned by the league kit's terms_signature
+CORE vector). Our client now speaks each shape's own registered handshake:
+bookletter negotiates by config hash, reference-v3 by flat terms with
+key-by-key value equality and a diagnostic naming every differing key. Model
+locks (scent/wire/info) ride alongside in both. Substance of rule 11 —
+identical agreed values, cryptographically locked — is satisfied in both
+forms; neither is a deviation, each is its shape's registration.
