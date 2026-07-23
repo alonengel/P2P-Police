@@ -1,10 +1,13 @@
 """Half-turn handlers + audit finish for the HiddenRuntime (split from
 hidden_runtime.py for the 150-code-line cap; `rt` carries all the state).
 
-Cadence (PRD 01): the police opens every round; the thief's half-turn
-closes it. Each peer runs the book-model update on its OWN field at the
-boundary BEFORE serializing it, so every transmitted snapshot shows exactly
-what the replicated engines would show at that moment.
+Reference cadence (verified against the demo): the THIEF opens every round
+— its runtime seeds turn 1 before the receive-respond loop — and each side
+numbers its OWN steps 1, 2, 3... (demo own_state.apply_move). The thief's
+step ticks the round clock: survival counts the thief's own steps (demo
+rules.thief_result reads state.step_number), so the boundary — the
+book-model update on this peer's OWN field, run BEFORE serializing — fires
+on the thief's action on both peers.
 """
 
 import contextlib
@@ -15,7 +18,9 @@ from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.wire import audit, claims, codec
 
 
-def my_half_turn(rt, step: int) -> None:
+def my_half_turn(rt) -> None:
+    rt.my_step += 1  # per-sender numbering: MY moves count 1, 2, 3...
+    step = rt.my_step
     rt.fsm.transition(GamePhase.COMPUTING_MOVE)
     # Belief is the ONLY rival estimate — OwnState holds no rival position,
     # so "exact" play is structurally impossible on this wire (rules 8-9).
@@ -28,9 +33,9 @@ def my_half_turn(rt, step: int) -> None:
     captured = rt.role is Role.THIEF and rt.own.i_am_captured()
     win = None
     if rt.role is Role.THIEF and not captured:
-        rt.own.close_full_turn()  # the thief's move closes the round
+        rt.own.close_full_turn()  # the thief's step ticks the round clock
         if rt.own.survival_reached():
-            win = {"type": "survival"}
+            win = {"type": "survival"}  # claimed at MY 35th step (demo timing)
     response, rt.pending_claim_response = rt.pending_claim_response, None
     if captured:
         response = claims.concede_declaration(rt.own)  # honest, automatic
@@ -53,8 +58,10 @@ def my_half_turn(rt, step: int) -> None:
     rt.perception.emit(rt.own, step)
 
 
-def their_half_turn(rt, step: int) -> int:
-    """Absorb the rival's message; returns the last consumed step index."""
+def their_half_turn(rt) -> None:
+    """Absorb the rival's next own-numbered message (their_step + 1)."""
+    rt.their_step += 1  # the rival's steps count 1, 2, 3... independently
+    step = rt.their_step
     message = codec.parse_turn_message(rt.exchange.receive_turn(step))
     rival = Role(message["sender"])
     if message["barrier_placed"]:
@@ -64,7 +71,7 @@ def their_half_turn(rt, step: int) -> int:
     response = message["claim_response"]
     conceded = bool(response and response.get("caught"))
     if rt.role is Role.POLICE and not conceded:
-        rt.own.close_full_turn()  # the rival (thief) just closed the round
+        rt.own.close_full_turn()  # the rival (thief) just ticked the round
     rt.perception.observe(rt.own, rival, message["hint"])
     if conceded:
         rt.own.outcome = Outcome.CAPTURE  # rival honestly declared itself caught
@@ -83,21 +90,22 @@ def their_half_turn(rt, step: int) -> int:
             if not hit:
                 rt.pending_claim_response = claims.concede_declaration(rt.own)
             rt.own.outcome = Outcome.CAPTURE
-            step += 1
-            send_concede(rt, step)
+            send_concede(rt)
     rt.perception.emit(rt.own, step)
-    return step
 
 
-def send_concede(rt, step: int) -> None:
+def send_concede(rt) -> None:
     """The mandatory sealed 'you got me' closure: action-free (STAY), the
-    honest caught=True response attached; no boundary fires (mid-round)."""
+    honest caught=True response attached; no boundary fires (mid-round).
+    Numbered as OUR next own step — the receiver keys any caught=True final
+    to its live expectation, so the demo's last-step re-use also lands."""
+    rt.my_step += 1
     response, rt.pending_claim_response = rt.pending_claim_response, None
     action = {"type": "move", "move": "STAY"}
     commit = rt.exchange.seal_step(
-        rt.own.digest(), step, action, codec.FINAL_CAUGHT_HINT, True)
+        rt.own.digest(), rt.my_step, action, codec.FINAL_CAUGHT_HINT, True)
     rt.exchange.send_message(codec.build_turn_message(
-        step, rt.role.value, codec.FINAL_CAUGHT_HINT,
+        rt.my_step, rt.role.value, codec.FINAL_CAUGHT_HINT,
         codec.serialize_scent(rt.own.scent[rt.role]), commit,
         claim_response=response))
 

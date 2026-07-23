@@ -60,6 +60,10 @@ class HiddenRuntime:
             turn_timeout=config.turn_timeout_seconds,
         )
         self.pending_claim_response: dict | None = None
+        # PER-SENDER step clocks (demo own_state.apply_move: step_number
+        # advances only on OWN moves — each side numbers 1, 2, 3...).
+        self.my_step = 0
+        self.their_step = 0
 
     def _wait(self, inbox: queue.Queue, what: str, deadline=None) -> dict:
         deadline = deadline or Deadline(self.config.turn_timeout_seconds)
@@ -74,13 +78,26 @@ class HiddenRuntime:
 
     def _wait_turn(self, what: str, deadline=None) -> dict:
         """Adapt raw TurnMessages to the hardened receiver's (kind, turn)
-        expectation keys — forced LAST so a hostile message cannot spoof."""
-        message = self._wait(self.inboxes.turns, what, deadline)
-        try:
-            step = int(message.get("step", -1))
-        except (TypeError, ValueError):
-            step = -1
-        return {**message, "kind": "turn", "turn": step}
+        expectation keys — forced LAST so a hostile message cannot spoof.
+
+        Both senders count 1, 2, 3... so a message echoing OUR OWN role can
+        collide with the rival's same-numbered step: drop it as transport
+        noise (the deadline keeps judging the rival). A caught=True final is
+        keyed to the CURRENT expectation — the demo's send_final re-uses the
+        thief's LAST step number (no apply_move before it), so keying it by
+        its embedded number would dedup-drop the concession we are owed."""
+        while True:
+            message = self._wait(self.inboxes.turns, what, deadline)
+            if message.get("sender") == self.role.value:
+                continue  # our own echo: never protocol content
+            try:
+                step = int(message.get("step", -1))
+            except (TypeError, ValueError):
+                step = -1
+            response = message.get("claim_response")
+            if isinstance(response, dict) and response.get("caught"):
+                step = self.exchange.expected_turn or step
+            return {**message, "kind": "turn", "turn": step}
 
     def negotiate(self) -> dict:
         """Reference-v3 flat-terms handshake: signed {terms, nonce, signature}
@@ -103,19 +120,19 @@ class HiddenRuntime:
 
     def play(self, resume_from: int = 0) -> dict:
         """Full hidden-mode game; failures route to TECHNICAL_LOSS (rules 4-6).
-        resume_from > 0 skips negotiation and continues a re-armed game."""
+        resume_from > 0 skips negotiation and continues a re-armed game (the
+        per-sender clocks my_step/their_step were restored by the rearm)."""
         try:
             if resume_from == 0:
                 self.negotiate()
-            step = resume_from
             while self.own.outcome is Outcome.ONGOING:
-                step += 1
                 self.watchdog.beat()  # heartbeat per half-turn (rule 7)
                 if self.own.next_actor is self.role:
-                    hidden_turns.my_half_turn(self, step)
+                    hidden_turns.my_half_turn(self)
                 else:
-                    step = hidden_turns.their_half_turn(self, step)
-                self.resume.checkpoint(self, step)  # E6 half-turn snapshot
+                    hidden_turns.their_half_turn(self)
+                # E6 snapshot, indexed by total half-turns played
+                self.resume.checkpoint(self, self.my_step + self.their_step)
         except (DeadlineExpiredError, GameRuleError):
             if self.fsm.can_transition(GamePhase.TECHNICAL_LOSS):
                 self.fsm.transition(GamePhase.TECHNICAL_LOSS)

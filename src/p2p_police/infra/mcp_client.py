@@ -32,10 +32,12 @@ class McpTransport:
         retry_backoff_sec: float,
         response_timeout_sec: float = 30.0,
         sleep: Callable[[float], None] = time.sleep,
+        beat_slice_sec: float = 2.0,
     ) -> None:
         self.opponent_url = opponent_url
         self.retry_backoff_sec = retry_backoff_sec
         self.response_timeout_sec = response_timeout_sec
+        self.beat_slice_sec = beat_slice_sec  # max un-beaten single wait
         self._sleep = sleep
         self.beat: Callable[[], None] = lambda: None  # watchdog liveness: a
         # legal retry-until-up wait is WORK, not a hang (live-session finding)
@@ -52,12 +54,33 @@ class McpTransport:
         return self._loop
 
     def _submit(self, coro, timeout: float):
+        """Await a loop-thread coroutine in SHORT beat-sized slices:
+        response_timeout still bounds the call, but no single silent block
+        may span the watchdog window while the MCP client's internals (e.g.
+        its GET-stream reconnect) hold the await — the liveness heartbeat
+        keeps firing and only the DEADLINE judges the rival (live-outage
+        finding)."""
         future = asyncio.run_coroutine_threadsafe(coro, self._ensure_loop())
-        try:
-            return future.result(timeout=timeout)
-        except concurrent.futures.TimeoutError as error:
-            future.cancel()
-            raise TimeoutError(f"in-flight call to {self.opponent_url} timed out") from error
+        expires = time.monotonic() + timeout
+        while True:
+            self.beat()
+            window = min(self.beat_slice_sec, max(0.05, expires - time.monotonic()))
+            try:
+                return future.result(timeout=window)
+            except concurrent.futures.TimeoutError as error:
+                if time.monotonic() >= expires:
+                    future.cancel()
+                    raise TimeoutError(
+                        f"in-flight call to {self.opponent_url} timed out"
+                    ) from error
+
+    def _sleep_beating(self, seconds: float) -> None:
+        """Retry backoff in beat-sized slices (same liveness rule)."""
+        while seconds > 0:
+            self.beat()
+            step = min(self.beat_slice_sec, seconds)
+            self._sleep(step)
+            seconds -= step
 
     async def _call_once(self, tool: str, payload: dict) -> dict:
         if self._client is None:
@@ -99,7 +122,7 @@ class McpTransport:
                 raise DeadlineExpiredError(
                     f"opponent at {self.opponent_url} unreachable until deadline: {last}"
                 )
-            self._sleep(self.retry_backoff_sec)
+            self._sleep_beating(self.retry_backoff_sec)
 
     def close(self) -> None:
         """Fast, non-blocking shutdown (watchdog-safe): flag first so callers

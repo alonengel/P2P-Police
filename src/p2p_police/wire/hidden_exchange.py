@@ -31,6 +31,7 @@ class HiddenExchange(SealedExchange):
         return commit
 
     last_sent: dict | None = None  # commit-only TurnMessage (resume re-send)
+    expected_turn: int = 0  # live expectation: the rival's next own step
 
     def send_message(self, message: dict) -> None:
         """Push one TurnMessage through the runtime's transport callable.
@@ -40,8 +41,12 @@ class HiddenExchange(SealedExchange):
         self._send(message)
 
     def receive_turn(self, step: int) -> dict:
-        """Wait for the rival's TurnMessage for `step` through the hardened
-        receiver; store its commit for the audit; return the raw message."""
+        """Wait for the rival's TurnMessage for `step` (ITS OWN per-sender
+        number) through the hardened receiver; store its commit for the
+        audit; return the raw message. The published expectation lets the
+        wait adapter key a caught=True final here even when the sender
+        re-used its last step number (demo send_final behavior)."""
+        self.expected_turn = step
         message = self._next("turn", step)
         if message.get("sender") == self.role.value:
             raise GameRuleError("opponent claimed our role in a turn message")

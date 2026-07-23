@@ -482,3 +482,73 @@ naming every diverging term turns a dead game into a one-line fix on
 either side — and the derive-don't-duplicate rule (terms are a projection
 of the signed config, never a second copy) is what keeps the wire shape
 honest when the constitution changes.
+
+## 2026-07-23 — Session 16: live-interop fixes — per-sender steps, thief opener, watchdog liveness
+
+**Prompt (paraphrased).** *"Fix three live-interop defects in the
+reference-v3 hidden wire, verified against the official demo before
+coding. (1) Step numbering: we numbered turns with a GLOBAL half-turn
+counter (our messages arrived as steps 1, 3, 5...) while the reference
+numbers PER-SENDER — step_number increments only on your OWN move (demo
+own_state.apply_move), each side sending 1, 2, 3...; align, and check
+every consumer: dedup keys when both senders reuse the same numbers,
+audit reconstruction ordering, resume snapshots, codec validation.
+(2) Thief opening turn: our thief handshook then never sent — root-cause
+against the demo's round flow (its runtime SEEDS the thief's turn before
+the receive-respond loop) and align who awaits whom, keeping
+deadline/watchdog/FSM discipline. (3) Watchdog liveness: a rival mid-game
+outage held an in-flight MCP await ~60s without beating — the watchdog
+killed us (controlled) at 60s instead of letting the 180s deadline
+classify; make EVERY wait path beat every few seconds so only the
+deadline judges the rival, tested with a fake clock and a hung transport.
+Plus: a two-runtime cross-cadence integration test asserting the live-GUI
+perception feed fires for BOTH roles (the live thief window stayed black),
+and an idle-state paint in the GUI at window-open. No commits — main
+session reviews."*
+
+**What was built.** Root causes, each pinned to the demo: (1)
+`hidden_runtime.play` drove ONE global step counter through both halves —
+the demo's `own_state.apply_move` (line 51) increments `step_number` only
+on own moves and `peer/sealing.build_turn_message` sends
+`state.step_number`, so numbering is per-sender; (2) `wire/own_state.py`
+seeded `next_actor = Role.POLICE` (bookletter lockstep habit) while the
+demo's `runtime.run` (lines 92-93) has the THIEF `take_turn` BEFORE the
+receive-respond loop — our thief waited for a police message that a
+reference police (which waits to receive first) would never send:
+mutual starvation, 0 turns, rival timeout; (3) `mcp_client._submit`
+awaited `future.result(timeout≤30s)` in ONE block and the backoff sleep
+in another — legal per-iteration waits chain into ~37s+ silent gaps, and
+a coroutine-raised TimeoutError could be mistaken for a slice timeout.
+Fixes: per-sender clocks `my_step`/`their_step` on HiddenRuntime (the
+halves own their increments — no desync possible), thief-opener token,
+audit reconstruction ordered by `(step, thief-before-police)`, resume
+snapshots persist/restore both clocks (older snapshots refuse cleanly),
+codec requires step ≥ 1, and the receive adapter now (a) DROPS echoes of
+our own role (same-number collisions are the price of per-sender
+numbering; an echo must never be lethal) and (b) keys any caught=True
+final to the LIVE expectation — the demo's `send_final` re-uses the
+sender's LAST step number (no apply_move before it), which our dedup
+would otherwise drop as an at-least-once duplicate, hanging the win we
+are owed. Survival stays demo-timed automatically: the thief's step ticks
+the round clock, so `survival_reached()` fires at its OWN 35th step and
+the win_claim rides that very message. `_submit` now waits in beat-sized
+slices (default 2s, injectable) with a done-future guard, the retry
+backoff sleeps in slices, and the chaos duplicate-wrapper forwards `beat`
+to the inner transport it had been silently stranding. GUI: `live_view`
+paints an idle local-truth snapshot (empty board + OWN start cell) at
+window-open. New tests: two-runtime cross-cadence game to a verified
+audit (per-sender wire assertions, thief-opens, 35-step survival,
+perception.on_snapshot fired for BOTH roles with the closed local-truth
+key set), demo-style final re-use consumption, own-echo drop, hung
+transport + fake-clock backoff + coroutine-timeout liveness, idle
+snapshot. Full suite 502 green (police) / 500 (thief), coverage 92%,
+ruff 0, line cap OK, physics parity OK (domain/ and vectors untouched);
+every change mirrored byte-identically.
+
+**Lesson.** Interop bugs hide in the counters nobody signs: the wire
+schema matched the reference perfectly while the NUMBERS on it spoke a
+different dialect, and the deadlock needed no bug on either side — just
+two correct implementations of two different cadences. The demo's code is
+the contract; read the loop, not the message shape. And liveness is a
+property of every await individually: a chain of legal 30s waits is an
+illegal 60s silence.

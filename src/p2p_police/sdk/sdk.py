@@ -125,7 +125,8 @@ class SimulationSdk:
 
         from p2p_police.gui.live_view import LiveView
 
-        view = LiveView(self.config.grid_size, MY_ROLE.value)
+        view = LiveView(self.config.grid_size, MY_ROLE.value,
+                        start_cell=self.config.cop_start)  # idle paint: MY start
         runtime.perception.on_snapshot = view.feed
         box: dict = {}
 

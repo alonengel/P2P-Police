@@ -91,12 +91,12 @@ def run_drill(config: Config, evidence: chaos_lib.EvidenceLog, snap_path: Path) 
     mine.negotiate()
     step = 0
     while mine.own.outcome is Outcome.ONGOING and step < crash_after:
-        step += 1
+        step += 1  # total half-turns; the wire clocks are per-sender on `mine`
         if mine.own.next_actor is mine.role:
-            hidden_turns.my_half_turn(mine, step)
+            hidden_turns.my_half_turn(mine)
         else:
-            step = hidden_turns.their_half_turn(mine, step)
-        mine.resume.checkpoint(mine, step)
+            hidden_turns.their_half_turn(mine)
+        mine.resume.checkpoint(mine, mine.my_step + mine.their_step)
 
     # -- the crash: transport gone, undelivered inbox mail lost, object dropped --
     crash_at = time.perf_counter()

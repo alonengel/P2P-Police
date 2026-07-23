@@ -74,7 +74,10 @@ class OwnState:
         }
         self.turns_completed = 0
         self.outcome = Outcome.ONGOING
-        self.next_actor = Role.POLICE  # police opens every round (PRD 01)
+        # Reference cadence: the THIEF opens every round (the demo's runtime
+        # seeds the thief's turn before the receive-respond loop) — the
+        # bookletter engine keeps its own police-first clock untouched.
+        self.next_actor = Role.THIEF
         self.boundary_cells: list[Cell] = []  # scent-replay history (crash-resume)
 
     @property

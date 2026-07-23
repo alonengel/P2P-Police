@@ -89,6 +89,10 @@ def _thief_runtime(config_dir, sent):
     own = OwnState(Role.THIEF, config.grid_size, config.thief_start, config.rule_set())
     runtime = HiddenRuntime(Role.THIEF, config, own, StubTransport(), inboxes,
                             RandomBrain(Role.THIEF, random.Random(1)))
+    # Mid-round posture: the thief opened (its step 1 is out), the police
+    # holds the token — its message is the one under test.
+    runtime.own.next_actor = Role.POLICE
+    runtime.my_step = 1
     return runtime, inboxes
 
 
@@ -97,9 +101,10 @@ def test_rules_21_22_hit_claim_forces_an_immediate_honest_concession(config_dir)
     runtime, inboxes = _thief_runtime(config_dir, sent)
     inboxes.turns.put(codec.build_turn_message(
         1, "police", "got you now", {}, "c" * 64, capture_claim=[3, 3]))
-    hidden_turns.their_half_turn(runtime, 1)
+    hidden_turns.their_half_turn(runtime)
     assert runtime.own.outcome is Outcome.CAPTURE
     assert sent[-1]["claim_response"] == {"claim": [3, 3], "caught": True}
+    assert sent[-1]["step"] == 2  # the concede is OUR next own step
 
 
 def test_rules_21_22_missed_claim_answered_truthfully_false(config_dir):
@@ -107,7 +112,7 @@ def test_rules_21_22_missed_claim_answered_truthfully_false(config_dir):
     runtime, inboxes = _thief_runtime(config_dir, sent)
     inboxes.turns.put(codec.build_turn_message(
         1, "police", "hmm where", {}, "c" * 64, capture_claim=[0, 0]))
-    hidden_turns.their_half_turn(runtime, 1)
+    hidden_turns.their_half_turn(runtime)
     assert runtime.own.outcome is Outcome.ONGOING
     assert runtime.pending_claim_response == {"claim": [0, 0], "caught": False}
     assert sent == []  # the answer rides our NEXT turn message
@@ -118,6 +123,53 @@ def test_rules_21_22_barrier_on_our_cell_forces_the_concession(config_dir):
     runtime, inboxes = _thief_runtime(config_dir, sent)
     inboxes.turns.put(codec.build_turn_message(
         1, "police", "walls closing in", {}, "c" * 64, barrier_placed=[3, 3]))
-    hidden_turns.their_half_turn(runtime, 1)
+    hidden_turns.their_half_turn(runtime)
     assert runtime.own.outcome is Outcome.CAPTURE
     assert sent[-1]["claim_response"] == {"claim": [3, 3], "caught": True}
+
+
+def _police_runtime(config_dir, sent):
+    config = Config.load(config_dir)
+    config.private["network"]["wire_shape"] = "reference"
+
+    class StubTransport:
+        def send_turn(self, payload, _deadline):
+            sent.append(payload)
+            return {"accepted": True}
+
+    inboxes = PeerInboxes()
+    own = OwnState(Role.POLICE, config.grid_size, config.cop_start, config.rule_set())
+    runtime = HiddenRuntime(Role.POLICE, config, own, StubTransport(), inboxes,
+                            RandomBrain(Role.POLICE, random.Random(1)))
+    return runtime, inboxes
+
+
+def test_demo_style_final_reusing_the_last_step_is_consumed_not_deduped(config_dir):
+    """Reference interop: the demo's send_final re-uses the sender's LAST
+    step number (no apply_move before it). Our receiver keys any caught=True
+    final to its LIVE expectation, so the concession we are owed lands
+    instead of being dropped as an at-least-once duplicate of step 1."""
+    sent = []
+    runtime, inboxes = _police_runtime(config_dir, sent)
+    inboxes.turns.put(codec.build_turn_message(1, "thief", "catch me", {}, "a" * 64))
+    hidden_turns.their_half_turn(runtime)  # thief's step 1 consumed
+    hidden_turns.my_half_turn(runtime)     # our step 1 + landing claim out
+    inboxes.turns.put(codec.build_turn_message(
+        1, "thief", codec.FINAL_CAUGHT_HINT, {}, "b" * 64,
+        claim_response={"claim": [3, 3], "caught": True}))
+    hidden_turns.their_half_turn(runtime)  # expects thief 2; final says 1
+    assert runtime.own.outcome is Outcome.CAPTURE
+    assert [r["commit"] for r in runtime.exchange.their_records] == ["a" * 64, "b" * 64]
+
+
+def test_our_own_echoed_message_is_dropped_never_fatal(config_dir):
+    """Per-sender numbering makes MY step N collide with the rival's step N
+    in the (kind, turn) keyspace — an echo of OUR OWN message is transport
+    noise the wait adapter drops; the rival's real message still lands."""
+    sent = []
+    runtime, inboxes = _police_runtime(config_dir, sent)
+    inboxes.turns.put(codec.build_turn_message(1, "police", "echo of us", {}, "e" * 64))
+    inboxes.turns.put(codec.build_turn_message(1, "thief", "the real one", {}, "a" * 64))
+    hidden_turns.their_half_turn(runtime)
+    assert runtime.own.outcome is Outcome.ONGOING
+    assert [r["commit"] for r in runtime.exchange.their_records] == ["a" * 64]

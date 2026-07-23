@@ -19,26 +19,34 @@ def test_rival_position_is_structurally_absent():
         _ = state.positions[Role.THIEF]
 
 
+def test_the_thief_holds_the_opening_token():
+    """Reference cadence: the THIEF seeds turn 1 (demo runtime seeds the
+    thief's take_turn before the receive-respond loop)."""
+    assert own().next_actor is Role.THIEF
+    assert own(Role.THIEF, (3, 3)).next_actor is Role.THIEF
+
+
 def test_apply_own_move_walks_the_board():
-    state = own()
+    state = own(Role.THIEF, (3, 3))  # the thief opens
     state.apply_own_action({"type": "move", "move": "S"})
-    assert state.cell == (1, 0)
-    assert state.next_actor is Role.THIEF
+    assert state.cell == (4, 3)
+    assert state.next_actor is Role.POLICE
 
 
 def test_illegal_move_rejected_not_fixed():
     with pytest.raises(IllegalMoveError):
-        own().apply_own_action({"type": "move", "move": "N"})  # off the board
+        own(Role.THIEF, (0, 0)).apply_own_action({"type": "move", "move": "N"})
 
 
 def test_out_of_turn_action_rejected():
-    thief = own(Role.THIEF, (3, 3))  # police opens every round
+    police = own()  # the thief opens every round on this wire
     with pytest.raises(GameRuleError):
-        thief.apply_own_action({"type": "move", "move": "N"})
+        police.apply_own_action({"type": "move", "move": "S"})
 
 
 def test_barrier_placement_validated_and_returned():
     state = own()
+    state.next_actor = Role.POLICE  # after the thief's opener
     placed = state.apply_own_action({"type": "barrier", "cell": [0, 1]})
     assert placed == (0, 1)
     assert state.board.is_barrier((0, 1))
@@ -46,14 +54,15 @@ def test_barrier_placement_validated_and_returned():
 
 def test_thief_may_never_place_barriers():
     thief = own(Role.THIEF, (3, 3))
-    thief.next_actor = Role.THIEF
     with pytest.raises(GameRuleError):
         thief.apply_own_action({"type": "barrier", "cell": [3, 4]})
 
 
 def test_far_barrier_rejected():
+    state = own()
+    state.next_actor = Role.POLICE
     with pytest.raises(IllegalBarrierError):
-        own().apply_own_action({"type": "barrier", "cell": [5, 5]})
+        state.apply_own_action({"type": "barrier", "cell": [5, 5]})
 
 
 def test_rival_barrier_absorbed_once_duplicates_tolerated():
@@ -93,7 +102,7 @@ def test_survival_threshold():
 
 
 def test_digest_is_self_only_and_deterministic():
-    first, second = own(), own()
+    first, second = own(Role.THIEF, (3, 3)), own(Role.THIEF, (3, 3))
     assert first.digest() == second.digest()
     second.apply_own_action({"type": "move", "move": "E"})
     assert first.digest() != second.digest()

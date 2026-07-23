@@ -28,11 +28,15 @@ def snapshot_path(config) -> Path:
 
 
 def build_snapshot(rt, step: int) -> dict:
-    """Everything a fresh HiddenRuntime needs to continue this peer's game."""
+    """Everything a fresh HiddenRuntime needs to continue this peer's game.
+    `step` is the total-half-turn checkpoint index; the wire clocks are the
+    PER-SENDER counters (each side numbers its own steps 1, 2, 3...)."""
     own_records, their_records, consumed = rt.exchange.export_state()
     own = rt.own
     return {
         "turn": step,
+        "my_step": rt.my_step,
+        "their_step": rt.their_step,
         "group_id": rt.config.group_id,
         "opponent_agreement": getattr(rt, "opponent_info", {}),
         "own_records": own_records,
@@ -68,6 +72,9 @@ def rearm(rt, snapshot: dict) -> int:
     own.scent[own.role.rival].absorb(block["rival_scent"])
     if own.digest() != snapshot["own_digest"]:
         raise base.ResumeError("restored own-state diverged from the snapshot digest")
+    if "my_step" not in snapshot or "their_step" not in snapshot:
+        raise base.ResumeError("snapshot predates per-sender step numbering")
+    rt.my_step, rt.their_step = int(snapshot["my_step"]), int(snapshot["their_step"])
     rt.exchange.restore_state(
         snapshot["own_records"], snapshot["their_records"], snapshot["consumed"])
     rt.exchange.last_sent = snapshot.get("last_sent")

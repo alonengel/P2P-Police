@@ -73,9 +73,12 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict) -> d
     board, rules = Board(grid), _rules_from(shared_terms)
     positions = {Role.POLICE: cop_start, Role.THIEF: thief_start}
     turns, outcome = 0, Outcome.ONGOING
+    # Per-sender numbering: BOTH sides seal steps 1, 2, 3... — the game
+    # order is (step, actor) with the thief first at equal step numbers
+    # (reference cadence: the thief opens every round).
     payloads = sorted(
         (r["payload"] for r in list(own_records) + list(their_records) if "payload" in r),
-        key=lambda p: p["step"])
+        key=lambda p: (p["step"], 0 if p["role"] == Role.THIEF.value else 1))
     for payload in payloads:
         if outcome is not Outcome.ONGOING:
             if payload["action"] != _CLOSURE_ACTION or Role(payload["role"]) is Role.POLICE:
@@ -94,9 +97,9 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict) -> d
             if board.is_surrounded(thief_cell) or board.is_barrier(thief_cell):
                 outcome = Outcome.CAPTURE  # walked into a pocket: must concede
                 continue
-            turns += 1  # the thief's half-turn closes the round
+            turns += 1  # the thief's step ticks the round clock (it opens)
             if turns >= rules.survival_threshold or turns >= rules.max_moves:
-                outcome = Outcome.SURVIVAL
+                outcome = Outcome.SURVIVAL  # survival counts the thief's own steps
     if outcome is Outcome.ONGOING:
         raise GameRuleError("revealed records end with the game still ongoing")
     state = {

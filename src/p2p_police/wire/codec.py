@@ -82,6 +82,8 @@ def parse_turn_message(payload: dict) -> dict:
         Role(payload["sender"])
     except (TypeError, ValueError) as error:
         raise GameRuleError(f"malformed turn message {payload!r}: {error}") from error
+    if step < 1:  # per-sender numbering: each side's own steps start at 1
+        raise GameRuleError(f"turn message step must be >= 1, got {step}")
     if not isinstance(payload["hint"], str) or not isinstance(payload["commit"], str):
         raise GameRuleError("turn message hint/commit must be strings")
     if not isinstance(payload["smell_grid"], dict):

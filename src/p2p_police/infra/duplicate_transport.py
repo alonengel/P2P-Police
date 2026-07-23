@@ -49,6 +49,16 @@ class DuplicatingTransport:
         self._inner, self._evidence = inner, evidence
         self.duplicated = 0
 
+    @property
+    def beat(self):
+        """Watchdog liveness forwards to the INNER transport — its retry
+        loops do the beating, so wiring the wrapper must reach them."""
+        return self._inner.beat
+
+    @beat.setter
+    def beat(self, callback) -> None:
+        self._inner.beat = callback
+
     def send_agreement(self, payload: dict, deadline) -> dict:
         return self._inner.send_agreement(payload, deadline)
 

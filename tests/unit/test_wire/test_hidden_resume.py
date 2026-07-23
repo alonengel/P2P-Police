@@ -42,12 +42,16 @@ def _runtime(config_dir, sent: list) -> tuple[HiddenRuntime, PeerInboxes]:
 
 
 def _play_three_half_turns(runtime: HiddenRuntime, inboxes: PeerInboxes) -> int:
-    hidden_turns.my_half_turn(runtime, 1)
+    """Reference cadence for a POLICE peer: receive the thief's 1, answer
+    with our 1, receive the thief's 2 (per-sender numbering both ways)."""
     inboxes.turns.put(codec.build_turn_message(
-        2, "thief", "nowhere near", {"3,3": 0.9}, "c" * 64))
-    step = hidden_turns.their_half_turn(runtime, 2)
-    hidden_turns.my_half_turn(runtime, step + 1)
-    return step + 1
+        1, "thief", "nowhere near", {"3,3": 0.9}, "c" * 64))
+    hidden_turns.their_half_turn(runtime)
+    hidden_turns.my_half_turn(runtime)
+    inboxes.turns.put(codec.build_turn_message(
+        2, "thief", "still roaming", {"3,4": 0.62}, "d" * 64))
+    hidden_turns.their_half_turn(runtime)
+    return runtime.my_step + runtime.their_step
 
 
 def test_snapshot_rearm_restores_the_exact_own_state(config_dir, tmp_path):
@@ -60,9 +64,10 @@ def test_snapshot_rearm_restores_the_exact_own_state(config_dir, tmp_path):
 
     fresh, _ = _runtime(config_dir, [])
     resumed_from = hidden_resume.rearm(fresh, base.load_snapshot(path))
-    assert resumed_from == last
+    assert resumed_from == last == 3
+    assert (fresh.my_step, fresh.their_step) == (runtime.my_step, runtime.their_step) == (1, 2)
     assert fresh.own.cell == runtime.own.cell
-    assert fresh.own.turns_completed == runtime.own.turns_completed == 1
+    assert fresh.own.turns_completed == runtime.own.turns_completed == 2
     assert fresh.own.next_actor is runtime.own.next_actor
     assert fresh.own.digest() == runtime.own.digest()
     assert fresh.own.scent[Role.POLICE].values() == runtime.own.scent[Role.POLICE].values()

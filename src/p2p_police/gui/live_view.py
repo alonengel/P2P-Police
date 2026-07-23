@@ -19,10 +19,27 @@ def heat_color(value: float, peak: float) -> str:
     return f"#{red:02x}1620"
 
 
+def idle_snapshot(grid_size: int, start_cell) -> dict:
+    """The pre-game view painted at window-open: the empty board and OUR
+    OWN start cell — local truth only, no belief yet, no rival data (the
+    live feed replaces it at the first perception snapshot)."""
+    return {
+        "idle": True,
+        "turn": 0,
+        "my_cell": tuple(start_cell),
+        "belief": [[0.0] * grid_size for _ in range(grid_size)],
+        "barriers": [],
+        "my_turn": False,
+        "hint": "",
+        "outcome": "ongoing",
+        "game_over": False,
+    }
+
+
 class LiveView:
     """Input: snapshot dicts from the runtime queue. Output: the live window."""
 
-    def __init__(self, grid_size: int, role: str) -> None:
+    def __init__(self, grid_size: int, role: str, start_cell=None) -> None:
         try:  # physical-pixel alignment for screenshots
             import ctypes
 
@@ -43,6 +60,8 @@ class LiveView:
         self.info.pack(fill="x", padx=8, pady=(0, 8))
         self._screenshot_path: str | None = None
         self._done = False
+        if start_cell is not None:  # never a black void before the first
+            self._render(idle_snapshot(grid_size, start_cell))  # snapshot
 
     def feed(self, snapshot: dict) -> None:
         """Called from the runtime thread - queue is the only shared state."""
@@ -77,7 +96,9 @@ class LiveView:
         x, y = col * CELL + CELL // 2, row * CELL + CELL // 2
         self.canvas.create_oval(x - 16, y - 16, x + 16, y + 16, fill="#1f6feb", outline="white")
         self.canvas.create_text(x, y, text="ME", fill="white", font=("Segoe UI", 10, "bold"))
-        if snap["game_over"]:
+        if snap.get("idle"):
+            self.banner.config(bg="#6e7681", text="WAITING - game starting")
+        elif snap["game_over"]:
             self.banner.config(bg="#8957e5", text=f"GAME OVER - {snap['outcome']}")
             self._done = True
         elif snap["my_turn"]:

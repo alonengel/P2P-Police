@@ -42,6 +42,7 @@ def test_concede_names_my_true_cell():
 
 def test_cop_claims_its_landing_cell_only_after_a_move():
     cop = OwnState(Role.POLICE, 7, (0, 0), RuleSet(14, 35, 35))
+    cop.next_actor = Role.POLICE  # after the thief's opener (reference cadence)
     cop.apply_own_action({"type": "move", "move": "E"})
     assert claims.capture_claim_for({"type": "move", "move": "E"}, cop) == [0, 1]
     assert claims.capture_claim_for({"type": "barrier", "cell": [0, 0]}, cop) is None
