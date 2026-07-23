@@ -41,7 +41,7 @@ model = ""
 step_deadline_seconds = 30      # hard cap on LLM thinking per step
 
 [email]
-recipient = "rmisegal+uoh26finalgame@gmail.com"
+recipient = "alonisrael.engel@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
 
 [resume]                        # crash-resume snapshots (peer/resume.py) - pure LOCAL persistence
