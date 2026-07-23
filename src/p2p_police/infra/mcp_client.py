@@ -64,7 +64,10 @@ class McpTransport:
             client = Client(self.opponent_url)
             await client.__aenter__()  # persistent session (closed on reset)
             self._client = client
-        result = await self._client.call_tool(tool, {"payload": payload})
+        # reference tool-arg contract (interop, verified against the demo):
+        # `message` everywhere except submit_audit's `payload`
+        arg = "payload" if tool == "submit_audit" else "message"
+        result = await self._client.call_tool(tool, {arg: payload})
         return result.data if isinstance(result.data, dict) else {"data": result.data}
 
     async def _reset_client(self) -> None:

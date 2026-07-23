@@ -50,15 +50,15 @@ def build_peer_server(inboxes: PeerInboxes, name: str = "p2p_police_peer") -> Fa
     mcp = FastMCP(name)
 
     @mcp.tool
-    def negotiate(payload: dict) -> dict:
+    def negotiate(message: dict) -> dict:
         """Receive the opponent's pre-game agreement (config sha, commit order)."""
-        inboxes.agreements.put(payload)
+        inboxes.agreements.put(message)
         return {"accepted": True}
 
     @mcp.tool
-    def receive_turn(payload: dict) -> dict:
+    def receive_turn(message: dict) -> dict:
         """Receive one turn message from the opponent."""
-        inboxes.turns.put(payload)
+        inboxes.turns.put(message)
         return {"accepted": True}
 
     @mcp.tool
@@ -68,9 +68,9 @@ def build_peer_server(inboxes: PeerInboxes, name: str = "p2p_police_peer") -> Fa
         return {"accepted": True}
 
     @mcp.tool
-    def receive_control(payload: dict) -> dict:
+    def receive_control(message: dict) -> dict:
         """Receive out-of-band control messages (pause, abort, info)."""
-        inboxes.controls.put(payload)
+        inboxes.controls.put(message)
         return {"accepted": True}
 
     return mcp
