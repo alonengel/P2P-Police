@@ -29,6 +29,22 @@ class PeerInboxes:
         self.turns: queue.Queue[dict] = queue.Queue()
         self.audits: queue.Queue[dict] = queue.Queue()
         self.controls: queue.Queue[dict] = queue.Queue()
+        # Set by the SDK once this peer's own sub-game settles (classified,
+        # audit exchanged or failed): tools then REFUSE instead of enqueueing.
+        self.settled = False
+
+
+SETTLED_REFUSAL = {"accepted": False, "reason": "sub-game settled"}
+
+
+def deliver(inboxes: PeerInboxes, box: queue.Queue, payload: dict) -> dict:
+    """Inbox door with the settlement gate: a settled peer must never
+    swallow the rival's NEXT-sub-game greeting into a queue nobody reads —
+    refusing here lets their transport retry reach our next instance."""
+    if inboxes.settled:
+        return dict(SETTLED_REFUSAL)
+    box.put(payload)
+    return {"accepted": True}
 
 
 def ensure_port_free(port: int, host: str = "127.0.0.1") -> None:
@@ -52,26 +68,22 @@ def build_peer_server(inboxes: PeerInboxes, name: str = "p2p_police_peer") -> Fa
     @mcp.tool
     def negotiate(message: dict) -> dict:
         """Receive the opponent's pre-game agreement (config sha, commit order)."""
-        inboxes.agreements.put(message)
-        return {"accepted": True}
+        return deliver(inboxes, inboxes.agreements, message)
 
     @mcp.tool
     def receive_turn(message: dict) -> dict:
         """Receive one turn message from the opponent."""
-        inboxes.turns.put(message)
-        return {"accepted": True}
+        return deliver(inboxes, inboxes.turns, message)
 
     @mcp.tool
     def submit_audit(payload: dict) -> dict:
         """Receive end-of-game audit material (nonces, digests)."""
-        inboxes.audits.put(payload)
-        return {"accepted": True}
+        return deliver(inboxes, inboxes.audits, payload)
 
     @mcp.tool
     def receive_control(message: dict) -> dict:
         """Receive out-of-band control messages (pause, abort, info)."""
-        inboxes.controls.put(message)
-        return {"accepted": True}
+        return deliver(inboxes, inboxes.controls, message)
 
     return mcp
 

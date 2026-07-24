@@ -62,6 +62,26 @@ def test_second_bind_on_busy_port_fails_fast(live_peer: tuple[PeerInboxes, str])
         ensure_port_free(busy_port)
 
 
+def test_settled_peer_refuses_all_four_tools_over_real_http() -> None:
+    """Post-settlement gate through the real FastMCP doors: a settled peer
+    answers {"accepted": false, "reason": "sub-game settled"} instead of
+    enqueueing — its dying instance can never swallow the rival's next
+    greeting (own server: fresh port, never the shared module fixture)."""
+    inboxes = PeerInboxes()
+    port = free_port()
+    start_peer_server(build_peer_server(inboxes, name="settled_peer"), port)
+    transport = McpTransport(f"http://127.0.0.1:{port}/mcp", retry_backoff_sec=0.2)
+    assert transport.send_control({"kind": "ping"}, Deadline(15)) == {"accepted": True}
+    inboxes.settled = True
+    refusal = {"accepted": False, "reason": "sub-game settled"}
+    assert transport.send_agreement({"terms": {}}, Deadline(10)) == refusal
+    assert transport.send_turn({"step": 9}, Deadline(10)) == refusal
+    assert transport.send_audit({"records": []}, Deadline(10)) == refusal
+    assert transport.send_control({"kind": "late"}, Deadline(10)) == refusal
+    assert inboxes.agreements.empty() and inboxes.turns.empty()
+    assert inboxes.audits.empty() and inboxes.controls.qsize() == 1  # ping only
+
+
 def test_unreachable_opponent_expires_the_deadline() -> None:
     dead_url = f"http://127.0.0.1:{free_port()}/mcp"
     transport = McpTransport(dead_url, retry_backoff_sec=0.1, sleep=lambda _s: None)

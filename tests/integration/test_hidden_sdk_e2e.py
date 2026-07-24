@@ -57,6 +57,15 @@ def test_run_peer_routes_to_the_hidden_runtime(config_dir, tmp_path, monkeypatch
     assert box["outcome"] == report["outcome"]
     assert box["end_state_digest"] == report["end_state_digest"]
 
+    # Settlement gate (live-observed failure mirror): once run_peer returned,
+    # our still-running server must REFUSE, not swallow, a late greeting —
+    # so the rival's next-sub-game transport retry reaches our next instance.
+    from p2p_police.peer.deadline import Deadline
+
+    late = McpTransport(f"http://127.0.0.1:{my_port}/mcp", 0.2)
+    assert late.send_agreement({"probe": True}, Deadline(10)) == {
+        "accepted": False, "reason": "sub-game settled"}
+
     log_path = tmp_path / "results" / "log_anrbj666-vs-anrbj666_g01.json"
     doc = json.loads(log_path.read_text(encoding="utf-8"))
     assert doc["wire_shape"] == "reference"  # the hidden runtime played this

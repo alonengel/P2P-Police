@@ -791,3 +791,59 @@ physics parity OK (16 files identical) both.
 in front of it: make the send reachable exclusively through the code path
 that already refused unsettled series, and "never email an invented
 result" becomes a structural property instead of a convention.
+
+## 2026-07-24 — Session 21: pre-series handshake hardening — mutual wire shape, agreement re-push & the settlement gate
+
+**Context.** Final hardening before the counted series, from two live
+findings. (1) The counterparty proposed an exact mutual negotiate shape
+to interoperate first try: two extra TOP-LEVEL keys beside
+identity/nonce/terms/signature, unsigned and outside terms —
+`{"sub_game_number": N, "role": "police"|"thief"}` — with the kit's
+locked-model refusal style. (2) A live-observed failure: a handshake
+swallowed by the opponent's PREVIOUS sub-game peer, which acked into a
+dead queue and exited; the faster side ran ahead and the series drifted
+into a rule-35 shape.
+
+**Prompt pattern — match the agreed shape byte-for-byte, then mirror
+both halves of the swallowed-greeting failure.** The brief: (1) VERIFY
+our `sub_game_number` spelling/level (already top-level — confirmed) and
+ADD `role` with the inverted truth table: their role present and equal
+to ours refuses loudly (peers must be complementary), either key absent
+always proceeds (reference peers stay playable); (2) AGREEMENT RE-PUSH —
+negotiate re-sends our agreement every [network] agreement_repush_sec
+(config knob, dedup-safe: the SAME payload, same nonce) until the
+rival's arrives or the turn deadline lapses, watchdog beats maintained;
+(3) POST-SETTLEMENT INBOUND REFUSAL — once our own sub-game settles, our
+four MCP tools answer {"accepted": false, "reason": "sub-game settled"}
+instead of enqueueing into a queue nobody reads, so OUR dying peer can
+never swallow THEIR next greeting.
+
+**Build.** wire/terms.py: `build_negotiate_message(..., role=)` rides
+`role` top-level unsigned; `verify_declarations` adds the inverted
+role rule (equal-declared pair refuses, naming "complementary"). NEW
+wire/repush.py: `push_agreement(rt, mine, clock)` — send, re-send
+unchanged each interval (fake-clock injectable), overall deadline still
+judges; hidden_runtime routes negotiate through it and declares
+`role=self.role.value`. infra/mcp_server.py: `PeerInboxes.settled` +
+`deliver()` settlement gate on all four tools; sdk.run_peer sets
+`inboxes.settled = True` at settlement (finally) — BOTH wire shapes
+(geometric and hidden) go through run_peer, so both got the gate.
+game.toml documents agreement_repush_sec = 7.0. domain/ and
+tests/vectors/ untouched; everything mirrored to the twin.
+
+**Tests.** Role truth table (equal refuses, complementary/absent play);
+exact top-level spelling of BOTH keys asserted on the emitted negotiate
+payload (unit key-set + round-trip log + every re-pushed copy); re-push
+with a ticking fake clock (re-sent until theirs arrives — 3 sends then
+stop; 1 send when immediate; deadline still bounds the loop); settlement
+gate before/after the flag (unit door, all four tools over real HTTP,
+and a late greeting refused after a full run_peer e2e).
+
+**Gates.** Full `uv run pytest --cov -q` green: 580 tests (police) /
+579 (thief), coverage 93.26% / 93.21%; ruff 0 both; 150-code-line cap OK
+both; physics parity OK (16 files identical) both.
+
+**Lesson.** A dying peer is part of the wire contract: an ack into a
+queue nobody will ever read is a lie to the counterparty. Refuse once
+settled, re-push until answered, and let dedup make persistence free —
+liveness then degrades into retries instead of series drift.

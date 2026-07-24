@@ -69,7 +69,8 @@ def sign_terms(terms: dict, nonce: str) -> str:
 
 def build_negotiate_message(config, hardware: dict | None = None,
                             info_mode: str = "belief",
-                            sub_game: int | None = None) -> dict:
+                            sub_game: int | None = None,
+                            role: str | None = None) -> dict:
     """The reference-shaped negotiate payload with our declarations alongside.
 
     A reference peer verifies exactly {terms, nonce, signature} and reads
@@ -92,6 +93,8 @@ def build_negotiate_message(config, hardware: dict | None = None,
         message["hardware_spec_sha256"] = config_sha256(hardware)
     if sub_game is not None:  # rides OUTSIDE the signed terms, like info_mode
         message["sub_game_number"] = int(sub_game)
+    if role is not None:  # agreed mutual shape: unsigned TOP-LEVEL key too
+        message["role"] = str(role)
     return message
 
 
@@ -132,7 +135,9 @@ def verify_terms_message(mine_terms: dict, message: dict) -> None:
 
 def verify_declarations(mine: dict, theirs: dict) -> None:
     """Registry refusal rule over the alongside declarations: refuse ONLY
-    when both peers declare a family and the values differ (kit section 7)."""
+    when both peers declare a family and the values differ (kit section 7).
+    `role` inverts the comparison: peers must be COMPLEMENTARY, so refusal
+    fires when both declare and the values are EQUAL; omission still plays."""
     for field in BOTH_DECLARE_FIELDS:
         ours, others = mine.get(field), theirs.get(field)
         if ours is not None and others is not None and ours != others:
@@ -141,6 +146,12 @@ def verify_declarations(mine: dict, theirs: dict) -> None:
             raise GameRuleError(
                 f"negotiate declaration mismatch on '{field}': "
                 f"mine={ours!r} theirs={others!r}{hint}")
+    my_role, their_role = mine.get("role"), theirs.get("role")
+    if my_role is not None and their_role is not None and my_role == their_role:
+        raise GameRuleError(
+            f"negotiate role collision: both peers declare role={my_role!r} "
+            "- peers must be complementary (police vs thief); is a same-role "
+            "instance (or our own echo) pointed at us?")
 
 
 def peer_group_id(message: dict) -> str:

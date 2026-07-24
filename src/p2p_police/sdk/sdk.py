@@ -102,6 +102,10 @@ class SimulationSdk:
             report = reporting.technical_loss_report(MY_ROLE, runtime, error)
         finally:
             watchdog.stop()
+            # Settlement gate (both wire shapes): our four MCP tools now
+            # refuse instead of enqueueing into a queue nobody reads — this
+            # dying peer can never swallow the rival's next-sub-game greeting.
+            inboxes.settled = True
         if report.get("audit") == "TAMPERED":
             # Rule 19: a FAILED mutual audit voids the game. A merely MISSING
             # audit ('not received') is dispute evidence, not tampering - the

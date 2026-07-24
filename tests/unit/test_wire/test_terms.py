@@ -85,6 +85,21 @@ def test_message_shape_signature_and_declarations(config_dir):
                             "scent_model_sha256", "info_mode", "hardware_spec_sha256"}
 
 
+def test_agreed_mutual_shape_rides_both_unsigned_top_level_keys(config_dir):
+    """The cross-team agreed wire shape: `sub_game_number` AND `role` ride
+    as TOP-LEVEL unsigned keys beside identity/nonce/terms/signature —
+    exact spelling, never inside the signed flat terms."""
+    config = Config.load(config_dir)
+    message = wire_terms.build_negotiate_message(config, sub_game=4, role="police")
+    assert message["sub_game_number"] == 4
+    assert message["role"] == "police"
+    assert "sub_game_number" not in message["terms"] and "role" not in message["terms"]
+    wire_terms.verify_terms_message(message["terms"], message)  # signature intact
+    assert set(message) == {"terms", "nonce", "signature", "group_id", "identity",
+                            "scent_model_sha256", "info_mode",
+                            "sub_game_number", "role"}
+
+
 def test_hardware_seal_only_rides_when_a_spec_is_given(config_dir):
     message = wire_terms.build_negotiate_message(Config.load(config_dir))
     assert "hardware_spec_sha256" not in message

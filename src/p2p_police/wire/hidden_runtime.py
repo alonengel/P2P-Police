@@ -11,6 +11,7 @@ Deceiver and the template hint chain (moves stay pure Python, rule 25).
 """
 
 import queue
+import time
 from datetime import UTC, datetime
 
 from p2p_police.domain.errors import GameRuleError
@@ -23,7 +24,7 @@ from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.deception import Deceiver
 from p2p_police.strategy.talk_providers import build_talk_chain
-from p2p_police.wire import hidden_resume, hidden_turns, lock, terms
+from p2p_police.wire import hidden_resume, hidden_turns, lock, repush, terms
 from p2p_police.wire.hidden_exchange import HiddenExchange
 from p2p_police.wire.own_state import OwnState
 
@@ -61,6 +62,7 @@ class HiddenRuntime:
             turn_timeout=config.turn_timeout_seconds,
         )
         self.pending_claim_response: dict | None = None
+        self.clock = time.monotonic  # injectable seam for the repush tests
         # Series-report timestamp: this instance's game start (UTC ISO).
         self.started_at = datetime.now(UTC).isoformat(timespec="seconds")
         # PER-SENDER step clocks (demo own_state.apply_move: step_number
@@ -113,10 +115,12 @@ class HiddenRuntime:
             # both-declare guard: a leftover rival instance from a previous
             # window must not pair into the wrong sub-game (uid can't tell).
             sub_game=int(self.config.private["game"]["sub_game_number"]),
+            role=self.role.value,  # complementary-role guard (equal refuses)
         )
         lock.extend_agreement(mine, self.config)
-        self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
-        theirs = self._wait(self.inboxes.agreements, "opponent agreement")
+        # re-push until theirs arrives: a greeting swallowed by the rival's
+        # dying previous-sub-game peer gets fresh chances at the real one
+        theirs = repush.push_agreement(self, mine, self.clock)
         terms.verify_terms_message(mine["terms"], theirs)
         terms.verify_declarations(mine, theirs)
         lock.verify_wire_shape(mine, theirs)

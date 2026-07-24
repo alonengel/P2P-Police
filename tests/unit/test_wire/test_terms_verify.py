@@ -117,6 +117,29 @@ def test_both_declare_truth_table_for_alongside_declarations(field, ours, others
         assert repr(ours) in str(caught.value) and repr(others) in str(caught.value)
 
 
+@pytest.mark.parametrize(("ours", "others", "plays"), [
+    ("police", "thief", True),    # complementary pair plays
+    ("thief", "police", True),
+    ("police", "police", False),  # equal declared roles refuse
+    ("thief", "thief", False),
+    ("police", None, True),       # omission never refuses (reference peers)
+    (None, "thief", True),
+    (None, None, True),
+])
+def test_role_refuses_only_an_equal_declared_pair(ours, others, plays):
+    """Inverted both-declare: peers must be COMPLEMENTARY, so refusal fires
+    on equality; either side omitting `role` always proceeds."""
+    mine = {"role": ours} if ours is not None else {}
+    theirs = {"role": others} if others is not None else {}
+    if plays:
+        wire_terms.verify_declarations(mine, theirs)
+    else:
+        with pytest.raises(GameRuleError) as caught:
+            wire_terms.verify_declarations(mine, theirs)
+        text = str(caught.value)
+        assert "role" in text and repr(ours) in text and "complementary" in text
+
+
 def test_negotiate_message_declares_sub_game_outside_the_signed_terms(config_dir):
     """The sub-game index rides alongside like info_mode: it must appear in
     the message, never inside the signed flat terms, and stay optional."""

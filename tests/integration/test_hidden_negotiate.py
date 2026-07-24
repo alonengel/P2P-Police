@@ -54,6 +54,11 @@ def test_round_trip_negotiate_between_two_hidden_runtimes(config_dir):
             message["terms"], message["nonce"])
         assert message["wire_shape_sha256"] == REGISTRY_PIN
         assert "config_sha256" not in message  # bookletter-v3 property
+        # agreed mutual shape: BOTH keys ride top-level, unsigned, spelled so
+        assert message["sub_game_number"] == 1
+        assert "sub_game_number" not in message["terms"]
+        assert "role" not in message["terms"]
+    assert {message["role"] for message in log} == {"police", "thief"}
     assert police.opponent_group_id == thief.opponent_group_id == "anrbj666"
     assert len(log) == 2 and results["police"] != results["thief"]  # fresh nonces
     assert results["police"] in log and results["thief"] in log
@@ -77,6 +82,17 @@ def test_negotiate_accepts_a_minimal_reference_peer(config_dir, shared_terms):
     theirs = police.negotiate()
     assert police.opponent_group_id == "ref-team1"
     assert theirs["terms"] == wire_terms.terms_from_shared(shared_terms)
+
+
+def test_negotiate_refuses_a_same_role_peer(config_dir, shared_terms):
+    """A rival declaring OUR role (a mispointed same-role instance) is
+    refused loudly; complementary and silent roles keep playing."""
+    police, _thief, _log = _pair(hidden_config(config_dir))
+    message = _foreign_message(shared_terms, "ref-team1")
+    message["role"] = "police"  # equal to ours -> collision
+    police.inboxes.agreements.put(message)
+    with pytest.raises(GameRuleError, match="complementary"):
+        police.negotiate()
 
 
 def test_negotiate_refuses_a_diverging_term_naming_it(config_dir, shared_terms):
