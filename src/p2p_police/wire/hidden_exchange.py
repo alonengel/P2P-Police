@@ -11,6 +11,7 @@ and nonces stay local until the end-of-game audit reveals them together
 from p2p_police.domain import crypto
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.peer.sealing import SealedExchange
+from p2p_police.wire import audit_foreign
 
 
 class HiddenExchange(SealedExchange):
@@ -57,18 +58,10 @@ class HiddenExchange(SealedExchange):
         return {k: v for k, v in message.items() if k not in ("kind", "turn")}
 
     def audit_reveals(self, revealed: list[dict]) -> str:
-        """'Verified OK' or 'TAMPERED' (binary, ch. 7): every revealed record
-        must re-hash to the commit RECEIVED LIVE for that step — the live
-        commit is the anchor a post-hoc rewrite cannot move."""
-        if len(revealed) != len(self.their_records):
-            return "TAMPERED"
-        for live, full in zip(self.their_records, revealed, strict=True):
-            try:
-                if full["commit"] != live["commit"]:
-                    return "TAMPERED"
-                if not crypto.verify_commit(full["payload"], full["nonce"], full["commit"]):
-                    return "TAMPERED"
-            except (KeyError, TypeError, ValueError):
-                return "TAMPERED"  # malformed audit material IS a failed audit
-            live.update(payload=full["payload"], nonce=full["nonce"])
-        return "Verified OK"
+        """'Verified OK' or 'TAMPERED' (binary, ch. 7): every commit RECEIVED
+        LIVE must be re-proven by a commit-clean reveal — the live commit is
+        the anchor a post-hoc rewrite cannot move. The check is the SHARED
+        contract only (schema-agnostic hash, alignment by commit): a foreign
+        rival's reveal set may carry extra sealed records (reference step-0
+        spec) and a payload schema that is not ours (2026-07-24 finding)."""
+        return audit_foreign.verify_reveals(self.their_records, revealed)

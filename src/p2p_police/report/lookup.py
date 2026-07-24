@@ -13,6 +13,7 @@ from pathlib import Path
 
 from p2p_police.domain import game_ids, protocol
 from p2p_police.domain.engine import GameEngine
+from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import Role
 from p2p_police.domain.rules import RuleSet
 
@@ -62,20 +63,27 @@ def recompute_digest(doc: dict, terms: dict) -> str:
 def recompute_hidden(doc: dict, terms: dict) -> str:
     """Hidden-wire replay (ADR-0008): reconstruct from the revealed records
     on Board physics — capture only where the cop's OWN action created it,
-    the thief's concede duty enforced. An engine replay would false-flag
-    honest hidden games (any co-location reads as instant capture there,
-    but a thief crossing the cop's cell is unobservable live). A log whose
-    game never completed (technical loss) has NO revealed rival actions to
-    replay — its digest is the peer's self-only state, so only the commit
-    checks apply, exactly like a bookletter log with no archived terms."""
-    from p2p_police.wire import audit  # local: audit imports this module
+    the thief's concede duty enforced. The STRICT reconstruction runs only
+    when the rival's payloads parse as OUR schema (same wire pair posture);
+    a FOREIGN-schema or commit-only rival half is judged on the derivable
+    checks alone and the log's own digest stands — payload schema and digest
+    construction are per-team, not interop contracts (2026-07-24 finding).
+    A log whose game never completed (technical loss) has NO revealed rival
+    actions to replay — its digest is the peer's self-only state."""
+    from p2p_police.wire import audit, audit_foreign  # local: audit imports us
 
     summary = doc.get("summary", {})
+    own_digest = str(summary.get("end_state_digest", ""))
     if summary.get("outcome") not in ("capture", "survival"):
-        return str(summary.get("end_state_digest", ""))
-    reconstruction = audit.reconstruct(
-        doc.get("records", []), doc.get("opponent_records", []), terms)
-    return reconstruction["digest"]
+        return own_digest
+    theirs = [r for r in doc.get("opponent_records", []) if "payload" in r]
+    if theirs and audit_foreign.parses_as_ours(theirs):
+        reconstruction = audit.reconstruct(doc.get("records", []), theirs, terms)
+        return reconstruction["digest"]
+    if not (audit_foreign.continuity_ok(theirs)
+            and audit_foreign.movement_ok(theirs, geometry(terms)[0])):
+        raise GameRuleError("foreign revealed records break a derivable rule")
+    return own_digest
 
 
 def replay_verdict(doc: dict, log_path: str | Path) -> str:

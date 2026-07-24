@@ -51,6 +51,29 @@ def test_verify_log_on_real_artifact_runs_physics_path() -> None:
         "results/log_anrbj666-vs-anrbj666_g01.json") == "Verified OK"
 
 
+def _foreign_doc(positions: list) -> dict:
+    """A completed hidden-wire game whose rival half is FOREIGN-schema
+    (reference keys: step/position/move — no role, no action)."""
+    theirs = [{"payload": {"step": step, "position": list(cell), "move": "E"},
+               "nonce": "0" * 32, "commit": "c" * 64}
+              for step, cell in enumerate(positions, start=1)]
+    return {"wire_shape": "reference", "records": [], "opponent_records": theirs,
+            "summary": {"outcome": "survival", "end_state_digest": "ab" * 32}}
+
+
+def test_recompute_hidden_tolerates_a_foreign_schema_half() -> None:
+    """Per-team payload schema: the log's own digest stands; the strict
+    reconstruction never judges keys it does not own."""
+    doc = _foreign_doc([(3, 3), (3, 4), (3, 5)])
+    terms = dict(TERMS)
+    assert lookup.recompute_hidden(doc, terms) == "ab" * 32
+
+
+def test_recompute_hidden_still_convicts_derivable_violations() -> None:
+    with pytest.raises(GameRuleError):  # (3,3) -> (0,0) is no legal step
+        lookup.recompute_hidden(_foreign_doc([(3, 3), (0, 0)]), TERMS)
+
+
 def test_verify_log_flags_digest_mismatch(tmp_path) -> None:
     import json
     from pathlib import Path

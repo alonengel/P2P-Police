@@ -69,7 +69,10 @@ def their_half_turn(rt) -> None:
     rt.own.scent[rival].absorb(message["smell_grid"])
     rt.own.note_rival_half_turn()
     response = message["claim_response"]
-    conceded = bool(response and response.get("caught"))
+    # Only the THIEF's truth-duty flow can concede OUR capture (rules 21-22:
+    # the cop claims, the thief answers about its own cell). A police-role
+    # caught=True is no concession — it must never fabricate a capture.
+    conceded = bool(response and response.get("caught")) and rival is Role.THIEF
     if rt.role is Role.POLICE and not conceded:
         rt.own.close_full_turn()  # the rival (thief) just ticked the round
     rt.perception.observe(rt.own, rival, message["hint"])
@@ -111,24 +114,37 @@ def send_concede(rt) -> None:
 
 
 def finish(rt) -> dict:
-    """Mutual audit: transmit our reveals, verify theirs against the live
-    commits, reconstruct the physics from BOTH revealed halves (rule 20)."""
+    """Mutual audit, three tiers: (a) the commit criterion over the rival's
+    reveals; (b) the strict full physics reconstruction — but ONLY when the
+    rival's payloads parse as OUR schema (payload schema is a per-team
+    choice, not an interop contract); a foreign-schema half degrades to the
+    derivable checks instead of reading TAMPERED; (c) the digest comparison
+    only where one construction exists on both sides — foreign pairs report
+    digest_match as not-comparable (None), never false."""
+    from p2p_police.wire import audit_foreign
+
     own_digest = rt.own.digest()
     with contextlib.suppress(DeadlineExpiredError):
         rt.transport.send_audit(
-            audit.build_audit_payload(
-                rt.exchange, rt.config.group_id, rt.own.outcome.value, own_digest),
+            audit.build_audit_payload(rt.exchange, rt.role.value, rt.own.outcome.value),
             Deadline(rt.config.turn_timeout_seconds))
     verdict, digest_match, end_digest = "not received", False, own_digest
     try:
         theirs = rt._wait(rt.inboxes.audits, "opponent audit (records + nonces)")
         verdict = rt.exchange.audit_reveals(theirs.get("records", []))
         if verdict == "Verified OK":
-            reconstruction = audit.reconstruct(
-                rt.exchange.own_records, rt.exchange.their_records, rt.config.shared)
-            end_digest = reconstruction["digest"]
-            digest_match = audit.consistent(
-                reconstruction, rt.own.outcome, rt.own.turns_completed)
+            if audit_foreign.parses_as_ours(rt.exchange.their_records):
+                reconstruction = audit.reconstruct(
+                    rt.exchange.own_records, rt.exchange.their_records, rt.config.shared)
+                end_digest = reconstruction["digest"]
+                digest_match = audit.consistent(
+                    reconstruction, rt.own.outcome, rt.own.turns_completed)
+            else:
+                from p2p_police.report.lookup import geometry
+
+                tier = audit_foreign.judge(rt.exchange.their_records,
+                                           geometry(rt.config.shared)[0])
+                verdict, digest_match = tier["audit"], tier["digest_match"]
     except DeadlineExpiredError:
         pass
     except GameRuleError:

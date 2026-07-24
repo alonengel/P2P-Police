@@ -1,9 +1,9 @@
 {
   "_schema": "p2p-police-artifacts",
-  "config_name": "config_anrbj666-vs-unknown_g01.json",
+  "config_name": "config_anrbj666-vs-imreeyal_g01.json",
   "config_sha256": "528e4a0068cd41495164cf4e884961f1f0d2f91b1897ef89913ec1d1613825e7",
-  "game_id": "anrbj666-vs-unknown",
-  "game_uid": "1b532b0a-16cc-fec8-de55-2c4bc263c79d",
+  "game_id": "anrbj666-vs-imreeyal",
+  "game_uid": "2f0c25a9-5008-03c7-2d60-645dd51be11a",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
     "thief": "https://github.com/alonengel/P2P-Thief"

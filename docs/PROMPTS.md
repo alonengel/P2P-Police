@@ -629,3 +629,64 @@ every exit path of the game thread must message the UI, because the
 "impossible" path (an exception before the first emit) is exactly the one a
 dead tunnel takes. And read the live logs before believing any hypothesis:
 the named suspects all had alibis written in httpx timestamps.
+
+## 2026-07-24 — Session 18: fair audit of a FOREIGN-schema rival — the mutual-audit failure of the first full cross-team games
+
+**Context.** Tonight's first complete cross-team games (35 turns, both
+sides) ended with BOTH peers rendering the audit TAMPERED /
+digest_match=false against an honest reference-shaped rival — and the
+counterparty's side symmetrically rejected OUR audit envelope. The league
+SPEC is explicit: the payload schema and the end-digest construction are
+PER-TEAM choices; only canonical JSON and the commit construction
+SHA256(canonical(payload)+"|"+nonce) are the shared contract.
+
+**Prompt pattern — judge by the contract, not by our schema.** The brief:
+build a three-tier verdict for the rival's half — (a) the commit criterion
+over every revealed record (the ONLY tamper test), (b) our strict physics
+reconstruction ONLY when the rival's payloads parse as our schema, with a
+graceful degrade to derivable checks (per-sender step continuity, revealed-
+position movement legality) for foreign schemas, (c) digest comparison only
+under one shared construction — otherwise digest_match=null, never false.
+Plus two queued items: caught=True must not classify as capture unless the
+sender is the THIEF (only the cop's claim flow produces our capture), and
+our audit message must be the reference AuditPayload envelope EXACTLY
+(sender/records/result_claim — their strict parser rejected ours for the
+missing `sender`, and cls(**data) rejects any extra key).
+
+**Root cause, read from the real artifacts + the reference source.** Three
+schema couplings, all pre-flagged: (1) the reference reveal set carries a
+step-0 system_spec record whose commit never crosses the live turn wire, so
+our strict zip+length alignment could never match — tonight's logs prove
+this tier aborted FIRST: opponent_records hold live commits only, no merged
+payloads; (2) domain crypto's commit recompute demands OUR pinned field
+set, so even aligned foreign payloads read TAMPERED; (3) reconstruct/
+digest_match assumed our role/action keys and our digest construction.
+
+**Fix.** New wire/audit_foreign.py (schema-agnostic commit_clean, reveal
+alignment BY COMMIT with extra commit-clean records tolerated,
+parses_as_ours gate, continuity_ok + movement_ok derivable checks, judge()
+returning digest_match=null); hidden_exchange.audit_reveals delegates to
+it; hidden_turns.finish routes strict-vs-foreign and sends the exact
+reference envelope; their_half_turn gained the thief-only concession guard;
+report/lookup.recompute_hidden degrades identically for saved logs;
+sdk.verify_log checks the rival's records under the shared contract only;
+pair_verify keys only same-schema payloads. Strict full reconstruction
+unchanged for our own records and same-schema pairs; bookletter untouched;
+domain/ and tests/vectors/ untouched.
+
+**Proof on tonight's actual files.** tests use the REAL working-tree logs:
+the cross-team game logs now replay "Verified OK" in both repos (foreign
+schema tolerated, commit criterion intact — forging one sealed byte of the
+same real log still convicts), reference-shaped reveal fixtures (the
+rival's literal sealing field set) verify clean including the step-0 spec
+record, a forged commit in the same set reads TAMPERED, digest
+not-comparable lands as JSON null in the result artifact.
+
+**Gates.** 531 tests green (police) / 529 (thief), coverage ~93% both,
+ruff 0, line cap OK, physics parity OK; every change mirrored.
+
+**Lesson.** An audit that encodes our own serialization habits as morality
+will convict every honest stranger it meets: verify the CONTRACT (the
+hash), derive what the revealed data actually supports, and say
+"not comparable" when two constructions share no common frame — null is a
+verdict too, and it is not "false".

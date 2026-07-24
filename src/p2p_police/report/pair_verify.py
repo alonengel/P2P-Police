@@ -19,11 +19,15 @@ def _load(path: str | Path) -> dict:
 
 
 def _by_key(records: list[dict]) -> dict:
-    """Payload-carrying records only: on the hidden wire a failed/absent
-    audit leaves commit-only opponent records — those surface as 'missing
-    from the rival's view' problems instead of crashing the verifier."""
+    """OUR-schema payload-carrying records only: commit-only opponent
+    records (failed/absent audit) and FOREIGN-schema payloads (a rival's
+    per-team sealing) surface as 'missing from the rival's view' problems
+    instead of crashing the verifier — byte-level cross-checks are only
+    defined between two logs sealed under the same schema."""
     return {(r["payload"]["step"], r["payload"]["role"]): r
-            for r in records if "payload" in r}
+            for r in records
+            if isinstance(r.get("payload"), dict)
+            and {"step", "role"} <= r["payload"].keys()}
 
 
 def _public(payload: dict) -> dict:

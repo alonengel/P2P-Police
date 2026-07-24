@@ -48,6 +48,21 @@ def test_log_and_result_share_uid_and_emit(config_dir: Path, tmp_path: Path) -> 
     assert path.is_file() and "tokens_total" in path.read_text()
 
 
+def test_result_reports_not_comparable_digest_as_null(config_dir: Path) -> None:
+    """A foreign-schema pair has no shared digest construction: the result
+    must carry digest_match null — a report of non-comparability, not a
+    false accusation (and not a silent false)."""
+    import json
+
+    config = Config.load(config_dir)
+    report = {"outcome": "survival", "turns_completed": 35, "audit": "Verified OK",
+              "end_state_digest": "d", "digest_match": None, "role": "police",
+              "opponent_group_id": "rival"}
+    result = artifacts.build_result(config, "a-vs-b", "uid1", report, (0, 10), 0)
+    assert result["digest_match"] is None
+    assert json.loads(json.dumps(result))["digest_match"] is None
+
+
 def test_declaration_is_signed_and_carries_opponent(config_dir: Path) -> None:
     """Rules 24/37-38/49: hardware sealed, opponent identity persisted,
     sign-then-insert signature verifiable by a third party."""

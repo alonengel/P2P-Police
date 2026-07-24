@@ -30,13 +30,18 @@ from p2p_police.report.lookup import geometry
 _CLOSURE_ACTION = {"type": "move", "move": "STAY"}
 
 
-def build_audit_payload(exchange, group_id: str, outcome: str, state_digest: str) -> dict:
-    """The reveal we transmit at game end: full records incl. the nonces."""
+def build_audit_payload(exchange, sender: str, outcome: str) -> dict:
+    """The reveal we transmit at game end: full records incl. the nonces —
+    in the REFERENCE AuditPayload envelope EXACTLY (sender / records /
+    result_claim, nothing else). The reference parser is strict (a dataclass
+    built via cls(**data)): a missing `sender` is rejected outright and any
+    extra key of ours would reject the whole audit (2026-07-24 live cross-
+    team finding — our envelope without `sender` was refused, voiding an
+    otherwise clean 35-turn game on the counterparty's side)."""
     return {
-        "group_id": group_id,
+        "sender": sender,
         "records": list(exchange.own_records),
         "result_claim": outcome,
-        "state_digest": state_digest,
     }
 
 

@@ -164,13 +164,19 @@ class SimulationSdk:
         the physics and recompute the end digest (rule 20): bookletter logs
         replay on a fresh engine; logs declaring the hidden wire replay
         through the audit reconstruction (report/lookup.py, ADR-0008)."""
+        from p2p_police.wire import audit_foreign
+
         doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
         own = doc.get("records", [])
-        theirs = [r for r in doc.get("opponent_records", []) if "nonce" in r]
-        for record in own + theirs:
+        for record in own:
             if not crypto.verify_commit(
                 record["payload"], record["nonce"], record["commit"]
             ):
+                return "TAMPERED"
+        # The rival's half may be sealed under a FOREIGN payload schema: the
+        # commit criterion is the shared contract, checked schema-agnostically.
+        for record in doc.get("opponent_records", []):
+            if "nonce" in record and not audit_foreign.commit_clean(record):
                 return "TAMPERED"
         from p2p_police.report import lookup
 
