@@ -52,6 +52,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="directory holding sub-game logs; repeat the flag to pool "
                              "BOTH role repos' results (default: results)")
     series.add_argument("--config-dir", default="config")
+    series.add_argument("--email", action="store_true",
+                        help="after a SUCCESSFUL emit, auto-send the one series report "
+                             "email (fires only when [email].mode == 'send'; a refused "
+                             "series never emails)")
     return parser
 
 
@@ -97,7 +101,11 @@ def main(argv: list[str] | None = None) -> int:
 
         from p2p_police.domain.game_ids import result_name
         from p2p_police.report.artifacts import emit, git_commit_hash
-        from p2p_police.sdk.series import SeriesSettlementError, aggregate_series
+        from p2p_police.sdk.series import (
+            SeriesSettlementError,
+            aggregate_series,
+            maybe_email_series,
+        )
         from p2p_police.shared.config import Config
 
         config = Config.load(args.config_dir)
@@ -118,5 +126,9 @@ def main(argv: list[str] | None = None) -> int:
         path = emit(doc, Path(dirs[0]), result_name(args.game_id))
         print(json.dumps(doc["final_result"], indent=2))
         print(f"written: {path}")
+        if args.email:
+            message_id = maybe_email_series(config, doc, path)
+            if message_id:
+                print(f"emailed: {message_id}")
         return 0
     return 0

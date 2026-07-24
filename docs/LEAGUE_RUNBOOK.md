@@ -37,7 +37,54 @@ costs points or disqualifies (rule numbers from the rulebook's Appendix ה/ו).
    cross-verifies from every team's reports — lying disqualifies.
 6. **Re-mint the Gmail token if >5 days old** (Testing-mode tokens die at ~7):
    `uv run python scripts/gmail_auth.py ../secrets/credentials.json`.
-7. Set `[email] mode = "send"`; update `sub_game_number`; commit everything.
+7. Set `[email] mode = "send"` AND restore the league recipient (see
+   "Running the counted series" step 1); update `sub_game_number`; commit
+   everything.
+
+## Running the counted series (end to end)
+
+A counted series is ONE continuous run that ends in its series report:
+six sub-games, roles alternating per the book — this police repo plays the
+ODD windows (1,3,5), the thief repo the EVEN ones (2,4,6).
+
+1. **Arm the counted posture** (per repo, per counted game): set
+   `[email] mode = "send"` and RESTORE the recipient to the league address
+   `rmisegal+uoh26finalgame@gmail.com` (rule 51). The committed game.toml
+   deliberately ships the warm-up posture — recipient = our own addresses
+   (`alonisrael.engel@gmail.com, Imree.c@gmail.com`), `mode = "disabled"` —
+   so a stray dev run can never mail the league; flipping both back is a
+   HUMAN duty. Commit the armed config.
+2. **T-protocol launch**: at the agreed start time, tunnels up and probed
+   (see "Per counted game" 2/2b), then each of OUR repos starts ITS window
+   runner:
+   - police repo (here): `uv run python scripts/league_series.py --sub-games "1,3,5" --seed 900`
+   - thief repo: `uv run python scripts/league_series.py --sub-games "2,4,6" --seed 900`
+   Each runner launches the committed CLI per window (`peer --sub-game N
+   --seed base+N`), strictly sequentially, logging every window honestly
+   to stdout. A runner refuses windows of the wrong parity.
+3. **Single-instance lock**: the runner writes
+   `results/local/league_series.lock` (its pid inside); a second instance
+   REFUSES to start — our orchestration-layer half of the double-instance
+   guard (the wire's game_uid/sub_game_number checks are the other half).
+   If a runner died hard, verify that pid is gone before deleting the lock.
+4. **A failed window is logged, never fabricated.** The runner continues to
+   the next window and exits non-zero; re-run ONLY the failed window by
+   hand (`uv run p2p-police peer --sub-game N --seed base+N`) until it
+   settles.
+5. **Aggregate across BOTH role repos** (a team's series record spans them):
+   `uv run p2p-police series-result --game-id <ours-vs-theirs>
+   --results-dir results --results-dir ../P2P-Thief/results --email`
+6. **The settlement guard (rule 35)** is why aggregation may print REFUSED:
+   every sub-game 1..num_games needs a settled, audit-clean log — the
+   report never invents or completes a missing game. A refused series
+   emails NOTHING; settle the missing window, then re-aggregate.
+7. **`--email` auto-fire**: on a successful emit only, ONE email goes out —
+   the result JSON as body plus the emitted result file attached — through
+   shared/gatekeeper, recipient from config, and only when
+   `[email] mode = "send"`. The subject carries the game_id, the final
+   score and series_tie/winner.
+8. **Rule 53 stays manual**: email the lecturer the commit id used for each
+   counted game (see "Per counted game" step 1) — the code never does this.
 
 ## Per counted game
 

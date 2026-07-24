@@ -122,3 +122,32 @@ def aggregate_series(results_dirs, game_id: str, score_table,
     doc = build_series_result(game_id, uid, by_slot, score_table,
                               int(expected_games), our_identity or {})
     return doc, excluded
+
+
+def maybe_email_series(config, doc: dict, result_path, gatekeeper=None) -> str | None:
+    """The ONE end-of-series report email, auto-fired only in send mode.
+
+    Called strictly AFTER aggregate_series returned - the settlement guard
+    has already refused any unsettled series (rule 35), so nothing invented
+    can ever be mailed. Body carries the full result JSON, the emitted
+    result file rides along as the attachment, the recipient comes from
+    config, and the send goes through shared/gatekeeper like every other
+    external call. Returns the message id, or None when the mode gate held."""
+    email_cfg = config.private.get("email", {})
+    if email_cfg.get("mode") != "send":
+        return None
+    from p2p_police.infra.email_sender import send_report
+    from p2p_police.shared.gatekeeper import ApiGatekeeper
+
+    final = doc["final_result"]
+    verdict = ("series_tie" if final["series_tie"]
+               else f"winner={final['winner_group']}")
+    score = " ".join(f"{group}:{points}"
+                     for group, points in sorted(final["total_score"].items()))
+    message_id = send_report(
+        gatekeeper or ApiGatekeeper(config.rate_limits),
+        email_cfg["recipient"],
+        f"P2P league SERIES result - {doc['game_id']} - {verdict} - {score}",
+        json.dumps(doc, indent=2),
+        [Path(result_path)])
+    return str(message_id)

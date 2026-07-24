@@ -744,3 +744,50 @@ field (game_uid) and its key layout are the counterparty's parsing
 surface, and an aggregator that fills gaps instead of refusing turns a
 missing game into a forged one. Conform to the reference's structure,
 derive identity from evidence, and make every exclusion say its name.
+
+## 2026-07-24 — Session 20: counted-series readiness — series email auto-fire & the league-day window runner
+
+**Prompt (condensed).** "A counted series is one continuous run ending in
+its report; today the email is manual. (1) `series-result --email`: after
+a SUCCESSFUL conformant emit (settlement guard passed) send the ONE
+series email exactly like the per-game auto-report — mode gate,
+shared/gatekeeper, recipient from config, subject carrying game_id +
+final score + series_tie/winner; a refusal must never email. (2) A
+committed `scripts/league_series.py` per repo driving that repo's role
+windows (police: odd, thief: even) via the real CLI in sequential
+subprocesses, with a single-instance pid lockfile under results/local/
+and honest per-window logging — a failed window is logged, never
+fabricated. (3) Runbook: the counted-series procedure end to end."
+
+**Build.** `sdk/series.py` gains `maybe_email_series` (mode gate →
+gatekeeper → `infra/email_sender.send_report`; body = the full result
+JSON, attachment = the emitted result file, subject =
+`game_id - winner/series_tie - score`); it is reachable ONLY after
+`aggregate_series` returned, so the rule-35 settlement guard structurally
+precedes any email. `cli series-result --email` wires it and prints the
+message id. NEW `scripts/league_series.py`: parses this repo's window
+list (refusing wrong-parity windows — the book's alternation is not
+negotiable), takes an O_EXCL pid lockfile (second instance refuses and
+never deletes a lock it does not own), launches `uv run p2p-police peer
+--sub-game N --seed base+N` per window sequentially, reports each exit
+code verbatim and continues past failures with a non-zero final exit.
+LEAGUE_RUNBOOK.md: new "Running the counted series (end to end)" section
+(T-protocol launch, two --results-dir aggregation, --email auto-fire,
+settlement-guard meaning, lock semantics, rule-53 manual commit-id email,
+and the explicit counted-posture flip: league recipient restored +
+mode=send armed vs the committed warm-up posture). Tests: fake sender
+injected via monkeypatch — send-mode emits then emails once (recipient
+from config, gatekeeper instance asserted); a refused series and
+disabled mode send NOTHING; no flag = no email; runner parity/lock/
+sequence/failure-continuation covered with an injected fake subprocess
+runner. domain/ and tests/vectors/ untouched; everything mirrored to the
+twin.
+
+**Gates.** Full `uv run pytest -q` green: 563 tests (police) / 562
+(thief); ruff 0 (src+tests+scripts) both; 150-code-line cap OK both;
+physics parity OK (16 files identical) both.
+
+**Lesson.** An auto-fired settlement email is only as honest as the guard
+in front of it: make the send reachable exclusively through the code path
+that already refused unsettled series, and "never email an invented
+result" becomes a structural property instead of a convention.
