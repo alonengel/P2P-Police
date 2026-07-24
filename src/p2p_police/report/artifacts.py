@@ -81,7 +81,8 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int,
                 "llm_model": config.private.get("llm", {}).get("model", "template"),
             },
             "opponent": {
-                "group_id": (opponent or {}).get("group_id", "unknown"),
+                "group_id": (opponent or {}).get("group_id")
+                or (opponent or {}).get("identity", {}).get("group_id", "unknown"),
                 "identity": (opponent or {}).get("identity", {}),
                 "hardware_spec_sha256": (opponent or {}).get("hardware_spec_sha256", ""),
             },
