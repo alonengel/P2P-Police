@@ -552,3 +552,80 @@ two correct implementations of two different cadences. The demo's code is
 the contract; read the loop, not the message shape. And liveness is a
 property of every await individually: a chain of legal 30s waits is an
 illegal 60s silence.
+
+---
+
+## 2026-07-24 — Session 17: GUI-mode outage defects — the zombie window & the spurious watchdog
+
+**Context.** Two live cross-team GUI runs (sparring, reference wire) died the
+same way: the rival's edge went 502/530, ~60s later the watchdog logged "no
+heartbeat for 60.0s — controlled shutdown", then NOTHING — no report JSON,
+four OS processes alive forever. Never in headless runs, never in local GUI
+games that complete. Mid-session a second report landed: in the next
+cross-team attempt both our peers "negotiated cleanly then went silent" — the
+thief never opened, the police never answered the rival thief's step 1.
+
+**Prompt pattern — logs before hypotheses.** The brief named suspects
+(unbeaten wait paths, beat wiring order, the GUI feed queue). Before touching
+code we read logs/p2p_police.log + logs/p2p_thief.log + both watchdog dumps
+from the live runs and rebuilt the timeline to the second. Every suspect was
+innocent: the transport beat through the whole outage (530 retries every 5s
+for the full 180s budget; no firing DURING the wait). The real chain: the GUI
+worker thread classifies technical_loss at its deadline → the worker DIES with
+the report boxed → beats stop → `view.run()` (Tk mainloop) never exits because
+the exception path skips `perception.emit`, so no game_over snapshot ever
+reaches the view → run_peer's `finally: watchdog.stop()` is unreachable → the
+still-armed watchdog fires exactly +60s after worker death (defect A) and the
+report stays trapped behind the mainloop forever (defect B). Both dumps agree:
+outcome was ALREADY "technical_loss" at fire time.
+
+**Root causes (pre-fix lines).** sdk/sdk.py:141 `view.run()` returns only when
+gui/live_view.py:102-103 set `_done` on a game_over SNAPSHOT — and no failure
+path emits one; nothing stops the watchdog when the worker ends, so the
+monitor outlives the game it monitors.
+
+**Fix (mirrored).** `play_into_box` gained a `finally`:
+`runtime.watchdog.stop()` (the game is classified the moment the worker ends)
+plus `view.finish(outcome)` — a thread-safe sentinel through the snapshot
+queue that flips the banner to GAME OVER and releases the mainloop.
+`NullWatchdog` grew the matching `stop()`; the GUI path now also forwards
+`start_turn` (GUI + --resume no longer re-negotiates a resumed game).
+
+**Repro-first (TDD).** tests/integration/test_gui_outage.py drives
+`_play_with_gui` with a stubbed LiveView (real mainloop semantics — run()
+blocks until told the game ended, hard-capped so a red run FAILS instead of
+hanging) against a scripted rival whose tunnel dies mid-game (retries in
+beat-sized slices until the deadline — the committed McpTransport outage
+contract), on the hidden wire AND the geometric path. Red reproduced the live
+runs exactly (watchdog FIRED after worker death, view never released); green
+asserts no firing while the deadline runs, technical_loss classified, the
+report returned in-time, the mainloop released.
+
+**Cross-team silence triage (which cause explains which symptom).**
+(1) POLICE SILENT: the rival thief's step-1 tool call never REACHED our inbox
+— the log shows its MCP session created at 13:28:27 with no CallToolRequest
+ever processed, then their edge 502 at 13:31:23; our police correctly waited
+its full 180s. Their literal message shape is NOT the cause:
+tests/unit/test_wire/test_reference_message_fixture.py feeds the exact
+ten-key / explicit-nulls / dense-25-cell / microsecond-timestamp message
+through the receive path — parse, scent absorb, token pass all clean ("r,c"
+keys match the demo emission; the closed key set still rejects unknowns).
+(2) THIEF SILENT: the rival cop's negotiate never arrived in the live window —
+our previous ZOMBIE process (defect B's downstream damage) had been acking
+their negotiate retries at 13:23/13:25/13:27 into a queue nobody read, so the
+rival believed the handshake done; the fresh 13:28 process waited 180s for an
+agreement that never came. (3) THE HANG: defect B, fixed — and with the
+process now exiting properly, the zombie-swallowing failure mode dies with it.
+No regression in the session-16 batch.
+
+**Gates.** 509 tests green (police) / 507 (thief), coverage 93% both, ruff 0,
+line cap OK, physics parity OK (domain/ and vectors untouched); every change
+mirrored.
+
+**Lesson.** A watchdog that cannot be stopped by the thread it watches will
+eventually bark at a corpse: disarm liveness monitors at CLASSIFICATION, not
+at report emission. In GUI architectures the mainloop is a report gate —
+every exit path of the game thread must message the UI, because the
+"impossible" path (an exception before the first emit) is exactly the one a
+dead tunnel takes. And read the live logs before believing any hypothesis:
+the named suspects all had alibis written in httpx timestamps.

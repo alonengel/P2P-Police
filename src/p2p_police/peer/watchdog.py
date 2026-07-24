@@ -23,6 +23,9 @@ class NullWatchdog:
     def beat(self) -> None:
         return
 
+    def stop(self) -> None:  # same surface as the real one (GUI worker calls it)
+        return
+
 
 class Watchdog:
     """Input: heartbeats + a state provider. Output: crash dump + shutdown."""

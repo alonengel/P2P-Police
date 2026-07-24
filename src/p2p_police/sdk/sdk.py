@@ -94,7 +94,7 @@ class SimulationSdk:
         runtime.transport.beat = watchdog.beat  # send-retry liveness (live-session finding)
         watchdog.start()
         try:
-            report = (self._play_with_gui(runtime, gui_screenshot) if gui
+            report = (self._play_with_gui(runtime, gui_screenshot, start_turn) if gui
                       else runtime.play(start_turn))
         except Exception as error:  # noqa: BLE001 - rules 32/35: EVERY game
             # end (any failure whatsoever) must still be reported and emailed;
@@ -119,7 +119,8 @@ class SimulationSdk:
         time.sleep(SHUTDOWN_GRACE_SEC)
         return report
 
-    def _play_with_gui(self, runtime: GeometricRuntime, screenshot: str | None) -> dict:
+    def _play_with_gui(self, runtime: GeometricRuntime, screenshot: str | None,
+                       start_turn: int = 0) -> dict:
         """Tk owns the main thread; the runtime plays in a worker thread."""
         import threading
 
@@ -132,9 +133,16 @@ class SimulationSdk:
 
         def play_into_box() -> None:
             try:
-                box.update(runtime.play())
+                box.update(runtime.play(start_turn))
             except Exception as error:  # noqa: BLE001 - reported, never lost
                 box.update(reporting.technical_loss_report(MY_ROLE, runtime, error))
+            finally:
+                # The game is CLASSIFIED the moment this worker ends. Silence
+                # the watchdog (a classified game must never "fire" 60s later)
+                # and release the Tk mainloop so the report reaches stdout -
+                # never a zombie window (2026-07-24 live cross-team finding).
+                runtime.watchdog.stop()
+                view.finish(box.get("outcome", "technical_loss"))
 
         worker = threading.Thread(target=play_into_box, daemon=True)
         worker.start()

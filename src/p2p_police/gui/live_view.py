@@ -67,10 +67,22 @@ class LiveView:
         """Called from the runtime thread - queue is the only shared state."""
         self.snapshots.put(snapshot)
 
+    def finish(self, outcome: str) -> None:
+        """Thread-safe end-of-game signal: release the mainloop even when no
+        game_over snapshot was ever fed - technical-loss paths emit none (the
+        2026-07-24 live hang: window open forever, report never printed)."""
+        self.snapshots.put({"final_outcome": outcome})
+
     def _poll(self) -> None:
         try:
             while True:
-                self._render(self.snapshots.get_nowait())
+                snap = self.snapshots.get_nowait()
+                if "final_outcome" in snap:
+                    self.banner.config(bg="#8957e5",
+                                       text=f"GAME OVER - {snap['final_outcome']}")
+                    self._done = True
+                else:
+                    self._render(snap)
         except queue.Empty:
             pass
         if self._done:
