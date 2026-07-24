@@ -100,6 +100,10 @@ def test_reference_minimal_message_verifies_without_declarations(config_dir):
     ("info_mode", "belief", "exact", False),
     ("info_mode", "belief", None, True),
     ("info_mode", None, "exact", True),
+    ("sub_game_number", 2, 2, True),
+    ("sub_game_number", 2, 5, False),
+    ("sub_game_number", 2, None, True),   # reference peers never send it
+    ("sub_game_number", None, 5, True),
 ])
 def test_both_declare_truth_table_for_alongside_declarations(field, ours, others, plays):
     mine = {field: ours} if ours is not None else {}
@@ -111,6 +115,27 @@ def test_both_declare_truth_table_for_alongside_declarations(field, ours, others
             wire_terms.verify_declarations(mine, theirs)
         assert field in str(caught.value)
         assert repr(ours) in str(caught.value) and repr(others) in str(caught.value)
+
+
+def test_negotiate_message_declares_sub_game_outside_the_signed_terms(config_dir):
+    """The sub-game index rides alongside like info_mode: it must appear in
+    the message, never inside the signed flat terms, and stay optional."""
+    config = Config.load(config_dir)
+    message = wire_terms.build_negotiate_message(config, sub_game=3)
+    assert message["sub_game_number"] == 3
+    assert "sub_game_number" not in message["terms"]
+    wire_terms.verify_terms_message(message["terms"], message)  # signature intact
+    assert "sub_game_number" not in wire_terms.build_negotiate_message(config)
+
+
+def test_sub_game_mismatch_names_the_stale_instance_hazard():
+    """Identical terms give identical game_uids across instances - the index
+    is the only disambiguator, so the refusal must say what to look for."""
+    with pytest.raises(GameRuleError) as caught:
+        wire_terms.verify_declarations({"sub_game_number": 2}, {"sub_game_number": 5})
+    text = str(caught.value)
+    assert "sub_game_number" in text and "2" in text and "5" in text
+    assert "stale" in text
 
 
 def test_peer_group_id_reads_top_level_then_identity_then_unknown():

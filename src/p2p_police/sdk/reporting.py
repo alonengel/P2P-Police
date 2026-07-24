@@ -25,6 +25,7 @@ def technical_loss_report(my_role, runtime, error: Exception) -> dict:
         digest = protocol.end_state_digest(runtime.engine)
     return {
         "role": my_role.value,
+        "started_at": getattr(runtime, "started_at", None),
         "outcome": "technical_loss",
         "turns_completed": turns,
         "end_state_digest": digest,

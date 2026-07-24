@@ -690,3 +690,57 @@ will convict every honest stranger it meets: verify the CONTRACT (the
 hash), derive what the revealed data actually supports, and say
 "not comparable" when two constructions share no common frame — null is a
 verdict too, and it is not "false".
+
+## 2026-07-24 — Session 19: reference-conformant series result, settlement guard & sub-game handshake
+
+**Context.** A live counterparty diffed our emitted series result against
+the official demo's sample-run result and found the shape wrong: missing
+game_uid (ours said null — the cross-team series identity BOTH reports
+must match on), groups, links, mutual_agreement, _schema, schema_version,
+report_type, timezone; sub_games keyed log_file/outcome/scores instead of
+log_files/result/score; no roles, winner_group, github_commit, tokens,
+tie, timestamps; final_result without tokens_total_series. Separately, a
+live find: identical terms give identical game_uids across instances, so
+a leftover rival instance from a previous window can pair into the WRONG
+sub-game and nothing on the wire disambiguates.
+
+**Prompt pattern — conform to the reference's key structure, refuse to
+invent a game.** The brief: (1) rework series aggregation to emit the
+reference-conformant document — real game_uid derived as the logs' shared
+uid, both teams' identity blocks, all four GitHub links, both FastMCP
+addresses, mutual-agreement confirmations from the per-game audits,
+per-sub-game roles/result/winner/score/tokens/log_files/audit/timestamps,
+tokens_total_series; (2) a SETTLEMENT GUARD — refuse to emit when any
+sub-game 1..num_games lacks a settled audit-clean log, naming the gaps
+(rule 35: a report that quietly completes a missing game endangers the
+counterparty); (3) pool logs from BOTH role repos (repeatable
+--results-dir) and exclude BY NAME any log whose game_uid or declared
+num_games mismatches the series; (4) exchange sub_game_number at the
+hidden-wire negotiate OUTSIDE the signed flat terms (like info_mode),
+refusing only when both declare and they differ — omission tolerated,
+reference peers never send it.
+
+**Build.** sdk/series.py rewritten (collect_logs + consensus-uid guard +
+require_settled + aggregate_series returning (doc, excluded)); NEW
+report/series_doc.py shapes the document (key sets transcribed from the
+demo sample, attribution in-file; sign-then-insert mutual_agreement);
+cli series-result takes repeated --results-dir, prints named exclusions,
+exits 1 with REFUSED on an unsettled series; wire/terms.py adds
+sub_game_number to BOTH_DECLARE_FIELDS with a stale-instance hint in the
+refusal; hidden_runtime declares it at negotiate and records started_at
+for future logs. domain/ and tests/vectors/ untouched; every change
+mirrored to the twin.
+
+**Proof on the six real logs.** The full series_final set emits a clean
+result — zero missing keys against the reference at every level, real
+game_uid 2f0c25a9-...; with s6 (the mis-attributed game) excluded the
+aggregator refuses: "s6: no settled log", exit 1.
+
+**Gates.** 553 tests green (police) / 552 (thief), coverage ~93% both,
+ruff 0, line cap OK, physics parity OK.
+
+**Lesson.** A settlement document is a cross-team contract: its identity
+field (game_uid) and its key layout are the counterparty's parsing
+surface, and an aggregator that fills gaps instead of refusing turns a
+missing game into a forged one. Conform to the reference's structure,
+derive identity from evidence, and make every exclusion say its name.

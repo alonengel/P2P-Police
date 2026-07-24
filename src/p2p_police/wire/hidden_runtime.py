@@ -11,6 +11,7 @@ Deceiver and the template hint chain (moves stay pure Python, rule 25).
 """
 
 import queue
+from datetime import UTC, datetime
 
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import GamePhase, Outcome, Role
@@ -60,6 +61,8 @@ class HiddenRuntime:
             turn_timeout=config.turn_timeout_seconds,
         )
         self.pending_claim_response: dict | None = None
+        # Series-report timestamp: this instance's game start (UTC ISO).
+        self.started_at = datetime.now(UTC).isoformat(timespec="seconds")
         # PER-SENDER step clocks (demo own_state.apply_move: step_number
         # advances only on OWN moves — each side numbers 1, 2, 3...).
         self.my_step = 0
@@ -107,6 +110,9 @@ class HiddenRuntime:
             self.config,
             hardware_spec(),
             info_mode="belief",  # structural under this wire (registry note)
+            # both-declare guard: a leftover rival instance from a previous
+            # window must not pair into the wrong sub-game (uid can't tell).
+            sub_game=int(self.config.private["game"]["sub_game_number"]),
         )
         lock.extend_agreement(mine, self.config)
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))

@@ -48,7 +48,9 @@ def build_parser() -> argparse.ArgumentParser:
     replay.add_argument("--screenshot", default=None, help="save a PNG and exit")
     series = subcommands.add_parser("series-result", help="aggregate sub-game logs into the series result")
     series.add_argument("--game-id", required=True)
-    series.add_argument("--results-dir", default="results")
+    series.add_argument("--results-dir", action="append", default=None,
+                        help="directory holding sub-game logs; repeat the flag to pool "
+                             "BOTH role repos' results (default: results)")
     series.add_argument("--config-dir", default="config")
     return parser
 
@@ -91,14 +93,29 @@ def main(argv: list[str] | None = None) -> int:
         app.run()
         return 0
     if args.command == "series-result":
+        from pathlib import Path
+
         from p2p_police.domain.game_ids import result_name
-        from p2p_police.report.artifacts import emit
-        from p2p_police.sdk.series import aggregate_series
+        from p2p_police.report.artifacts import emit, git_commit_hash
+        from p2p_police.sdk.series import SeriesSettlementError, aggregate_series
         from p2p_police.shared.config import Config
 
         config = Config.load(args.config_dir)
-        doc = aggregate_series(args.results_dir, args.game_id, config.score_table())
-        path = emit(doc, __import__("pathlib").Path(args.results_dir), result_name(args.game_id))
+        dirs = args.results_dir or ["results"]
+        ours = {"group_id": config.group_id,
+                "members": config.private["game"].get("members", []),
+                "github_commit": git_commit_hash(),
+                **config.identity_block()}
+        try:
+            doc, excluded = aggregate_series(
+                dirs, args.game_id, config.score_table(),
+                config.shared["network_and_league"]["num_games"], ours)
+        except SeriesSettlementError as error:
+            print(f"REFUSED: {error}")
+            return 1
+        for note in excluded:
+            print(f"excluded: {note}")
+        path = emit(doc, Path(dirs[0]), result_name(args.game_id))
         print(json.dumps(doc["final_result"], indent=2))
         print(f"written: {path}")
         return 0

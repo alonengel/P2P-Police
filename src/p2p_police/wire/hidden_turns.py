@@ -151,6 +151,7 @@ def finish(rt) -> dict:
         verdict = "TAMPERED"  # illegal revealed physics voids the audit
     return {
         "role": rt.role.value,
+        "started_at": getattr(rt, "started_at", None),
         "outcome": rt.own.outcome.value,
         "turns_completed": rt.own.turns_completed,
         "end_state_digest": end_digest,

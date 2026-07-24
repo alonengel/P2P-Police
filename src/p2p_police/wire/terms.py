@@ -21,7 +21,10 @@ from p2p_police.domain.negotiation import config_sha256, validate_shared_terms
 from p2p_police.domain.scent import scent_model_spec
 
 # Families verified here by both-declare (wire_shape stays in wire/lock.py).
-BOTH_DECLARE_FIELDS = ("scent_model_sha256", "info_mode")
+# sub_game_number rides here too: identical terms give identical game_uids
+# across instances, so the index is the ONLY thing that stops a leftover
+# rival instance from another window pairing into the wrong sub-game.
+BOTH_DECLARE_FIELDS = ("scent_model_sha256", "info_mode", "sub_game_number")
 
 
 def terms_from_shared(shared: dict) -> dict:
@@ -65,7 +68,8 @@ def sign_terms(terms: dict, nonce: str) -> str:
 
 
 def build_negotiate_message(config, hardware: dict | None = None,
-                            info_mode: str = "belief") -> dict:
+                            info_mode: str = "belief",
+                            sub_game: int | None = None) -> dict:
     """The reference-shaped negotiate payload with our declarations alongside.
 
     A reference peer verifies exactly {terms, nonce, signature} and reads
@@ -86,6 +90,8 @@ def build_negotiate_message(config, hardware: dict | None = None,
     }
     if hardware is not None:
         message["hardware_spec_sha256"] = config_sha256(hardware)
+    if sub_game is not None:  # rides OUTSIDE the signed terms, like info_mode
+        message["sub_game_number"] = int(sub_game)
     return message
 
 
@@ -130,9 +136,11 @@ def verify_declarations(mine: dict, theirs: dict) -> None:
     for field in BOTH_DECLARE_FIELDS:
         ours, others = mine.get(field), theirs.get(field)
         if ours is not None and others is not None and ours != others:
+            hint = (" - is a stale rival instance from a previous sub-game "
+                    "window still running?" if field == "sub_game_number" else "")
             raise GameRuleError(
                 f"negotiate declaration mismatch on '{field}': "
-                f"mine={ours!r} theirs={others!r}")
+                f"mine={ours!r} theirs={others!r}{hint}")
 
 
 def peer_group_id(message: dict) -> str:
