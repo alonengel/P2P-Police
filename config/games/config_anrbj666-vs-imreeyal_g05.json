@@ -1,6 +1,6 @@
 {
   "_schema": "p2p-police-artifacts",
-  "config_name": "config_anrbj666-vs-imreeyal_g01.json",
+  "config_name": "config_anrbj666-vs-imreeyal_g05.json",
   "config_sha256": "3d38cde31370cff4b18bb6384499454c4c43cdaae52bbef5acfc601bf2b73dce",
   "game_id": "anrbj666-vs-imreeyal",
   "game_uid": "2f0c25a9-5008-03c7-2d60-645dd51be11a",
@@ -10,7 +10,7 @@
   },
   "report_type": "config",
   "schema_version": "1.00",
-  "sub_game_number": 1,
+  "sub_game_number": 5,
   "terms": {
     "agreed_between": [
       "anrbj666-police",

@@ -1,35 +1,52 @@
 {
-  "_schema": "p2p-police-artifacts",
-  "agreement": {
-    "config_sha256": "528e4a0068cd41495164cf4e884961f1f0d2f91b1897ef89913ec1d1613825e7",
-    "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9"
+  "final_result": {
+    "series_tie": false,
+    "sub_games_won": {
+      "anrbj666": 0,
+      "imreeyal": 3
+    },
+    "ties": 0,
+    "total_score": {
+      "anrbj666": 15,
+      "imreeyal": 30
+    },
+    "winner_group": "imreeyal"
   },
-  "audit": "Verified OK",
-  "consensus_signature": "9fc2037d1fa26533c812f1193ff075bc0b5ab2f67ed26d6569c999f43b59c2de",
-  "digest_match": null,
-  "end_state_digest": "5522725b6f51cc63b52b039a48ef1c305f69302db3897d82f35107844d3f7c4a",
   "game_id": "anrbj666-vs-imreeyal",
-  "game_uid": "2f0c25a9-5008-03c7-2d60-645dd51be11a",
-  "github_commit": "c7b8a36a2ac154cb85e1946b55d4821fd71a30ce",
-  "group_id": "anrbj666",
-  "links": {
-    "cop": "https://github.com/alonengel/P2P-Police",
-    "thief": "https://github.com/alonengel/P2P-Thief"
-  },
-  "mcp_servers": {
-    "cop": "https://cop-mcp.alon.website/mcp",
-    "thief": "https://thief-mcp.alon.website/mcp"
-  },
-  "opponent_group_id": "imreeyal",
-  "outcome": "survival",
-  "report_type": "result",
-  "reported_at": "2026-07-24T12:00:36+00:00",
-  "schema_version": "1.00",
-  "score": {
-    "cop": 5,
-    "thief": 10
-  },
-  "tokens_total": 0,
-  "turns_completed": 35,
-  "winner_group": "imreeyal"
+  "num_sub_games": 3,
+  "sub_games": [
+    {
+      "audit": "Verified OK",
+      "log_file": "log_anrbj666-vs-imreeyal_g01.json",
+      "outcome": "survival",
+      "scores": {
+        "anrbj666": 5,
+        "imreeyal": 10
+      },
+      "sub_game_number": 1,
+      "turns_completed": 35
+    },
+    {
+      "audit": "Verified OK",
+      "log_file": "log_anrbj666-vs-imreeyal_g03.json",
+      "outcome": "survival",
+      "scores": {
+        "anrbj666": 5,
+        "imreeyal": 10
+      },
+      "sub_game_number": 3,
+      "turns_completed": 35
+    },
+    {
+      "audit": "Verified OK",
+      "log_file": "log_anrbj666-vs-imreeyal_g05.json",
+      "outcome": "survival",
+      "scores": {
+        "anrbj666": 5,
+        "imreeyal": 10
+      },
+      "sub_game_number": 5,
+      "turns_completed": 35
+    }
+  ]
 }
