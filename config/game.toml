@@ -17,8 +17,8 @@ mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief
 my_port = 8802                                  # police MCP server port
 opponent_url = "https://thief.imreeyal.com/mcp"  # series-test overlay (local only)      # the ONLY thing we know about the opponent
 turn_timeout_seconds = 180
-wire_shape = "bookletter"       # default lockstep wire; "reference" arms the hidden-information
-                                # (reference-v3) path and declares wire_shape_sha256 at negotiation
+wire_shape = "reference"        # the negotiated cross-team wire (hidden-information reference-v3);
+                                # declares wire_shape_sha256 at negotiation. "bookletter" = lockstep wire
 agreement_repush_sec = 7.0      # hidden-wire negotiate: re-send our agreement this often until the
                                 # rival's arrives (dedup-safe; turn_timeout_seconds still bounds it)
 inbound_buffer_limit = 8        # reorder-buffer flood cap (peer/sealing.py), floor 4: a crash+resume

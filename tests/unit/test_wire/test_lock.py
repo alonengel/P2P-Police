@@ -29,10 +29,11 @@ def test_default_wire_shape_is_bookletter(config_dir):
     assert lock.wire_shape(Config.load(config_dir)) == lock.BOOKLETTER
 
 
-def test_committed_game_toml_defaults_to_bookletter():
-    """Hard condition: the bookletter runtime stays the untouched default."""
+def test_committed_game_toml_arms_the_negotiated_wire():
+    """The committed default is the pair-negotiated cross-team wire; the
+    bookletter runtime stays fully selectable ("bookletter") and untouched."""
     private = tomllib.loads(Path("config/game.toml").read_text(encoding="utf-8"))
-    assert private["network"].get("wire_shape", "bookletter") == "bookletter"
+    assert private["network"].get("wire_shape") == "reference"
 
 
 def test_unknown_wire_shape_rejected(config_dir):
