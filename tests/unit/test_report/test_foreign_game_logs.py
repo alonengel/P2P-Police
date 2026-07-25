@@ -13,7 +13,7 @@ from pathlib import Path
 
 from p2p_police.sdk.sdk import SimulationSdk
 
-RESULTS = Path(__file__).resolve().parents[3] / "results"
+RESULTS = Path(__file__).resolve().parents[3] / "docs/evidence/discarded-series"
 
 
 def foreign_reference_logs() -> list[Path]:
