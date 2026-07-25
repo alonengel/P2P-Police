@@ -360,8 +360,8 @@ of this one game pair-verify `Verified OK` (§2, Cross-team verification):
 
 ### 5. Quality mapping (ISO/IEC 25010)
 
-Functional suitability — milestone-gated PRDs 01-09, 619 tests, branch
-coverage 93.16%. Reliability — deadlines, watchdog-style FSM exits, session
+Functional suitability — milestone-gated PRDs 01-09, 646 tests, branch
+coverage 93.27%. Reliability — deadlines, watchdog-style FSM exits, session
 rebuilds, chaos drills + crash-resume on both wire shapes,
 bystander-tolerant pairing, orphan-port guard, 20-seed self-play.
 Performance — template provider plays whole series at 0 LLM tokens. Security —

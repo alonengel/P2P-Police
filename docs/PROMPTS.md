@@ -1026,3 +1026,51 @@ than code: the only README statements that survived this pass unedited
 were the ones a committed command can regenerate. Write the command next
 to the claim, and stale docs become a failing check instead of a
 discovered embarrassment.
+
+## 2026-07-26 — Session: perception counter-build — the trail is a clock, walls betray their placer, place talk parses
+
+**Context.** A replayed-loss review of our own game logs turned into a
+failure-mode inventory of the belief stack, and three of the four modes
+were PERCEPTION bugs, not strategy bugs: (1) `observe_scent` multiplied by
+RAW intensity, so a long camp's saturated 5×5 plateau kept out-shouting the
+rival's live trail after it moved — the posterior locked onto a memory;
+(2) barrier declarations were consumed only as blocked cells, throwing away
+the law-of-barriers fact that a placement pins the placer to ≤5 cells;
+(3) `parse_claim` understood direction words only, so place-name hints
+("by the harbor") parsed to None and the hint channel went blind.
+
+**Prompt pattern — decode the physics, then let evidence land where the
+rival can BE, not where it WAS.** The fix that carries the session: under
+the fixed book model every reading is some kernel deposit K_d decayed
+×(1-ρ) per turn, so a value inverts to a REACH radius d+age — the Manhattan
+ball the emitter must occupy NOW. Spreading each reading's weight over its
+reach ball (ring hypotheses accepted fresh-only, to stop rung aliasing from
+re-anchoring stale plateaus) turns the mandatory transmitted trail into a
+live tracker: measured on an 8-step escape from a 9-turn camp, the peak
+runs 3 cells behind the walker and clear of the camp, where raw-intensity
+weighting sat 6 behind and still camp-anchored. TDD throughout: the tracker
+property, the barrier-origin localization (>0.6 mass on the origin cells,
+duplicate-declaration-safe on the reference wire) and the gazetteer tier
+(unique-landmark-only, fractional bands for any grid, inbound parsing only
+— rule 27 untouched) each landed red first.
+
+**Build.** Paired domain commit: `domain/evidence.py` (new, parity-locked)
++ `belief.py` (observe_scent over reach evidence; observe_barrier;
+observe_hint generalized to observe_region + region_is_lie). Peer commit:
+both runtimes hand freshly declared walls into `Perception.observe`.
+Strategy commit: `hints.py` landmark tier + `config/gazetteer.json`.
+Arena commit: `AgedBeliefTrapCop` — belief-led early pounce + gain-gated
+surgical walls, the calibrated hunting ceiling this belief stack enables,
+rule-25-guarded. Everything twin-shape with the sibling.
+
+**Gates.** 646 tests green, branch coverage 93.27% (≥85), ruff 0, 150-line
+caps OK (the decode split into `domain/evidence.py` exists BECAUSE of the
+cap), physics parity green both directions, README §5 counts regenerated.
+
+**Lesson.** The scent model transmits a clock, and we had been reading it
+as a heat map. When a mandatory channel seems weak, re-derive what it
+actually encodes before adding strategy on top: one likelihood function
+rewritten beat any amount of downstream cleverness built over the wrong
+posterior — and the pinned mirror-test relaxation (argmax ±1 under clamp
+saturation) documents exactly what the clamp makes unknowable, so nobody
+"fixes" it back into false certainty later.
