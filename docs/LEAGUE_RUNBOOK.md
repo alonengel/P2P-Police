@@ -120,3 +120,20 @@ Both repos: academic README complete + cross-links; screenshots in assets/;
 `git tag -a v1.0-submission -m "Final submission: Police-Thief P2P, group anrbj666"`
 + push the tag; Moodle form PDF (fields unaltered), EACH member submits
 separately, team code `anrbj666`.
+
+### Counted-day additions (2026-07-25)
+
+- **Preflight before window 1**: with `[email] mode = "send"`, the runner
+  verifies deliverability first (token loads/refreshes against the OAuth
+  endpoint only, recipient non-empty) and refuses the whole run with zero
+  games played if the report could not be sent — never discover a dead mail
+  rail after the sixth settle.
+- **League-address interlock**: sending to the league requires BOTH
+  `[email] counted = true` and the `--counted` flag. Rehearsals and
+  friendlies structurally cannot address the lecturer.
+- **Auto-close**: when the runner's last window settles and all num_games
+  logs are visible across both repos' results dirs, the series result is
+  aggregated and the ONE report email fires; any missing sub-game is named
+  and nothing is aggregated (a report must never invent a game).
+- **Orphan guard**: peer startup connect-probes its role port (refuses if
+  anything answers) and verifies its own server listens after start.

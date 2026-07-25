@@ -847,3 +847,127 @@ both; physics parity OK (16 files identical) both.
 queue nobody will ever read is a lie to the counterparty. Refuse once
 settled, re-push until answered, and let dedup make persistence free —
 liveness then degrades into retries instead of series drift.
+
+## 2026-07-25 — Session 22: report-layer book fidelity — no Hebrew match report is mandated (ADR-0009)
+
+**Context.** Our own book-fidelity review of the report layer. The
+course reference kit still ships `report/report_writer.py` — "the
+official Hebrew JSON match report ... Schema follows the game book
+(section 8)" — with Hebrew keys we never emit. If the book truly
+mandates a per-sub-game Hebrew-keyed report, our four artifacts hide a
+graded gap; if not, adopting it would drift from the book's canonical
+file vocabulary. Primary source first, code second.
+
+**Prompt (condensed).** "Re-read the reporting surface in full — ch. 8,
+ch. 9, Appendix ה, Appendix ו — before touching code. Decide: does the
+book define an official per-match Hebrew report schema, which fields,
+and is it חובה or example? If mandated, build `report/hebrew.py` TDD
+beside the four artifacts; if example-only or absent, build NOTHING and
+write the ADR with page cites. Book over example either way."
+
+**Finding.** The book mandates machine-readable JSON reporting but
+names no Hebrew field anywhere: §9.3.3 (p. 78) delegates the format to
+four attached example files, and Appendix ו Table 20 (p. 141) defines
+exactly four — declaration/config/log/result, named from game_id +
+g<NN>, "the names the book uses everywhere". The only field-level
+mandate (pp. 79-80): both teams' GitHub links (all four), each
+sub-game's commit id, token totals — all already carried by our
+declaration/result artifacts and the emailed series result
+(`report/series_doc.py`). Ch. 8 (pp. 61-68), the docstring's "section
+8", is architecture only — a stale cite; the reference's canonical
+sample run emits the four files with English snake_case keys, and its
+own sdk keeps the Hebrew report only as "legacy Hebrew log
+(back-compat)" feeding `{role}_match.json`, the ch. 7 replay input.
+
+**Build.** Deliberately no code: NEW
+`docs/adr/0010-official-match-report.md` (both repos, byte-identical)
+records the reading with page cites and the rules 32-36/49/51/53-54
+mapping, why the existing four-artifact layer IS the official report
+set, and the revisit trigger (a future binding schema lands in
+`report/`, never in parity-locked `domain/`). PROMPTS updated.
+domain/, tests/vectors/ and all code untouched.
+
+**Gates.** Docs-only session; suites re-run regardless: full
+`uv run pytest --cov -q` exit 0 in both repos (thief re-run solo after
+a parallel-run port flake in one chaos drill), 577 (police) / 575
+(thief) tests, coverage 93.26% / 93.21%; ruff 0 both; 150-code-line
+cap OK both; physics parity OK (16 files identical) both.
+
+**Lesson.** A reference implementation is evidence of A reading, not
+of THE rule: when its docstring points at a chapter that no longer
+says what it implies, the book's own binding principle (p. iv: nothing
+binds unless explicitly stated) decides. Recording the non-build in an
+ADR is as load-bearing as code — it closes the gap permanently instead
+of leaving it to be re-suspected at every audit.
+
+---
+
+## 2026-07-25 — Session: live-proven hardening batch (bystander-tolerant handshake, series bookends, port orphan guard, lecturer-address interlock)
+
+**Prompt pattern — adopt a batch of live-proven hardening items.** After
+the cross-team live sessions, a delegated agent received the observed
+failure modes as a numbered batch with per-item severity, the exact
+module map to touch, an explicit DO-NOT-TOUCH list (domain/, vectors,
+report/ owned by a concurrent task), and the standing gates: *"Nothing
+may evade the rulebook; every item below TIGHTENS compliance ... Tests:
+bystander agreement (wrong index) then real one -> game proceeds,
+refusal logged; fatal classes still fatal; deadline still bounds an
+endless-bystander stream."* Naming the tolerated/fatal split IN the
+prompt (pairing-class vs violation-class) is what kept the tolerance
+from quietly weakening rule 6.
+
+**Build.** wire/terms.py: `PairingRefusalError(GameRuleError)` — wrong
+`sub_game_number` and role-equal refusals classify as bystanders;
+locked-model mismatches stay plain-fatal. wire/repush.py:
+`push_agreement(..., verify=)` verifies INSIDE the wait — a pairing
+refusal is logged on the record ("agreement refused: wrong game, not
+you" with both values) and the wait continues, still bounded by the ONE
+overall deadline; hidden_runtime routes negotiate's three checks through
+it. infra/mcp_server.py: connect-probe orphan guard — `ensure_port_free`
+now refuses when the role port ANSWERS (`OrphanPeerError`; never
+trial-bind: on Windows two binds can both succeed) and
+`await_listening` proves our daemon server actually listens after
+start. shared/interlock.py (new): lecturer-address interlock — email to
+the league fires only when `[email] counted = true` AND `--counted`
+(peer/series-result/league_series) are BOTH armed; plus-aliases collapse
+onto the base identity; `assert_sparring_posture` refuses a tuned or
+email-armed sparring file at load. sdk/reporting.maybe_email records an
+interlock refusal ON the report (rule 32: the outcome still surfaces);
+sdk/series + cli surface it as `EMAIL REFUSED` + exit 1.
+scripts/league_close.py (new) + league_series.py: send-posture email
+preflight BEFORE window 1 (OAuth token endpoint only, zero games played
+on refusal, exit 2) and auto-close — aggregate with `--email` only when
+all num_games logs are visible across BOTH repos' results dirs
+(read-only file access, never a cross-repo import), else name who is
+missing and close nothing. peer/sealing.py: `_PENDING_CAP` ->
+config-owned `[network] inbound_buffer_limit` (default 8, floor 4) and
+the duplicate absorption upgraded to a structured evidence event
+(`inbound_tolerated kind=... turn=... reason=...`, INFO). Workspace-side
+`rival_shape_drill.sh` (NOT committed, workspace root): a sequential
+single-address six-window opponent from our sparring config, both
+runners full-dress against it. domain/, tests/vectors/, report/
+untouched; everything mirrored to the twin.
+
+**Tests.** Bystander wrong-window and role-equal: refused-on-record then
+the REAL counterpart pairs; endless-bystander stream still deadline-
+bounded; terms drift / bad signature / scent-lock mismatch stay
+first-offense fatal and never classify as pairing. Port guard with real
+sockets on ephemeral ports (orphan answers -> named refusal, no thread
+started; late listener -> await succeeds; nothing listens -> loud fail).
+Interlock truth table (config-half only / CLI-half only / both / friendly
+/ plus-alias / config-extended list), through maybe_email and the
+series-result CLI. Preflight (owes-nothing skip, empty recipient, dead
+token -> zero games) and close (complete -> aggregation command with both
+dirs + --email; gaps named, nothing run). Cap floor + narrowed-cap flood
++ the structured absorption event.
+
+**Gates.** Full `uv run pytest` green: 619 (police) / 617 (thief);
+coverage 93.16% / 93.12% (gate 85%); ruff 0 both; 150-code-line cap OK
+both; physics parity OK (16 files) both.
+
+**Lesson.** Classify before you punish: the FIRST message to arrive at a
+shared address is often somebody else's — a wire that treats "wrong
+game, not you" like "you cheated" hands technical losses to the honest
+side. Tolerance must be typed (a named exception class), logged as
+evidence, and bounded by the same deadline as silence — then it tightens
+rule 6 instead of weakening it.
