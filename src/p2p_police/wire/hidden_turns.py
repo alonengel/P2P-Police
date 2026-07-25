@@ -64,8 +64,11 @@ def their_half_turn(rt) -> None:
     step = rt.their_step
     message = codec.parse_turn_message(rt.exchange.receive_turn(step))
     rival = Role(message["sender"])
-    if message["barrier_placed"]:
-        rt.own.note_rival_barrier(message["barrier_placed"])
+    placed = message["barrier_placed"]
+    # Only a NEW declaration is evidence; redeliveries are transport noise.
+    fresh_wall = bool(placed) and not rt.own.board.is_barrier((placed[0], placed[1]))
+    if placed:
+        rt.own.note_rival_barrier(placed)
     rt.own.scent[rival].absorb(message["smell_grid"])
     rt.own.note_rival_half_turn()
     response = message["claim_response"]
@@ -75,7 +78,8 @@ def their_half_turn(rt) -> None:
     conceded = bool(response and response.get("caught")) and rival is Role.THIEF
     if rt.role is Role.POLICE and not conceded:
         rt.own.close_full_turn()  # the rival (thief) just ticked the round
-    rt.perception.observe(rt.own, rival, message["hint"])
+    rt.perception.observe(rt.own, rival, message["hint"],
+                          barrier_cell=(placed[0], placed[1]) if fresh_wall else None)
     if conceded:
         rt.own.outcome = Outcome.CAPTURE  # rival honestly declared itself caught
     elif message["win_claim"]:

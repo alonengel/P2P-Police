@@ -22,10 +22,19 @@ class Perception:
         self.profiler = OpponentProfiler()
         self.opponent_id = "unknown"
 
-    def observe(self, engine: GameEngine, rival: Role, hint_text: str | None) -> None:
-        """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4)."""
+    def observe(
+        self, engine: GameEngine, rival: Role, hint_text: str | None,
+        barrier_cell=None,
+    ) -> None:
+        """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4).
+
+        A freshly declared barrier placement (passed by the runtime the turn
+        it lands) first pins the placer's origin cells — law of barriers."""
         self.last_hint = hint_text or ""
         self.belief.diffuse(engine.board)
+        if barrier_cell is not None:
+            self.belief.observe_barrier(
+                (barrier_cell[0], barrier_cell[1]), engine.board)
         rival_scent = engine.scent[rival]
         self.belief.observe_scent(rival_scent, engine.board)
         claim = parse_claim(hint_text) if hint_text else None

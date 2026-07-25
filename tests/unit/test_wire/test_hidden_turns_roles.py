@@ -26,7 +26,7 @@ def stub_runtime(role: Role, message: dict) -> SimpleNamespace:
     return SimpleNamespace(
         role=role, own=own, their_step=0, pending_claim_response=None,
         exchange=SimpleNamespace(receive_turn=lambda step: message),
-        perception=SimpleNamespace(observe=lambda *_: None, emit=lambda *_: None),
+        perception=SimpleNamespace(observe=lambda *_, **__: None, emit=lambda *_: None),
     )
 
 

@@ -44,8 +44,7 @@ class GeometricRuntime:
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.brain, self.perception = brain, Perception(role, config.grid_size)
         self.deceiver = Deceiver(role, config, brain.rng)  # self-mirror lie policy
-        self.talk = build_talk_chain(config, brain.rng, gatekeeper)
-        self.fsm = GamePhaseMachine()
+        self.talk, self.fsm = build_talk_chain(config, brain.rng, gatekeeper), GamePhaseMachine()
         # SDK swaps in the real watchdog (rule 7) / resume recorder (E6)
         self.watchdog, self.resume = NullWatchdog(), NullResume()
 
@@ -104,11 +103,12 @@ class GeometricRuntime:
 
     def _their_half_turn(self, turn_index: int) -> None:
         payload = self.exchange.receive_sealed(turn_index)
-        actor = Role(payload["role"])
+        actor, action = Role(payload["role"]), payload["action"]
         if actor is self.role:
             raise GameRuleError("opponent claimed our role in a sealed record")
-        protocol.apply_action(self.engine, actor, payload["action"])
-        self.perception.observe(self.engine, actor, payload.get("hint"))
+        protocol.apply_action(self.engine, actor, action)
+        wall = tuple(action["cell"]) if action["type"] == "barrier" else None
+        self.perception.observe(self.engine, actor, payload.get("hint"), barrier_cell=wall)
         self.perception.emit(self.engine, turn_index)
 
 
