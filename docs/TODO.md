@@ -106,6 +106,14 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Third-party pair verifier (one game, two logs, one verdict) + committed-artifact guard over every committed log pair (report/pair_verify.py)
 - [x] Buffer-ahead sealing fix: a split commit+reveal pair no longer reads as desync (peer/sealing.py)
 
+## League-grade hidden wire & cross-team rehearsal (2026-07-22..25)
+- [x] Reference-v3 hidden client behind the negotiated wire_shape lock (src wire/ + sdk/hidden.py; ADR-0007 addendum + ADR-0008; mechanism PRD: docs/PRD_09_hidden_wire.md)
+- [x] Registered flat-terms handshake + role/sub-game pairing declarations + dedup-safe agreement re-push + typed bystander tolerance (PairingRefusalError)
+- [x] Claim-mediated capture + foreign-fair audit tiers (alignment by commit; Board-physics reconstruction; digest not-comparable, never false)
+- [x] Reference-conformant series result + rule-35 settlement guard; league-day runner with email preflight, auto-close and the doubly-armed lecturer-address interlock
+- [x] REAL cross-team play: warm-up games audits Verified OK on both sides + full 6-sub-game counted-format rehearsal (47-47 structural tie); mutually discarded evidence relocated to docs/evidence/discarded-series/ (outside the aggregation path, still committed history)
+- [x] Documentation-fidelity pass (2026-07-25): README Part II (dual wire, cross-team verification subsection, hidden replay witness assets/replay_hidden_verified.png, counts 619 tests / 93.16%), PRD_09, matrix PRD_01..09, this ledger
+
 ## DoD-observed ledger (measured evidence per completed phase)
 
 Every "done" above is backed by a regenerable artifact; the deep narratives
@@ -123,3 +131,5 @@ live in `docs/evidence/`:
 | Lying is a policy, not a coin (2026-07-21) | 2.0 lies/game vs the coin's 18.0; thief tracking error 2.36 -> 1.43 | `docs/evidence/deception.md`, `results/experiments/deception_policy.json` |
 | Negative results ship honestly (2026-07-21) | endgame solver 0 fires in 160 games; info-gain capture rate unmoved — both OFF by keep-gate | `docs/evidence/cop-strength.md`, `results/experiments/cop_strength.json` |
 | The hidden wire is league-grade end-to-end (2026-07-22) | reference-v3 phase 2: sdk wire-shape routing, hidden artifacts verify (verify-log + pair verifier, both directions), hidden kill-and-resume drill restored in 0.062 s, LIVE cross-repo g03 game: 35-turn survival, identical digests, pair-verify Verified OK | `docs/adr/0008-hidden-audit-reconstruction.md`, `docs/evidence/drills/hidden_resume_recovery_2026-07-22.jsonl`, `results/log_anrbj666-vs-anrbj666_g03.json` |
+| The counted format is rehearsed against a real rival (2026-07-24) | warm-up games: full 35 turns, audits Verified OK on BOTH sides, digest_match honestly null across per-team constructions; then all six sub-games of the counted format, roles alternating, every audit Verified OK, the predicted 47-47 structural tie + the ONE series email; the discarded series is committed history OUTSIDE the aggregation path | `docs/evidence/discarded-series/`, `config/games/config_anrbj666-vs-imreeyal_g*.json` |
+| One game, two logs, one third-party verdict (re-run 2026-07-25) | `verify_pair` on the committed twin logs: g01 (bookletter) and g03 (hidden) both `overall: Verified OK`; per-side `verify-log` on the rival-game logs: Verified OK in both repos; the hidden replay witness PNG regenerated from the committed CLI | `scripts/verify_pair.py`, `results/log_anrbj666-vs-anrbj666_g0*.json`, `assets/replay_hidden_verified.png` |

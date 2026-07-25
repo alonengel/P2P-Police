@@ -41,7 +41,14 @@ uv run p2p-police peer --gui           # + live local-truth view (belief heatmap
 uv run p2p-police peer --gui --gui-screenshot assets/live.png
 uv run p2p-police verify-log --log results/log_<game>.json   # Verified OK / TAMPERED
 uv run p2p-police replay --log results/log_<game>.json       # visual replay witness
+uv run p2p-police replay --log ... --screenshot out.png      # save the witness PNG, then exit
 uv run p2p-police --version
+
+# Series / league operations (docs/LEAGUE_RUNBOOK.md; wire shape from config or --wire-shape):
+uv run p2p-police peer --sub-game N [--resume|--sparring|--counted]
+uv run p2p-police series-result --game-id <id> --results-dir results --results-dir ../P2P-Thief/results
+uv run python scripts/league_series.py --sub-games "1,3,5" [--counted]   # our windows + auto-close
+uv run python scripts/verify_pair.py <log_a.json> <log_b.json>           # third-party pair verdict
 
 # Research reproduction (RL campaign - see Part II section 3 + PRD_08):
 uv run python scripts/train_rl.py          # linear Q-learning + negative result
@@ -119,6 +126,39 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   is the single entry to business logic.
 - **Commit order is negotiated** — an explicit agreement field, because two
   correct-but-different implementations would deadlock forever.
+- **One client, two registered wire shapes** (`[network] wire_shape` /
+  `--wire-shape`). The book self-contradicts: ch. 5's per-step reveal hands
+  both replicated engines the rival's true position, while the formal
+  model's Ωᵢ excludes it from observations (documented: ADR-0006/0007). We
+  ship both readings behind one negotiated lock — the default **bookletter
+  lockstep** (replicated engines, per-step reveals, `config_sha256`
+  agreement) and the **reference-v3 hidden mode** (`src/p2p_police/wire/`,
+  PRD_09): one commit-only TurnMessage per half-turn, the move sealed until
+  the audit, the rival's position structurally absent (`OwnState` carries
+  no field for it), capture claim-mediated, and the audit replayed on Board
+  physics because an engine replay would false-flag honest hidden games
+  (ADR-0008). Each shape speaks its own REGISTERED handshake — bookletter
+  by config hash, reference-v3 by the literal flat-terms form (14-key
+  `terms` + `nonce` + `signature = SHA256(canonical(terms)|nonce)`) — and
+  the choice itself is a locked model: `wire_shape_sha256` over the
+  published `config/wire_shape_lock.json`, refusal only when both peers
+  declare and differ.
+- **Hostile reality, drilled not hoped.** Chaos drills D1-D4 plus a LIVE
+  tunnel kill/heal with committed JSONL evidence
+  (`docs/evidence/chaos-drills.md`, `docs/evidence/drills/`);
+  per-half-turn crash-resume on BOTH wire shapes (`peer --resume`; drill
+  recoveries 0.045 s geometric / 0.062 s hidden, mutual audits Verified OK
+  after the restart); anti-stall rails for shared-address reality —
+  dedup-safe agreement re-push, bystander-tolerant pairing (a wrong-window
+  or same-role greeting is "wrong game, not you": logged and tolerated
+  while the one overall deadline still judges), post-settlement inbound
+  refusal (a dying peer must not swallow the rival's next greeting) and a
+  connect-probe orphan-port guard; and structural email interlocks — the
+  league/lecturer address is reachable only when a counted game is doubly
+  armed (`[email] counted = true` AND `--counted`), a send posture proves
+  OAuth-token deliverability BEFORE window 1, and `--sparring` refuses a
+  warm-up file carrying tuned play or an armed email path
+  (`shared/interlock.py`).
 - **The three classic orchestration failures** (course L09 framing) and our
   antidotes: *task duplication* — impossible, roles are disjoint by
   construction; *contradictory outputs* — replicated engines + end-state
@@ -126,18 +166,69 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   turn alternation with deadlines makes unbounded loops unrepresentable.
   (MCP is the project's mandated protocol; A2A and ACP are the complementary
   standards worth knowing for lifecycle handoff and zero-trust fleets.)
-- **A cross-team protocol contribution.** Reviewing another team's draft league
-  protocol (ImreEyal's interop kit), we identified that per-step commits —
-  strong against editing one step — leave a whole log re-forgeable offline,
-  and designed the fix: a `prev`/`prev_recv` hash interlock chaining both
+- **A cross-team protocol contribution.** Reviewing a rival league team's
+  draft interop protocol, we identified that per-step commits — strong
+  against editing one step — leave a whole log re-forgeable offline, and
+  designed the fix: a `prev`/`prev_recv` hash interlock chaining both
   sides' records into one tamper-evident DAG, making earliest divergence
-  provable from the two committed logs. The kit adopted it as its flagship
-  opt-in enhancement ("Design credit: anrbj666"). We deliberately do NOT run
+  provable from the two committed logs. The draft adopted it as its flagship
+  opt-in enhancement (design credited to `anrbj666`). We deliberately do NOT run
   it in counted games: it modifies the sealed record — the most
   disqualification-sensitive layer (rule 19) — for a guarantee the book does
   not require and only an opting-in opponent benefits from. The same review
   exchange surfaced the reference's byte-forms we aligned to (ADR-0004) and
   its settlement-signature quirk our conformance suite now pins.
+
+#### Cross-team verification
+
+- **The pair verifier** (`report/pair_verify.py`, CLI
+  `scripts/verify_pair.py`) — league tooling for ANY third party: given
+  both sides' log artifacts of one game it re-runs the ch. 7 replay per
+  side, then cross-checks that the two sealed views describe a single game
+  (same `game_uid`, same end digest, every record one side sealed
+  byte-equal to what the other received — commit equality is the anchor).
+  Re-verifiable on the committed twin logs of the hidden-wire game g03:
+
+  ```bash
+  uv run python scripts/verify_pair.py results/log_anrbj666-vs-anrbj666_g03.json \
+    ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
+  ```
+
+- **Real games against a rival league team** (2026-07-24, T-protocol
+  window): warm-up games over the public tunnels ran the full 35 turns to
+  survival with audits **Verified OK on both sides** — the registered
+  flat-terms handshake, the per-sender cadence, commit-aligned reveals
+  with the rival's step-0 spec record tolerated, and the reference-exact
+  audit envelope, all live; `digest_match` reports `null` between two
+  per-team digest constructions (not-comparable — never falsely false). A
+  full six-sub-game rehearsal of the counted format followed — roles
+  alternating, truthful declarations, every audit Verified OK, the
+  predicted 47-47 structural tie (`series_tie: true`), and the ONE
+  series-report email fired through the gatekeeper. The rehearsal was
+  mutually discarded (never counted), so its evidence lives outside the
+  aggregation path by construction —
+  [docs/evidence/discarded-series/](docs/evidence/discarded-series/)
+  (sub-game logs + declaration + the reference-conformant series result) —
+  and stays re-verifiable per side:
+
+  ```bash
+  uv run p2p-police verify-log \
+    --log docs/evidence/discarded-series/log_anrbj666-vs-imreeyal_g01.json   # Verified OK
+  ```
+
+  (The byte-level PAIR cross-check is defined over two logs sealed under
+  ONE schema, like our committed twin pairs; a rival half sealed under its
+  own per-team schema is judged by the schema-agnostic commit criterion
+  plus the derivable-rule tiers instead — never called tampered for its
+  schema.)
+
+- **The settlement guard (rule 35).** `series-result` folds sub-game logs
+  (pooling BOTH role repos' results dirs) into the reference-conformant
+  series result and **refuses** to emit unless every sub-game
+  1..num_games is covered by a settled, audit-clean log under one
+  consensus `game_uid` — wrong-window or wrong-`num_games` logs are
+  excluded BY NAME, never silently, and a refused series never emails
+  (`sdk/series.py`, `report/series_doc.py`, ADR-0009).
 
 ### 3. The chosen strategy
 
@@ -259,13 +350,23 @@ the game's structure, measured, not assumed.
 `verify-log` on the same log: genuine → `Verified OK`; one rewritten move →
 `TAMPERED` (exit 1).
 
+The same witness over the **hidden wire**: the reference-v3 self-play game
+g03 (`results/log_anrbj666-vs-anrbj666_g03.json`, `"wire_shape":
+"reference"`) replayed and re-verified — the reconstruction applies both
+revealed halves on Board physics (ADR-0008), and the twin repos' two logs
+of this one game pair-verify `Verified OK` (§2, Cross-team verification):
+
+![Hidden-wire replay Verified OK](assets/replay_hidden_verified.png)
+
 ### 5. Quality mapping (ISO/IEC 25010)
 
-Functional suitability — milestone-gated PRDs 01-08, 293 tests. Reliability —
-deadlines, watchdog-style FSM exits, session rebuilds, 20-seed self-play.
+Functional suitability — milestone-gated PRDs 01-09, 619 tests, branch
+coverage 93.16%. Reliability — deadlines, watchdog-style FSM exits, session
+rebuilds, chaos drills + crash-resume on both wire shapes,
+bystander-tolerant pairing, orphan-port guard, 20-seed self-play.
 Performance — template provider plays whole series at 0 LLM tokens. Security —
 send-only OAuth scope, secrets outside the repo, gitleaks CI, commit-reveal
-integrity. Maintainability — SDK layering, ≤150-line files, per-mechanism PRDs,
+integrity, doubly-armed lecturer-address interlock. Maintainability — SDK layering, ≤150-line files, per-mechanism PRDs,
 ADRs incl. documented book contradictions. Portability — uv-locked, stdlib+httpx
 core. Compatibility — byte-locked shared config + golden physics vectors across
 twins. Usability — one-command flows, local-truth GUI, actionable errors.

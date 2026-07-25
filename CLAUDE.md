@@ -49,7 +49,7 @@ uv run p2p-police --version                    # CLI smoke
 
 ## Doc map
 
-`docs/PRD.md` (+ `PRD_01..07_*.md` per stage) · `docs/PLAN.md` (architecture)
+`docs/PRD.md` (+ `PRD_01..09_*.md` per stage) · `docs/PLAN.md` (architecture)
 · `docs/TODO.md` (phase gates — keep statuses current) · `docs/PROMPTS.md`
 (prompt log) · `docs/adr/` (decisions & documented contradictions).
 

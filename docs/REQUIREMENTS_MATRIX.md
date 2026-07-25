@@ -23,7 +23,7 @@ this repo by the pre-league MUST-coverage audit.)
 | 18 | Nonce secret until audit | sealing (reveal omits nonce+verdict) | test_sealing (secrecy asserts) | IMPL |
 | 19 | Hash mismatch = technical loss | crypto.audit_records; sdk voids on TAMPERED | tamper tests | IMPL |
 | 20 | Replay + verification | gui/replay.py; verify-log CLI; both halves verified | live TAMPERED demo | IMPL |
-| 21-22 | Truthful capture, no false claims | replicated-engine capture - claim-time truth duty subsumed by sealed records (ADR-0005) | test_engine capture paths | IMPL |
+| 21-22 | Truthful capture, no false claims | replicated-engine capture - claim-time truth duty subsumed by sealed records (ADR-0005); hidden wire: structural claim flow (wire/claims.py, PRD_09) | test_engine capture paths; test_claims_truth | IMPL |
 | 23 | Scent model locked pre-game | scent_model_sha256 in agreement; scent_model_spec() | test_negotiation | IMPL |
 | 24 | Hardware declaration sealed | hardware_spec sha in agreement; declaration artifact | test_artifacts | IMPL |
 | 25 | LLM never decides moves | brains pure Python; TalkChain text-only | test_brains; SECURITY.md | IMPL |
@@ -43,7 +43,7 @@ this repo by the pre-league MUST-coverage audit.)
 | 46-47 | Barrier-capture; trapped-capture | domain/rules.py + engine mid-round checks | test_rules, test_engine | IMPL |
 | 48 | Score every scenario | domain/scoring.py from signed config | test_scoring | IMPL |
 | 49 | Two repos + cross-links | READMEs; links in all artifacts | check_submission | IMPL |
-| 50 | README/config/PRD/PLAN/TODO in repo | docs/ complete incl. PRD_01..08 | check_submission | IMPL |
+| 50 | README/config/PRD/PLAN/TODO in repo | docs/ complete incl. PRD_01..09 | check_submission | IMPL |
 | 51 | Reports to lecturer alias | game.toml recipient | live send path | IMPL+OPER |
 | 52 | One counted game per rival | sdk/series.py; runbook counting rules | test_series | IMPL+OPER |
 | 53 | Commit ID per game | declaration github_commit; manual email duty | runbook step 1 | IMPL+OPER |

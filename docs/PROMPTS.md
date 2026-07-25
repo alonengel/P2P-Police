@@ -971,3 +971,58 @@ game, not you" like "you cheated" hands technical losses to the honest
 side. Tolerance must be typed (a named exception class), logged as
 evidence, and bounded by the same deadline as silence — then it tightens
 rule 6 instead of weakening it.
+
+## 2026-07-25 — Session: documentation-fidelity pass — Part II catches up with the hidden-wire arc; PRD_09
+
+**Context.** README Part II still described a single-wire architecture,
+"PRDs 01-08" and pre-arc test counts; the reference-v3 client, the
+cross-team evidence, the series machinery and the interlocks were
+undocumented at README level, and the hidden wire had no mechanism PRD.
+Docs-and-evidence session only: src/, tests/ and config/ untouched.
+
+**Prompt pattern — verify-then-write, and let the tools veto the draft.**
+Every claim was re-derived from the tree before it entered a doc, and two
+draft claims died on contact with reality: (1) the pair verifier was
+re-run on the two repos' RIVAL-game logs and correctly answered
+CROSS-MISMATCH — they are two different physical games whose foreign
+halves share no digest construction — so the README's pair-verify claim
+was pointed at the committed twin logs of ONE game instead (g01
+bookletter, g03 hidden: both `overall: Verified OK`, re-run now), with
+the rival games carried by per-side `verify-log` (Verified OK re-run in
+both repos) exactly as ch. 7 defines; (2) a replay screenshot of the
+rival-game log is impossible BY DESIGN — the replay witness reconstructs
+from both halves' payloads and a foreign half fails our pinned-field
+`verify_commit` — so the mandatory-screenshot addition uses the committed
+hidden-wire twin game g03 (`replay --log results/log_anrbj666-vs-anrbj666_g03.json
+--screenshot assets/replay_hidden_verified.png`, green "Verified OK (70
+sealed steps)") and the README says precisely which pairs the byte-level
+cross-check is defined over.
+
+**Build.** README: Part I gains the series/league command block; Part II
+§2 gains the dual-wire bullet (the ch. 5-vs-Ωᵢ self-contradiction,
+ADR-0006/0007/0008, each shape's registered handshake, the
+wire_shape_sha256 lock), the drilled-hardening bullet (chaos + resume +
+anti-stall + bystander tolerance + orphan guard + email interlocks) and
+a "Cross-team verification" subsection (pair verifier with the exact
+command, the rival-league warm-up + 47-47 six-sub-game rehearsal with
+the discarded-series evidence paths, the rule-35 settlement guard); §4
+gains the hidden replay witness PNG; §5 counts move to PRDs 01-09 / 619
+tests / 93.16% branch coverage. Rival-team naming scrubbed from prose —
+league ids stay only in artifact filenames, which are league data. NEW
+docs/PRD_09_hidden_wire.md in the house per-mechanism format
+(description & theory, I/O contracts, cadence/claims/reconstruction,
+settlement, performance, alternatives, success criteria pointing at the
+real tests + evidence). REQUIREMENTS_MATRIX: row 50 → PRD_01..09, rules
+21-22 row now cites the structural claim flow. TODO: dated 2026-07-22..25
+section + two ledger rows. Everything mirrored to the twin (PRD_09
+byte-identical but for the repo's own drill timing).
+
+**Gates.** Docs + one PNG per repo only; full `uv run pytest --cov -q`
+green both repos: 619 (police) / 617 (thief), coverage 93.16% / 93.12%;
+ruff surfaces untouched; parity-locked files untouched.
+
+**Lesson.** Documentation is a claim generator, and claims rot faster
+than code: the only README statements that survived this pass unedited
+were the ones a committed command can regenerate. Write the command next
+to the claim, and stale docs become a failing check instead of a
+discovered embarrassment.
