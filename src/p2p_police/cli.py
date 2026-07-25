@@ -34,6 +34,9 @@ def build_parser() -> argparse.ArgumentParser:
     peer.add_argument("--sparring", action="store_true",
                       help="uncounted warm-up posture: load config/sparring.toml "
                            "(shipped baseline brain, deception disarmed, no email)")
+    peer.add_argument("--counted", action="store_true",
+                      help="counted league game: arms the CLI half of the lecturer-"
+                           "address interlock ([email] counted = true is the other half)")
     peer.add_argument("--wire-shape", choices=("bookletter", "reference"), default=None,
                       help="override [network] wire_shape for this run")
     peer.add_argument("--duplicate-outbound", action="store_true",
@@ -56,6 +59,9 @@ def build_parser() -> argparse.ArgumentParser:
                         help="after a SUCCESSFUL emit, auto-send the one series report "
                              "email (fires only when [email].mode == 'send'; a refused "
                              "series never emails)")
+    series.add_argument("--counted", action="store_true",
+                        help="counted league series: arms the CLI half of the lecturer-"
+                             "address interlock for the series email")
     return parser
 
 
@@ -70,6 +76,12 @@ def main(argv: list[str] | None = None) -> int:
 
         sdk = SimulationSdk(args.config_dir,
                             private_file="sparring.toml" if args.sparring else "game.toml")
+        if args.sparring:  # load-time posture gate: generic play, no email
+            from p2p_police.shared.interlock import assert_sparring_posture
+
+            assert_sparring_posture(sdk.config.private)
+        if args.counted:  # CLI half of the lecturer-address interlock
+            sdk.config.private.setdefault("email", {})["counted_cli_armed"] = True
         if args.sub_game is not None:
             sdk.config.private["game"]["sub_game_number"] = args.sub_game
         if args.wire_shape is not None:
@@ -109,6 +121,8 @@ def main(argv: list[str] | None = None) -> int:
         from p2p_police.shared.config import Config
 
         config = Config.load(args.config_dir)
+        if args.counted:  # CLI half of the lecturer-address interlock
+            config.private.setdefault("email", {})["counted_cli_armed"] = True
         dirs = args.results_dir or ["results"]
         ours = {"group_id": config.group_id,
                 "members": config.private["game"].get("members", []),
@@ -127,7 +141,13 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(doc["final_result"], indent=2))
         print(f"written: {path}")
         if args.email:
-            message_id = maybe_email_series(config, doc, path)
+            from p2p_police.shared.interlock import EmailInterlockError
+
+            try:
+                message_id = maybe_email_series(config, doc, path)
+            except EmailInterlockError as error:
+                print(f"EMAIL REFUSED: {error}")
+                return 1
             if message_id:
                 print(f"emailed: {message_id}")
         return 0

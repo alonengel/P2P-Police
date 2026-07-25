@@ -14,6 +14,12 @@ runner moves on - nothing is retried blindly and nothing is fabricated;
 the series-result settlement guard (rule 35) downstream refuses the whole
 series if any window never settled.
 
+Bookends (scripts/league_close.py): a send posture proves email
+deliverability BEFORE window 1 (else the run refuses with zero games
+played), and after this runner's last window settles the series
+auto-closes IF every sub-game log is visible across both repos' results
+dirs - otherwise the missing windows are named and nothing aggregates.
+
 Usage: uv run python scripts/league_series.py --sub-games "1,3,5" [--seed 900]
 """
 
@@ -25,9 +31,14 @@ import time
 from datetime import UTC, datetime
 from pathlib import Path
 
+import league_close
+
 ROOT = Path(__file__).resolve().parents[1]
 ROLE, CLI, PARITY = "police", "p2p-police", 1  # the police plays the ODD windows
 LOCK_PATH = ROOT / "results" / "local" / "league_series.lock"
+# The twin repo's results dir: read-only FILE access for the series close -
+# never an import (workspace iron rule); its runner owns the other windows.
+SIBLING_RESULTS = ROOT.parent / "P2P-Thief" / "results"
 
 
 def parse_sub_games(spec: str) -> list[int]:
@@ -57,11 +68,14 @@ def _stamp() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
 
 
-def run_window(window: int, seed_base: int | None, runner) -> dict:
+def run_window(window: int, seed_base: int | None, runner,
+               counted: bool = False) -> dict:
     """One sub-game via the real CLI; the exit code is reported verbatim."""
     command = ["uv", "run", CLI, "peer", "--sub-game", str(window)]
     if seed_base is not None:
         command += ["--seed", str(seed_base + window)]
+    if counted:  # arms the CLI half of the lecturer-address interlock
+        command.append("--counted")
     print(f"[{_stamp()}] window s{window}: launching {' '.join(command)}", flush=True)
     started = time.perf_counter()
     code = int(runner(command, cwd=ROOT).returncode)
@@ -80,11 +94,19 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
                         help='comma list of THIS repo\'s windows, e.g. "1,3,5"')
     parser.add_argument("--seed", type=int, default=None,
                         help="base seed; window N runs the peer with seed base+N")
+    parser.add_argument("--counted", action="store_true",
+                        help="counted league series: forwards --counted to every peer "
+                             "window and to the closing aggregation (lecturer-address "
+                             "email interlock, CLI half)")
     args = parser.parse_args(argv)
     try:
         windows = parse_sub_games(args.sub_games)
     except ValueError as error:
         print(f"REFUSED: {error}")
+        return 2
+    refusal = league_close.email_preflight(ROOT / "config")
+    if refusal is not None:  # a send posture that cannot deliver plays NOTHING
+        print(f"REFUSED (email preflight, zero games played): {refusal}")
         return 2
     if not acquire_lock(LOCK_PATH):
         holder = LOCK_PATH.read_text(encoding="ascii", errors="replace").strip() or "?"
@@ -92,7 +114,8 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
               f"{holder}); if that run is truly dead, delete the lockfile and retry")
         return 2
     try:
-        rows = [run_window(window, args.seed, runner) for window in windows]
+        rows = [run_window(window, args.seed, runner, args.counted)
+                for window in windows]
     finally:
         LOCK_PATH.unlink(missing_ok=True)  # ours: we acquired it above
     failed = [f"s{row['window']}" for row in rows if row["exit"] != 0]
@@ -101,7 +124,8 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
               "windows before aggregating (series-result will refuse otherwise)")
         return 1
     print(f"series windows done; all {len(rows)} settled")
-    return 0
+    return league_close.close_series(ROOT, SIBLING_RESULTS, CLI, runner,
+                                     counted=args.counted)
 
 
 if __name__ == "__main__":

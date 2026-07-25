@@ -23,6 +23,16 @@ def test_peer_defaults_leave_sparring_and_drill_knobs_off() -> None:
     assert args.sparring is False
     assert args.wire_shape is None
     assert args.duplicate_outbound is False
+    assert args.counted is False  # lecturer-address interlock stays unarmed
+
+
+def test_counted_flag_parses_on_peer_and_series_result() -> None:
+    assert build_parser().parse_args(["peer", "--counted"]).counted is True
+    series = build_parser().parse_args(
+        ["series-result", "--game-id", "a-vs-b", "--counted"])
+    assert series.counted is True
+    assert build_parser().parse_args(
+        ["series-result", "--game-id", "a-vs-b"]).counted is False
 
 
 def test_peer_parses_sparring_wire_shape_and_duplicate_flags() -> None:

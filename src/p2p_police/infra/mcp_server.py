@@ -9,12 +9,19 @@ the transport (separation of concerns, ch. 8).
 import queue
 import socket
 import threading
+import time
 
 from fastmcp import FastMCP
 
 
 class PortBusyError(Exception):
     """The configured port is taken — fail fast with an actionable message."""
+
+
+class OrphanPeerError(PortBusyError):
+    """Something already ANSWERS on our role port: an orphaned peer instance
+    would swallow the rival's traffic while the real peer starves and
+    mis-reports the game — never start beside it."""
 
 
 class PeerInboxes:
@@ -47,18 +54,41 @@ def deliver(inboxes: PeerInboxes, box: queue.Queue, payload: dict) -> dict:
     return {"accepted": True}
 
 
-def ensure_port_free(port: int, host: str = "127.0.0.1") -> None:
-    """Raise PortBusyError if `port` cannot be bound (rulebook: fail fast
-    beats a silent second instance fighting over the inbox)."""
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
-        probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+def ensure_port_free(port: int, host: str = "127.0.0.1",
+                     timeout: float = 0.5) -> None:
+    """CONNECT-probe the role port BEFORE binding: anything that ANSWERS is
+    an orphaned peer (or a foreign server) — refuse by name (rulebook: fail
+    fast beats a silent second instance fighting over the inbox). Never
+    trial-bind as the guard: on Windows two binds can BOTH succeed, so
+    answering, not bindability, is the only honest test."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            answered = True
+    except OSError:
+        answered = False  # nothing listening: the port is ours to take
+    if answered:
+        raise OrphanPeerError(
+            f"port {port} on {host} already ANSWERS a connect probe - an "
+            "orphaned peer instance seems to hold it (the real peer would "
+            "starve and mis-report); stop that process or change "
+            "[network].my_port in config/game.toml")
+
+
+def await_listening(port: int, host: str = "127.0.0.1",
+                    attempts: int = 40, delay: float = 0.1) -> None:
+    """AFTER the daemon server thread starts: prove it actually listens
+    (connect-probe with small retries) — a peer that cannot be reached must
+    fail loudly at startup, never play on and mis-report the rival absent."""
+    for _ in range(attempts):
         try:
-            probe.bind((host, port))
-        except OSError as error:
-            raise PortBusyError(
-                f"port {port} on {host} is busy ({error}); stop the other process "
-                f"or change [network].my_port in config/game.toml"
-            ) from error
+            with socket.create_connection((host, port), timeout=0.25):
+                return
+        except OSError:
+            time.sleep(delay)
+    raise PortBusyError(
+        f"our MCP server never started listening on {host}:{port} "
+        f"(~{attempts * delay:.0f}s of connect probes) - refusing to play "
+        "unreachable")
 
 
 def build_peer_server(inboxes: PeerInboxes, name: str = "p2p_police_peer") -> FastMCP:
@@ -95,6 +125,8 @@ def start_peer_server(
 
     Daemon: the game loop owns process lifetime; a wedged transport must never
     keep a dead peer alive (watchdog does controlled shutdown, ch. 8).
+    Guarded on both edges: an orphan answering the port refuses BEFORE we
+    bind; the started server must prove it listens AFTER (await_listening).
     """
     ensure_port_free(port, host)
     thread = threading.Thread(
@@ -111,4 +143,5 @@ def start_peer_server(
         daemon=True,
     )
     thread.start()
+    await_listening(port, host)
     return thread

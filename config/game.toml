@@ -21,6 +21,8 @@ wire_shape = "bookletter"       # default lockstep wire; "reference" arms the hi
                                 # (reference-v3) path and declares wire_shape_sha256 at negotiation
 agreement_repush_sec = 7.0      # hidden-wire negotiate: re-send our agreement this often until the
                                 # rival's arrives (dedup-safe; turn_timeout_seconds still bounds it)
+inbound_buffer_limit = 8        # reorder-buffer flood cap (peer/sealing.py), floor 4: a crash+resume
+                                # can legitimately split/reorder two commit/reveal pairs
 
 # [strategy]  -- optional: point at your brain subclass (else the shipped heuristic runs)
 # police_class = "p2p_police.strategy.police_brain:PoliceBrain"
@@ -45,6 +47,11 @@ step_deadline_seconds = 30      # hard cap on LLM thinking per step
 [email]
 recipient = "alonisrael.engel@gmail.com, Imree.c@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
+counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
+                                # (the other half) a counted game may address the league; rehearsals
+                                # and friendlies structurally cannot (shared/interlock.py)
+league_addresses = ["rmisegal@gmail.com", "rmisegal+uoh26finalgame@gmail.com"]  # the league/lecturer
+                                # inbox family (rule 51); plus-aliases collapse onto the base identity
 
 [resume]                        # crash-resume snapshots (peer/resume.py) - pure LOCAL persistence
 enabled = true                  # ON by default: per-half-turn snapshot -> results/local/resume_*.json

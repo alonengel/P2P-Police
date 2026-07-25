@@ -17,7 +17,7 @@ from p2p_police.infra.mcp_server import PeerInboxes
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.peer.perception import Perception
 from p2p_police.peer.resume import NullResume, handle_controls
-from p2p_police.peer.sealing import SealedExchange
+from p2p_police.peer.sealing import SealedExchange, pending_cap_from
 from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.brain_base import BrainBase
@@ -56,7 +56,7 @@ class GeometricRuntime:
                 msg, Deadline(self.config.turn_timeout_seconds)
             ),
             lambda what, deadline=None: self._wait(self.inboxes.turns, what, deadline),
-            turn_timeout=config.turn_timeout_seconds,
+            turn_timeout=config.turn_timeout_seconds, pending_cap=pending_cap_from(config),
         )
 
     def _wait(self, inbox: queue.Queue, what: str, deadline=None) -> dict:

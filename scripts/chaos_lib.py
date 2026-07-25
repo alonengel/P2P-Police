@@ -115,18 +115,20 @@ def finish_row(evidence: EvidenceLog, name: str, mine: dict, stub_box: dict,
 
 
 class DedupObserver(logging.Handler):
-    """Counts the sealing layer's REAL 'duplicate delivery dropped' records."""
+    """Counts the sealing layer's REAL absorption events — the structured
+    `inbound_tolerated ... reason=duplicate delivery` INFO records."""
 
     def __init__(self) -> None:
-        super().__init__(level=logging.DEBUG)
+        super().__init__(level=logging.INFO)
         self.dropped = 0
         self._logger = logging.getLogger("p2p_police.peer.sealing")
         self._prior_level = self._logger.level
-        self._logger.setLevel(logging.DEBUG)
+        self._logger.setLevel(logging.INFO)
         self._logger.addHandler(self)
 
     def emit(self, record: logging.LogRecord) -> None:
-        if "duplicate delivery dropped" in record.getMessage():
+        message = record.getMessage()
+        if "inbound_tolerated" in message and "duplicate delivery" in message:
             self.dropped += 1
 
     def detach(self) -> None:

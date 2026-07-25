@@ -10,6 +10,7 @@ Perception (belief is the ONLY rival estimate — rules 8-9), the self-mirror
 Deceiver and the template hint chain (moves stay pure Python, rule 25).
 """
 
+import logging
 import queue
 import time
 from datetime import UTC, datetime
@@ -20,6 +21,7 @@ from p2p_police.domain.state_machine import GamePhaseMachine
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 from p2p_police.peer.perception import Perception
 from p2p_police.peer.resume import NullResume
+from p2p_police.peer.sealing import pending_cap_from
 from p2p_police.peer.watchdog import NullWatchdog
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.deception import Deceiver
@@ -27,6 +29,8 @@ from p2p_police.strategy.talk_providers import build_talk_chain
 from p2p_police.wire import hidden_resume, hidden_turns, lock, repush, terms
 from p2p_police.wire.hidden_exchange import HiddenExchange
 from p2p_police.wire.own_state import OwnState
+
+_LOG = logging.getLogger(__name__)
 
 
 class HiddenRuntime:
@@ -60,6 +64,7 @@ class HiddenRuntime:
             ),
             self._wait_turn,
             turn_timeout=config.turn_timeout_seconds,
+            pending_cap=pending_cap_from(config),
         )
         self.pending_claim_response: dict | None = None
         self.clock = time.monotonic  # injectable seam for the repush tests
@@ -94,7 +99,9 @@ class HiddenRuntime:
         while True:
             message = self._wait(self.inboxes.turns, what, deadline)
             if message.get("sender") == self.role.value:
-                continue  # our own echo: never protocol content
+                _LOG.info("inbound_tolerated kind=%s turn=%s reason=%s", "turn",
+                          message.get("step"), "own-role echo, never protocol content")
+                continue  # our own echo
             try:
                 step = int(message.get("step", -1))
             except (TypeError, ValueError):
@@ -118,12 +125,18 @@ class HiddenRuntime:
             role=self.role.value,  # complementary-role guard (equal refuses)
         )
         lock.extend_agreement(mine, self.config)
-        # re-push until theirs arrives: a greeting swallowed by the rival's
-        # dying previous-sub-game peer gets fresh chances at the real one
-        theirs = repush.push_agreement(self, mine, self.clock)
-        terms.verify_terms_message(mine["terms"], theirs)
-        terms.verify_declarations(mine, theirs)
-        lock.verify_wire_shape(mine, theirs)
+
+        def verify(theirs: dict) -> None:
+            """Ran INSIDE the wait: a PairingRefusalError (bystander: wrong window
+            or our role) keeps the wait alive; the rest stays fatal."""
+            terms.verify_terms_message(mine["terms"], theirs)
+            terms.verify_declarations(mine, theirs)
+            lock.verify_wire_shape(mine, theirs)
+
+        # re-push until a VERIFIED counterpart arrives: a greeting swallowed
+        # by the rival's dying previous-sub-game peer gets fresh chances at
+        # the real one, and a bystander's greeting never costs us the game
+        theirs = repush.push_agreement(self, mine, self.clock, verify)
         self.opponent_info = theirs
         self.opponent_group_id = self.perception.opponent_id = terms.peer_group_id(theirs)
         return theirs

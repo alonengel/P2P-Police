@@ -15,24 +15,38 @@ from p2p_police.peer.deadline import Deadline
 
 _LOG = logging.getLogger(__name__)
 
+DEFAULT_PENDING_CAP = 8  # ~2 pairs of lookahead is legitimate; more is flooding
+MIN_PENDING_CAP = 4  # floor: a crash+resume can split/reorder two full pairs
+
+
+def pending_cap_from(config) -> int:
+    """[network] inbound_buffer_limit — the reorder-buffer flood cap."""
+    return int(config.private.get("network", {})
+               .get("inbound_buffer_limit", DEFAULT_PENDING_CAP))
+
 
 class SealedExchange:
     """Input: my role/sub_game + send/wait callables from the runtime.
     Output: applied opponent actions + audit verdicts. Setup: empty logs."""
 
     def __init__(self, role: Role, sub_game: int, send_turn, wait_turn,
-                 turn_timeout: float | None = None) -> None:
+                 turn_timeout: float | None = None,
+                 pending_cap: int = DEFAULT_PENDING_CAP) -> None:
+        if pending_cap < MIN_PENDING_CAP:
+            raise ValueError(
+                f"[network] inbound_buffer_limit must be >= {MIN_PENDING_CAP} "
+                f"(got {pending_cap}): the reorder buffer must still absorb a "
+                "resume-split commit/reveal pair from each side")
         self.role = role
         self.sub_game = sub_game
         self._send = send_turn
         self._wait = wait_turn
         self.turn_timeout = turn_timeout  # one deadline per EXPECTED message
+        self.pending_cap = int(pending_cap)
         self.own_records: list[dict] = []   # {payload, nonce, commit}
         self.their_records: list[dict] = [] # {payload, commit}
         self._consumed: set[tuple[str, int]] = set()  # dedup: at-least-once transport
         self._pending: dict[tuple[str, int], dict] = {}  # out-of-order buffer
-
-    _PENDING_CAP = 8  # ~2 pairs of lookahead is legitimate; more is flooding
 
     def _next(self, kind: str, turn_index: int) -> dict:
         """Wait for (kind, turn), SKIPPING duplicates the retrying transport
@@ -58,12 +72,14 @@ class SealedExchange:
                                if r.get("payload", {}).get("step") == key[1]), None)
                 if key[0] == "commit" and stored and message.get("commit") != stored["commit"]:
                     raise GameRuleError(f"conflicting commit for played step {key[1]}")
-                _LOG.debug("duplicate delivery dropped: %s (at-least-once transport)", key)
+                # evidence-grade absorption event (stable key, no wire change)
+                _LOG.info("inbound_tolerated kind=%s turn=%s reason=%s", key[0],
+                          key[1], "duplicate delivery, at-least-once transport")
                 continue
             if key == expected:
                 self._consumed.add(key)
                 return message
-            if len(self._pending) >= self._PENDING_CAP:
+            if len(self._pending) >= self.pending_cap:
                 raise GameRuleError(
                     f"protocol desync: flooded while expecting {kind} {turn_index}"
                 )

@@ -138,6 +138,11 @@ def maybe_email_series(config, doc: dict, result_path, gatekeeper=None) -> str |
         return None
     from p2p_police.infra.email_sender import send_report
     from p2p_police.shared.gatekeeper import ApiGatekeeper
+    from p2p_police.shared.interlock import ensure_email_allowed
+
+    # lecturer-address interlock: an unarmed run cannot address the league
+    # (EmailInterlockError propagates; the CLI reports the refusal)
+    ensure_email_allowed(config, email_cfg["recipient"])
 
     final = doc["final_result"]
     verdict = ("series_tie" if final["series_tie"]

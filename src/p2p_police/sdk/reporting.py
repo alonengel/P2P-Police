@@ -104,13 +104,24 @@ def emit_artifacts(config, runtime, report: dict) -> list:
 
 
 def maybe_email(config, report: dict, gatekeeper=None) -> None:
-    """Automatic end-of-game report (rule 32) when [email].mode == send."""
+    """Automatic end-of-game report (rule 32) when [email].mode == send.
+
+    Routed through the lecturer-address interlock: a run not doubly armed as
+    a counted game structurally cannot address the league — the refusal is
+    recorded ON THE REPORT (the game outcome must still reach stdout intact,
+    rule 32) and nothing is sent."""
     email_cfg = config.private.get("email", {})
     if email_cfg.get("mode") != "send":
         return
     from p2p_police.infra.email_sender import send_report
     from p2p_police.shared.gatekeeper import ApiGatekeeper
+    from p2p_police.shared.interlock import EmailInterlockError, ensure_email_allowed
 
+    try:
+        ensure_email_allowed(config, email_cfg["recipient"])
+    except EmailInterlockError as refusal:
+        report["email_refused"] = str(refusal)
+        return
     message_id = send_report(
         gatekeeper or ApiGatekeeper(config.rate_limits),
         email_cfg["recipient"],

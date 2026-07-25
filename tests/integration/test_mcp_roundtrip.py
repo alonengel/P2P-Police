@@ -55,11 +55,16 @@ def test_agreement_and_audit_route_to_their_inboxes(live_peer: tuple[PeerInboxes
     assert inboxes.audits.get(timeout=5)["digest"] == "xyz"
 
 
-def test_second_bind_on_busy_port_fails_fast(live_peer: tuple[PeerInboxes, str]) -> None:
+def test_port_answered_by_a_live_peer_refuses_fast(live_peer: tuple[PeerInboxes, str]) -> None:
+    """The orphan guard against a REAL listening server: the connect probe
+    sees it answer and refuses by name before any second bind is attempted."""
+    from p2p_police.infra.mcp_server import OrphanPeerError
+
     _, url = live_peer
     busy_port = int(url.rsplit(":", 1)[1].split("/")[0])
-    with pytest.raises(PortBusyError, match="game.toml"):
+    with pytest.raises(OrphanPeerError, match="game.toml"):
         ensure_port_free(busy_port)
+    assert issubclass(OrphanPeerError, PortBusyError)
 
 
 def test_settled_peer_refuses_all_four_tools_over_real_http() -> None:

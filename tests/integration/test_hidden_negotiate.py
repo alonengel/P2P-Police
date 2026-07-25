@@ -84,15 +84,26 @@ def test_negotiate_accepts_a_minimal_reference_peer(config_dir, shared_terms):
     assert theirs["terms"] == wire_terms.terms_from_shared(shared_terms)
 
 
-def test_negotiate_refuses_a_same_role_peer(config_dir, shared_terms):
-    """A rival declaring OUR role (a mispointed same-role instance) is
-    refused loudly; complementary and silent roles keep playing."""
+def test_negotiate_tolerates_a_same_role_bystander_then_pairs(
+        config_dir, shared_terms, caplog):
+    """A rival declaring OUR role (a mispointed same-role instance) is a
+    BYSTANDER: its agreement is refused on the record and the wait continues
+    until the real complementary counterpart pairs (never a technical loss)."""
+    import logging
+
     police, _thief, _log = _pair(hidden_config(config_dir))
     message = _foreign_message(shared_terms, "ref-team1")
-    message["role"] = "police"  # equal to ours -> collision
+    message["role"] = "police"  # equal to ours -> pairing collision
     police.inboxes.agreements.put(message)
-    with pytest.raises(GameRuleError, match="complementary"):
-        police.negotiate()
+    real = _foreign_message(shared_terms, "ref-team2")
+    real["role"] = "thief"
+    police.inboxes.agreements.put(real)
+    with caplog.at_level(logging.INFO, logger="p2p_police.wire.repush"):
+        theirs = police.negotiate()
+    assert theirs["identity"]["group_id"] == "ref-team2"
+    assert police.opponent_group_id == "ref-team2"
+    assert "agreement refused: wrong game, not you" in caplog.text
+    assert "complementary" in caplog.text
 
 
 def test_negotiate_refuses_a_diverging_term_naming_it(config_dir, shared_terms):

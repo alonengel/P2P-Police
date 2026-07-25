@@ -27,6 +27,13 @@ from p2p_police.domain.scent import scent_model_spec
 BOTH_DECLARE_FIELDS = ("scent_model_sha256", "info_mode", "sub_game_number")
 
 
+class PairingRefusalError(GameRuleError):
+    """Wrong counterpart, not a violation: the agreement names another
+    sub-game window or carries our own role. Refuse the AGREEMENT (a
+    bystander) and keep waiting for the real counterpart — never a
+    first-offense technical loss (wire/repush.py absorbs these)."""
+
+
 def terms_from_shared(shared: dict) -> dict:
     """Derive the reference's flat 14-key terms from the signed game.json.
 
@@ -137,18 +144,21 @@ def verify_declarations(mine: dict, theirs: dict) -> None:
     """Registry refusal rule over the alongside declarations: refuse ONLY
     when both peers declare a family and the values differ (kit section 7).
     `role` inverts the comparison: peers must be COMPLEMENTARY, so refusal
-    fires when both declare and the values are EQUAL; omission still plays."""
+    fires when both declare and the values are EQUAL; omission still plays.
+    Wrong-window / same-role refusals classify as PairingRefusalError (a
+    bystander, tolerable); locked-model mismatches stay plain-fatal."""
     for field in BOTH_DECLARE_FIELDS:
         ours, others = mine.get(field), theirs.get(field)
         if ours is not None and others is not None and ours != others:
             hint = (" - is a stale rival instance from a previous sub-game "
                     "window still running?" if field == "sub_game_number" else "")
-            raise GameRuleError(
+            error = PairingRefusalError if field == "sub_game_number" else GameRuleError
+            raise error(
                 f"negotiate declaration mismatch on '{field}': "
                 f"mine={ours!r} theirs={others!r}{hint}")
     my_role, their_role = mine.get("role"), theirs.get("role")
     if my_role is not None and their_role is not None and my_role == their_role:
-        raise GameRuleError(
+        raise PairingRefusalError(
             f"negotiate role collision: both peers declare role={my_role!r} "
             "- peers must be complementary (police vs thief); is a same-role "
             "instance (or our own echo) pointed at us?")

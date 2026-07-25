@@ -92,3 +92,41 @@ def test_without_the_flag_send_mode_stays_manual(tmp_path, config_dir, monkeypat
     settled_log(results)
     assert run_cli(results, config_dir, email=False) == 0
     assert calls == {}
+
+
+def _league_recipient(config_dir: Path, counted_line: str = "") -> None:
+    toml = config_dir / "game.toml"
+    text = toml.read_text(encoding="utf-8").replace(
+        'recipient = "nobody@example.com"',
+        f'recipient = "rmisegal+uoh26finalgame@gmail.com"\n{counted_line}')
+    toml.write_text(text, encoding="utf-8")
+
+
+def test_series_email_to_the_league_without_arming_is_refused(
+        tmp_path, config_dir, capsys, monkeypatch):
+    """The series email path routes through the lecturer-address interlock:
+    an unarmed run aggregates fine but the email is refused, loudly."""
+    calls = arm(config_dir, "send", monkeypatch)
+    _league_recipient(config_dir)
+    results = tmp_path / "results"
+    results.mkdir()
+    settled_log(results)
+    assert run_cli(results, config_dir) == 1
+    assert calls == {}  # nothing sent
+    out = capsys.readouterr().out
+    assert "EMAIL REFUSED" in out and "counted" in out
+    assert (results / f"result_{GAME_ID}.json").is_file()  # emit still happened
+
+
+def test_series_email_to_the_league_with_both_armings_sends(
+        tmp_path, config_dir, capsys, monkeypatch):
+    calls = arm(config_dir, "send", monkeypatch)
+    _league_recipient(config_dir, counted_line="counted = true")
+    results = tmp_path / "results"
+    results.mkdir()
+    settled_log(results)
+    argv = ["series-result", "--game-id", GAME_ID, "--results-dir", str(results),
+            "--config-dir", str(config_dir), "--email", "--counted"]
+    assert main(argv) == 0
+    assert calls["recipient"] == "rmisegal+uoh26finalgame@gmail.com"
+    assert "emailed: series-msg-1" in capsys.readouterr().out
