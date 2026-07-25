@@ -71,6 +71,11 @@ def _stamp() -> str:
 def run_window(window: int, seed_base: int | None, runner,
                counted: bool = False) -> dict:
     """One sub-game via the real CLI; the exit code is reported verbatim."""
+    # a FRESH window must never inherit a dead game's context: wipe this
+    # sub-game's stale local resume state (resume is an explicit --resume
+    # operator action, never an accident of leftover disk state)
+    for stale in (ROOT / "results" / "local").glob(f"resume_*_g{window:02d}.json"):
+        stale.unlink(missing_ok=True)
     command = ["uv", "run", CLI, "peer", "--sub-game", str(window)]
     if seed_base is not None:
         command += ["--seed", str(seed_base + window)]
