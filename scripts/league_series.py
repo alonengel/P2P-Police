@@ -87,6 +87,28 @@ def run_window(window: int, seed_base: int | None, runner,
     return {"window": window, "exit": code}
 
 
+
+
+def wait_for_previous(window: int, since: float, timeout_sec: float = 600.0) -> bool:
+    """Series tempo: window N launches only after sub-game N-1's log exists
+    (either repo's results dir, fresher than this run) - the series is ONE
+    sequence across both roles, and a window that starts its budget before
+    the rival's driver reaches it burns the budget against nobody."""
+    if window <= 1:
+        return True
+    import glob
+    import time as _time
+    pattern_pair = [str(ROOT / "results" / f"log_*_g{window-1:02d}.json"),
+                    str(SIBLING_RESULTS / f"log_*_g{window-1:02d}.json")]
+    deadline = _time.monotonic() + timeout_sec
+    while _time.monotonic() < deadline:
+        for pattern in pattern_pair:
+            for hit in glob.glob(pattern):
+                if Path(hit).stat().st_mtime >= since:
+                    return True
+        _time.sleep(3)
+    return False
+
 def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
     parser = argparse.ArgumentParser(
         description=f"drive this repo's ({ROLE}) sub-game windows of a counted series")
@@ -114,8 +136,17 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
               f"{holder}); if that run is truly dead, delete the lockfile and retry")
         return 2
     try:
-        rows = [run_window(window, args.seed, runner, args.counted)
-                for window in windows]
+        import time as _time
+        run_start = _time.time()
+        rows = []
+        for window in windows:
+            live = runner is subprocess.run  # injected runners = tests: no tempo wait
+            if live and not wait_for_previous(window, run_start):
+                print(f"window s{window}: previous sub-game never settled in "
+                      "either results dir - not launching into a dead window")
+                rows.append({"window": window, "exit": 1})
+                continue
+            rows.append(run_window(window, args.seed, runner, args.counted))
     finally:
         LOCK_PATH.unlink(missing_ok=True)  # ours: we acquired it above
     failed = [f"s{row['window']}" for row in rows if row["exit"] != 0]
