@@ -5,9 +5,14 @@ book's default (0 tokens). Every provider path — template today, LLM modes
 later — passes through enforce_word_limit (hint_max_words applies to ALL).
 """
 
+import json
 import random
+from pathlib import Path
 
-from p2p_police.domain.primitives import Move
+from p2p_police.domain.primitives import Cell, Move
+
+GAZETTEER_PATH = Path(__file__).resolve().parents[3] / "config" / "gazetteer.json"
+_gazetteer_cache: dict | None = None
 
 # Deterministic templates per claimed direction: free language, parseable by
 # US because we authored them (rivals only ever see the text).
@@ -77,3 +82,40 @@ def parse_claim(text: str) -> str | None:
         if any(word in lowered for word in words)
     }
     return matches.pop() if len(matches) == 1 else None
+
+
+def _gazetteer_entries() -> dict:
+    """config/gazetteer.json landmark table (private, per-peer). Cached;
+    a missing file simply disables the tier (parse falls through to None)."""
+    global _gazetteer_cache
+    if _gazetteer_cache is None:
+        _gazetteer_cache = (
+            json.loads(GAZETTEER_PATH.read_text(encoding="utf-8"))
+            if GAZETTEER_PATH.is_file() else {"landmarks": {}}
+        )
+    return _gazetteer_cache["landmarks"]
+
+
+def landmark_region(text: str, grid_size: int, entries: dict | None = None) -> set[Cell] | None:
+    """Third parsing tier (after templates and direction words): place-name
+    talk -> the board region the private gazetteer maps it to.
+
+    A UNIQUE landmark mention wins; ambiguous or unknown talk yields None —
+    belief then rests on scent alone, never on a guess. Regions are
+    fractional row/col bands scaled by cell-center membership, so no grid
+    size is hardcoded. INBOUND parsing only: our own hints stay free
+    language (rule 27 stays untouched on the wire)."""
+    lowered = f" {text.lower()} "
+    matched = [entry for entry in (entries if entries is not None else _gazetteer_entries())
+               .values() if any(alias in lowered for alias in entry["aliases"])]
+    if len(matched) != 1:
+        return None
+    (row_lo, row_hi), (col_lo, col_hi) = matched[0]["rows"], matched[0]["cols"]
+    region = {
+        (row, col)
+        for row in range(grid_size)
+        for col in range(grid_size)
+        if row_lo <= (row + 0.5) / grid_size < row_hi
+        and col_lo <= (col + 0.5) / grid_size < col_hi
+    }
+    return region or None

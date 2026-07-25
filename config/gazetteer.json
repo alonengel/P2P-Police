@@ -1,0 +1,45 @@
+{
+  "_comment": "Private per-peer landmark gazetteer: place-name talk in INBOUND hints -> fractional board regions (rows/cols bands in [0,1], cell-center membership, any grid size). Third parsing tier after templates and direction words; a unique alias match becomes a region-shaped belief observation. Parsing only - our own outbound hints stay free language and never carry coordinates (rule 27).",
+  "landmarks": {
+    "harbor": {
+      "aliases": ["harbor", "harbour", "wharf", "waterfront", "marina", "the port"],
+      "rows": [0.6, 1.0],
+      "cols": [0.0, 1.0]
+    },
+    "station": {
+      "aliases": ["station", "terminal", "railyard", "platforms"],
+      "rows": [0.0, 0.4],
+      "cols": [0.0, 1.0]
+    },
+    "market": {
+      "aliases": ["market", "bazaar", "plaza", "town square"],
+      "rows": [0.28, 0.72],
+      "cols": [0.28, 0.72]
+    },
+    "park": {
+      "aliases": ["park", "gardens", "meadow", "greenery"],
+      "rows": [0.0, 1.0],
+      "cols": [0.0, 0.4]
+    },
+    "alleys": {
+      "aliases": ["alley", "alleys", "backstreet", "backstreets"],
+      "rows": [0.0, 1.0],
+      "cols": [0.6, 1.0]
+    },
+    "old_town": {
+      "aliases": ["old town", "cathedral", "chapel", "bell tower"],
+      "rows": [0.0, 0.5],
+      "cols": [0.0, 0.5]
+    },
+    "warehouse": {
+      "aliases": ["warehouse", "factory", "industrial", "the mills"],
+      "rows": [0.5, 1.0],
+      "cols": [0.5, 1.0]
+    },
+    "river": {
+      "aliases": ["bridge", "river", "riverbank", "canal"],
+      "rows": [0.35, 0.65],
+      "cols": [0.0, 1.0]
+    }
+  }
+}

@@ -7,7 +7,7 @@ public barriers, the received hint. The rival's true position never does.
 from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.primitives import Outcome, Role
-from p2p_police.strategy.hints import parse_claim
+from p2p_police.strategy.hints import landmark_region, parse_claim
 from p2p_police.strategy.profiler import OpponentProfiler
 
 
@@ -37,11 +37,17 @@ class Perception:
                 (barrier_cell[0], barrier_cell[1]), engine.board)
         rival_scent = engine.scent[rival]
         self.belief.observe_scent(rival_scent, engine.board)
+        # Hint tiers: directional claim first; place-name talk falls through
+        # to the gazetteer and lands as a region observation. Both carry the
+        # profiler's reputation weights; both stay scent-lie-checked.
         claim = parse_claim(hint_text) if hint_text else None
+        weights = self.profiler.advised_weights(self.opponent_id)
         if claim:
-            self.belief.observe_hint(
-                claim, rival_scent, self.profiler.advised_weights(self.opponent_id)
-            )
+            self.belief.observe_hint(claim, rival_scent, weights)
+            return
+        region = landmark_region(hint_text, self.belief.grid_size) if hint_text else None
+        if region:
+            self.belief.observe_region(region, rival_scent, weights)
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:

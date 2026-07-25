@@ -4,7 +4,7 @@ import pytest
 
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.errors import GameRuleError
-from p2p_police.domain.primitives import Role
+from p2p_police.domain.primitives import Move, Role
 from p2p_police.domain.rules import RuleSet
 from p2p_police.peer.perception import Perception
 from p2p_police.peer.sealing import SealedExchange
@@ -62,6 +62,21 @@ def test_perception_snapshot_is_local_truth_only() -> None:
     assert "belief" in snap and "barriers" in snap
     assert (3, 3) not in [tuple(v) for k, v in snap.items() if k == "rival_cell"]
     assert "rival_cell" not in snap  # the rival's truth never leaves Perception
+
+
+def test_landmark_hint_lands_as_region_evidence() -> None:
+    """Place talk the direction tier cannot read still moves the belief:
+    the gazetteer region (here the south harbor band) gains mass when the
+    scent backs it — parsed INBOUND only, nothing new on the wire."""
+    engine = GameEngine(7, (0, 0), (5, 5), RULES)
+    engine.police_move(Move.STAY)
+    engine.thief_move(Move.STAY)  # boundary: the thief's trail is emitted
+    perception = Perception(Role.POLICE, 7)
+    south = [(r, c) for r in (4, 5, 6) for c in range(7)]
+    before = sum(perception.belief.value_at(cell) for cell in south)
+    perception.observe(engine, Role.THIEF, "Salt air by the harbor suits me fine.")
+    after = sum(perception.belief.value_at(cell) for cell in south)
+    assert after > before  # the hot harbor band absorbed the place talk
 
 
 def test_duplicate_deliveries_are_skipped_not_fatal() -> None:
