@@ -15,7 +15,7 @@ from pathlib import Path
 from p2p_police.domain.negotiation import validate_shared_terms
 from p2p_police.domain.rules import RuleSet
 from p2p_police.domain.scoring import ScoreTable
-from p2p_police.shared.tuning import endgame_table, info_gain_table
+from p2p_police.shared.tuning import endgame_table, info_gain_table, trap_table
 from p2p_police.shared.version import is_supported_config
 
 REQUIRED_SHARED_SECTIONS = (
@@ -112,15 +112,18 @@ class Config:
         """[strategy.info_gain] entropy-reduction blend (defaults: shared/tuning.py)."""
         return info_gain_table(self.private)
 
+    def trap(self) -> dict:
+        """[strategy.trap] barrier-gate thresholds (defaults: shared/tuning.py)."""
+        return trap_table(self.private)
+
     def info_mode(self) -> str:
         """[strategy] info_mode: 'belief' (default) | 'exact' (ADR-0006)."""
         return self.private.get("strategy", {}).get("info_mode", "belief")
 
     def deception(self) -> dict:
-        """[deception] self-mirror lie-policy tunables (private, per-peer —
-        never part of the signed game.json; missing keys keep the shipped
-        cop posture: conservative, lying only while closing in to mask the
-        approach direction)."""
+        """[deception] self-mirror lie-policy tunables (private, per-peer)."""
+        # Never part of the signed game.json; missing keys keep the shipped cop
+        # posture: conservative, lying only while closing in to mask the approach.
         block = self.private.get("deception", {})
         return {
             "max_lies": int(block.get("max_lies", 2)),

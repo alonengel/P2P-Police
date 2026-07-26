@@ -4,6 +4,7 @@ brain actions are always legal."""
 
 import random
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -93,3 +94,15 @@ def test_resolve_brain_surfaces_bad_spec_loudly(config_dir: Path) -> None:
     config = Config.load(config_dir)
     with pytest.raises(ModuleNotFoundError):
         resolve_brain(config, Role.POLICE, random.Random(0))
+
+
+def test_trap_gate_thresholds_come_from_the_config() -> None:
+    """A thief with three escape routes two steps away is beyond the old gate
+    and inside the shipped one: the same position must draw a barrier under
+    the default table and none under a tightened [strategy.trap] block."""
+    engine = GameEngine(7, (3, 2), (3, 0), RULES)  # edge thief: N, S, E only
+    loose = PoliceBrain(Role.POLICE, random.Random(3))
+    tight = PoliceBrain(Role.POLICE, random.Random(3),
+                        SimpleNamespace(private={"strategy": {"trap": {"escape_limit": 2}}}))
+    assert loose.decide(engine)["type"] == "barrier"
+    assert tight.decide(engine)["type"] == "move"

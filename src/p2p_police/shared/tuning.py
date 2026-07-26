@@ -1,4 +1,5 @@
-"""Strategy-layer tunables: [strategy.endgame] / [strategy.info_gain] defaults.
+"""Strategy-layer tunables: [strategy.endgame] / [strategy.info_gain] /
+[strategy.trap] defaults.
 
 Both tables live in the PRIVATE config (game.toml) - pure play-strength
 knobs, never agreed game terms. The defaults below encode the measured
@@ -28,6 +29,18 @@ INFO_GAIN_DEFAULTS: dict = {
 }
 
 
+TRAP_DEFAULTS: dict = {
+    "escape_limit": 3,             # wall only a thief down to this many exits...
+    "range": 3,                    # ...and already this close in BFS steps
+    #                                Both were 2 while the posterior was too
+    #                                blunt to justify a placement; with the
+    #                                dwell-plateau pin the quota is worth
+    #                                spending a step earlier - swept 2/3/4/5
+    #                                over 60-150 games, 3 wins outright
+    #                                (docs/evidence/cop-strength.md)
+}
+
+
 def _merge(defaults: dict, block: dict) -> dict:
     merged = dict(defaults)
     for key, default in defaults.items():
@@ -44,3 +57,8 @@ def endgame_table(private: dict) -> dict:
 def info_gain_table(private: dict) -> dict:
     """[strategy.info_gain] from a private-config dict, defaults filled in."""
     return _merge(INFO_GAIN_DEFAULTS, private.get("strategy", {}).get("info_gain", {}))
+
+
+def trap_table(private: dict) -> dict:
+    """[strategy.trap] from a private-config dict, defaults filled in."""
+    return _merge(TRAP_DEFAULTS, private.get("strategy", {}).get("trap", {}))

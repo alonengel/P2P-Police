@@ -3,10 +3,12 @@
 Policy: close the TRUE (barrier-aware BFS) distance to the thief; when one
 step away, land the capture. Spend a barrier only when it immediately tightens
 a nearly-trapped thief (few escape routes) — barriers are a quota resource,
-not confetti (ch. 3 resource management). Two belief-mode boosters, each
-config-gated and keep-gate-measured (docs/evidence/cop-strength.md): an exact
-endgame pre-check (strategy/endgame.py) and an information-gain move term
-(strategy/info_gain.py) blended into the pursuit score.
+not confetti (ch. 3 resource management), but an UNSPENT quota buys nothing
+either, so the trap gate is config-driven and swept ([strategy.trap]).
+Two belief-mode boosters, each config-gated and keep-gate-measured
+(docs/evidence/cop-strength.md): an exact endgame pre-check
+(strategy/endgame.py) and an information-gain move term (strategy/info_gain.py)
+blended into the pursuit score.
 """
 
 import random
@@ -15,13 +17,10 @@ from p2p_police.domain import protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.pathfind import UNREACHABLE, bfs_distances
 from p2p_police.domain.primitives import Cell, Move, Role
-from p2p_police.shared.tuning import endgame_table, info_gain_table
+from p2p_police.shared.tuning import endgame_table, info_gain_table, trap_table
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.endgame import EndgameSolver
 from p2p_police.strategy.info_gain import expected_gain
-
-TRAP_ESCAPE_LIMIT = 2  # barrier only when the thief has this many escapes or fewer
-TRAP_RANGE = 2  # ...and is already this close
 
 
 class PoliceBrain(BrainBase):
@@ -32,6 +31,7 @@ class PoliceBrain(BrainBase):
         private = config.private if config is not None else {}
         self.endgame = EndgameSolver(endgame_table(private))
         self.info_gain = info_gain_table(private)
+        self.trap = trap_table(private)
 
     def decide(self, engine: GameEngine, belief=None) -> dict:
         if belief is not None:  # exact pre-check: play a PROVEN forcing line
@@ -77,14 +77,14 @@ class PoliceBrain(BrainBase):
         orthogonal neighbor) AND it removes one of the thief's last escapes."""
         if len(engine.board.barriers) >= engine.rules.max_barriers:
             return None
-        if my_distance == UNREACHABLE or my_distance > TRAP_RANGE:
+        if my_distance == UNREACHABLE or my_distance > self.trap["range"]:
             return None
         thief_escapes = [
             m.applied_to(thief)
             for m in (Move.N, Move.S, Move.E, Move.W)
             if engine.board.is_passable(m.applied_to(thief))
         ]
-        if len(thief_escapes) > TRAP_ESCAPE_LIMIT:
+        if len(thief_escapes) > self.trap["escape_limit"]:
             return None
         my_reach = {me} | {
             m.applied_to(me)
