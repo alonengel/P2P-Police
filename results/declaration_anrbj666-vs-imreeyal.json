@@ -1,0 +1,71 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "7f78b8c04e337044c2f4569f1f0a7d26f154f6b8627abed425a88db76d68eb9f",
+  "declared_at": "2026-07-25T20:32:46+00:00",
+  "game_id": "anrbj666-vs-imreeyal",
+  "game_uid": "2f0c25a9-5008-03c7-2d60-645dd51be11a",
+  "group": {
+    "code_version": "1.00",
+    "counted_games_played": 0,
+    "github_commit": "05f2b38d4ebe40a42f59c241e984cf727ed4d70b",
+    "group_id": "anrbj666",
+    "hardware_spec": {
+      "cpu_cores": 24,
+      "cpu_freq_mhz": 0,
+      "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+      "gpu_model": "unknown",
+      "os": "Windows 10",
+      "python": "3.13.13",
+      "ram_gb": 32,
+      "vram_gb": 0
+    },
+    "hardware_spec_sha256": "58209ad522fc252de904bc262f9ee1d41336fd31c43ec07d5e38227119837fcd",
+    "llm_model": "",
+    "mcp_servers": {
+      "cop": "https://cop-mcp.alon.website/mcp",
+      "thief": "https://thief-mcp.alon.website/mcp"
+    },
+    "members": [
+      "Alon Engel",
+      "Renat Karimov"
+    ]
+  },
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent": {
+    "group_id": "imreeyal",
+    "hardware_spec_sha256": "",
+    "identity": {
+      "group_id": "imreeyal",
+      "group_name": "ImreEyal-Police",
+      "llm_model": "none",
+      "mcp_servers": {
+        "cop": "https://cop.imreeyal.com/mcp",
+        "thief": "https://thief.imreeyal.com/mcp"
+      },
+      "members": [
+        "Imree Cohen",
+        "Eyal Shtinmetz"
+      ],
+      "repos": {
+        "cop": "https://github.com/Imreec/copthief-p2p-cop",
+        "thief": "https://github.com/Imreec/copthief-p2p-thief"
+      },
+      "spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3693,
+        "cpu_type": "AMD64 Family 25 Model 33 Stepping 0, AuthenticAMD",
+        "gpu_cores_or_cuda": "cuda",
+        "gpu_type": "NVIDIA GeForce RTX 3080 Ti",
+        "os": "Windows (10.0.19045)",
+        "ram_gb": 31.9,
+        "vram_gb": 12.0
+      }
+    }
+  },
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "token_budget_per_series": 200000
+}
