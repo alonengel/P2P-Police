@@ -44,10 +44,13 @@ class Perception:
         weights = self.profiler.advised_weights(self.opponent_id)
         if claim:
             self.belief.observe_hint(claim, rival_scent, weights)
-            return
-        region = landmark_region(hint_text, self.belief.grid_size) if hint_text else None
-        if region:
-            self.belief.observe_region(region, rival_scent, weights)
+        else:
+            region = landmark_region(hint_text, self.belief.grid_size) if hint_text else None
+            if region:
+                self.belief.observe_region(region, rival_scent, weights)
+        # Last, and deliberately: a fitted dwell plateau is physics the rival
+        # emitted about itself, so it outranks anything it CHOSE to say.
+        self.belief.observe_plateau(rival_scent, engine.board)
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:
