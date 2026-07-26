@@ -181,3 +181,41 @@ transferring cleanly, and the reason the pool sweep now exists at all.
 sub-games: capture on turn 15 with three barriers spent, both sides
 `Verified OK` with matching end-state digests. Before this work the same brain
 placed 0.00 barriers per game.
+
+## Trust boundary: the trail is ASSERTED on the reference wire (ADR-0010)
+
+PRD 10 consumes the rival's transmitted field and boosts one cell 25x, so the
+new dependency was audited before it shipped. `smell_grid` rides in the turn
+message as a plaintext sibling of `commit`, never inside the sealed payload,
+and the end-of-game audit recomputes hashes of SEALED records - so a forged
+grid is outside what the audit can see even in principle. The rulebook's
+"scent cannot lie" is a property of the replicated-engine wire, where the
+field is derived rather than transmitted.
+
+Measured with no check: a decoy plateau drove capture 1.000 -> 0.000; a
+saturating flood did the same with zero pins fired. That second case pre-dates
+PRD 10 - `observe_scent` alone was already enough to be blinded.
+
+The mitigation holds an asserted trail to the movement model and refuses an
+impossible reading whole, latching (`peer/perception.py`). Both directions are
+measured (`scripts/measure_trail_forgery.py`):
+
+| arm | detected | false positives |
+|---|---|---|
+| honest | - | **0.000** |
+| decoy stamped where the rival cannot be | 1.000 | - |
+| field saturating every cell | 1.000 | - |
+| decoy that starts legal and walks a step per turn | **0.000** | - |
+
+Two findings are worth more than the table. First, soundness had to be ranked
+above sensitivity twice, because the tighter version measured worse: a rolling
+anchor took pool capture 0.983 -> 0.358, and a barrier-aware reachability test
+produced 22.5% false refusals on a wall-filled late board (walls arrive during
+the game; the rival walked there before the wall existed). The refusal latches,
+so one false positive blinds the peer for a whole game.
+
+Second, the last row is a limit, not a gap: a forgery that obeys the movement
+model is indistinguishable from a legal trail from the scent channel alone.
+The structural fix is protocol-level - seal the grid inside the commit - and
+is recorded as a proposal rather than adopted unilaterally, since the wire
+shape is a negotiated, hash-locked term.

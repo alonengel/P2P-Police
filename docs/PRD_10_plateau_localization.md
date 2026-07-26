@@ -142,3 +142,26 @@ of the belief*, not because of the solver — recorded in
 - Verified live over the reference (hidden-information) wire: full game, both
   sides `Verified OK` with matching end-state digests, capture on turn 15 with
   three barriers spent — the behaviour the offline campaigns predicted.
+
+## Trust boundary (added 2026-07-27, ADR-0010)
+
+This mechanism consumes the rival's TRANSMITTED field and boosts one cell 25x,
+so the dependency was audited. On the reference wire `smell_grid` is a
+plaintext sibling of `commit`, never sealed, and the end-of-game audit
+recomputes hashes of SEALED records - a forged grid is outside what the audit
+can see. The rulebook's "scent cannot lie" holds under the replicated-engine
+wire, where the field is derived rather than asserted.
+
+`Perception` therefore holds an asserted trail to the movement model
+(`credible_cells` / `incredible_saturation`): a clamp-level deposit somewhere
+no emitter moving a step per turn could have reached is refused whole, and the
+refusal latches. Zero false positives on honest traffic in both repos; gross
+forgeries caught every time; a decoy that starts legal and walks a step per
+turn is undetectable from this channel alone, which is a limit of the channel
+rather than of the check. Full reasoning, measurements and the protocol-level
+proposal (seal the grid inside the commit) are in ADR-0010.
+
+- Sensitivity analysis and figures for this mechanism: `notebooks/analysis.ipynb`
+  sections 5-6, regenerated from `scripts/measure_localization.py` and
+  `scripts/measure_trail_forgery.py` into `results/experiments/` and rendered by
+  `scripts/render_pin_figures.py`.
