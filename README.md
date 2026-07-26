@@ -242,13 +242,49 @@ pursuit brain, `strategy/police_brain.py`:
    weight — belief re-aims at the *evidence*, not the words.
 3. **Barrier-aware BFS pursuit**: Manhattan distance lies once walls exist; we
    chase the true shortest path to the belief argmax.
-4. **Surgical barriers**: spent only on a nearly-cornered thief within reach —
+4. **Dwell-plateau localization** (`domain/evidence.py`, PRD 10): the book's
+   own update rule drives a re-emitted cell to `delta / rho`, so 21 of the 25
+   kernel offsets saturate at the clamp and 4 never do — a rival that stands
+   still stamps its own kernel window on the board. Reach-decoding cannot read
+   it (every saturated cell decodes reach 0, so the likelihood is flat and the
+   peak drifts); fitting the *shape* back inverts it to the emitter's own cell.
+   Localization went from **7% exact / 2.42 cells** to **89% exact / 0.11
+   cells**, and board clipping makes the fit sharpest exactly where a cornered
+   rival hides. It abstains unless the shape is unambiguous — a pin is consumed
+   as near-certainty. **Camping is self-reporting**, which is why our own thief
+   caps consecutive stays.
+5. **Surgical barriers**: spent only on a nearly-cornered thief within reach —
    quota is a resource, and a barrier on the thief's cell is an instant capture.
+   The gate lives in `[strategy.trap]` and was swept, not guessed: while the
+   posterior was blunt this policy fired **0.00 walls per game**, which is the
+   signature of a policy starved of information rather than one badly designed.
+6. **Exact endgame pre-check + info-gain steering** (`strategy/endgame.py`,
+   `strategy/info_gain.py`): both had *honestly failed* their keep-gates and
+   shipped OFF. Re-measured after the plateau pin sharpened the belief, both
+   re-opened — the original verdicts had been about the belief, not the
+   modules. They ship as a **pair**: the info-gain term is still negative alone
+   (0.558 vs 0.625 baseline) and earns its place only by opening the solver's
+   support gate 29% more often (230 → 296 fires), taking the pool to 0.983.
 
 Measured: full-information pursuit captures a random thief ≥20/25 and beat the
 evasion twin in 13 turns; *blind* (belief-only) pursuit still captures ≥15/25.
 The blind cross-repo match flipped to thief survival — **uncertainty works as
 the rulebook intends**, and our belief machinery demonstrably drives the moves.
+
+Measured end to end over the 4-evader arena (blind cop, shipped `Perception`
+pipeline, same seeds per arm — `scripts/measure_cop_strength.py`):
+
+| arm | pool capture | heuristic | random | perfect | deep-RL |
+|---|---|---|---|---|---|
+| baseline (pre-PRD-10 belief) | 0.625 | 1.00 | 0.93 | 0.40 | 0.17 |
+| + endgame | 0.850 | 1.00 | 1.00 | 1.00 | 0.40 |
+| + info-gain alone | 0.558 | 1.00 | 0.97 | 0.00 | 0.27 |
+| **shipped (both)** | **0.983** | 1.00 | 1.00 | 1.00 | 0.93 |
+
+The `info-gain alone` row is kept in the table deliberately: it is the
+component that measures *negative* in isolation and positive in combination,
+and publishing only the winning row would hide the interaction that justifies
+it.
 **Reinforcement learning (optional path, implemented):** a linear
 function-approximation Q-learner (`strategy/rl_brain.py`, features = barrier-
 aware BFS geometry, TD(0), ε-greedy 0.30→0.05) trains vs a scripted

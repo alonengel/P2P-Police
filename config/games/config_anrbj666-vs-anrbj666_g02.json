@@ -1,7 +1,7 @@
 {
   "_schema": "p2p-police-artifacts",
   "config_name": "config_anrbj666-vs-anrbj666_g02.json",
-  "config_sha256": "528e4a0068cd41495164cf4e884961f1f0d2f91b1897ef89913ec1d1613825e7",
+  "config_sha256": "3d38cde31370cff4b18bb6384499454c4c43cdaae52bbef5acfc601bf2b73dce",
   "game_id": "anrbj666-vs-anrbj666",
   "game_uid": "23020791-2460-8b05-1491-75c4e2f2551b",
   "links": {
@@ -46,7 +46,7 @@
       "diversity_reward": 10,
       "max_games_per_team": 10,
       "min_games_to_pass": 2,
-      "num_games": 1,
+      "num_games": 6,
       "response_timeout_sec": 30,
       "token_budget_per_series": 200000,
       "watchdog_timeout_sec": 60

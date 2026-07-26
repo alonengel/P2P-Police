@@ -133,3 +133,51 @@ the trap gate covers the same ground with no extra machinery.
 
 **Net for the cop:** capture rate **0.147 -> 0.847** with no change to the
 pursuit score, no new brain, and no lookahead.
+
+## Keep-gates re-measured on the shipped pipeline (2026-07-26)
+
+Two corrections were needed before any of the above could be trusted.
+
+**The harness was measuring the wrong belief.** `measure_cop_strength.py` built
+its own `BeliefMap` and called `diffuse` + `observe_scent` directly, bypassing
+`Perception` - so it never ran the hint tiers or the plateau pin, and every arm
+was scored on a belief the live peer does not use. It now observes through
+`Perception`, which is why these numbers differ from earlier runs.
+
+**Two honest negatives turned out to be verdicts about the BELIEF, not the
+modules.** With the pin in place, both re-open (30 games/evader, 120
+games/arm, same seeds):
+
+| arm | pool | heuristic | random | perfect | deep-RL | solver fires |
+|---|---|---|---|---|---|---|
+| baseline | 0.625 | 1.00 | 0.93 | 0.40 | 0.17 | 0 |
+| + endgame | 0.850 | 1.00 | 1.00 | 1.00 | 0.40 | 230 |
+| + info_gain | 0.558 | 1.00 | 0.97 | 0.00 | 0.27 | 0 |
+| **both (shipped)** | **0.983** | 1.00 | 1.00 | 1.00 | 0.93 | 296 |
+| both, trap 2 | 0.983 | 1.00 | 1.00 | 1.00 | 0.93 | 293 |
+| both, trap 4 | 0.808 | 1.00 | 0.90 | 1.00 | 0.33 | 227 |
+
+`[strategy.endgame] enabled = true` and `[strategy.info_gain] enabled = true`.
+
+**They ship as a pair, and the reason is mechanical.** Info-gain alone is still
+NEGATIVE (0.558 vs 0.625 baseline, 0 solver fires) - steering toward
+informative cells while nothing consumes the information just wanders. Its
+value is the interaction: it opens the solver's support gate **29% more often**
+(230 -> 296 fires), and that is what takes the pool from 0.850 to 0.983.
+Enabling it alone would make the cop measurably worse, which is pinned by
+`test_shipped_defaults_arm_both_boosters_as_a_pair`.
+
+**Trap gate, generalization check.** The 2->3 lift was first swept against a
+single opponent, so it was re-swept across the pool. Under the shipped
+(boosters-on) configuration 2 and 3 are a genuine tie (0.983 both); bare, 2 is
+better on the pool (0.700 vs 0.625) while 3 is better against the measured live
+opponent (0.847 vs 0.733); 4 and 5 are worse everywhere. 3 is kept: it costs
+nothing in the configuration that ships and wins in the fallback case we have
+actually played. The split is recorded rather than smoothed over - it is the
+clearest example in this project of a knob tuned on one opponent not
+transferring cleanly, and the reason the pool sweep now exists at all.
+
+**Live confirmation.** Full game on the reference wire, both peers, both
+sub-games: capture on turn 15 with three barriers spent, both sides
+`Verified OK` with matching end-state digests. Before this work the same brain
+placed 0.00 barriers per game.
