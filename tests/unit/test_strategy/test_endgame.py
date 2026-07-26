@@ -31,14 +31,16 @@ class FakeBelief:
 
 
 def solver(**overrides) -> EndgameSolver:
-    """Solver under test: forced ON (the shipped default is the keep-gate's
-    honest OFF; docs/evidence/cop-strength.md)."""
+    """Solver under test, explicitly armed regardless of the shipped default."""
     return EndgameSolver({**ENDGAME_DEFAULTS, "enabled": True, **overrides})
 
 
-def test_shipped_default_is_off_and_gates_solve() -> None:
-    assert ENDGAME_DEFAULTS["enabled"] is False  # measured keep-gate verdict
-    disabled = EndgameSolver(dict(ENDGAME_DEFAULTS))
+def test_shipped_default_is_on_and_the_gate_still_disarms() -> None:
+    """The keep-gate re-opened once the dwell-plateau pin sharpened the belief
+    (docs/evidence/cop-strength.md), so the shipped default is now ON - but the
+    gate must still be a real gate: disabled means silent, not merely slower."""
+    assert ENDGAME_DEFAULTS["enabled"] is True  # measured keep-gate verdict
+    disabled = EndgameSolver({**ENDGAME_DEFAULTS, "enabled": False})
     assert disabled.solve(pocket_engine(), FakeBelief(7, [(0, 0)])) is None
 
 

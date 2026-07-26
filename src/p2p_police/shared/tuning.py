@@ -10,9 +10,13 @@ Brains built without a Config (unit arenas) run on these same defaults.
 """
 
 ENDGAME_DEFAULTS: dict = {
-    "enabled": False,              # keep-gate FAILED: the scent-floor belief never
-    #                                sharpens to a provable support (0 fires / 160
-    #                                games even at K=8) - honest negative result
+    "enabled": True,               # keep-gate RE-OPENED 2026-07-26. It failed while
+    #                                the scent-floor belief never sharpened to a
+    #                                provable support (0 fires / 160 games even at
+    #                                K=8). The dwell-plateau pin sharpened it: 230
+    #                                fires / 120 games, capture 0.625 -> 0.850 over
+    #                                the whole evader pool. The old verdict was
+    #                                about the BELIEF, not the solver.
     "max_support_cells": 3,        # run only when the belief support is this sharp
     "support_mass_threshold": 0.05,  # cells at/above this mass form the support
     "max_horizon_turns": 5,        # lookahead in full turns; min(this, turns left)
@@ -21,8 +25,13 @@ ENDGAME_DEFAULTS: dict = {
 }
 
 INFO_GAIN_DEFAULTS: dict = {
-    "enabled": False,              # keep-gate FAILED: capture rate unmoved at every
-    #                                weight swept (0.5-4.0) - honest negative result
+    "enabled": True,               # keep-gate RE-OPENED 2026-07-26, but ONLY in
+    #                                combination: alone it still measures NEGATIVE
+    #                                (0.558 vs 0.625 baseline, 0 solver fires). Its
+    #                                value is an interaction - steering toward
+    #                                informative cells opens the solver's support
+    #                                gate 29% more often (230 -> 296 fires), taking
+    #                                the pair to 0.983. Never enable it alone.
     "weight": 1.0,                 # entropy nats traded per BFS step in the blend
     "match_tolerance": 0.08,       # kernel readings this close are indistinguishable
     "mismatch_likelihood": 0.15,   # mass retained by hypotheses the reading refutes

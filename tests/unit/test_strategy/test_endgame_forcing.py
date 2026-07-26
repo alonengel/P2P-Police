@@ -113,7 +113,11 @@ def test_full_blind_game_with_boosters_completes_legally() -> None:
         assert cop.endgame.settings["enabled"] and cop.info_gain["enabled"]
 
 
-def test_shipped_defaults_leave_both_boosters_off() -> None:
-    """Keep-gate verdict is the DEFAULT: a config-less brain plays baseline."""
+def test_shipped_defaults_arm_both_boosters_as_a_pair() -> None:
+    """Keep-gate verdict is the DEFAULT. Both re-opened once the dwell-plateau
+    pin sharpened the belief, and they ship as a PAIR: the info-gain term is
+    negative alone and earns its place only by feeding the solver's support
+    gate (docs/evidence/cop-strength.md), so a config-less brain must arm
+    both or neither - never info_gain by itself."""
     cop = PoliceBrain(Role.POLICE, random.Random(0))
-    assert not cop.endgame.settings["enabled"] and not cop.info_gain["enabled"]
+    assert cop.endgame.settings["enabled"] and cop.info_gain["enabled"]

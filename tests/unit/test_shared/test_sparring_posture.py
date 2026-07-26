@@ -25,7 +25,7 @@ def test_sparring_runs_the_shipped_baseline_brain_only() -> None:
     config = load_sparring()
     assert "strategy" not in config.private  # no class override, no tuned weights
     brain = resolve_brain(config, Role.POLICE, random.Random(0))
-    # exactly the shipped baseline: no solver pre-check, no info-gain arming
+    # exactly the shipped brain, with no per-opponent overrides layered on
     assert type(brain) is PoliceBrain
 
 
@@ -33,8 +33,10 @@ def test_sparring_disarms_deception_and_tuned_terms() -> None:
     config = load_sparring()
     tuning = config.deception()
     assert tuning["max_lies"] == 0  # zero lie budget: every hint truthful
-    assert config.private.get("strategy", {}).get("endgame", {}).get("enabled", False) is False
-    assert config.private.get("strategy", {}).get("info_gain", {}).get("enabled", False) is False
+    # The invariant is that sparring carries no OVERRIDES - it inherits the
+    # shipped strategy defaults like any other game, and tunes nothing per rival.
+    assert "endgame" not in config.private.get("strategy", {})
+    assert "info_gain" not in config.private.get("strategy", {})
 
 
 def test_sparring_emails_nothing() -> None:
