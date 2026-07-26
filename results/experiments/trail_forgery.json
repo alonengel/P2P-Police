@@ -1,0 +1,31 @@
+{
+  "description": "forged transmitted trail vs the movement-model check; the honest arm's detected_rate is the FALSE-POSITIVE rate",
+  "games_per_evader_per_arm": 20,
+  "false_positive_rate": 0.0,
+  "arms": {
+    "honest": {
+      "games": 40,
+      "capture_rate": 1.0,
+      "detected_rate": 0.0,
+      "mean_refusals": 0.0
+    },
+    "decoy_corner": {
+      "games": 40,
+      "capture_rate": 0.2,
+      "detected_rate": 1.0,
+      "mean_refusals": 31.25
+    },
+    "decoy_drift": {
+      "games": 40,
+      "capture_rate": 0.05,
+      "detected_rate": 0.0,
+      "mean_refusals": 0.0
+    },
+    "flood": {
+      "games": 40,
+      "capture_rate": 0.2,
+      "detected_rate": 1.0,
+      "mean_refusals": 31.25
+    }
+  }
+}

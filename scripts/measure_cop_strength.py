@@ -7,7 +7,7 @@ belief-driven heuristic evader (blind), the deterministic PerfectEvader and
 the twin-trained DeepEvader (both full information - the harshest test). The
 cop is always BLIND and observes through the SHIPPED Perception pipeline, so
 what is measured here is what plays: diffuse, scent, then the dwell-plateau
-pin. Keep rule: a setting stays only if it raises capture rate ACROSS THE
+pin, with the movement-model credibility check armed as in a real game. Keep rule: a setting stays only if it raises capture rate ACROSS THE
 POOL - a gate tuned on one opponent is not a gate that travels; a negative
 result flips the config default and is recorded honestly
 (docs/evidence/cop-strength.md).
@@ -71,7 +71,7 @@ def play(seed: int, config: Config, arm: str, evader_name: str) -> dict:
     evader = EVADERS[evader_name](Role.THIEF, random.Random(seed + 999))
     # The cop observes through the shipped pipeline (Perception), so the arms
     # measure the belief the live peer actually decides on - plateau pin included.
-    perception = Perception(Role.POLICE, config.grid_size)
+    perception = Perception.for_peer(Role.POLICE, config)
     evader_belief = BeliefMap(config.grid_size)  # blind evaders' picture of the cop
     while engine.outcome is Outcome.ONGOING:
         action = cop.decide(engine, perception.belief)
