@@ -42,7 +42,7 @@ class GeometricRuntime:
         self.role, self.config, self.engine = role, config, engine
         self.transport, self.inboxes = transport, inboxes
         # Local truth only: belief about the RIVAL, fed by scent + hints.
-        self.brain, self.perception = brain, Perception(role, config.grid_size)
+        self.brain, self.perception = brain, Perception.for_peer(role, config)
         self.deceiver = Deceiver(role, config, brain.rng)  # self-mirror lie policy
         self.talk, self.fsm = build_talk_chain(config, brain.rng, gatekeeper), GamePhaseMachine()
         # SDK swaps in the real watchdog (rule 7) / resume recorder (E6)
@@ -138,16 +138,12 @@ class GeometricRuntime:
         digest = protocol.end_state_digest(self.engine)
         # Best-effort: if the opponent tore down right after ITS audit
         # reached us, our send may fail although the exchange succeeded.
+        disclosure = {"end_state_digest": digest, "group_id": self.config.group_id,
+                      "nonces": self.exchange.own_nonces(),
+                      "verdicts": self.exchange.own_verdicts()}
         with contextlib.suppress(DeadlineExpiredError):
             self.transport.send_audit(
-                {
-                    "end_state_digest": digest,
-                    "group_id": self.config.group_id,
-                    "nonces": self.exchange.own_nonces(),
-                    "verdicts": self.exchange.own_verdicts(),
-                },
-                Deadline(self.config.turn_timeout_seconds),
-            )
+                disclosure, Deadline(self.config.turn_timeout_seconds))
         audit_verdict, digest_match = "not received", False
         try:
             theirs = self._wait(self.inboxes.audits, "opponent audit (nonces + digest)")
@@ -166,6 +162,9 @@ class GeometricRuntime:
             "digest_match": digest_match,
             "audit": audit_verdict,
             "steps_sealed": len(self.exchange.own_records),
+            # Mutual-audit evidence (rule 36): trail readings refused as
+            # physically impossible. Zero on every honest game measured.
+            "scent_readings_refused": self.perception.refused_readings,
             "opponent_group_id": getattr(self, "opponent_group_id", "unknown"),
             "opponent_info": getattr(self, "opponent_info", {}),
         }

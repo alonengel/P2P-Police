@@ -162,6 +162,11 @@ def finish(rt) -> dict:
         "digest_match": digest_match,
         "audit": verdict,
         "steps_sealed": len(rt.exchange.own_records),
+        # Evidence for the mutual audit (rule 36): how many transmitted trail
+        # readings we refused as physically impossible. Zero on every honest
+        # game ever measured; non-zero is a claim a third party can check.
+        "scent_readings_refused": getattr(
+            getattr(rt, "perception", None), "refused_readings", 0),
         "opponent_group_id": getattr(rt, "opponent_group_id", "unknown"),
         "opponent_info": getattr(rt, "opponent_info", {}),
     }

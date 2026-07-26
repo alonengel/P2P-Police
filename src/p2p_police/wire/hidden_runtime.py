@@ -50,7 +50,7 @@ class HiddenRuntime:
     ) -> None:
         self.role, self.config, self.own = role, config, own
         self.transport, self.inboxes, self.brain = transport, inboxes, brain
-        self.perception = Perception(role, config.grid_size)
+        self.perception = Perception.for_peer(role, config)
         self.deceiver = Deceiver(role, config, brain.rng)
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
