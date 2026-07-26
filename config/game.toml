@@ -100,8 +100,10 @@ range = 3                       # ...and this close in barrier-aware BFS steps.
                                 # spending a step earlier -- swept 2/3/4/5, 3 wins outright.
 
 [strategy.endgame]              # exact endgame solver (belief-support minimax; keep-gate: docs/evidence/cop-strength.md)
-enabled = false                 # keep-gate FAILED: 0 solver fires in 160 games -- the scent-floor
-                                # belief never sharpens to a provable support (honest negative result)
+enabled = true                  # keep-gate RE-OPENED: it failed only because the belief never
+                                # sharpened to a provable support (0 fires / 160 games). The
+                                # dwell-plateau pin sharpened it -- 230 fires, capture 0.625 -> 0.850
+                                # across the evader pool. Pair with info_gain below (0.983 together).
 max_support_cells = 3           # run only when the belief support is this sharp
 support_mass_threshold = 0.05   # cells at/above this belief mass form the support
 max_horizon_turns = 5           # lookahead in full turns; effective horizon = min(this, turns left)
@@ -109,7 +111,10 @@ node_cap = 20000                # search states before deferring to the heuristi
 time_cap_ms = 150.0             # wall-clock cap -- optimality is never worth the turn deadline
 
 [strategy.info_gain]            # expected belief-entropy-reduction move term (same keep-gate doc)
-enabled = false                 # keep-gate FAILED: capture rate unmoved at every weight swept (0.5-4.0)
+enabled = true                  # keep-gate RE-OPENED **in combination only**: alone this term still
+                                # measures NEGATIVE (0.558 vs 0.625). It earns its place by opening the
+                                # solver's support gate 29% more often (230 -> 296 fires) -> 0.983 as a
+                                # pair. Never enable it without [strategy.endgame].
 weight = 1.0                    # entropy nats traded per BFS step in the blended score
 match_tolerance = 0.08          # kernel readings this close are indistinguishable
 mismatch_likelihood = 0.15      # belief mass retained by hypotheses the reading refutes

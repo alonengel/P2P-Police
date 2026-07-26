@@ -2,11 +2,18 @@
 per decay turn), so evidence lands where the rival can be NOW — the
 counter-camping property that turns the transmitted trail into a tracker."""
 
+import json
+from pathlib import Path
+
 import pytest
 
 from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.board import Board
-from p2p_police.domain.evidence import decoded_reach, plateau_origin
+from p2p_police.domain.evidence import (
+    SATURATING_OFFSETS,
+    decoded_reach,
+    plateau_origin,
+)
 from p2p_police.domain.scent import ScentField
 
 
@@ -124,3 +131,34 @@ def test_evidence_spread_respects_barriers(board: Board) -> None:
     belief.observe_scent(scent, board)
     assert belief.value_at((3, 4)) == 0.0
     assert sum(sum(row) for row in belief.values()) == pytest.approx(1.0)
+
+
+def test_decode_matches_the_twin_repo_golden_vectors(board: Board) -> None:
+    """Parity hashing catches drift BETWEEN the twins; only vectors catch a
+    change made identically in both. The decode is what every brain scores
+    on, so it is pinned exactly — including the three shapes the plateau fit
+    must REFUSE to pin, since a silent loss of abstention is the dangerous
+    regression (a confident wrong pin is acted on as certainty)."""
+    vectors = json.loads(
+        (Path(__file__).parents[2] / "vectors" / "physics_vectors.json").read_text()
+    )["evidence"]
+    assert [tuple(offset) for offset in vectors["saturating_offsets"]] == list(
+        SATURATING_OFFSETS)
+    for value, reach in vectors["reach_ladder"].items():
+        assert decoded_reach(float(value)) == reach
+
+    camp = ScentField(7)
+    for _ in range(12):
+        camp.update((6, 6))
+    assert camp.values() == vectors["corner_dweller_field"]
+    assert list(plateau_origin(camp, board, 7)) == vectors["corner_dweller_origin"]
+
+    march = ScentField(7)
+    for col in range(7):
+        march.update((3, col))
+    spike = ScentField(7)
+    spike.update((3, 3))
+    refused = vectors["refusals"]
+    assert plateau_origin(ScentField(7), board, 7) == refused["silence"] is None
+    assert plateau_origin(spike, board, 7) == refused["lone_spike"] is None
+    assert plateau_origin(march, board, 7) == refused["open_march"] is None

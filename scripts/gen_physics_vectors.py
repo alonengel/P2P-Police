@@ -11,7 +11,9 @@ Usage: uv run python scripts/gen_physics_vectors.py
 import json
 from pathlib import Path
 
+from p2p_police.domain.board import Board
 from p2p_police.domain.engine import GameEngine
+from p2p_police.domain.evidence import SATURATING_OFFSETS, decoded_reach, plateau_origin
 from p2p_police.domain.primitives import Move, Role
 from p2p_police.domain.rules import RuleSet
 from p2p_police.domain.scent import EMISSION_KERNEL, ScentField
@@ -69,10 +71,43 @@ def engine_full_turn_boundary() -> dict:
     return {"rounds": [["E", "STAY"], ["E", "W"]], "snapshots": snapshots}
 
 
+def evidence_decode() -> dict:
+    """Pin the INFERENCE the twins run over a reading, not just the physics.
+
+    Parity hashing catches drift BETWEEN the twins; these vectors catch a
+    change made identically in both — the decode is what every brain scores
+    on, so a silent shift in it is a silent shift in play. Cases: the reach
+    ladder, a corner dweller's saturated plateau and its fitted origin, and
+    the three shapes the fit must REFUSE to pin (silence, a lone spike, an
+    open march).
+    """
+    board = Board(GRID)
+    camp = ScentField(GRID)
+    for _ in range(12):
+        camp.update((6, 6))
+    march = ScentField(GRID)
+    for col in range(GRID):
+        march.update((3, col))
+    spike = ScentField(GRID)
+    spike.update((3, 3))
+    return {
+        "saturating_offsets": [list(offset) for offset in SATURATING_OFFSETS],
+        "reach_ladder": {str(value): decoded_reach(value)
+                         for value in (0.9, 0.81, 0.729, 0.62, 0.2, 0.04, 0.0)},
+        "corner_dweller_field": camp.values(),
+        "corner_dweller_origin": list(plateau_origin(camp, board, GRID)),
+        "refusals": {
+            "silence": plateau_origin(ScentField(GRID), board, GRID),
+            "lone_spike": plateau_origin(spike, board, GRID),
+            "open_march": plateau_origin(march, board, GRID),
+        },
+    }
+
+
 def main() -> None:
     payload = {
         "_comment": "Twin-repo physics contract. Byte-identical in both repos.",
-        "schema": 2,
+        "schema": 3,
         "scent": {
             "kernel": [list(row) for row in EMISSION_KERNEL],
             "grid_size": GRID,
@@ -83,6 +118,7 @@ def main() -> None:
         "engine": {
             "full_turn_boundary": engine_full_turn_boundary(),
         },
+        "evidence": evidence_decode(),
     }
     out = Path("tests/vectors/physics_vectors.json")
     out.parent.mkdir(parents=True, exist_ok=True)
