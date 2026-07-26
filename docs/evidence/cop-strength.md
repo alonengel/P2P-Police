@@ -73,3 +73,63 @@ everywhere); the only effect was mean turns-to-capture vs the random evader
   harness re-measures it in one command.
 
 Re-run: `uv run python scripts/measure_cop_strength.py 20`
+
+## The dwell plateau: localization, not lookahead (2026-07-26)
+
+The keep-gates above both failed for ONE root cause — a posterior too blunt
+to act on. Attacking the blur directly beat every attempt to search harder
+on top of it.
+
+**The physics.** Under re-emission `tau' = (1-rho)*tau + delta` a kernel cell
+converges to `delta / rho`. Every offset with `delta >= rho * 0.9` therefore
+reaches the clamp; the kernel's four far corners (`delta = 0.04`) never do.
+A rival that dwells stamps its own kernel window onto the board at max
+intensity, board-clipped. Reach-decoding alone cannot read it — every
+saturated cell decodes reach 0, so the evidence ties flat across the whole
+plateau and the argmax lands wherever diffusion happens to favour. Fitting
+the SHAPE back (Jaccard over each candidate's clipped saturating window)
+inverts the plateau to the emitter's own cell. Corners and edges make the
+fit *sharper*, not weaker: clipping removes hypotheses.
+
+**Localization measured** (1,292 blind turns, ground truth from the closed
+loop; `domain/evidence.py::plateau_origin`, boost in `BeliefMap.observe_plateau`):
+
+| estimator | fires | exact | mean error |
+|---|---|---|---|
+| belief argmax (before) | every turn | 7% | 2.42 cells |
+| plateau fit, `fit >= 0.9`, margin 0.05 | 43% of turns | **89%** | **0.11 cells** |
+
+Loosening to `fit >= 0.7` fires on 57% of turns at 82% exact; the tighter
+gate is kept because a pin is acted on as certainty. It abstains on silence,
+on a lone fresh spike (one cell — no shape) and on a straight open march (a
+smear fitting no single window). Abstention is the safety property.
+
+**Capture rate**, same 150-game closed loop, shipped brain otherwise
+unchanged: **0.147 -> 0.733**. The surgical barrier policy had been
+information-starved, not badly designed — it fired 0.00 walls/game before and
+1.59 after, and 74 of the 110 captures were walled.
+
+## Barrier-gate sweep ([strategy.trap])
+
+With a pin worth acting on, the quota gate itself was re-swept (150 games at
+the winner, 60 at the rest). `escape_limit` and `range` moved together:
+
+| gate | 2 (old) | **3** | 4 | 5 |
+|---|---|---|---|---|
+| capture rate | 0.733 | **0.847** | 0.817 | 0.817 |
+| walls/game | 1.59 | 3.39 | 3.22 | 3.22 |
+
+An unspent quota buys nothing: 14 barriers over 35 turns is generous, and
+hoarding them was costing more than spending them. Both values are now
+config-driven (`[strategy.trap]`, defaults in `shared/tuning.py`) rather than
+frozen constants in the brain.
+
+**Rejected (honest negative): area-denial herding.** A policy spending
+barriers on the placement that maximally CUTS the believed thief's reachable
+region produced outcomes *byte-identical* to the shipped brain over 60 games
+— the region gate never opened, because a region small enough to be worth
+cutting is already a region the trap gate walls one turn later. Not shipped;
+the trap gate covers the same ground with no extra machinery.
+
+**Net for the cop:** capture rate **0.147 -> 0.847** with no change to the
+pursuit score, no new brain, and no lookahead.

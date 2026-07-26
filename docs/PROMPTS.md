@@ -1074,3 +1074,54 @@ rewritten beat any amount of downstream cleverness built over the wrong
 posterior — and the pinned mirror-test relaxation (argmax ±1 under clamp
 saturation) documents exactly what the clamp makes unknowable, so nobody
 "fixes" it back into false certainty later.
+
+---
+
+## Session: the plateau decode and the lethal gate (2026-07-26)
+
+**Prompt (verbatim).** "do all babe, and then run all" — following a
+measurement session that had produced a survival/capture split and a
+proposal to patch two specific kill lines.
+
+**Context.** Offline replay had produced a per-turn ground-truth harness:
+our real, unmodified brains in a closed loop against faithful local replicas
+of a strong rival stack. That harness is the whole method here — every
+number below is an A/B on 150 games with only one thing changed.
+
+**What the measurement said, and what it was worth.** Two failures, each
+with a single root cause, and neither was where intuition pointed:
+
+1. Our thief survived 0.900 with *zero active captures* — every loss was one
+   repeated line, at the same turn number. Reading the trace rather than the
+   aggregate showed the score tuple, not the tactics, was wrong: the
+   trap forecast already flagged the fatal landing and was outranked by the
+   flee term. A promotion in the ordering, not a new heuristic.
+2. Our cop captured 0.147 and placed **0.00 barriers per game** across 150
+   games. That number is the tell: a policy that never fires is not a policy
+   that needs tuning. Its gate was conditioned on knowing where the thief
+   was, and the posterior was 7% exact / 2.42 cells off.
+
+**Lesson (the one worth keeping).** Both fixes were *upstream* of the code
+that looked broken. The temptation was to search harder — deeper lookahead,
+a herding policy, more arms. The area-denial herding arm was built and
+measured, and produced outcomes byte-identical to the shipped brain: it
+never fired, for exactly the same reason the barrier policy never fired.
+What actually worked was re-deriving what the mandatory channel encodes:
+under re-emission the update rule saturates every kernel offset whose fixed
+point clears the clamp, so a dwelling rival stamps its own kernel window on
+the board — and fitting that SHAPE back inverts to its cell. Localization
+7% -> 89% exact; capture rate 0.147 -> 0.847, with the pursuit score
+untouched. Twice in this project now, a channel that "wasn't strong enough"
+was a channel we were decoding wrong.
+
+**Build.** Paired domain commit (`evidence.plateau_origin` +
+`BeliefMap.observe_plateau`, byte-identical in both repos, wired last in
+`Perception.observe` because physics the rival emitted about itself outranks
+anything it chose to say). Thief commit: `lethal_gate` in the doctrine
+ordering, plus a module split (`doctrine_signals.py`) forced by the line
+cap. Cop commit: the barrier gate lifted out of frozen constants into
+`[strategy.trap]` and re-swept (2/3/4/5 → 3 wins outright).
+
+**Gates.** Both suites green, ruff 0, 150-line caps OK, physics parity green
+both directions, branch coverage 93%+ each repo. Every keep-gate written up
+in `docs/evidence/` including the negative result.
