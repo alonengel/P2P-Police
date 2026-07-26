@@ -6,7 +6,7 @@ import pytest
 
 from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.board import Board
-from p2p_police.domain.evidence import decoded_reach
+from p2p_police.domain.evidence import decoded_reach, plateau_origin
 from p2p_police.domain.scent import ScentField
 
 
@@ -70,6 +70,46 @@ def test_stale_reading_spreads_thinner_than_fresh_spike(board: Board) -> None:
     peaked.observe_scent(fresh, board)
     aged.observe_scent(stale, board)
     assert aged.value_at((3, 3)) < peaked.value_at((3, 3))
+
+
+def test_plateau_origin_pins_a_camper_the_argmax_cannot_find(board: Board) -> None:
+    """The camper's tell. Dwelling re-deposits until every kernel cell whose
+    fixed point (delta / rho) reaches the clamp saturates at max intensity —
+    so the SHAPE of the saturated set is the emitter's kernel window, clipped
+    by the board. Fitting that shape back inverts to the emitter's own cell,
+    while the posterior peak (every plateau cell decodes reach 0, so evidence
+    ties across all of them) is left several cells adrift."""
+    scent = ScentField(7)
+    for _ in range(12):
+        scent.update((6, 6))  # corner camp: the plateau is clipped two ways
+    belief = BeliefMap(7)
+    belief.diffuse(board)
+    belief.observe_scent(scent, board)
+    assert plateau_origin(scent, board, 7) == (6, 6)
+    assert belief.argmax_cell() != (6, 6)  # the tie the fit resolves
+
+
+def test_plateau_origin_stays_silent_when_the_shape_is_ambiguous(board: Board) -> None:
+    """No guessing: silence, a lone fresh spike (one cell — no shape yet) and
+    a straight open march (a smear that fits no single window) all abstain.
+    Abstention is the whole safety property — a pin is acted on as certainty."""
+    assert plateau_origin(ScentField(7), board, 7) is None
+    fresh = ScentField(7)
+    fresh.update((3, 3))
+    assert plateau_origin(fresh, board, 7) is None
+    marching = ScentField(7)
+    for col in range(7):
+        marching.update((3, col))
+        assert plateau_origin(marching, board, 7) is None
+
+
+def test_plateau_origin_ignores_walls_and_never_pins_one(board: Board) -> None:
+    """Barrier cells hold no emitter and never count against the fit."""
+    board.add_barrier((4, 6))
+    scent = ScentField(7)
+    for _ in range(12):
+        scent.update((6, 6))
+    assert plateau_origin(scent, board, 7) == (6, 6)
 
 
 def test_evidence_spread_respects_barriers(board: Board) -> None:

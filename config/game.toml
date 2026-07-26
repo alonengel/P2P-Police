@@ -92,6 +92,13 @@ tunnel_downtime_seconds = 6.0       # how long the tunnel stays dead before rest
 tunnel_name = "copthief"            # named tunnel (docs/DEPLOYMENT.md); hostnames from [game].mcp_servers
 cloudflared_exe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 
+[strategy.trap]                 # barrier gate: when a placement is worth its quota (same keep-gate doc)
+escape_limit = 3                # wall a thief already down to this many escape routes...
+range = 3                       # ...and this close in barrier-aware BFS steps.
+                                # Both were 2 while the posterior was too blunt to justify a
+                                # placement; with the dwell-plateau pin the quota is worth
+                                # spending a step earlier -- swept 2/3/4/5, 3 wins outright.
+
 [strategy.endgame]              # exact endgame solver (belief-support minimax; keep-gate: docs/evidence/cop-strength.md)
 enabled = false                 # keep-gate FAILED: 0 solver fires in 160 games -- the scent-floor
                                 # belief never sharpens to a provable support (honest negative result)

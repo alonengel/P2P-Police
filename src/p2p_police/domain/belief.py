@@ -8,7 +8,7 @@ origin likelihood (a declared placement pins the placer — law of barriers).
 """
 
 from p2p_police.domain.board import Board
-from p2p_police.domain.evidence import scent_evidence
+from p2p_police.domain.evidence import plateau_origin, scent_evidence
 from p2p_police.domain.primitives import Cell, Move
 from p2p_police.domain.scent import ScentField
 
@@ -19,6 +19,7 @@ FALSE_CLAIM_WEIGHT = 0.4
 # far weaker evidence are treated as lies.
 LIE_EVIDENCE_FLOOR = 0.4
 BARRIER_ORIGIN_BOOST = 25.0  # placement-origin cells: near-certain evidence
+PLATEAU_ORIGIN_BOOST = 25.0  # a fitted dwell plateau: the same evidence grade
 
 
 def claimed_region(claim: str, grid_size: int) -> set[Cell]:
@@ -135,6 +136,19 @@ class BeliefMap:
     ) -> None:
         """Directional claim -> board-half region observation."""
         self.observe_region(claimed_region(claim, self.grid_size), scent, weights)
+
+    def observe_plateau(self, scent: ScentField, board: Board) -> None:
+        """Pin a dwelling rival to the cell its saturated plateau fits.
+
+        Reach-decoding ties flat across a plateau (every cell reads reach 0),
+        so a dweller hides inside its own trail; the shape fit breaks that tie
+        exactly. Applied as a boost rather than a collapse: a wrong pin must
+        stay recoverable by the next turn's evidence. No fit, no observation."""
+        origin = plateau_origin(scent, board, self.grid_size)
+        if origin is None:
+            return
+        self._p[origin[0]][origin[1]] *= PLATEAU_ORIGIN_BOOST
+        self._normalize()
 
     def observe_barrier(self, barrier: Cell, board: Board) -> None:
         """A declared placement localizes the placer: the target lies on the
