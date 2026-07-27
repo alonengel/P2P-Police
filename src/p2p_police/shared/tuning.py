@@ -1,5 +1,5 @@
 """Strategy-layer tunables: [strategy.endgame] / [strategy.info_gain] /
-[strategy.trap] defaults.
+[strategy.trap] / [deception] defaults.
 
 Both tables live in the PRIVATE config (game.toml) - pure play-strength
 knobs, never agreed game terms. The defaults below encode the measured
@@ -50,6 +50,16 @@ TRAP_DEFAULTS: dict = {
 }
 
 
+DECEPTION_DEFAULTS: dict = {
+    "max_lies": 2,                 # conservative cop budget - lie only while closing
+    "cooldown_turns": 6,           # minimum full turns between lies
+    "exposure_threshold": 0.4,     # mirror mass near our true cell that arms a lie
+    "opponent_distance_threshold": 2,  # believed rival distance: mask the approach
+    "exposure_radius": 1,          # Manhattan radius of the exposure mass
+    "baseline_truth_probability": 0.5,
+}
+
+
 def _merge(defaults: dict, block: dict) -> dict:
     merged = dict(defaults)
     for key, default in defaults.items():
@@ -71,3 +81,8 @@ def info_gain_table(private: dict) -> dict:
 def trap_table(private: dict) -> dict:
     """[strategy.trap] from a private-config dict, defaults filled in."""
     return _merge(TRAP_DEFAULTS, private.get("strategy", {}).get("trap", {}))
+
+
+def deception_table(private: dict) -> dict:
+    """[deception] self-mirror lie policy (private, never a signed term)."""
+    return _merge(DECEPTION_DEFAULTS, private.get("deception", {}))

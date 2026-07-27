@@ -15,7 +15,8 @@ from pathlib import Path
 from p2p_police.domain.negotiation import validate_shared_terms
 from p2p_police.domain.rules import RuleSet
 from p2p_police.domain.scoring import ScoreTable
-from p2p_police.shared.tuning import endgame_table, info_gain_table, trap_table
+from p2p_police.shared import tuning
+from p2p_police.shared.info_modes import InfoModeError, resolve
 from p2p_police.shared.version import is_supported_config
 
 REQUIRED_SHARED_SECTIONS = (
@@ -106,33 +107,30 @@ class Config:
 
     def endgame(self) -> dict:
         """[strategy.endgame] exact-solver gates/caps (defaults: shared/tuning.py)."""
-        return endgame_table(self.private)
+        return tuning.endgame_table(self.private)
 
     def info_gain(self) -> dict:
         """[strategy.info_gain] entropy-reduction blend (defaults: shared/tuning.py)."""
-        return info_gain_table(self.private)
+        return tuning.info_gain_table(self.private)
 
     def trap(self) -> dict:
         """[strategy.trap] barrier-gate thresholds (defaults: shared/tuning.py)."""
-        return trap_table(self.private)
+        return tuning.trap_table(self.private)
 
-    def info_mode(self) -> str:
-        """[strategy] info_mode: 'belief' (default) | 'exact' (ADR-0006)."""
-        return self.private.get("strategy", {}).get("info_mode", "belief")
+    def info_mode(self, wire_shape: str | None = None) -> str:
+        """[strategy] info_mode, validated against the registry (ADR-0006).
+
+        Pass the wire shape to have legality checked too: a regime the wire
+        cannot serve is a startup error, never a silent downgrade."""
+        name = self.private.get("strategy", {}).get("info_mode", "belief")
+        try:
+            return resolve(name, wire_shape).name
+        except InfoModeError as error:
+            raise ConfigError(str(error)) from error
 
     def deception(self) -> dict:
-        """[deception] self-mirror lie-policy tunables (private, per-peer)."""
-        # Never part of the signed game.json; missing keys keep the shipped cop
-        # posture: conservative, lying only while closing in to mask the approach.
-        block = self.private.get("deception", {})
-        return {
-            "max_lies": int(block.get("max_lies", 2)),
-            "cooldown_turns": int(block.get("cooldown_turns", 6)),
-            "exposure_threshold": float(block.get("exposure_threshold", 0.4)),
-            "opponent_distance_threshold": int(block.get("opponent_distance_threshold", 2)),
-            "exposure_radius": int(block.get("exposure_radius", 1)),
-            "baseline_truth_probability": float(block.get("baseline_truth_probability", 0.5)),
-        }
+        """[deception] self-mirror lie-policy tunables (defaults: shared/tuning.py)."""
+        return tuning.deception_table(self.private)
 
     def resume_enabled(self) -> bool:
         """[resume] enabled (default ON): per-half-turn crash-resume snapshots
