@@ -15,8 +15,12 @@ moving a step per turn could have reached is refused WHOLE for that turn
 
 from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
-from p2p_police.domain.evidence import credible_cells, incredible_saturation
 from p2p_police.domain.primitives import Outcome, Role
+from p2p_police.domain.trail_forensics import (
+    credible_cells,
+    incredible_saturation,
+    transition_emitters,
+)
 from p2p_police.strategy.hints import landmark_region, parse_claim
 from p2p_police.strategy.profiler import OpponentProfiler
 
@@ -52,6 +56,8 @@ class Perception:
         self._anchor_age = 0
         self.refused_readings = 0  # evidence counter, surfaced in the summary
         self.scent_trusted = True  # latches false on a physically impossible reading
+        self._previous_field: list | None = None  # last accepted frame
+        self._law_breaks = 0  # consecutive frames no single emitter explains
 
     @classmethod
     def for_peer(cls, role: Role, config) -> "Perception":
@@ -79,9 +85,10 @@ class Perception:
         self._anchor_age += 1
         allowed = credible_cells(engine.board, self._anchor,
                                  self._anchor_age, self.grid_size)
-        if self.scent_trusted and incredible_saturation(
+        broken = self._breaks_the_law(rival_scent, engine.board)
+        if self.scent_trusted and (broken or incredible_saturation(
             rival_scent, engine.board, self.grid_size, allowed
-        ):
+        )):
             # A reading that breaks the movement model is not partly true, and
             # half-believing it is exactly how a forgery steers us. One such
             # reading is already proof the channel is broken or hostile, so the
@@ -95,6 +102,7 @@ class Perception:
         if not self.scent_trusted:
             self.refused_readings += 1
             return  # belief runs on diffusion, hints and barrier origins only
+        self._previous_field = rival_scent.values()
         self.belief.observe_scent(rival_scent, engine.board)
         # Hint tiers: directional claim first; place-name talk falls through
         # to the gazetteer and lands as a region observation. Both carry the
@@ -110,6 +118,28 @@ class Perception:
         # Last, and deliberately: a fitted dwell plateau is physics the rival
         # emitted about itself, so it outranks anything it CHOSE to say.
         self.belief.observe_plateau(rival_scent, engine.board)
+
+    def _breaks_the_law(self, rival_scent, board) -> bool:
+        """Do two consecutive frames admit NO single emitter (ADR-0010)?
+
+        This is the check that closes the gap the reachability envelope leaves:
+        a forgery can walk its decoy one legal step per turn, but the update law
+        binds the whole board, so it would also have to move its own HISTORY -
+        and a cell may never fall below (1-rho) times its previous value.
+
+        Two consecutive breaks are required before latching. One is already
+        strong evidence, but the law was validated against a single foreign
+        implementation, and the refusal is irreversible; a sustained forgery
+        breaks it every frame, while an unforeseen quirk gets one free pass.
+        """
+        if self._previous_field is None:
+            return False  # nothing to compare the first frame against
+        if transition_emitters(self._previous_field, rival_scent.values(),
+                               board, self.grid_size):
+            self._law_breaks = 0
+            return False
+        self._law_breaks += 1
+        return self._law_breaks >= 2
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:
