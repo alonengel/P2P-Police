@@ -1,0 +1,81 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "config_name": "config_anrbj666-vs-anrbj666_g06.json",
+  "config_sha256": "3d38cde31370cff4b18bb6384499454c4c43cdaae52bbef5acfc601bf2b73dce",
+  "game_id": "anrbj666-vs-anrbj666",
+  "game_uid": "be1d1da6-f409-a243-4b0c-1c0482225851",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "report_type": "config",
+  "schema_version": "1.00",
+  "sub_game_number": 6,
+  "terms": {
+    "agreed_between": [
+      "anrbj666-police",
+      "anrbj666-thief"
+    ],
+    "board_and_agents": {
+      "axis_origin_corner": "top-left",
+      "axis_start_index": 0,
+      "cop_start": [
+        0,
+        0
+      ],
+      "grid_size": 7,
+      "num_agents": 2,
+      "thief_start": [
+        3,
+        3
+      ]
+    },
+    "movement_and_barriers": {
+      "max_barriers": 14,
+      "max_moves": 35,
+      "move_set": [
+        "N",
+        "S",
+        "E",
+        "W",
+        "STAY"
+      ],
+      "survival_threshold": 35
+    },
+    "network_and_league": {
+      "diversity_reward": 10,
+      "max_games_per_team": 10,
+      "min_games_to_pass": 2,
+      "num_games": 6,
+      "response_timeout_sec": 30,
+      "token_budget_per_series": 200000,
+      "watchdog_timeout_sec": 60
+    },
+    "pheromones": {
+      "min_center_intensity": 0.5,
+      "pheromone_center_intensity": 0.9,
+      "pheromone_decay": 0.1,
+      "pheromone_grid_size": 5
+    },
+    "rate_limiter_gatekeeper": {
+      "concurrent_requests": 2,
+      "max_retries": 3,
+      "queue_depth": 100,
+      "requests_per_minute": 30,
+      "retry_backoff_sec": 5
+    },
+    "schema_version": "1.3",
+    "scoring": {
+      "capture_cop": 20,
+      "capture_thief": 5,
+      "survival_cop": 5,
+      "survival_thief": 10,
+      "technical_loss": 0,
+      "tie_score": 2
+    },
+    "world": {
+      "hint_max_words": 15,
+      "map_area": "New York"
+    }
+  }
+}
