@@ -23,6 +23,7 @@ from p2p_police.peer.perception import Perception
 from p2p_police.peer.resume import NullResume
 from p2p_police.peer.sealing import pending_cap_from
 from p2p_police.peer.watchdog import NullWatchdog
+from p2p_police.shared.info_modes import REFERENCE, resolve
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.deception import Deceiver
 from p2p_police.strategy.talk_providers import build_talk_chain
@@ -51,6 +52,9 @@ class HiddenRuntime:
         self.role, self.config, self.own = role, config, own
         self.transport, self.inboxes, self.brain = transport, inboxes, brain
         self.perception = Perception.for_peer(role, config)
+        # Structural, not chosen: this wire carries no rival position, so the
+        # registry refuses any regime that would need one (ADR-0006/0010).
+        self.mode = resolve(config.info_mode(REFERENCE), REFERENCE)
         self.deceiver = Deceiver(role, config, brain.rng)
         self.talk = build_talk_chain(config, brain.rng, gatekeeper)
         self.fsm = GamePhaseMachine()
@@ -118,7 +122,7 @@ class HiddenRuntime:
         mine = terms.build_negotiate_message(
             self.config,
             hardware_spec(),
-            info_mode="belief",  # structural under this wire (registry note)
+            info_mode=self.mode.name,  # registry-checked for this wire
             # both-declare guard: a leftover rival instance from a previous
             # window must not pair into the wrong sub-game (uid can't tell).
             sub_game=int(self.config.private["game"]["sub_game_number"]),

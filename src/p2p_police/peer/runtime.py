@@ -19,6 +19,7 @@ from p2p_police.peer.perception import Perception
 from p2p_police.peer.resume import NullResume, handle_controls
 from p2p_police.peer.sealing import SealedExchange, pending_cap_from
 from p2p_police.peer.watchdog import NullWatchdog
+from p2p_police.shared.info_modes import BOOKLETTER, brain_view, resolve
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.deception import Deceiver
@@ -43,6 +44,9 @@ class GeometricRuntime:
         self.transport, self.inboxes = transport, inboxes
         # Local truth only: belief about the RIVAL, fed by scent + hints.
         self.brain, self.perception = brain, Perception.for_peer(role, config)
+        # Resolved once, at construction: an illegal regime must fail at startup
+        # rather than silently downgrade mid-game.
+        self.mode = resolve(config.info_mode(BOOKLETTER), BOOKLETTER)
         self.deceiver = Deceiver(role, config, brain.rng)  # self-mirror lie policy
         self.talk, self.fsm = build_talk_chain(config, brain.rng, gatekeeper), GamePhaseMachine()
         # SDK swaps in the real watchdog (rule 7) / resume recorder (E6)
@@ -71,7 +75,7 @@ class GeometricRuntime:
 
     def negotiate(self) -> dict:
         mine = build_agreement(self.config.shared, self.config.group_id, hardware_spec(),
-                               info_mode=self.config.info_mode(),
+                               info_mode=self.mode.name,
                                identity=self.config.identity_block())
         self.transport.send_agreement(mine, Deadline(self.config.turn_timeout_seconds))
         theirs = self._wait(self.inboxes.agreements, "opponent agreement")
@@ -82,12 +86,10 @@ class GeometricRuntime:
 
     def _my_half_turn(self, turn_index: int) -> None:
         self.fsm.transition(GamePhase.COMPUTING_MOVE)
-        # [strategy] info_mode: "belief" (default - the Dec-POMDP posture) or
-        # "exact" - legal ONLY under a pair-locked bookletter wire, where every
-        # position arrived via the agreed protocol and is shared local
-        # knowledge (joint ADR line). The live UI shows belief either way.
-        exact = self.config.info_mode() == "exact"
-        action = self.brain.decide(self.engine, None if exact else self.perception.belief)
+        # The information regime decides what the brain may see; the registry
+        # decides which regimes this wire can honour (shared/info_modes.py,
+        # ADR-0006). The live UI shows the belief map in every regime.
+        action = self.brain.decide(self.engine, brain_view(self.mode, self.perception))
         moved = action["move"] if action["type"] == "move" else "STAY"
         claim, truth = self.deceiver.plan_hint(
             self.engine, self.perception, Move[moved], turn_index)
