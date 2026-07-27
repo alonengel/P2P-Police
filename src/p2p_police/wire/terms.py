@@ -17,6 +17,7 @@ import hashlib
 
 from p2p_police.domain.crypto import canonical, new_nonce
 from p2p_police.domain.errors import GameRuleError
+from p2p_police.domain.game_ids import derive_game_uid
 from p2p_police.domain.negotiation import config_sha256, validate_shared_terms
 from p2p_police.domain.scent import scent_model_spec
 
@@ -24,7 +25,12 @@ from p2p_police.domain.scent import scent_model_spec
 # sub_game_number rides here too: identical terms give identical game_uids
 # across instances, so the index is the ONLY thing that stops a leftover
 # rival instance from another window pairing into the wrong sub-game.
-BOTH_DECLARE_FIELDS = ("scent_model_sha256", "info_mode", "sub_game_number")
+# game_uid rides here under the same rule (joint proposal with the pairing
+# team): the uid never crosses the wire in the reference shape, so two peers
+# deriving it from DIFFERENT inputs stay silently divergent for a whole series
+# and nothing notices until the reports are diffed. Declaring it turns that
+# into a refusal at handshake time.
+BOTH_DECLARE_FIELDS = ("scent_model_sha256", "info_mode", "sub_game_number", "game_uid")
 
 
 class PairingRefusalError(GameRuleError):
@@ -77,7 +83,8 @@ def sign_terms(terms: dict, nonce: str) -> str:
 def build_negotiate_message(config, hardware: dict | None = None,
                             info_mode: str = "belief",
                             sub_game: int | None = None,
-                            role: str | None = None) -> dict:
+                            role: str | None = None,
+                            opponent_group_id: str | None = None) -> dict:
     """The reference-shaped negotiate payload with our declarations alongside.
 
     A reference peer verifies exactly {terms, nonce, signature} and reads
@@ -102,21 +109,25 @@ def build_negotiate_message(config, hardware: dict | None = None,
         message["sub_game_number"] = int(sub_game)
     if role is not None:  # agreed mutual shape: unsigned TOP-LEVEL key too
         message["role"] = str(role)
+    if opponent_group_id:
+        # Derived HERE, from the flat terms just signed above - the caller
+        # passes a group id, never a uid, so no call site can feed the
+        # derivation the wrong object (which is precisely the divergence this
+        # declaration exists to catch). Needs both group ids, so a peer with
+        # no expected opponent configured simply declares nothing.
+        message["game_uid"] = derive_game_uid(terms, config.group_id, str(opponent_group_id))
     return message
 
 
 def _diff_lines(mine: dict, theirs: dict) -> list[str]:
     """Every differing key, each named with BOTH values (interop debugging:
     a rival must see exactly which term diverges, not just 'mismatch')."""
-    lines = []
-    for key in sorted(set(mine) | set(theirs)):
-        if key not in theirs:
-            lines.append(f"{key}: mine={mine[key]!r} theirs=<missing>")
-        elif key not in mine:
-            lines.append(f"{key}: mine=<missing> theirs={theirs[key]!r}")
-        elif mine[key] != theirs[key]:
-            lines.append(f"{key}: mine={mine[key]!r} theirs={theirs[key]!r}")
-    return lines
+    missing = "<missing>"
+    return [
+        f"{key}: mine={mine.get(key, missing)!r} theirs={theirs.get(key, missing)!r}"
+        for key in sorted(set(mine) | set(theirs))
+        if key not in mine or key not in theirs or mine[key] != theirs[key]
+    ]
 
 
 def verify_terms_message(mine_terms: dict, message: dict) -> None:

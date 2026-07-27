@@ -54,11 +54,8 @@ class Config:
         shared = _read_json(directory / "game.json")
         private = _read_toml(directory / private_file)
         limits_path = directory / "rate_limits.json"
-        rate_limits = (
-            _read_json(limits_path)
-            if limits_path.is_file()
-            else {"services": {"default": dict(shared["rate_limiter_gatekeeper"])}}
-        )
+        rate_limits = (_read_json(limits_path) if limits_path.is_file() else
+                       {"services": {"default": dict(shared["rate_limiter_gatekeeper"])}})
 
         schema = shared.get("schema_version", "")
         if not is_supported_config(schema):
@@ -73,11 +70,8 @@ class Config:
 
     def rule_set(self) -> RuleSet:
         block = self.shared["movement_and_barriers"]
-        return RuleSet(
-            max_barriers=block["max_barriers"],
-            max_moves=block["max_moves"],
-            survival_threshold=block["survival_threshold"],
-        )
+        return RuleSet(max_barriers=block["max_barriers"], max_moves=block["max_moves"],
+                       survival_threshold=block["survival_threshold"])
 
     def score_table(self) -> ScoreTable:
         return ScoreTable(**self.shared["scoring"])
@@ -127,6 +121,14 @@ class Config:
             return resolve(name, wire_shape).name
         except InfoModeError as error:
             raise ConfigError(str(error)) from error
+
+    def opponent_group_id(self) -> str | None:
+        """[game] opponent_group_id: the peer EXPECTED this session, or None."""
+        # Optional. Set, it lets us derive the shared game_uid before the
+        # handshake and DECLARE it, so a peer deriving it from a different
+        # input is refused at negotiate instead of diverging silently for a
+        # whole series. Unset (unknown opponent) declares nothing.
+        return str(self.private.get("game", {}).get("opponent_group_id") or "") or None
 
     def deception(self) -> dict:
         """[deception] self-mirror lie-policy tunables (defaults: shared/tuning.py)."""

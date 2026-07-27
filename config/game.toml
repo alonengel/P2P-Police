@@ -7,6 +7,10 @@ version = "1.10"
 [game]
 group_name = "anrbj666"
 group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
+# opponent_group_id = "imreeyal"   # the peer expected this session: lets us DECLARE the
+#                                  # derived game_uid at the handshake, so a peer deriving it from a
+#                                  # different input is refused in seconds instead of diverging silently
+#                                  # for a whole series (both-declare: omission never refuses)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
 counted_games_played = 0    # UPDATE before every counted game (rules 37-38)
@@ -45,7 +49,7 @@ model = ""
 step_deadline_seconds = 30      # hard cap on LLM thinking per step
 
 [email]
-recipient = "alonisrael.engel@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
+recipient = "alonisrael.engel@gmail.com, Imree.c@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
 counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals

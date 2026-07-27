@@ -127,6 +127,10 @@ class HiddenRuntime:
             # window must not pair into the wrong sub-game (uid can't tell).
             sub_game=int(self.config.private["game"]["sub_game_number"]),
             role=self.role.value,  # complementary-role guard (equal refuses)
+            # Declared when we know who we are playing: the uid never crosses
+            # the wire otherwise, so a derivation-input mismatch stays silent
+            # until the reports are diffed.
+            opponent_group_id=self.config.opponent_group_id(),
         )
         lock.extend_agreement(mine, self.config)
 
