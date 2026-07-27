@@ -45,7 +45,7 @@ model = ""
 step_deadline_seconds = 30      # hard cap on LLM thinking per step
 
 [email]
-recipient = "alonisrael.engel@gmail.com, Imree.c@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
+recipient = "alonisrael.engel@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
 mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
 counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals
