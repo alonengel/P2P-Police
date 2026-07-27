@@ -69,40 +69,6 @@ def decoded_reach(value: float) -> int | None:
     return best if best is not None and best <= REACH_HORIZON else None
 
 
-def credible_cells(board: Board, anchor, elapsed: int, grid_size: int) -> set:
-    """Cells an emitter last known at `anchor`, `elapsed` turns ago, could
-    legally have deposited on NOW: the kernel dilation of everything reachable
-    in that many steps. `anchor=None` (or a stale one) yields the whole board,
-    which is the graceful degradation - the check only ever tightens."""
-    board_cells = {(r, c) for r in range(grid_size) for c in range(grid_size)}
-    if anchor is None:
-        return board_cells
-    # Reachability deliberately IGNORES barriers. Walls appear DURING the game,
-    # so a barrier-aware BFS asks "could it reach there on today's board" when
-    # the honest answer is "it walked there before the wall existed" - measured
-    # as a 22.5% false-refusal rate once a late board filled with walls. Every
-    # barrier only ever shrinks the true reachable set, so the wall-free ball
-    # is a sound superset: it can miss a forgery, never invent one.
-    reachable = {cell for cell in board_cells
-                 if abs(cell[0] - anchor[0]) + abs(cell[1] - anchor[1]) <= elapsed}
-    return {
-        (cell[0] + dr, cell[1] + dc)
-        for cell in reachable
-        for dr in range(-KERNEL_RADIUS, KERNEL_RADIUS + 1)
-        for dc in range(-KERNEL_RADIUS, KERNEL_RADIUS + 1)
-    } & board_cells
-
-
-def incredible_saturation(scent, board: Board, grid_size: int, allowed: set) -> bool:
-    """Does the reading claim a clamp-level deposit somewhere no emitter obeying
-    the movement model could have reached? On the reference wire the trail
-    arrives as an ASSERTION (`smell_grid` rides beside `commit`, never inside
-    it, so no hash audit can ever check it) - physics is the only check left,
-    and a forgery that ignores it is refused whole rather than partly believed.
-    """
-    return bool(saturated_cells(scent, board, grid_size) - allowed)
-
-
 def saturated_cells(scent, board: Board, grid_size: int) -> set:
     """Passable cells reading at the clamp (reach 0) — the plateau's shape."""
     return {

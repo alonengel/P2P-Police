@@ -10,12 +10,13 @@ denial of service, so the anchor is the AGREED start, never a later estimate.
 import pytest
 
 from p2p_police.domain.board import Board
-from p2p_police.domain.evidence import (
-    TRAIL_CENTER,
+from p2p_police.domain.evidence import TRAIL_CENTER
+from p2p_police.domain.scent import ScentField
+from p2p_police.domain.trail_forensics import (
     credible_cells,
     incredible_saturation,
+    transition_emitters,
 )
-from p2p_police.domain.scent import ScentField
 
 
 @pytest.fixture
@@ -67,3 +68,44 @@ def test_credibility_never_rejects_an_honest_walk(board: Board) -> None:
         scent.update(cell)
         allowed = credible_cells(board, (3, 3), step, 7)
         assert not incredible_saturation(scent, board, 7, allowed)
+
+
+def test_an_honest_transition_admits_exactly_one_emitter(board: Board) -> None:
+    """The far tighter constraint the reachability envelope throws away: an
+    honest field satisfies the update law EXACTLY, frame to frame, for a
+    SINGLE emitter. Measured over 396 frames produced by a foreign
+    implementation, every honest transition admitted exactly one emitter and
+    none were unexplained - the law is arithmetic, not an approximation."""
+    scent = ScentField(7)
+    scent.update((3, 3))
+    for cell in ((3, 4), (4, 4), (4, 5)):
+        previous = scent.values()
+        scent.update(cell)
+        assert transition_emitters(previous, scent.values(), board, 7) == [cell]
+
+
+def test_a_value_may_never_fall_faster_than_decay(board: Board) -> None:
+    """Why a drifting decoy cannot escape: it moves its plateau, so cells that
+    read the clamp last frame read zero this one. The law forbids it outright -
+    a deposit is non-negative, so no cell may drop below 0.9x its own previous
+    value, whatever the sender claims about where it now stands."""
+    scent = ScentField(7)
+    for _ in range(12):
+        scent.update((3, 3))
+    previous = scent.values()
+    drifted = ScentField(7)
+    for _ in range(12):
+        drifted.update((3, 4))  # a legal STEP, but a teleported HISTORY
+    assert not transition_emitters(previous, drifted.values(), board, 7)
+
+
+def test_a_saturated_camp_stays_explainable(board: Board) -> None:
+    """No false alarm where information is genuinely lost: under a dweller the
+    clamp erases the difference between frames, so the transition is satisfied
+    (by more than one candidate) rather than violated."""
+    scent = ScentField(7)
+    for _ in range(12):
+        scent.update((3, 3))
+    previous = scent.values()
+    scent.update((3, 3))
+    assert (3, 3) in transition_emitters(previous, scent.values(), board, 7)
