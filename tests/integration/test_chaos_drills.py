@@ -51,3 +51,30 @@ def test_d4_budget_exhaustion_classifies_cleanly(tmp_path: Path) -> None:
     assert row["outcome"] == "technical_loss"  # engine-level classification
     budget = config.private["chaos"]["turn_timeout_seconds"]
     assert row["seconds_to_classify"] <= budget + 3.0  # bounded, never a hang
+
+
+def test_port_acquisition_survives_a_lost_race() -> None:
+    """Regression for the drills' intermittent failures. `free_port` cannot
+    reserve - the probe socket must close before the real server binds - so
+    under a full suite something else occasionally takes the port in that gap.
+    It looked like drill flakiness (failing only in whole-suite runs, never in
+    isolation); it was the harness losing a race it never retried."""
+    from chaos_net import PORT_ATTEMPTS, bind_with_retry
+
+    from p2p_police.infra.mcp_server import OrphanPeerError, PortBusyError
+
+    seen: list[int] = []
+
+    def start(port: int) -> str:
+        seen.append(port)
+        if len(seen) < 3:
+            raise OrphanPeerError("someone took it in the gap")
+        return "listening"
+
+    result, port = bind_with_retry(start)
+    assert result == "listening" and port == seen[-1]
+    assert len(set(seen)) > 1  # a FRESH port each attempt, never the same one
+
+    with pytest.raises(PortBusyError, match="no free port survived"):
+        bind_with_retry(lambda port: (_ for _ in ()).throw(PortBusyError("busy")))
+    assert PORT_ATTEMPTS >= 3
