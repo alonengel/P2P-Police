@@ -4,11 +4,14 @@ Split from sdk.py (150-line cap); rules 32/35: EVERY game end - including a
 technical loss - emits the four artifacts and, in send mode, the email.
 """
 
+import hashlib
 import random  # noqa: F401  (kept for parity of imports used in bodies)
 from pathlib import Path
 
 from p2p_police.domain import game_ids
+from p2p_police.domain.crypto import canonical
 from p2p_police.report import artifacts
+from p2p_police.wire import terms as wire_terms
 
 
 def technical_loss_report(my_role, runtime, error: Exception) -> dict:
@@ -54,15 +57,31 @@ def watchdog_state(runtime):
 
 
 def _series_uid(config, game_id: str, opponent_group_id: str) -> str:
-    """ONE game_uid per series, DERIVED from the agreed terms + group ids
-    (reference form, ADR-0004) so the opponent computes the identical uid.
-    The marker file freezes the series' uid against mid-series term changes."""
+    """ONE game_uid per series, derived exactly as the reference derives it.
+
+    The input is the flat NEGOTIATED terms, not our whole game.json - the
+    reference's handshake feeds `terms_from_config(config)` to
+    `derive_game_ids`, and those flat terms are the only description of the
+    game both peers provably hold. Hashing the raw config was deterministic
+    too, and permanently different from the opponent's value, which under
+    rule 35 makes two honest reports look like they describe different games.
+
+    The marker still freezes the uid for a series (so a discarded attempt and
+    the real run cannot drift apart), but it now carries the fingerprint of
+    the terms it was minted from and is ignored when they no longer match -
+    otherwise a marker written under the old input would resurrect the old
+    uid forever.
+    """
+    terms = wire_terms.terms_from_shared(config.shared)
+    fingerprint = hashlib.sha256(canonical(terms).encode("utf-8")).hexdigest()[:16]
     marker = Path("results") / f".game_uid_{game_id}"
     if marker.is_file():
-        return marker.read_text(encoding="utf-8").strip()
-    uid = game_ids.derive_game_uid(config.shared, config.group_id, opponent_group_id)
+        stored, _, cached = marker.read_text(encoding="utf-8").strip().partition(":")
+        if stored == fingerprint and cached:
+            return cached
+    uid = game_ids.derive_game_uid(terms, config.group_id, opponent_group_id)
     marker.parent.mkdir(exist_ok=True)
-    marker.write_text(uid, encoding="utf-8")
+    marker.write_text(f"{fingerprint}:{uid}", encoding="utf-8")
     return uid
 
 
