@@ -152,14 +152,21 @@ recomputes hashes of SEALED records - a forged grid is outside what the audit
 can see. The rulebook's "scent cannot lie" holds under the replicated-engine
 wire, where the field is derived rather than asserted.
 
-`Perception` therefore holds an asserted trail to the movement model
-(`credible_cells` / `incredible_saturation`): a clamp-level deposit somewhere
-no emitter moving a step per turn could have reached is refused whole, and the
-refusal latches. Zero false positives on honest traffic in both repos; gross
-forgeries caught every time; a decoy that starts legal and walks a step per
-turn is undetectable from this channel alone, which is a limit of the channel
-rather than of the check. Full reasoning, measurements and the protocol-level
-proposal (seal the grid inside the commit) are in ADR-0010.
+`Perception` therefore holds an asserted trail to physics, in two tiers
+(`domain/trail_forensics.py`). `incredible_saturation` bounds WHERE a deposit
+may appear given the movement model - all a single frame can support, and what
+covers the first frame. `transition_emitters` uses the much tighter constraint
+between CONSECUTIVE frames: the update law is arithmetic, so no cell may fall
+below `(1-rho)` times its own previous value and the residual must match the
+kernel centred on one cell. A forgery can move its position; it cannot move its
+history.
+
+Measured in both repos: **0.000 false positives** on honest traffic, **1.000
+detection** on every forged arm including the drifting decoy that the envelope
+alone could not touch, and **0 refusals over 300 games** against a foreign
+implementation whose honest frames matched our predicted transition bit-exactly.
+Full reasoning, the corrected claim, and the protocol-level proposal (seal the
+grid inside the commit) are in ADR-0010.
 
 - Sensitivity analysis and figures for this mechanism: `notebooks/analysis.ipynb`
   sections 5-6, regenerated from `scripts/measure_localization.py` and

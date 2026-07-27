@@ -205,7 +205,7 @@ measured (`scripts/measure_trail_forgery.py`):
 | honest | - | **0.000** |
 | decoy stamped where the rival cannot be | 1.000 | - |
 | field saturating every cell | 1.000 | - |
-| decoy that starts legal and walks a step per turn | **0.000** | - |
+| decoy that starts legal and walks a step per turn | **1.000** | - |
 
 Two findings are worth more than the table. First, soundness had to be ranked
 above sensitivity twice, because the tighter version measured worse: a rolling
@@ -214,8 +214,16 @@ produced 22.5% false refusals on a wall-filled late board (walls arrive during
 the game; the rival walked there before the wall existed). The refusal latches,
 so one false positive blinds the peer for a whole game.
 
-Second, the last row is a limit, not a gap: a forgery that obeys the movement
-model is indistinguishable from a legal trail from the scent channel alone.
-The structural fix is protocol-level - seal the grid inside the commit - and
-is recorded as a proposal rather than adopted unilaterally, since the wire
-shape is a negotiated, hash-locked term.
+Second, the last row started at 0.000 and was written up as an
+"information-theoretic" limit. That was wrong. The envelope checks one frame;
+the update law binds CONSECUTIVE frames, and a deposit being non-negative means
+no cell may fall below (1-rho) times its own previous value. A drifting decoy
+walks its plateau legally but must teleport its own history to do it, which the
+law forbids - detection went 0.000 -> 1.000 with false positives still 0.000,
+validated bit-exactly against a foreign implementation's frames (ADR-0010).
+
+What remains genuinely open is narrower: a forger who simulates a full legal
+trail for a fictional trajectory produces frames that satisfy the law, because
+they ARE legal frames for a different game. That one needs the grid bound to
+the sealed record - a protocol change, recorded as a proposal rather than
+adopted unilaterally, since the wire shape is a negotiated, hash-locked term.

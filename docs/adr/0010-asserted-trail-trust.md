@@ -36,8 +36,10 @@ the hole; it made one variant of it precise rather than merely destructive.
 
 ## Decision
 
-1. **Hold an asserted trail to the movement model** (`peer/perception.py`,
-   `domain/evidence.py::credible_cells` / `incredible_saturation`). A reading
+1. **Hold an asserted trail to physics** (`peer/perception.py`, checks in
+   `domain/trail_forensics.py`: the one-frame envelope
+   `credible_cells` / `incredible_saturation`, and the consecutive-frame
+   `transition_emitters` added in the addendum below). A reading
    claiming a clamp-level deposit somewhere no emitter moving one step per turn
    could have reached is refused WHOLE for that turn — the diffused prior
    stands. Half-believing an impossible field is how a forgery steers us.
@@ -63,12 +65,60 @@ service, strictly worse than no check. Both the barrier fix and the
 start-anchor rule exist because the tighter version measured *worse* in
 exactly that way (pool capture 0.983 -> 0.358 with a rolling anchor).
 
-**What this does not buy.** A forger who respects the movement model — a decoy
-that starts where the rival legitimately is and walks a step per turn — is
-undetectable from the scent channel alone, and it is the most damaging attack
-we measured. That is information-theoretic, not a tuning gap: such a field is
-indistinguishable from a legal one. We can refuse to be *steered* by impossible
-data; we cannot recover information from a channel that lies plausibly.
+## Addendum (same day): the drifting decoy is NOT undetectable
+
+The first version of this ADR closed with a claim that a forgery respecting the
+movement model is "information-theoretic" undetectable from the scent channel.
+**That was wrong, and it was wrong in an instructive way** — it generalized from
+the check we had built rather than from what the channel actually constrains.
+
+The envelope test asks only WHERE saturation may appear, using one frame. The
+update law binds far more than that, and it binds every cell every turn:
+
+&nbsp;&nbsp;&nbsp;&nbsp;`F_t(c) = clamp((1-rho)·F_{t-1}(c) + delta(c - e), 0, center)`
+
+for a SINGLE emitter `e`. Two consequences the envelope threw away. A deposit is
+non-negative, so **no cell may ever fall below `(1-rho)` times its own previous
+value** — whatever the sender claims about where it stands. And the residual
+after decay must match the kernel exactly, centred on one cell.
+
+A drifting decoy walks its plateau one legal step per turn, which the movement
+model permits — but doing so requires cells that read the clamp last frame to
+read zero this frame. The law forbids it outright. **A forgery can move its
+position; it cannot move its history.**
+
+Measured (`transition_emitters`, both repos):
+
+| | before | after |
+|---|---|---|
+| drifting decoy detected | 0.000 | **1.000** |
+| false positives, honest traffic | 0.000 | **0.000** |
+| refusals over 300 games vs a FOREIGN implementation | 0 | **0** |
+
+The cross-implementation result is the one that matters: 396 honest frames
+produced by the opponent's own scent code matched our predicted transition
+bit-exactly (0 misses at tolerance 1e-9), and detection was unchanged from 1e-9
+to 1e-2. The shipped tolerance is 1e-3 — four orders of margin for a peer that
+rounds its field into JSON, at no measured cost.
+
+Two guards were kept rather than one: the envelope still covers the FIRST frame,
+where there is no predecessor to compare against. And the latch now needs **two
+consecutive** unexplained frames, because the law was validated against a single
+foreign implementation and the refusal is irreversible — a sustained forgery
+breaks it every frame, while an unforeseen quirk gets one free pass.
+
+**A third false positive, found the same way as the first two.** The candidate
+scan originally skipped cells holding a barrier — "nobody emits from inside a
+wall". The law of barriers lets the cop wall its OWN cell, and it still emits
+from there that turn, so the filter discarded the true emitter and refused
+honest frames in 50% of games on the twin's side. Every tightening on this path
+has needed measurement to prove it sound; none has been safe by inspection.
+
+**What remains open.** A forger willing to simulate a full legal trail — running
+the real physics for a fictional trajectory — still produces frames that satisfy
+the law, because such frames ARE legal frames for a different game. Detecting
+that needs the grid bound to the sealed record, which is the protocol proposal
+below, not a check we can add on our side.
 
 **Proposal, not shipped.** The structural fix belongs in the protocol: seal the
 grid (or its hash) inside the commit, and forgery becomes detectable by the
