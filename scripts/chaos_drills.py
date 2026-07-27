@@ -82,8 +82,13 @@ def drill_d2(config, evidence: EvidenceLog, dump_path: Path) -> dict:
     thread, stub_box = chaos_lib.play_in_thread(net["stub"], name)
     mine = chaos_lib.run_classified(runtime)
     seconds_to_classify = round(time.perf_counter() - inject_at.get("t", time.perf_counter()), 3)
-    # beats stop with the loop; the watchdog must notice ON ITS OWN and persist
-    give_up = time.perf_counter() + chaos["watchdog_timeout_sec"] + 3
+    # beats stop with the loop; the watchdog must notice ON ITS OWN and persist.
+    # The budget is deliberately loose: what is under test is THAT it fires and
+    # dumps unaided, never how fast. At drill scale the window is ~1s, and a
+    # tight grace made this drill fail intermittently inside full-suite runs
+    # (thread scheduling and disk contention, not a product fault) - so the
+    # wall-clock allowance is generous while the assertion stays exact.
+    give_up = time.perf_counter() + max(10.0, chaos["watchdog_timeout_sec"] * 5)
     while not watchdog.fired and time.perf_counter() < give_up:
         time.sleep(0.05)
     watchdog.stop()
