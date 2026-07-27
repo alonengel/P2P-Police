@@ -39,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
                            "address interlock ([email] counted = true is the other half)")
     peer.add_argument("--wire-shape", choices=("bookletter", "reference"), default=None,
                       help="override [network] wire_shape for this run")
+    peer.add_argument("--opponent-group", default=None,
+                      help="the peer's 8-char group code for this session; lets us "
+                           "DECLARE the derived game_uid at the handshake so a peer "
+                           "deriving it differently is refused in seconds instead of "
+                           "diverging silently for a whole series")
     peer.add_argument("--duplicate-outbound", action="store_true",
                       help="chaos drill: send every outbound turn push twice "
                            "(receiver-dedup demo; JSONL evidence recorded)")
@@ -86,6 +91,8 @@ def main(argv: list[str] | None = None) -> int:
             sdk.config.private["game"]["sub_game_number"] = args.sub_game
         if args.wire_shape is not None:
             sdk.config.private.setdefault("network", {})["wire_shape"] = args.wire_shape
+        if args.opponent_group is not None:
+            sdk.config.private.setdefault("game", {})["opponent_group_id"] = args.opponent_group
         if args.duplicate_outbound:
             sdk.config.private.setdefault("chaos", {})["duplicate_outbound_sends"] = True
         report = sdk.run_peer(seed=args.seed, gui=args.gui,
