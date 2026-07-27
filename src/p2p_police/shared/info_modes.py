@@ -36,7 +36,11 @@ class InfoMode:
 MODES: dict[str, InfoMode] = {
     "belief": InfoMode(
         "belief",
-        "Dec-POMDP posture: the brain sees only the scent/hint posterior.",
+        "Dec-POMDP posture: the transmitted field reaches decisions ONLY "
+        "through the probabilistic belief layer. Specifically forswears "
+        "deterministic transition-inversion of the field to pin the rival's "
+        "current cell - the field is the designed observation channel, but "
+        "the oracle it also contains is out of bounds (ADR-0010).",
         (BOOKLETTER, REFERENCE), needs_peer_agreement=False),
     "exact": InfoMode(
         "exact",

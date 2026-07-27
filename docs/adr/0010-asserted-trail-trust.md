@@ -133,3 +133,66 @@ or stale field from a peer under repair. The exposure was found by auditing our
 own new dependency, and the mitigation is measured in both directions —
 0.0 false positives on honest traffic in both repos, gross forgeries caught
 every time.
+
+
+## Addendum: the pairing round (2026-07-28)
+
+The counterparty reproduced every claim before answering (their house rule) and
+returned two things worth recording.
+
+**The leak is not a property of the book model.** They re-ran the §4.1 scan
+under `subtractive_chebyshev_v1` — max-merge deposit, ring falloff, round-3
+quantization — and got 224/224 frame pairs inverting to exactly one candidate,
+same as under `multiplicative_book_v1`. So the finding generalizes: *any*
+full-field transmission under deterministic public physics names its emitter,
+and rounding to three decimals does not blur it. Whichever model a series
+locks, if the grid crosses the wire the inversion rides along.
+
+**A coherence defect in the registry document, not in either implementation.**
+Our `config/scent_model_lock.json` — adopted verbatim from the league registry
+so our `scent_model_sha256` equals the pinned `934c220d…` — contains
+`"transmitted": false`. On the reference wire that is simply untrue:
+`smell_grid` is a member of the closed turn-message key set, so a grid crosses
+on every half-turn by construction. We cannot correct it unilaterally, because
+the value is inside the hashed document and any edit changes the hash and
+breaks the lock against every peer using the registry's. Recorded here as a
+joint item to raise at registry level rather than patched locally.
+
+**Which stack produced our validated frames** (their precision question, and a
+fair one — it decides the compare mode). Ours came from an implementation of
+`multiplicative_book_v1` with `rounding_decimals: null`, i.e. the unrounded
+book law — *not* round-3 subtractive frames: 396 honest frame pairs, 0
+unexplained at tolerance 1e-9. We ship 1e-3 regardless, which is four orders of
+margin, so a last-bit divergence or a peer that rounds into JSON cannot reach
+the decision either way.
+
+### Counted-series posture (agreed, pending their confirmation)
+
+The series locks `info_mode: belief`, defined as: the transmitted field reaches
+decisions ONLY through the probabilistic belief layer; neither side runs
+deterministic transition-inversion to pin the current cell; both step-0
+declarations say so. `shared/info_modes.py` carries that definition on the
+`belief` row so the constraint lives with the code rather than only in prose.
+
+Two honest notes on it. The belief layer legitimately *reads* the field — that
+is the designed observation channel, and under the reference form it already
+makes a pursuer near-exact; what belief-mode forswears is the oracle, not the
+mechanic. And the merits argument runs the same way for both of us: exactness
+upgrades the evader more than the pursuer, so "both may, declared" tilts a
+series toward six survivals and structural near-ties — a worse game and a worse
+pair of reports.
+
+### Scope of the sealing amendment
+
+Binding `smell_grid` (or its hash) into the commit preimage buys
+**authenticity**, not privacy: a stale, malformed or forged field becomes
+audit-grade evidence instead of a console-only observation. An honest,
+correctly bound field inverts exactly as before — §2 is untouched by it.
+Privacy would require changing the physics or the wire (noise, lag, or not
+transmitting), all of which are deviations from locked terms, which is why
+posture is the only lever on that side of the line.
+
+Timing constraint, theirs and correct: the amendment changes the commit
+preimage, so it plays in a counted series only after a warm-up drill proves it
+on both sides. A preimage change in the week of a counted game is how rule 35
+takes both scores with nobody cheating.
