@@ -33,6 +33,10 @@ from pathlib import Path
 
 import league_close
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from p2p_police.report.archive import archive_for_pairing  # noqa: E402
+from p2p_police.shared.config import Config  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 ROLE, CLI, PARITY = "police", "p2p-police", 1  # the police plays the ODD windows
 LOCK_PATH = ROOT / "results" / "local" / "league_series.lock"
@@ -142,6 +146,10 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
         return 2
     try:
         import time as _time
+        if runner is subprocess.run:  # injected runners = tests: touch nothing
+            # A rehearsal derives the SAME uid as a counted run, so leftovers
+            # either deadlock the settlement or get counted: start clean.
+            print(archive_for_pairing(ROOT, Config.load(ROOT / "config")))
         run_start = _time.time()
         rows = []
         for window in windows:
