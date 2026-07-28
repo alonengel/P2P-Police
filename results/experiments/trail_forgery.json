@@ -7,7 +7,7 @@
       "games": 40,
       "capture_rate": 1.0,
       "detected_rate": 0.0,
-      "mean_refusals": 0.0
+      "mean_refusals": 0.12
     },
     "decoy_corner": {
       "games": 40,
@@ -17,9 +17,9 @@
     },
     "decoy_drift": {
       "games": 40,
-      "capture_rate": 0.2,
+      "capture_rate": 0.25,
       "detected_rate": 1.0,
-      "mean_refusals": 27.68
+      "mean_refusals": 27.52
     },
     "flood": {
       "games": 40,
