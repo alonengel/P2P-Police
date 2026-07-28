@@ -102,10 +102,8 @@ to 1e-2. The shipped tolerance is 1e-3 — four orders of margin for a peer that
 rounds its field into JSON, at no measured cost.
 
 Two guards were kept rather than one: the envelope still covers the FIRST frame,
-where there is no predecessor to compare against. And the latch now needs **two
-consecutive** unexplained frames, because the law was validated against a single
-foreign implementation and the refusal is irreversible — a sustained forgery
-breaks it every frame, while an unforeseen quirk gets one free pass.
+where there is no predecessor to compare against. The refusal/latch split that
+originally accompanied it is superseded — see the recovery addendum below.
 
 **A third false positive, found the same way as the first two.** The candidate
 scan originally skipped cells holding a barrier — "nobody emits from inside a
@@ -196,3 +194,60 @@ Timing constraint, theirs and correct: the amendment changes the commit
 preimage, so it plays in a counted series only after a warm-up drill proves it
 on both sides. A preimage change in the week of a counted game is how rule 35
 takes both scores with nobody cheating.
+
+
+## Addendum: what a refusal does to the NEXT frame (2026-07-29)
+
+The pairing team asked one question about our own check that we had not: after
+a refusal, what is the baseline for the next comparison? Ours was the last
+ACCEPTED frame, and the two-break rule gated the REFUSAL rather than only the
+latch. On a single transient frame that failed both ways at once.
+
+- The bad frame was **absorbed**. Requiring two breaks before refusing meant
+  the first one fell through into belief — precisely the half-believing this
+  ADR tells everyone else never to do.
+- The peer then **never recovered**. With the baseline frozen at the last
+  accepted frame, every subsequent honest frame sat two-or-more advances away
+  and broke forever. Measured: one glitch, posterior poisoned, `scent_trusted`
+  false permanently while entirely honest traffic flowed.
+
+Corrected: **every** break refuses its own frame, and the baseline advances to
+whatever ARRIVED, accepted or not. The latch is a separate concern and now
+needs **three** consecutive breaks, because a transient necessarily poisons a
+following comparison as well — latching at two would make every glitch
+permanent, which is the failure mode this whole path is built to avoid.
+
+Recovery is cheaper than the two poisoned comparisons the counterparty
+predicted, and the asymmetry is worth recording: an **additive** corruption
+costs exactly ONE, because a phantom cell then decays by `(1-rho)`, and
+decay-only is a legal transition — the very next frame is explained again. A
+**subtractive** corruption costs two, since no legal transition removes value
+faster than decay.
+
+### An empty field is absence of data, not impossible data
+
+Under book-v1 an empty field explains no emitter at all — a live agent always
+deposits somewhere — so the checker refused every frame of a game in which the
+peer transmits nothing. That is exactly what a `transmitted: false` lock asks
+a peer to do, so the check was refusing a peer for honouring the declared
+lock. That is not a check, it is an incompatibility, and it would have broken
+the structural option (below) for both sides. An empty field is now skipped
+rather than refused.
+
+### Interop answers the counterparty asked for
+
+- **An absent `smell_grid` faults; an empty one does not.** The key is in the
+  reference's closed `REQUIRED_KEYS`, so omission is a missing-field refusal,
+  while `smell_grid: {}` is accepted today with no change on either side. Any
+  not-transmitted arrangement should therefore send `{}` rather than drop the
+  key — it keeps the closed key set intact and costs nobody a code change.
+- **Whose frames our validation used:** an implementation of
+  `multiplicative_book_v1` that is not ours. Their sender transmits
+  unconditionally despite the lock's `transmitted: false`, which is how those
+  frames existed at all. Their conclusion follows and is worth stating in both
+  reports: bit-exact agreement at 1e-9 is also evidence that two independent
+  implementations of the book law agree to the last bit.
+
+Unchanged by all of this: detection 1.000 on every forged arm, false positives
+0.000, and zero refusals across a closed-loop run against that foreign
+implementation.
