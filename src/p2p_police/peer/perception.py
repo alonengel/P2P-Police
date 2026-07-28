@@ -86,23 +86,25 @@ class Perception:
         allowed = credible_cells(engine.board, self._anchor,
                                  self._anchor_age, self.grid_size)
         broken = self._breaks_the_law(rival_scent, engine.board)
-        if self.scent_trusted and (broken or incredible_saturation(
+        if self.scent_trusted and incredible_saturation(
             rival_scent, engine.board, self.grid_size, allowed
-        )):
-            # A reading that breaks the movement model is not partly true, and
-            # half-believing it is exactly how a forgery steers us. One such
-            # reading is already proof the channel is broken or hostile, so the
-            # refusal LATCHES: re-checking each turn independently is what let
-            # the first version be defeated, because a refused turn cannot
-            # refresh the anchor and the reachable set grows to the whole board
-            # within a few turns. There is no recovering information from a
-            # channel that lies - the achievable goal is to stop being STEERED
-            # by it, and to leave the refusal in the record for the audit.
+        ):
+            # The envelope check is a GROSS violation: saturation somewhere no
+            # emitter could have reached is not transport noise, so it latches
+            # outright. Re-checking it per turn is defeatable anyway - a refused
+            # turn cannot refresh the anchor, and the allowed set then relaxes
+            # to the whole board within a few turns.
             self.scent_trusted = False
-        if not self.scent_trusted:
+        # The baseline advances to whatever ARRIVED, accepted or refused.
+        # Holding it at the last ACCEPTED frame never recovers: every later
+        # frame then sits two-or-more advances away and breaks forever, so a
+        # single glitch blinds the peer for the rest of the game. Advancing
+        # costs exactly two poisoned comparisons - the bad frame, and the
+        # honest one paired against it - and then honest traffic re-accepts.
+        self._previous_field = rival_scent.values()
+        if broken or not self.scent_trusted:
             self.refused_readings += 1
             return  # belief runs on diffusion, hints and barrier origins only
-        self._previous_field = rival_scent.values()
         self.belief.observe_scent(rival_scent, engine.board)
         # Hint tiers: directional claim first; place-name talk falls through
         # to the gazetteer and lands as a region observation. Both carry the
@@ -122,24 +124,36 @@ class Perception:
     def _breaks_the_law(self, rival_scent, board) -> bool:
         """Do two consecutive frames admit NO single emitter (ADR-0010)?
 
+
         This is the check that closes the gap the reachability envelope leaves:
         a forgery can walk its decoy one legal step per turn, but the update law
         binds the whole board, so it would also have to move its own HISTORY -
         and a cell may never fall below (1-rho) times its previous value.
 
-        Two consecutive breaks are required before latching. One is already
-        strong evidence, but the law was validated against a single foreign
-        implementation, and the refusal is irreversible; a sustained forgery
-        breaks it every frame, while an unforeseen quirk gets one free pass.
+        EVERY break refuses the frame - a reading the law cannot explain never
+        reaches belief, which is the same rule we ask of anyone else. The
+        LATCH is separate and needs three in a row, because a single transient
+        frame necessarily poisons two comparisons (itself, and the honest one
+        paired against it); latching at two would make every glitch permanent.
         """
         if self._previous_field is None:
             return False  # nothing to compare the first frame against
+        if not any(any(row) for row in rival_scent.values()):
+            # An EMPTY field is absence of data, not impossible data. A peer
+            # honouring a lock that says the trail is not transmitted sends
+            # nothing to check, and refusing that would latch us against a peer
+            # doing exactly what the declared lock asks. (Under book-v1 an
+            # empty field explains no emitter at all, so without this the
+            # checker refuses every frame of such a game.)
+            return False
         if transition_emitters(self._previous_field, rival_scent.values(),
                                board, self.grid_size):
             self._law_breaks = 0
             return False
         self._law_breaks += 1
-        return self._law_breaks >= 2
+        if self._law_breaks >= 3:
+            self.scent_trusted = False
+        return True
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:

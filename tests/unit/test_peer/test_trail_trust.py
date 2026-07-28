@@ -57,3 +57,68 @@ def test_a_trail_that_breaks_the_movement_model_latches_off() -> None:
     perception.observe(engine, Role.THIEF, None)  # honest-looking, still refused
     assert perception.refused_readings == 2
     assert perception.belief.values() != before  # diffusion still runs
+
+
+def _play(engine, perception, moves, corrupt=None):
+    for move in moves:
+        engine.police_move(Move.STAY)
+        engine.thief_move(move)
+        if corrupt is not None:
+            engine.scent[Role.THIEF]._grid[corrupt[0]][corrupt[1]] = 0.9
+        perception.observe(engine, Role.THIEF, None)
+
+
+def test_one_bad_frame_is_refused_and_the_peer_recovers() -> None:
+    """A transient corrupt frame must cost two comparisons, not the game.
+
+    The first version failed both ways at once: needing TWO breaks before
+    refusing meant the bad frame was fed to belief (the very half-believing we
+    warn others against), and keeping the baseline at the last ACCEPTED frame
+    meant every later honest frame sat two-or-more advances away and broke
+    forever. One glitch both poisoned the posterior and blinded the peer.
+    """
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    perception = Perception(Role.POLICE, 7, rival_start=(3, 3))
+    _play(engine, perception, [Move.E, Move.S])
+    assert perception.refused_readings == 0
+
+    _play(engine, perception, [Move.E], corrupt=(0, 6))  # one transport glitch
+    assert perception.refused_readings == 1  # refused, NOT absorbed
+    assert perception.scent_trusted  # and not latched on a single glitch
+
+    _play(engine, perception, [Move.S, Move.E, Move.S])
+    # Only the bad frame is poisoned here, not two: an ADDITIVE glitch decays
+    # legally afterwards (a cell falling by exactly (1-rho) is decay-only, which
+    # the law allows), so the very next frame is explained again. A SUBTRACTIVE
+    # glitch would cost two, since no legal transition removes value faster.
+    # Either way the peer re-accepts by itself instead of staying blind.
+    assert perception.refused_readings == 1
+    assert perception.scent_trusted
+
+
+def test_a_sustained_forgery_still_latches() -> None:
+    """Recovery must not become a way to keep steering us frame after frame."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    perception = Perception(Role.POLICE, 7, rival_start=(3, 3))
+    _play(engine, perception, [Move.E])
+    _play(engine, perception, [Move.S, Move.E, Move.S, Move.E], corrupt=(0, 6))
+    assert not perception.scent_trusted
+
+
+def test_an_empty_field_is_absence_of_data_not_impossible_data() -> None:
+    """Interop with a peer that transmits no trail.
+
+    Under book-v1 an empty field explains NO emitter - a live agent always
+    deposits somewhere - so a naive checker refuses every frame and latches
+    against a peer doing exactly what a `transmitted: false` lock asks. The
+    distinction is between a field that lies and a field that is not sent."""
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    perception = Perception(Role.POLICE, 7, rival_start=(3, 3))
+    _play(engine, perception, [Move.E])
+    for move in (Move.S, Move.W, Move.N, Move.E):
+        engine.police_move(Move.STAY)
+        engine.thief_move(move)
+        engine.scent[Role.THIEF]._grid = [[0.0] * 7 for _ in range(7)]  # nothing sent
+        perception.observe(engine, Role.THIEF, None)
+    assert perception.scent_trusted
+    assert perception.refused_readings == 0
