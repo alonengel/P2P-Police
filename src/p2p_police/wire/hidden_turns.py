@@ -15,7 +15,7 @@ import contextlib
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import GamePhase, Move, Outcome, Role
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
-from p2p_police.wire import audit, claims, codec
+from p2p_police.wire import audit, audit_foreign, claims, codec
 
 
 def my_half_turn(rt) -> None:
@@ -125,13 +125,12 @@ def finish(rt) -> dict:
     derivable checks instead of reading TAMPERED; (c) the digest comparison
     only where one construction exists on both sides — foreign pairs report
     digest_match as not-comparable (None), never false."""
-    from p2p_police.wire import audit_foreign
-
     own_digest = rt.own.digest()
     with contextlib.suppress(DeadlineExpiredError):
         rt.transport.send_audit(
             audit.build_audit_payload(rt.exchange, rt.role.value, rt.own.outcome.value),
             Deadline(rt.config.turn_timeout_seconds))
+        rt.audit_sent = True  # normal-path disclosure done (rules 35-36)
     verdict, digest_match, end_digest = "not received", False, own_digest
     try:
         theirs = rt._wait(rt.inboxes.audits, "opponent audit (records + nonces)")

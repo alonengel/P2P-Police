@@ -146,6 +146,7 @@ class GeometricRuntime:
         with contextlib.suppress(DeadlineExpiredError):
             self.transport.send_audit(
                 disclosure, Deadline(self.config.turn_timeout_seconds))
+            self.audit_sent = True  # normal-path disclosure done (rules 35-36)
         audit_verdict, digest_match = "not received", False
         try:
             theirs = self._wait(self.inboxes.audits, "opponent audit (nonces + digest)")

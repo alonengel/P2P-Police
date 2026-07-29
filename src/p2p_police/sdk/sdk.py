@@ -52,6 +52,9 @@ class SimulationSdk:
         """Start our MCP server, connect to the opponent, play one game to
         completion (optionally with the live local-truth GUI) and report.
         resume=True re-arms from the crash-resume snapshot (E6) and continues."""
+        from p2p_police.sdk.settlement import emergency_audit, ensure_counted_ready, settle_report
+
+        ensure_counted_ready(self.config)  # counted delivers or plays NOTHING
         inboxes = PeerInboxes()
         server = build_peer_server(inboxes, name=f"p2p_{MY_ROLE.value}_peer")
         start_peer_server(server, self.config.my_port)
@@ -100,6 +103,10 @@ class SimulationSdk:
             # end (any failure whatsoever) must still be reported and emailed;
             # an unreported forfeit is the worst outcome the league allows.
             report = reporting.technical_loss_report(MY_ROLE, runtime, error)
+            # rules 35-36: the rival may be alive and owed our records even
+            # though play() died; the finishers set audit_sent on the normal
+            # path, so a game that actually worked never re-sends here.
+            report["audit_disclosure"] = emergency_audit(runtime, self.config)
         finally:
             watchdog.stop()
             # Settlement gate (both wire shapes): our four MCP tools now
@@ -114,10 +121,7 @@ class SimulationSdk:
         if report.get("outcome") in ("capture", "survival"):
             resume_mod.discard(self.config)  # a finished game never resumes
         report["gatekeeper"] = gatekeeper.queue_status()  # section-5 monitoring view
-        report["artifacts"] = [
-            str(p) for p in reporting.emit_artifacts(self.config, runtime, report)
-        ]
-        reporting.maybe_email(self.config, report, gatekeeper)
+        settle_report(self.config, runtime, report, gatekeeper)  # rule-32 hardened
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)
