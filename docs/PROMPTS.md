@@ -1161,3 +1161,12 @@ and audit-honest in code. Enforcement gaps found and fixed this session:
 **Gates.** Both suites green (coverage ~93.9% each), ruff 0, 150-line caps
 OK (two module splits: report/code_identity.py, sdk/counted_ledger.py),
 physics parity green both directions.
+
+**Round 2 (2026-07-30).** Prompt: "anything else we can improve?" → the five
+open bugs from the original audit, each with a user constraint: emergency
+audit must never fire on a completed game (audit_sent flag set by the normal
+finishers), counted delivery gates must leave training postures untouched
+(every check keys off --counted arming), num_games=6 enforced at game start
+on counted runs only (COUNTED_FIXED_TERMS, not the standard validator),
+live rival-barrier quota, rule-32 funnel hardening (sdk/settlement.py
+split). Gates green both repos; parity green on the domain commit.
