@@ -71,15 +71,20 @@ def their_half_turn(rt) -> None:
         rt.own.note_rival_barrier(placed)
     rt.own.scent[rival].absorb(message["smell_grid"])
     rt.own.note_rival_half_turn()
-    response = message["claim_response"]
     # Only the THIEF's truth-duty flow can concede OUR capture (rules 21-22:
     # the cop claims, the thief answers about its own cell). A police-role
     # caught=True is no concession — it must never fabricate a capture.
-    conceded = bool(response and response.get("caught")) and rival is Role.THIEF
+    conceded = bool((message["claim_response"] or {}).get("caught")) and rival is Role.THIEF
     if rt.role is Role.POLICE and not conceded:
         rt.own.close_full_turn()  # the rival (thief) just ticked the round
-    rt.perception.observe(rt.own, rival, message["hint"],
-                          barrier_cell=(placed[0], placed[1]) if fresh_wall else None)
+    if not conceded:
+        # A concede is mid-round and action-free: its smell_grid re-sends the
+        # last boundary's field, which the frame-to-frame law (one decay+
+        # deposit step) rightly cannot explain - observing it would book a
+        # FALSE refused-reading against an honest rival (E2E g90 finding).
+        # The game is over on this message; there is nothing left to learn.
+        rt.perception.observe(rt.own, rival, message["hint"],
+                              barrier_cell=(placed[0], placed[1]) if fresh_wall else None)
     if conceded:
         rt.own.outcome = Outcome.CAPTURE  # rival honestly declared itself caught
     elif message["win_claim"]:

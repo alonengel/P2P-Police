@@ -24,6 +24,9 @@ def test_capture_claim_flow_lands_and_concedes(config_dir):
     concessions = [p for kind, p in wire_log if kind == "turn"
                    and p.get("claim_response") and p["claim_response"]["caught"]]
     assert concessions, "the truth duty must produce a concession"
+    # the concede re-sends the last boundary's field mid-round; it must NOT
+    # book a false refused-reading against an honest rival (E2E g90 finding)
+    assert reports["police"]["scent_readings_refused"] == 0
     assert concessions[-1]["claim_response"]["claim"] == [3, 3]
     claims = [p["capture_claim"] for kind, p in wire_log
               if kind == "turn" and p.get("capture_claim")]
