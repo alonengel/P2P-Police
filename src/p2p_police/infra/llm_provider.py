@@ -33,7 +33,8 @@ def _prompt(claim: str, arena: str, max_words: int) -> str:
     return (
         f"You are a cocky game agent{where}. In ONE sentence of at most "
         f"{max_words} words, taunt your rival while claiming you just moved "
-        f"{claim}. Output only the sentence."
+        f"{claim}. Never mention numbers, digits, coordinates or grid "
+        "positions. Output only the sentence."
     )
 
 
@@ -54,6 +55,9 @@ class LlmTalkProvider:
             return text
 
         text = str(self.gatekeeper.execute(self.service, call)).strip()
+        # rule 27 hardening: free text may taunt, never carry coordinates —
+        # digits are scrubbed no matter what the model produced
+        text = "".join(ch for ch in text if not ch.isdigit())
         return " ".join(text.split()[:max_words])  # the cap binds EVERY provider
 
     def _complete(self, prompt: str) -> tuple[str, int, int]:
