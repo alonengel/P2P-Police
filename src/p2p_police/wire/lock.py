@@ -21,6 +21,12 @@ REFERENCE = "reference"
 
 _LOCK_DOC_PATH = Path(__file__).resolve().parents[3] / "config" / "wire_shape_lock.json"
 _lock_doc_cache: dict | None = None
+# The registered information-regime document (kit family `info_mode`). Its
+# ABSENCE is the opt-in: two peers can both say "belief" and mean different
+# things, so what is declared is the hash of the registered DEFINITION - and a
+# locally invented envelope would hash differently and refuse an honest peer at
+# the handshake, which is worse than declaring nothing at all.
+_INFO_MODE_PATH = Path(__file__).resolve().parents[3] / "config" / "info_mode_lock.json"
 
 
 def wire_shape_lock_doc() -> dict:
@@ -36,6 +42,13 @@ def wire_shape_sha256() -> str:
     return config_sha256(wire_shape_lock_doc())
 
 
+def info_mode_sha256() -> str | None:
+    """Hash of the registered info_mode document, or None if we hold none."""
+    if not _INFO_MODE_PATH.is_file():
+        return None
+    return config_sha256(json.loads(_INFO_MODE_PATH.read_text(encoding="utf-8")))
+
+
 def wire_shape(config) -> str:
     """[network] wire_shape: 'bookletter' (default) | 'reference'."""
     value = config.private.get("network", {}).get("wire_shape", BOOKLETTER)
@@ -49,6 +62,9 @@ def extend_agreement(agreement: dict, config) -> dict:
     the default (bookletter) agreement stays byte-identical to before."""
     if wire_shape(config) == REFERENCE:
         agreement["wire_shape_sha256"] = wire_shape_sha256()
+        regime = info_mode_sha256()
+        if regime is not None:  # posture on the record, not merely promised
+            agreement["info_mode_sha256"] = regime
     return agreement
 
 
@@ -59,5 +75,17 @@ def verify_wire_shape(mine: dict, theirs: dict) -> None:
     if ours is not None and others is not None and ours != others:
         raise GameRuleError(
             f"wire-shape mismatch: mine={ours!r} theirs={others!r} "
+            "— both declared, hashes differ (locked-model refusal rule)"
+        )
+
+
+def verify_info_mode(mine: dict, theirs: dict) -> None:
+    """Same refusal rule for the regime: two peers may both say `belief` and
+    mean different things, so the hash of the registered definition is what
+    must agree. Refuse only when BOTH declare and the hashes differ."""
+    ours, others = mine.get("info_mode_sha256"), theirs.get("info_mode_sha256")
+    if ours is not None and others is not None and ours != others:
+        raise GameRuleError(
+            f"info_mode definition mismatch: mine={ours!r} theirs={others!r} "
             "— both declared, hashes differ (locked-model refusal rule)"
         )

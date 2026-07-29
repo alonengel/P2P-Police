@@ -140,6 +140,7 @@ class HiddenRuntime:
             terms.verify_terms_message(mine["terms"], theirs)
             terms.verify_declarations(mine, theirs)
             lock.verify_wire_shape(mine, theirs)
+            lock.verify_info_mode(mine, theirs)
 
         # re-push until a VERIFIED counterpart arrives: a greeting swallowed
         # by the rival's dying previous-sub-game peer gets fresh chances at
