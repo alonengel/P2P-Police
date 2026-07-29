@@ -53,6 +53,9 @@ class Config:
         directory = Path(config_dir)
         shared = _read_json(directory / "game.json")
         private = _read_toml(directory / private_file)
+        from p2p_police.shared.local_overlay import apply_local_overlay
+
+        private = apply_local_overlay(directory, private_file, private)
         limits_path = directory / "rate_limits.json"
         rate_limits = (_read_json(limits_path) if limits_path.is_file() else
                        {"services": {"default": dict(shared["rate_limiter_gatekeeper"])}})

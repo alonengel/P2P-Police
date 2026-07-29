@@ -36,3 +36,4 @@ Thumbs.db
 results/.game_uid_*
 results/watchdog_dump.json
 .ipynb_checkpoints/
+config/*.local.toml
