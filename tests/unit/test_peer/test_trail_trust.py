@@ -10,6 +10,7 @@ permanently rather than per-turn.
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.primitives import Move, Role
 from p2p_police.domain.rules import RuleSet
+from p2p_police.domain.scent import ScentField
 from p2p_police.peer.perception import Perception
 
 RULES = RuleSet(max_barriers=14, max_moves=35, survival_threshold=35)
@@ -87,11 +88,11 @@ def test_one_bad_frame_is_refused_and_the_peer_recovers() -> None:
     assert perception.scent_trusted  # and not latched on a single glitch
 
     _play(engine, perception, [Move.S, Move.E, Move.S])
-    # Only the bad frame is poisoned here, not two: an ADDITIVE glitch decays
-    # legally afterwards (a cell falling by exactly (1-rho) is decay-only, which
-    # the law allows), so the very next frame is explained again. A SUBTRACTIVE
-    # glitch would cost two, since no legal transition removes value faster.
-    # Either way the peer re-accepts by itself instead of staying blind.
+    # PERSISTENT corruption (written into the field, so it evolves onward)
+    # costs exactly one comparison, whatever its sign: the phantom then decays
+    # by (1-rho), which is decay-only and legal, so the next frame is explained
+    # again. See the transient case below for the other row - the sign never
+    # decides this, only whether the corruption entered an evolving state.
     assert perception.refused_readings == 1
     assert perception.scent_trusted
 
@@ -122,3 +123,37 @@ def test_an_empty_field_is_absence_of_data_not_impossible_data() -> None:
         perception.observe(engine, Role.THIEF, None)
     assert perception.scent_trusted
     assert perception.refused_readings == 0
+
+
+class _Seen:
+    """Engine view whose RIVAL field is a copy corrupted in transit."""
+
+    def __init__(self, engine, field):
+        self.board = engine.board
+        self.scent = dict(engine.scent)
+        self.scent[Role.THIEF] = field
+
+
+def test_a_transient_corruption_costs_two_comparisons_and_still_recovers() -> None:
+    """The other row of the matrix, and the one a faulty transport produces.
+
+    A frame corrupted IN TRANSIT never reaches the sender's state, so the next
+    honest frame does not carry the phantom either - and the comparison starts
+    from the corrupted baseline, where the value is already gone. Staying gone
+    is not legal for a cell the emitter is still feeding, so that second
+    comparison breaks too. Two refusals, then recovery, and never a latch.
+    """
+    engine = GameEngine(7, (0, 0), (3, 3), RULES)
+    perception = Perception(Role.POLICE, 7, rival_start=(3, 3))
+    for turn, move in enumerate([Move.E, Move.S, Move.E, Move.S, Move.W], start=1):
+        engine.police_move(Move.STAY)
+        engine.thief_move(move)
+        if turn == 3:  # one frame mangled between sender and receiver
+            field = ScentField(7)
+            field._grid = [row.copy() for row in engine.scent[Role.THIEF].values()]
+            field._grid[0][6] = 0.9
+            perception.observe(_Seen(engine, field), Role.THIEF, None)
+            continue
+        perception.observe(engine, Role.THIEF, None)
+    assert perception.refused_readings == 2
+    assert perception.scent_trusted  # recovered, never latched

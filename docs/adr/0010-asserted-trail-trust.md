@@ -217,12 +217,29 @@ needs **three** consecutive breaks, because a transient necessarily poisons a
 following comparison as well — latching at two would make every glitch
 permanent, which is the failure mode this whole path is built to avoid.
 
-Recovery is cheaper than the two poisoned comparisons the counterparty
-predicted, and the asymmetry is worth recording: an **additive** corruption
-costs exactly ONE, because a phantom cell then decays by `(1-rho)`, and
-decay-only is a legal transition — the very next frame is explained again. A
-**subtractive** corruption costs two, since no legal transition removes value
-faster than decay.
+Recovery cost depends on ONE variable, and our first reading of it was wrong.
+We reported the sign of the corruption as the discriminator — additive costs
+one, subtractive two. The counterparty ran the full 2x2 and the sign turns out
+not to matter in either locked model; we reproduced their matrix exactly:
+
+| corruption | refusals |
+|---|---|
+| transient (additive or subtractive) | **2** |
+| persistent (additive or subtractive) | **1** |
+
+The controlling variable is whether the corruption entered a state that keeps
+EVOLVING or touched a single frame in transit. Our injector wrote into the
+engine's scent field, so the phantom decayed onward by `(1-rho)` — legal, hence
+the next frame was explained and the cost was one. The same phantom injected in
+transit costs two, because the honest next frame never carried it and the
+comparison starts from the corrupted baseline, where the value is already gone
+— and staying gone is perfectly legal for a cell nobody is feeding.
+
+The error is the same shape as the one we caught in their report, from the
+other side: reasoning about the corrupted frame while forgetting that the NEXT
+comparison starts from it. Both rows are now covered by tests rather than one:
+the transient row is the transport-fault class, the persistent row is the
+crashed-peer class, and they cost differently.
 
 ### An empty field is absence of data, not impossible data
 
