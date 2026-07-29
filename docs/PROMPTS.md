@@ -1125,3 +1125,39 @@ cap. Cop commit: the barrier gate lifted out of frozen constants into
 **Gates.** Both suites green, ruff 0, 150-line caps OK, physics parity green
 both directions, branch coverage 93%+ each repo. Every keep-gate written up
 in `docs/evidence/` including the negative result.
+
+---
+
+## 2026-07-29 — full-rulebook compliance audit + enforcement-gap fixes
+
+**Prompt.** "Go over my code and verify everything isn't evading the rules —
+if there are problems or uncertainty, let me know", then per-item fix
+directives over the findings list (fix 1-4/6/7-counted-only/11; keep 5;
+defend 9-10 in writing).
+
+**Method.** Appendix ה (55 rules) + Appendix ו extracted from the book PDF
+with page cites, then five independent adversarial verification passes
+(physics, crypto/audit/truth, separation/architecture, language/LLM/
+deception, email/reporting/config) over BOTH repos' code, each returning
+violations/uncertainties/clean with file:line evidence.
+
+**Verdict.** No rule evasion, no disqualification-grade violation; physics
+numerics match Appendix ו exactly (kernel byte-for-byte vs Figure 4); no
+nonce leak anywhere; hint-lying confirmed book-legal (ch. 4.4/5.3.1/6.5.1)
+and audit-honest in code. Enforcement gaps found and fixed this session:
+
+- audit now cross-checks LIVE public declarations (barrier cell, capture
+  claim, hint) against the sealed reveals, and binds records to the current
+  sub-game (wire/audit.verify_declared; hidden_exchange records `declared`).
+- verify-log names reduced assurance ("Verified OK (seals only - ...)")
+  instead of silently passing when the config artifact or summary digest is
+  missing; replay viewer tolerates foreign-schema rival halves.
+- declared commit hash marks a dirty working tree (`<hash>-dirty`).
+- rule-52 structural guard: counted-series ledger under results/local/
+  refuses a second league-reported series against the same pairing.
+- LLM taunts digit-scrubbed + prompt forbids coordinates (rule 27).
+- ADR-0011 records the five defended book-interpretation readings.
+
+**Gates.** Both suites green (coverage ~93.9% each), ruff 0, 150-line caps
+OK (two module splits: report/code_identity.py, sdk/counted_ledger.py),
+physics parity green both directions.
