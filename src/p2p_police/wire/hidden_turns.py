@@ -139,7 +139,8 @@ def finish(rt) -> dict:
         if verdict == "Verified OK":
             if audit_foreign.parses_as_ours(rt.exchange.their_records):
                 reconstruction = audit.reconstruct(
-                    rt.exchange.own_records, rt.exchange.their_records, rt.config.shared)
+                    rt.exchange.own_records, rt.exchange.their_records,
+                    rt.config.shared, expected_sub_game=rt.exchange.sub_game)
                 end_digest = reconstruction["digest"]
                 digest_match = audit.consistent(
                     reconstruction, rt.own.outcome, rt.own.turns_completed)

@@ -54,7 +54,14 @@ class HiddenExchange(SealedExchange):
         commit = message.get("commit")
         if not isinstance(commit, str) or not commit:
             raise GameRuleError(f"turn message {step} carries no commit")
-        self.their_records.append({"commit": commit})
+        # The live PUBLIC declarations ride along with the commit: at audit
+        # the reveal must re-prove not only the hash but that what was said
+        # openly (rules 15-16, 21-22) is what was sealed (audit.verify_declared).
+        self.their_records.append({"commit": commit, "declared": {
+            "barrier_placed": message.get("barrier_placed"),
+            "capture_claim": message.get("capture_claim"),
+            "hint": message.get("hint"),
+        }})
         return {k: v for k, v in message.items() if k not in ("kind", "turn")}
 
     def audit_reveals(self, revealed: list[dict]) -> str:

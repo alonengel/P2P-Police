@@ -45,6 +45,34 @@ def build_audit_payload(exchange, sender: str, outcome: str) -> dict:
     }
 
 
+def _sealed_barrier(payload: dict) -> list | None:
+    action = payload.get("action")
+    if not (isinstance(action, dict) and action.get("type") == "barrier"):
+        return None
+    return [action["cell"][0], action["cell"][1]]
+
+
+def verify_declared(record: dict) -> dict:
+    """Rules 15-16: what a peer DECLARED live beside its commit must match
+    what its reveal proves it sealed. Returns the declared block ({} when
+    the record carries none — commit-only halves, geometric records and
+    pre-upgrade logs derive nothing, they are not refused)."""
+    payload, declared = record.get("payload"), record.get("declared")
+    if not isinstance(payload, dict) or not isinstance(declared, dict):
+        return {}
+    placed = declared.get("barrier_placed")
+    if (list(placed) if placed is not None else None) != _sealed_barrier(payload):
+        raise GameRuleError(
+            f"step {payload.get('step')}: live barrier declaration {placed} "
+            "does not match the sealed action - tampering evidence")
+    hint = declared.get("hint")
+    if hint is not None and hint != payload.get("hint"):
+        raise GameRuleError(
+            f"step {payload.get('step')}: live hint differs from the sealed "
+            "hint - tampering evidence")
+    return declared
+
+
 def _rules_from(terms: dict) -> RuleSet:
     block = terms["movement_and_barriers"]
     return RuleSet(int(block["max_barriers"]), int(block["max_moves"]),
@@ -70,10 +98,12 @@ def _apply(payload: dict, board: Board, positions: dict, rules: RuleSet) -> None
         ) from error
 
 
-def reconstruct(own_records: list, their_records: list, shared_terms: dict) -> dict:
+def reconstruct(own_records: list, their_records: list, shared_terms: dict,
+                expected_sub_game: int | None = None) -> dict:
     """Replay both sides' revealed actions; returns the reconstructed
     {digest, outcome, turns_completed}. Raises GameRuleError on illegal
-    physics or a violated capture-truth duty — both are tampering evidence."""
+    physics, a violated capture-truth duty, a live declaration the reveal
+    contradicts, or a record sealed for another sub-game — all tampering."""
     grid, cop_start, thief_start = geometry(shared_terms)
     board, rules = Board(grid), _rules_from(shared_terms)
     positions = {Role.POLICE: cop_start, Role.THIEF: thief_start}
@@ -81,10 +111,18 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict) -> d
     # Per-sender numbering: BOTH sides seal steps 1, 2, 3... — the game
     # order is (step, actor) with the thief first at equal step numbers
     # (reference cadence: the thief opens every round).
-    payloads = sorted(
-        (r["payload"] for r in list(own_records) + list(their_records) if "payload" in r),
-        key=lambda p: (p["step"], 0 if p["role"] == Role.THIEF.value else 1))
-    for payload in payloads:
+    entries = sorted(
+        ((r["payload"], verify_declared(r))
+         for r in list(own_records) + list(their_records) if "payload" in r),
+        key=lambda e: (e[0]["step"], 0 if e[0]["role"] == Role.THIEF.value else 1))
+    for payload, declared in entries:
+        if expected_sub_game is not None \
+                and payload.get("sub_game") != expected_sub_game:
+            raise GameRuleError(
+                f"step {payload['step']}: sealed for sub-game "
+                f"{payload.get('sub_game')!r} but this audit is sub-game "
+                f"{expected_sub_game!r} - a re-presented record from another "
+                "game is tampering evidence")
         if outcome is not Outcome.ONGOING:
             if payload["action"] != _CLOSURE_ACTION or Role(payload["role"]) is Role.POLICE:
                 raise GameRuleError(
@@ -93,6 +131,12 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict) -> d
         _apply(payload, board, positions, rules)
         cop_cell, thief_cell = positions[Role.POLICE], positions[Role.THIEF]
         if Role(payload["role"]) is Role.POLICE:
+            claim = declared.get("capture_claim")
+            if claim is not None and [cop_cell[0], cop_cell[1]] != list(claim):
+                raise GameRuleError(
+                    f"step {payload['step']}: live capture claim {list(claim)} "
+                    "names a cell the revealed action never reached - a false "
+                    "claim (rules 21-22) is tampering evidence")
             # Only the cop's OWN action can prove a capture live (claim or
             # barrier declaration); the truth duty makes the thief concede.
             if cop_cell == thief_cell or board.is_barrier(thief_cell) \

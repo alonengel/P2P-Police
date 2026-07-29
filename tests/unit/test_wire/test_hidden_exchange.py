@@ -45,7 +45,11 @@ def test_receive_stores_the_live_commit():
     message = exchange.receive_turn(1)
     assert message["step"] == 1
     assert "kind" not in message
-    assert exchange.their_records == [{"commit": "a" * 64}]
+    record = exchange.their_records[0]
+    assert record["commit"] == "a" * 64
+    # the live PUBLIC declarations ride with the commit for the audit
+    # cross-check (rules 15-16/21-22, audit.verify_declared)
+    assert set(record["declared"]) == {"barrier_placed", "capture_claim", "hint"}
 
 
 def test_duplicate_delivery_dropped():
