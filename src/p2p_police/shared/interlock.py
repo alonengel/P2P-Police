@@ -61,6 +61,27 @@ def ensure_email_allowed(config, recipient: str) -> None:
             "--counted CLI flag)")
 
 
+def ensure_counted_posture(config) -> None:
+    """--counted refusal gate (rules 32/51 + Table 18): a run ARMED as
+    counted must be able to deliver the league report — else it plays ZERO
+    games. Training runs (no --counted) never reach any of these checks and
+    keep their private recipients untouched."""
+    email_cfg = config.private.get("email", {})
+    if not email_cfg.get("counted_cli_armed"):
+        return
+    problems = []
+    if not email_cfg.get("counted"):
+        problems.append("[email] counted is not true (config half unarmed)")
+    if email_cfg.get("mode") != "send":
+        problems.append(f"[email] mode = {email_cfg.get('mode', 'disabled')!r}"
+                        " (a counted run owes the league a report)")
+    if not league_hits(config, email_cfg.get("recipient", "")):
+        problems.append("recipient list contains no league/lecturer address")
+    if problems:
+        raise EmailInterlockError(
+            "counted run refused (zero games played): " + "; ".join(problems))
+
+
 def assert_sparring_posture(private: dict) -> None:
     """--sparring load gate: the warm-up posture must be GENERIC — refuse a
     sparring file carrying tuned play or an armed email path (warm-ups must

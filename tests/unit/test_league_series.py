@@ -23,7 +23,7 @@ def isolated_lock(tmp_path, monkeypatch):
 def quiet_bookends(monkeypatch):
     """Runner-flow tests: preflight passes, close is a spy returning 0."""
     closes: list = []
-    monkeypatch.setattr(league_close, "email_preflight", lambda config_dir: None)
+    monkeypatch.setattr(league_close, "email_preflight", lambda config_dir, counted=False: None)
     monkeypatch.setattr(
         league_close, "close_series",
         lambda root, sibling, cli, runner, counted=False: closes.append(
@@ -90,7 +90,7 @@ def test_preflight_refusal_plays_zero_games(capsys, monkeypatch):
     """A send posture that cannot deliver refuses the WHOLE run: exit 2 and
     not a single window launched."""
     monkeypatch.setattr(league_close, "email_preflight",
-                        lambda config_dir: "token refresh failed (stub)")
+                        lambda config_dir, counted=False: "token refresh failed (stub)")
     journal: list = []
     assert league_series.main(["--sub-games", "1,3,5"], runner=fake_runner(journal)) == 2
     assert journal == []  # zero games played

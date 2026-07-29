@@ -135,7 +135,7 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
     except ValueError as error:
         print(f"REFUSED: {error}")
         return 2
-    refusal = league_close.email_preflight(ROOT / "config")
+    refusal = league_close.email_preflight(ROOT / "config", counted=args.counted)
     if refusal is not None:  # a send posture that cannot deliver plays NOTHING
         print(f"REFUSED (email preflight, zero games played): {refusal}")
         return 2

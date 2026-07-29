@@ -22,15 +22,19 @@ from p2p_police.domain.game_ids import log_name
 from p2p_police.shared.config import Config
 
 
-def email_preflight(config_dir: Path) -> str | None:
-    """Refusal message when the send posture cannot deliver, else None."""
+def email_preflight(config_dir: Path, counted: bool = False) -> str | None:
+    """Refusal message when the send posture cannot deliver, else None.
+    A COUNTED series OWES the league a report: mode != 'send' is itself a
+    refusal there, instead of 'nothing to prove'."""
     try:
         config = Config.load(config_dir)
     except Exception as error:
         return f"config unusable ({type(error).__name__}: {error})"
     email_cfg = config.private.get("email", {})
     if email_cfg.get("mode") != "send":
-        return None  # this posture owes no report: nothing to prove
+        return ("counted series owes the league a report but [email] mode != "
+                "'send' - fix the posture before any window plays") if counted \
+            else None  # uncounted posture owes no report: nothing to prove
     if not str(email_cfg.get("recipient", "")).strip():
         return "[email] mode = send but recipient is empty"
     from p2p_police.infra import email_sender

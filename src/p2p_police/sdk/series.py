@@ -133,6 +133,9 @@ def maybe_email_series(config, doc: dict, result_path, gatekeeper=None) -> str |
     result file rides along as the attachment, the recipient comes from
     config, and the send goes through shared/gatekeeper like every other
     external call. Returns the message id, or None when the mode gate held."""
+    from p2p_police.shared.interlock import ensure_counted_posture
+
+    ensure_counted_posture(config)  # a counted close must deliver to the league
     email_cfg = config.private.get("email", {})
     if email_cfg.get("mode") != "send":
         return None

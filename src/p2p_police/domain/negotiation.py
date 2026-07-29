@@ -44,6 +44,13 @@ MINIMUM_TERMS: dict[str, int] = {
     "rate_limiter_gatekeeper.queue_depth": 100,
 }
 
+# Appendix VI Table 18: [games per series] is FIXED at 6 — but enforced only
+# on a COUNTED (league) run: warm-ups legitimately spar shorter series, and
+# the value rides the locked config identity either way (rule 11).
+COUNTED_FIXED_TERMS: dict[str, object] = {
+    "network_and_league.num_games": 6,
+}
+
 # The intra-round order both sides must explicitly agree on (PRD 01/02).
 COMMIT_ORDER = "police_first"
 
@@ -81,6 +88,18 @@ def validate_shared_terms(shared: dict) -> None:
         actual = _lookup(shared, dotted)
         if not isinstance(actual, int | float) or actual < floor:
             raise GameRuleError(f"MINIMUM term '{dotted}' may not drop below {floor}, got {actual}")
+
+
+def validate_counted_terms(shared: dict) -> None:
+    """Rule 12, league posture: FIXED values a COUNTED run must also hold
+    (Table 18). Training runs never call this - shorter warm-up series stay
+    legal; a counted run on deviating terms refuses before any game plays."""
+    for dotted, expected in COUNTED_FIXED_TERMS.items():
+        actual = _lookup(shared, dotted)
+        if actual != expected:
+            raise GameRuleError(
+                f"counted run: '{dotted}' is FIXED at {expected!r} "
+                f"(Appendix VI), got {actual!r}")
 
 
 def build_agreement(shared: dict, group_id: str, hardware_spec: dict | None = None,
