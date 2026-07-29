@@ -76,7 +76,7 @@ def test_verify_log_both_verdicts(tmp_path: Path) -> None:
                          "commit": crypto.commit_hash(payload, nonce)}]}
     path = tmp_path / "log.json"
     path.write_text(json.dumps(good), encoding="utf-8")
-    assert SimulationSdk.verify_log(str(path)) == "Verified OK"
+    assert SimulationSdk.verify_log(str(path)).startswith("Verified OK")
     good["records"][0]["payload"]["hint"] = "changed"
     path.write_text(json.dumps(good), encoding="utf-8")
     assert SimulationSdk.verify_log(str(path)) == "TAMPERED"

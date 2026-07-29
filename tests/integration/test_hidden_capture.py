@@ -64,7 +64,9 @@ def test_hidden_log_verifies_with_the_replay_machinery(config_dir, tmp_path):
     }
     log_path = tmp_path / "log_hidden.json"
     log_path.write_text(json.dumps(log_doc, ensure_ascii=False), encoding="utf-8")
-    assert SimulationSdk.verify_log(str(log_path)) == "Verified OK"
+    # no config artifact rides with this tmp log: the verdict NAMES the
+    # seals-only assurance instead of a silent full pass (rule 20)
+    assert SimulationSdk.verify_log(str(log_path)).startswith("Verified OK")
     from p2p_police.gui.replay import load_steps  # headless helper only
 
     _doc, steps, verdict = load_steps(str(log_path))

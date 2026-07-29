@@ -36,7 +36,8 @@ def test_consistent_pair_verifies_ok(tmp_path) -> None:
     row = verify_pair(*_write(tmp_path, *_pair(tmp_path)))
     assert row["overall"] == "Verified OK"
     assert row["problems"] == [] and row["sides"] == ["team-a", "team-b"]
-    assert row["verdict_a"] == row["verdict_b"] == "Verified OK"
+    assert row["verdict_a"].startswith("Verified OK")
+    assert row["verdict_b"].startswith("Verified OK")
 
 
 def test_tampered_record_is_tampered_overall(tmp_path) -> None:

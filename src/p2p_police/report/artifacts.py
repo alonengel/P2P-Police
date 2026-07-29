@@ -8,12 +8,12 @@ one game_uid; filenames derive from game_id so games never mix.
 
 import hashlib
 import json
-import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
 from p2p_police.domain import game_ids
 from p2p_police.domain.negotiation import config_sha256
+from p2p_police.report.code_identity import git_commit_hash  # noqa: F401 (re-export)
 from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.shared.version import CODE_VERSION
 
@@ -32,17 +32,6 @@ def consensus_signature(body: dict) -> str:
     re-serialize spaced, re-hash (sign-then-insert)."""
     spaced = json.dumps(body, sort_keys=True, ensure_ascii=False)
     return hashlib.sha256(spaced.encode("utf-8")).hexdigest()
-
-
-def git_commit_hash() -> str:
-    """The exact code identity played this game (rules 24/53); best effort."""
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "HEAD"], capture_output=True, text=True, timeout=10
-        )
-        return out.stdout.strip() or "unknown"
-    except OSError:
-        return "unknown"
 
 
 def _base(kind: str, game_id: str, game_uid: str, config) -> dict:

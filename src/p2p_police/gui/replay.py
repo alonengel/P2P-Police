@@ -17,18 +17,38 @@ CELL = 52
 COLORS = {"police": "#1f6feb", "thief": "#d29922", "barrier": "#484f58"}
 
 
+def _renderable(payload) -> bool:
+    """Only OUR-schema payloads step through the board: a FOREIGN-schema
+    rival half is commit-verified but not drawn (its keys are per-team)."""
+    return (isinstance(payload, dict)
+            and {"step", "role", "action"} <= set(payload)
+            and payload.get("role") in COLORS)
+
+
 def load_steps(log_path: str) -> tuple[dict, list[dict], str]:
-    """Merge own+opponent records into step order; verdict from own seals."""
+    """Merge own+opponent records into step order; verdict from own seals.
+    A rival record sealed under a foreign payload schema is checked via the
+    SHARED contract only (commit_clean) instead of crashing the viewer —
+    the headless verify-log stays the cross-team authority (rule 20)."""
+    from p2p_police.wire import audit_foreign
+
     doc = json.loads(Path(log_path).read_text(encoding="utf-8"))
     verdict = "Verified OK"
-    verifiable = doc.get("records", []) + [
-        r for r in doc.get("opponent_records", []) if "nonce" in r
-    ]
-    for record in verifiable:
+    for record in doc.get("records", []):
         if not crypto.verify_commit(record["payload"], record["nonce"], record["commit"]):
             verdict = "TAMPERED"
+    for record in doc.get("opponent_records", []):
+        if "nonce" not in record:
+            continue  # commit-only half (no audit arrived): nothing to check
+        if audit_foreign.parses_as_ours([record]):
+            if not crypto.verify_commit(record["payload"], record["nonce"],
+                                        record["commit"]):
+                verdict = "TAMPERED"
+        elif not audit_foreign.commit_clean(record):
+            verdict = "TAMPERED"
     merged = [r["payload"] for r in doc.get("records", [])]
-    merged += [r["payload"] for r in doc.get("opponent_records", [])]
+    merged += [r["payload"] for r in doc.get("opponent_records", [])
+               if _renderable(r.get("payload"))]
     merged.sort(key=lambda p: p["step"])
     return doc, merged, verdict
 
@@ -41,12 +61,14 @@ def replay_states(steps: list[dict], grid: int, cop, thief) -> list[dict]:
     states = [{"positions": dict(positions), "barriers": set(), "hint": "", "actor": "-"}]
     for payload in steps:
         action, actor = payload["action"], payload["role"]
-        if action["type"] == "barrier":
+        if action.get("type") == "barrier" and action.get("cell") is not None:
             barriers.add(tuple(action["cell"]))
-        else:
+        elif action.get("move") in deltas:
             dr, dc = deltas[action["move"]]
             row, col = positions[actor]
             positions[actor] = (row + dr, col + dc)
+        else:
+            continue  # foreign action shape: commit-verified, not drawable
         states.append(
             {"positions": dict(positions), "barriers": set(barriers),
              "hint": payload.get("hint", ""), "actor": actor}

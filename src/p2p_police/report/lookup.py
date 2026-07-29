@@ -78,7 +78,10 @@ def recompute_hidden(doc: dict, terms: dict) -> str:
         return own_digest
     theirs = [r for r in doc.get("opponent_records", []) if "payload" in r]
     if theirs and audit_foreign.parses_as_ours(theirs):
-        reconstruction = audit.reconstruct(doc.get("records", []), theirs, terms)
+        sub_game = doc.get("sub_game_number")
+        reconstruction = audit.reconstruct(
+            doc.get("records", []), theirs, terms,
+            expected_sub_game=int(sub_game) if sub_game is not None else None)
         return reconstruction["digest"]
     if not (audit_foreign.continuity_ok(theirs)
             and audit_foreign.movement_ok(theirs, geometry(terms)[0])):
@@ -93,8 +96,13 @@ def replay_verdict(doc: dict, log_path: str | Path) -> str:
     the hidden wire routes to the reconstruction (rule 20 both ways)."""
     terms = terms_for_log(doc, log_path)
     expected = doc.get("summary", {}).get("end_state_digest")
-    if terms is None or not expected:
-        return "Verified OK"
+    if terms is None:  # NEVER a silent pass: a lost config artifact must
+        # read as reduced assurance, not as a fully verified game (rule 20)
+        return ("Verified OK (seals only - this game's archived config "
+                "artifact was not found, physics tier skipped)")
+    if not expected:
+        return ("Verified OK (seals only - the log summary carries no "
+                "end_state_digest, physics tier skipped)")
     try:
         recomputed = (recompute_hidden(doc, terms)
                       if doc.get("wire_shape") == "reference"
