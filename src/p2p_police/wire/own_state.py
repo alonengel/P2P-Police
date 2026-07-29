@@ -14,7 +14,7 @@ import hashlib
 
 from p2p_police.domain.board import Board
 from p2p_police.domain.crypto import canonical
-from p2p_police.domain.errors import GameRuleError
+from p2p_police.domain.errors import GameRuleError, RivalBreachError
 from p2p_police.domain.primitives import Cell, Move, Outcome, Role
 from p2p_police.domain.rules import RuleSet, validate_barrier_placement
 from p2p_police.domain.scent import ScentField
@@ -122,7 +122,7 @@ class OwnState:
         if self.board.is_barrier(target):
             return  # redelivery: at-least-once transport noise
         if len(self.board.barriers) >= self.rules.max_barriers:
-            raise GameRuleError(
+            raise RivalBreachError(
                 f"rival declared barrier #{len(self.board.barriers) + 1} but "
                 f"max_barriers is {self.rules.max_barriers} - rule breach")
         self.board.add_barrier(target)

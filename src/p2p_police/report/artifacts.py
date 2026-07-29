@@ -113,11 +113,14 @@ def build_log(config, game_id: str, game_uid: str, sub_game: int, report: dict,
 
 def _winner_group(config, report: dict) -> str:
     """Which group won this sub-game (A.7 result field). Capture -> the cop
-    side's group; survival -> the thief side's; technical loss -> the rival."""
+    side's group; survival -> the thief side's; technical loss -> the side
+    that did NOT cause it (score stays 0/0 either way, App ו): ours by
+    default, theirs when the breach is proven from the rival's own message
+    (breach_by) - a cheater must never be credited as winner_group."""
     opponent = report.get("opponent_group_id", "unknown")
     role, outcome = report.get("role", ""), report.get("outcome", "")
     if outcome == "technical_loss":
-        return opponent
+        return config.group_id if report.get("breach_by") == "opponent" else opponent
     we_won = (role == "police") == (outcome == "capture")
     return config.group_id if we_won else opponent
 

@@ -20,3 +20,11 @@ class IllegalBarrierError(GameRuleError):
 
 class IllegalTransitionError(GameRuleError):
     """State machine asked to perform a transition its table forbids."""
+
+
+class RivalBreachError(GameRuleError):
+    """A rule breach PROVEN from the rival's own message (e.g. a declared
+    barrier beyond the quota). The technical loss still scores 0/0 (App ו),
+    but the report must attribute the breach to the OPPONENT — our own
+    report must never name a cheater as winner_group. Raised only where the
+    breach is unambiguously theirs, never for local failures."""

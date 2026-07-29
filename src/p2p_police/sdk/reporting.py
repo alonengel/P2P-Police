@@ -26,7 +26,9 @@ def technical_loss_report(my_role, runtime, error: Exception) -> dict:
 
         turns = runtime.engine.turns_completed
         digest = protocol.end_state_digest(runtime.engine)
-    return {
+    from p2p_police.domain.errors import RivalBreachError
+
+    report = {
         "role": my_role.value,
         "started_at": getattr(runtime, "started_at", None),
         "outcome": "technical_loss",
@@ -38,6 +40,11 @@ def technical_loss_report(my_role, runtime, error: Exception) -> dict:
         "opponent_group_id": getattr(runtime, "opponent_group_id", "unknown"),
         "failure": f"{type(error).__name__}: {error}",
     }
+    if isinstance(error, RivalBreachError):
+        # The breach is PROVEN from the rival's own message: still 0/0, but
+        # our report must never name the cheater as winner (rules 21-22/48).
+        report["breach_by"] = "opponent"
+    return report
 
 
 def watchdog_state(runtime):

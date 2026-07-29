@@ -116,8 +116,11 @@ class SimulationSdk:
         if report.get("audit") == "TAMPERED":
             # Rule 19: a FAILED mutual audit voids the game. A merely MISSING
             # audit ('not received') is dispute evidence, not tampering - the
-            # played outcome stands and the logs decide.
+            # played outcome stands and the logs decide. The audit field is
+            # OUR verdict over THEIR reveals, so the forging side is theirs -
+            # score 0 for the forger, never a winner_group credit.
             report["outcome"] = "technical_loss"
+            report["breach_by"] = "opponent"
         if report.get("outcome") in ("capture", "survival"):
             resume_mod.discard(self.config)  # a finished game never resumes
         report["gatekeeper"] = gatekeeper.queue_status()  # section-5 monitoring view
