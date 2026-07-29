@@ -104,7 +104,9 @@ def main(argv: list[str] | None = None) -> int:
 
         verdict = SimulationSdk.verify_log(args.log)
         print(verdict)
-        return 0 if verdict == "Verified OK" else 1
+        # a qualified "Verified OK (seals only - ...)" still exits clean:
+        # the seals are intact; the qualifier names the reduced assurance
+        return 0 if verdict.startswith("Verified OK") else 1
     if args.command == "replay":
         from p2p_police.gui.replay import ReplayApp
 
@@ -120,6 +122,7 @@ def main(argv: list[str] | None = None) -> int:
 
         from p2p_police.domain.game_ids import result_name
         from p2p_police.report.artifacts import emit, git_commit_hash
+        from p2p_police.sdk.counted_ledger import record_counted, refuse_repeat_counted
         from p2p_police.sdk.series import (
             SeriesSettlementError,
             aggregate_series,
@@ -131,19 +134,19 @@ def main(argv: list[str] | None = None) -> int:
         if args.counted:  # CLI half of the lecturer-address interlock
             config.private.setdefault("email", {})["counted_cli_armed"] = True
         dirs = args.results_dir or ["results"]
-        ours = {"group_id": config.group_id,
+        ours = {"group_id": config.group_id, "github_commit": git_commit_hash(),
                 "members": config.private["game"].get("members", []),
-                "github_commit": git_commit_hash(),
                 **config.identity_block()}
         try:
             doc, excluded = aggregate_series(
                 dirs, args.game_id, config.score_table(),
                 config.shared["network_and_league"]["num_games"], ours)
+            if args.counted:  # rule 52: one counted series per rival pairing
+                refuse_repeat_counted(dirs[0], args.game_id, doc["game_uid"])
         except SeriesSettlementError as error:
             print(f"REFUSED: {error}")
             return 1
-        for note in excluded:
-            print(f"excluded: {note}")
+        print("".join(f"excluded: {note}\n" for note in excluded), end="")
         path = emit(doc, Path(dirs[0]), result_name(args.game_id))
         print(json.dumps(doc["final_result"], indent=2))
         print(f"written: {path}")
@@ -155,6 +158,8 @@ def main(argv: list[str] | None = None) -> int:
             except EmailInterlockError as error:
                 print(f"EMAIL REFUSED: {error}")
                 return 1
+            if message_id and args.counted:  # ledger remembers league reports
+                record_counted(dirs[0], args.game_id, doc["game_uid"], message_id)
             if message_id:
                 print(f"emailed: {message_id}")
         return 0
