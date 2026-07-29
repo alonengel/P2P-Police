@@ -112,12 +112,20 @@ class OwnState:
 
     def note_rival_barrier(self, cell) -> None:
         """Absorb a barrier_placed declaration (public, binding for both);
-        duplicates are at-least-once transport noise, not errors."""
+        duplicates are at-least-once transport noise, not errors. The QUOTA
+        binds LIVE (Table 15): an illegal 15th+ barrier must not enter our
+        world and quietly beat us mid-game — it is a rule breach the moment
+        it is declared, not only at the audit replay."""
         target = (cell[0], cell[1])
         if not self.board.in_bounds(target):
             raise GameRuleError(f"declared barrier {target} is off the board")
-        if not self.board.is_barrier(target):
-            self.board.add_barrier(target)
+        if self.board.is_barrier(target):
+            return  # redelivery: at-least-once transport noise
+        if len(self.board.barriers) >= self.rules.max_barriers:
+            raise GameRuleError(
+                f"rival declared barrier #{len(self.board.barriers) + 1} but "
+                f"max_barriers is {self.rules.max_barriers} - rule breach")
+        self.board.add_barrier(target)
 
     def close_full_turn(self) -> None:
         """Full-turn boundary: MY field updates at MY cell (the rival runs
