@@ -78,11 +78,13 @@ def their_half_turn(rt) -> None:
     if rt.role is Role.POLICE and not conceded:
         rt.own.close_full_turn()  # the rival (thief) just ticked the round
     if not conceded:
-        # A concede is mid-round and action-free: its smell_grid re-sends the
-        # last boundary's field, which the frame-to-frame law (one decay+
-        # deposit step) rightly cannot explain - observing it would book a
-        # FALSE refused-reading against an honest rival (E2E g90 finding).
-        # The game is over on this message; there is nothing left to learn.
+        # NEVER JUDGE THE FINAL (settled convention with imreec): a conceded
+        # final is mid-round and action-free, and its smell_grid legitimately
+        # varies by implementation - ours re-sends the last boundary's field
+        # (zero-step), the reference's unconditional send() advances one more
+        # step. No one frame-to-frame law explains both, so judging it books
+        # a FALSE refused-reading against an honest rival (E2E g90 finding).
+        # The game is over on receipt: expect no particular final, judge none.
         rt.perception.observe(rt.own, rival, message["hint"],
                               barrier_cell=(placed[0], placed[1]) if fresh_wall else None)
     if conceded:

@@ -64,3 +64,16 @@ def _reference(config_dir):
     config = Config.load(config_dir)
     config.private.setdefault("network", {})["wire_shape"] = "reference"
     return config
+
+
+# The kit registry's published hash for info_mode:belief
+# (vectors/locked_model.json, enclosed verbatim by imreec, round 18).
+REGISTERED_BELIEF_SHA256 = (
+    "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202")
+
+
+def test_committed_document_matches_the_kit_registration() -> None:
+    """The repo ships the kit-registered info_mode:belief document verbatim:
+    our declaration must equal the registry's published hash, byte-derived —
+    anything else refuses an honest peer at the handshake."""
+    assert lock.info_mode_sha256() == REGISTERED_BELIEF_SHA256
