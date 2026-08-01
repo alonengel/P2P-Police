@@ -52,6 +52,28 @@ def test_series_result_accepts_repeated_results_dirs() -> None:
         ["series-result", "--game-id", "a-vs-b"]).results_dir is None
 
 
+def test_peer_exit_code_is_the_settlement_criterion(monkeypatch, config_dir) -> None:
+    """digest_match is None-BY-DESIGN against a foreign-schema rival (tier c:
+    not comparable) — a clean cross-team window must exit 0 on played outcome
+    + clean mutual audit, else the runner marks every rival game FAILED and
+    the series auto-close never fires (2026-08-01 rehearsal finding)."""
+    from p2p_police.sdk.sdk import SimulationSdk
+
+    reports = iter([
+        {"outcome": "survival", "audit": "Verified OK", "digest_match": None},
+        {"outcome": "capture", "audit": "Verified OK", "digest_match": True},
+        {"outcome": "technical_loss", "audit": "unavailable (technical loss)",
+         "digest_match": False},
+        {"outcome": "capture", "audit": "TAMPERED", "digest_match": True},
+    ])
+    monkeypatch.setattr(SimulationSdk, "run_peer", lambda self, **kw: next(reports))
+    argv = ["peer", "--config-dir", str(config_dir)]
+    assert main(argv) == 0  # foreign rival: None digest, clean audit
+    assert main(argv) == 0  # same-schema pair: digest comparable and matching
+    assert main(argv) == 1  # technical loss
+    assert main(argv) == 1  # tampered audit voids the window
+
+
 def _settled_log(directory, game_id: str, n: int) -> None:
     doc = {"game_uid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "sub_game_number": n,
            "summary": {"outcome": "survival", "turns_completed": 35,

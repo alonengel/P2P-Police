@@ -98,12 +98,17 @@ def main(argv: list[str] | None = None) -> int:
         report = sdk.run_peer(seed=args.seed, gui=args.gui,
                               gui_screenshot=args.gui_screenshot, resume=args.resume)
         print(json.dumps(report, indent=2))
-        return 0 if report.get("digest_match") else 1
+        # window verdict = the settlement guard's own criterion: a played
+        # outcome with a clean mutual audit. digest_match is None-BY-DESIGN
+        # against a foreign-schema rival (tier c: not comparable) and keying
+        # exit on it failed every clean cross-team window and silently
+        # skipped the series auto-close (2026-08-01 rehearsal finding).
+        return 0 if (report.get("outcome") in ("capture", "survival")
+                     and report.get("audit") == "Verified OK") else 1
     if args.command == "verify-log":
         from p2p_police.sdk.sdk import SimulationSdk
 
-        verdict = SimulationSdk.verify_log(args.log)
-        print(verdict)
+        print(verdict := SimulationSdk.verify_log(args.log))
         # a qualified "Verified OK (seals only - ...)" still exits clean:
         # the seals are intact; the qualifier names the reduced assurance
         return 0 if verdict.startswith("Verified OK") else 1
