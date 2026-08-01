@@ -56,6 +56,14 @@ TRAP_DEFAULTS: dict = {
     #                                never runs its own imprisonment check just
     #                                plays on - measured live 2026-08-01, three
     #                                sealed-in games scored as survival.
+    "landing_deadline_turns": 2,   # ...but not at the buzzer: with this many
+    #                                turns or fewer left, take the WALL. Both
+    #                                actions cost one turn, so the preference
+    #                                never burns clock - what differs is the
+    #                                miss. A landing on air gains nothing; a
+    #                                wall still shrinks their world, and with
+    #                                no turns left to recover, an unrecoverable
+    #                                miss is the game.
 }
 
 

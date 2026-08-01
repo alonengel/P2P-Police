@@ -96,8 +96,16 @@ class PoliceBrain(BrainBase):
         # claim-mediated and its truth duty is enforceable. When the cell is a
         # legal step, step: walk the capture in rather than wall it.
         if thief in my_reach:
+            # ...EXCEPT at the buzzer. Both actions cost exactly one turn, so
+            # the preference never burns clock; what differs is the MISS. A
+            # landing that lands on air gains nothing, while a wall shrinks
+            # their world permanently — and with no turns left to recover, an
+            # unrecoverable miss IS the loss. Inside the deadline, take the
+            # wall (rule 46 capture, and provable from their own reveal).
+            remaining = engine.rules.survival_threshold - engine.turns_completed
             step_in = (self.trap["prefer_landing_capture"]
-                       and thief != me and engine.board.is_passable(thief))
+                       and thief != me and engine.board.is_passable(thief)
+                       and remaining > self.trap["landing_deadline_turns"])
             return None if step_in else thief
         candidates = [c for c in thief_escapes if c in my_reach and not engine.board.is_barrier(c)]
         return candidates[0] if candidates else None
