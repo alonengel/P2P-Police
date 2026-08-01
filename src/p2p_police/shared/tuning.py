@@ -47,6 +47,15 @@ TRAP_DEFAULTS: dict = {
     #                                spending a step earlier - swept 2/3/4/5
     #                                over 60-150 games, 3 wins outright
     #                                (docs/evidence/cop-strength.md)
+    "prefer_landing_capture": True,  # when the believed cell is a legal STEP,
+    #                                take the step instead of walling it. A
+    #                                LANDING capture is claim-mediated: the
+    #                                rival's truth duty must answer it. A
+    #                                barrier capture (rules 46/47) is only ever
+    #                                self-declared by the rival, so a peer that
+    #                                never runs its own imprisonment check just
+    #                                plays on - measured live 2026-08-01, three
+    #                                sealed-in games scored as survival.
 }
 
 

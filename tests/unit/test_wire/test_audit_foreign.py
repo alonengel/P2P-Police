@@ -119,7 +119,8 @@ def test_judge_reports_digest_as_not_comparable_never_false() -> None:
     """Different per-team digest constructions cannot be compared: the tier
     reports None (JSON null), not a false accusation."""
     verdict = audit_foreign.judge(rival_walk(), grid=7)
-    assert verdict == {"audit": "Verified OK", "digest_match": None}
+    assert verdict == {"audit": "Verified OK", "digest_match": None,
+                       "disputed_capture": None}
     broken = rival_walk()
     broken[1]["payload"]["position"] = [6, 0]  # underivable jump
     assert audit_foreign.judge(broken, grid=7)["audit"] == "TAMPERED"

@@ -91,9 +91,14 @@ class PoliceBrain(BrainBase):
             for m in (Move.N, Move.S, Move.E, Move.W)
             if engine.board.in_bounds(m.applied_to(me))
         }
-        # Placing ON the thief captures outright - take it when reachable.
+        # Placing ON the believed cell captures outright (rule 46) - but that
+        # capture is SELF-DECLARED by the rival, while a landing capture is
+        # claim-mediated and its truth duty is enforceable. When the cell is a
+        # legal step, step: walk the capture in rather than wall it.
         if thief in my_reach:
-            return thief
+            step_in = (self.trap["prefer_landing_capture"]
+                       and thief != me and engine.board.is_passable(thief))
+            return None if step_in else thief
         candidates = [c for c in thief_escapes if c in my_reach and not engine.board.is_barrier(c)]
         return candidates[0] if candidates else None
 

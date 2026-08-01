@@ -37,8 +37,7 @@ def my_half_turn(rt) -> None:
         if rt.own.survival_reached():
             win = {"type": "survival"}  # claimed at MY 35th step (demo timing)
     response, rt.pending_claim_response = rt.pending_claim_response, None
-    if captured:
-        response = claims.concede_declaration(rt.own)  # honest, automatic
+    response = claims.concede_declaration(rt.own) if captured else response  # honest
     commit = rt.exchange.seal_step(rt.own.digest(), step, action, hint, truth)
     rt.exchange.send_message(codec.build_turn_message(
         step, rt.role.value, hint, codec.serialize_scent(rt.own.scent[rt.role]),
@@ -68,7 +67,7 @@ def their_half_turn(rt) -> None:
     # Only a NEW declaration is evidence; redeliveries are transport noise.
     fresh_wall = bool(placed) and not rt.own.board.is_barrier((placed[0], placed[1]))
     if placed:
-        rt.own.note_rival_barrier(placed)
+        rt.own.note_rival_barrier(placed)  # quota-checked (Table 15)
     rt.own.scent[rival].absorb(message["smell_grid"])
     rt.own.note_rival_half_turn()
     # Only the THIEF's truth-duty flow can concede OUR capture (rules 21-22:
@@ -153,9 +152,11 @@ def finish(rt) -> dict:
             else:
                 from p2p_police.report.lookup import geometry
 
-                tier = audit_foreign.judge(rt.exchange.their_records,
-                                           geometry(rt.config.shared)[0])
-                verdict, digest_match = tier["audit"], tier["digest_match"]
+                # rules 46/47 ride along: a barrier capture is self-declared
+                # live, so THEIR reveal is the only place we can prove it
+                verdict, digest_match, rt.disputed_capture = audit_foreign.foreign_verdict(
+                    rt.exchange.their_records, geometry(rt.config.shared)[0],
+                    getattr(getattr(rt.own, "board", None), "barriers", ()))
     except DeadlineExpiredError:
         pass
     except GameRuleError:
@@ -176,4 +177,8 @@ def finish(rt) -> dict:
             getattr(rt, "perception", None), "refused_readings", 0),
         "opponent_group_id": getattr(rt, "opponent_group_id", "unknown"),
         "opponent_info": getattr(rt, "opponent_info", {}),
+        # Rule-36 evidence: a capture their own reveal proves, that their peer
+        # never conceded. Recorded for the logs to settle (rule 35), never a
+        # unilateral outcome rewrite - absent on every honest game.
+        "disputed_capture": getattr(rt, "disputed_capture", None),
     }
