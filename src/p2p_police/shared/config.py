@@ -144,11 +144,10 @@ class Config:
         return bool(self.private.get("resume", {}).get("enabled", True))
 
     def identity_block(self) -> dict:
-        """Rival-facing identity declaration (rules 37-38/49, ADR-0005/6)."""
-        game = self.private.get("game", {})
-        return {"repos": game.get("repos", {}),
-                "mcp_servers": game.get("mcp_servers", {}),
-                "counted_games_played": int(game.get("counted_games_played", 0))}
+        """Rival-facing identity declaration (shared/identity.py)."""
+        from p2p_police.shared.identity import identity_block
+
+        return identity_block(self.private, self.group_id)
 
     @property
     def my_port(self) -> int:

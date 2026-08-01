@@ -100,13 +100,22 @@ def test_final_result_and_links_cover_the_reference(tmp_path) -> None:
     assert len(urls) == 4 and all(url.startswith("https://") for url in urls)
 
 
-def test_groups_carry_both_identities(tmp_path) -> None:
+def test_groups_is_the_flat_id_pair_sample_verbatim(tmp_path) -> None:
+    """The book's attached example homes identity in the DECLARATION; the
+    result's `groups` is two ids and nothing else, so two honest reports
+    cannot diff on shape (2026-08-01 report-diff with imreeyal)."""
     doc = build(tmp_path)
-    by_id = {g["group_id"]: g for g in doc["groups"]}
-    assert set(by_id) == {"alpha", "beta"}
-    assert by_id["alpha"]["members"] == OUR_IDENTITY["members"]
-    assert by_id["alpha"]["mcp_servers"] and by_id["beta"]["mcp_servers"]
-    assert by_id["beta"]["repos"]["cop"] == "https://example.test/their-cop"
+    assert doc["groups"] == ["alpha", "beta"]
+    assert doc["timezone"] == "Asia/Jerusalem"  # the sample's label
+
+
+def test_all_four_repo_links_survive_the_flattening(tmp_path) -> None:
+    """Rule 49 still needs both teams' cop+thief links in the emailed file —
+    they live under links.github, sourced from config + their handshake."""
+    github = build(tmp_path)["links"]["github"]
+    assert set(github) == {"alpha", "beta"}
+    assert github["alpha"] == OUR_IDENTITY["repos"]
+    assert github["beta"]["cop"] == "https://example.test/their-cop"
 
 
 def test_mutual_agreement_signed_then_inserted_and_confirmed(tmp_path) -> None:

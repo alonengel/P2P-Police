@@ -1,10 +1,11 @@
 """The series RESULT document, key-structured like the official demo's
 sample-run result (course DemoExamples, learn-only reference; key layout
 reproduced with attribution - the values are all ours). It carries what the
-book mandates for the final result (ch. 9, rules 49/54): both teams'
-identities, all four GitHub repo links, both sides' FastMCP addresses, the
-mutual-agreement confirmations, timestamps and total tokens. Timestamps in
-our artifacts are UTC ISO-8601, hence the fixed "UTC" timezone tag.
+book mandates for the final result (ch. 9, rules 49/54): all four GitHub
+repo links, both sides' FastMCP addresses, the mutual-agreement
+confirmations, timestamps and total tokens. Team IDENTITY (members, hardware,
+llm_model) is NOT here: the book's attached example homes it in the
+declaration file, and this document carries the flat id pair only.
 """
 
 from p2p_police.domain import game_ids
@@ -12,8 +13,11 @@ from p2p_police.report.artifacts import consensus_signature
 
 _SCHEMA = ("Summary and final result for the WHOLE series between two "
            "teams: per-group score for every sub-game plus the aggregate "
-           "outcome. Static team metadata is carried in groups[] and in "
-           "the linked declaration.")
+           "outcome. Static team metadata is carried in the linked "
+           "declaration.")
+# The sample's fixed label, not a tunable: our timestamps stay UTC ISO-8601
+# with explicit offsets, so this tags the league's wall-clock zone only.
+TIMEZONE = "Asia/Jerusalem"
 SCHEMA_VERSION = "1.1"
 
 
@@ -57,25 +61,29 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
     }
 
 
-def _groups(by_slot: dict, our_identity: dict) -> tuple[list[dict], str]:
-    """BOTH teams' identity blocks: ours from config, the opponent's from
-    the identity it declared at the negotiate handshake (stored per log)."""
-    first = by_slot[min(by_slot)]["summary"]
-    me, them, _, _ = _names(first)
-    identity = (first.get("opponent_info") or {}).get("identity") or {}
-    return [
-        {"group_id": me,
-         "members": list(our_identity.get("members", [])),
-         "repos": dict(our_identity.get("repos", {})),
-         "mcp_servers": dict(our_identity.get("mcp_servers", {}))},
-        {"group_id": them,
-         "members": list(identity.get("members", [])),
-         "repos": dict(identity.get("repos", {})),
-         "mcp_servers": dict(identity.get("mcp_servers", {}))},
-    ], them
+def _groups(by_slot: dict) -> tuple[list[str], str]:
+    """The RESULT file's groups field: the flat id pair, sample-verbatim.
+
+    The book's attached example (docs/sample-run/result_*.json) homes team
+    identity in the DECLARATION — `groups` here is a list of two ids and
+    nothing else. Our earlier enrichment was additive rather than wrong, but
+    it made two honest reports diff on shape, and the schema already has a
+    file for identity (2026-08-01 report-diff with imreeyal)."""
+    me, them, _, _ = _names(by_slot[min(by_slot)]["summary"])
+    return [me, them], them
 
 
-def _links(game_id: str, groups: list[dict]) -> dict:
+def _repo_map(by_slot: dict, our_identity: dict) -> dict:
+    """Both teams' repo URLs: ours from config, theirs from the identity they
+    declared at the handshake (rule 49 — all four links in the emailed file)."""
+    me, them, _, _ = _names(by_slot[min(by_slot)]["summary"])
+    theirs = ((by_slot[min(by_slot)]["summary"].get("opponent_info") or {})
+              .get("identity") or {})
+    return {me: dict(our_identity.get("repos", {})),
+            them: dict(theirs.get("repos", {}))}
+
+
+def _links(game_id: str, github: dict) -> dict:
     """The reference's logical-role filenames + all four GitHub repo URLs
     (both teams' cop and thief repos, book ch. 9)."""
     return {
@@ -83,7 +91,7 @@ def _links(game_id: str, groups: list[dict]) -> dict:
         "config": f"config_{game_id}_g<NN>.json",
         "log": f"log_{game_id}_g<NN>.json",
         "result": game_ids.result_name(game_id),
-        "github": {g["group_id"]: dict(g["repos"]) for g in groups},
+        "github": github,
     }
 
 
@@ -93,7 +101,7 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
     """Assemble the full reference-conformant result document. The
     mutual_agreement sha256 is sign-then-insert over the rest of the doc
     (ADR-0004 settlement form); confirmed = every sub-game audit clean."""
-    groups, them = _groups(by_slot, our_identity)
+    groups, them = _groups(by_slot)
     sub_games = [_entry(by_slot[n], score_table, our_identity)
                  for n in sorted(by_slot)]
     totals: dict[str, int] = {}
@@ -123,8 +131,8 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
         "report_type": "final_game_result",
         "game_id": game_id,
         "game_uid": game_uid,
-        "links": _links(game_id, groups),
-        "timezone": "UTC",
+        "links": _links(game_id, _repo_map(by_slot, our_identity)),
+        "timezone": TIMEZONE,
         "groups": groups,
         "num_sub_games": expected_games,
         "sub_games": sub_games,
