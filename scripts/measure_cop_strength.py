@@ -39,12 +39,21 @@ DEFAULT_GAMES = 20  # per evader per arm; the 4-evader pool makes 80 games/arm
 # (endgame, info_gain, trap gate or None = shipped default). The trap gate is
 # swept BOTH bare and under the boosters: gates interact, and a gate tuned in
 # isolation is a gate tuned for a configuration nobody plays.
+# 4th slot = prefer_landing_capture (None = shipped default True). The arena
+# engine resolves captures OBJECTIVELY, so what these arms measure is the only
+# thing that is measurable here: whether preferring the step COSTS captures.
+# The reason we prefer it - a wall capture is self-declared by the rival, a
+# landing capture is claim-mediated - cannot be measured against our own
+# arena evaders, only against a live peer (2026-08-01: three sealed games
+# scored as survival). If the cost is zero, the enforceability is free.
 ARMS: dict = {
-    "baseline": (False, False, None), "endgame": (True, False, None),
-    "info_gain": (False, True, None), "both": (True, True, None),
-    "trap2": (False, False, 2), "trap4": (False, False, 4),
-    "both_trap2": (True, True, 2), "both_trap4": (True, True, 4),
-    "both_trap5": (True, True, 5),
+    "baseline": (False, False, None, None), "endgame": (True, False, None, None),
+    "info_gain": (False, True, None, None), "both": (True, True, None, None),
+    "trap2": (False, False, 2, None), "trap4": (False, False, 4, None),
+    "both_trap2": (True, True, 2, None), "both_trap4": (True, True, 4, None),
+    "both_trap5": (True, True, 5, None),
+    "land_off": (False, False, None, False),
+    "both_land_off": (True, True, None, False),
 }
 # random = calibration floor (the strong evaders sit at 0 captures for a blind
 # cop - deception_policy.json - so deltas need a beatable rung to register).
@@ -54,13 +63,15 @@ BLIND_EVADERS = {"heuristic", "random"}  # the rest play with full information
 
 
 def arm_config(config: Config, arm: str) -> SimpleNamespace:
-    use_endgame, use_info, trap = ARMS[arm]
+    use_endgame, use_info, trap, landing = ARMS[arm]
     private = json.loads(json.dumps(config.private))  # deep copy - no live sharing
     strategy = private.setdefault("strategy", {})
     strategy.setdefault("endgame", {})["enabled"] = use_endgame
     strategy.setdefault("info_gain", {})["enabled"] = use_info
     if trap is not None:  # sweep both gate dimensions together, as shipped
         strategy.setdefault("trap", {}).update({"escape_limit": trap, "range": trap})
+    if landing is not None:
+        strategy.setdefault("trap", {})["prefer_landing_capture"] = landing
     return SimpleNamespace(private=private)
 
 

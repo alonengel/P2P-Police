@@ -227,3 +227,32 @@ trail for a fictional trajectory produces frames that satisfy the law, because
 they ARE legal frames for a different game. That one needs the grid bound to
 the sealed record - a protocol change, recorded as a proposal rather than
 adopted unilaterally, since the wire shape is a negotiated, hash-locked term.
+
+## Landing-vs-wall preference (keep-gate, 2026-08-01)
+
+`[strategy.trap] prefer_landing_capture` — when the believed cell is a legal
+step, step onto it instead of walling it. Motivated live, not theoretically:
+a barrier capture (rules 46/47) is only ever SELF-declared by the rival, and
+on 2026-08-01 three sealed-in games against imreeyal were scored as survivals
+because their thief never ran its own imprisonment check. A landing capture
+is claim-mediated and its truth duty is enforceable.
+
+The arena engine resolves captures OBJECTIVELY, so it cannot measure that
+enforceability at all — only whether preferring the step COSTS captures. It
+does not. It pays:
+
+| arm | pool capture rate | mean turns |
+|---|---|---|
+| baseline (landing ON, shipped) | **0.758** | 14.6 |
+| land_off (wall-first, old behaviour) | 0.625 | 12.5 |
+| both boosters (landing ON) | **0.983** | 12.9 |
+| both boosters + land_off | 0.983 | 12.9 |
+
+30 games per evader across the 4-evader pool, same seeds per arm.
+**+13.3 points bare, neutral under the boosters** (the endgame solver already
+forces those lines). Kept ON: the enforceability is free, and then some.
+
+Caveat recorded honestly: the gain is measured against OUR arena evaders, and
+the `landing_deadline_turns = 2` buzzer fallback is unmeasured here — it fires
+too rarely at this sample size to separate from noise. It is a safety rail,
+not a scoring feature.

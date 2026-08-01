@@ -4,8 +4,8 @@
   "arms": {
     "baseline": {
       "games": 120,
-      "capture_rate": 0.625,
-      "mean_turns_to_capture": 12.51,
+      "capture_rate": 0.758,
+      "mean_turns_to_capture": 14.57,
       "endgame_fired_turns": 0,
       "per_evader": {
         "heuristic": {
@@ -16,25 +16,25 @@
         "random": {
           "games": 30,
           "capture_rate": 0.933,
-          "mean_turns_to_capture": 9.57
+          "mean_turns_to_capture": 9.54
         },
         "perfect": {
           "games": 30,
-          "capture_rate": 0.4,
-          "mean_turns_to_capture": 12.0
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 19.8
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.167,
-          "mean_turns_to_capture": 25.2
+          "capture_rate": 0.1,
+          "mean_turns_to_capture": 21.67
         }
       }
     },
     "endgame": {
       "games": 120,
-      "capture_rate": 0.85,
-      "mean_turns_to_capture": 12.68,
-      "endgame_fired_turns": 230,
+      "capture_rate": 0.842,
+      "mean_turns_to_capture": 12.5,
+      "endgame_fired_turns": 228,
       "per_evader": {
         "heuristic": {
           "games": 30,
@@ -44,7 +44,7 @@
         "random": {
           "games": 30,
           "capture_rate": 1.0,
-          "mean_turns_to_capture": 10.23
+          "mean_turns_to_capture": 10.2
         },
         "perfect": {
           "games": 30,
@@ -53,15 +53,15 @@
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.4,
-          "mean_turns_to_capture": 20.83
+          "capture_rate": 0.367,
+          "mean_turns_to_capture": 20.09
         }
       }
     },
     "info_gain": {
       "games": 120,
-      "capture_rate": 0.558,
-      "mean_turns_to_capture": 11.81,
+      "capture_rate": 0.792,
+      "mean_turns_to_capture": 15.62,
       "endgame_fired_turns": 0,
       "per_evader": {
         "heuristic": {
@@ -72,24 +72,24 @@
         "random": {
           "games": 30,
           "capture_rate": 0.967,
-          "mean_turns_to_capture": 8.83
+          "mean_turns_to_capture": 8.97
         },
         "perfect": {
           "games": 30,
-          "capture_rate": 0.0,
-          "mean_turns_to_capture": null
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 25.0
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.267,
-          "mean_turns_to_capture": 20.12
+          "capture_rate": 0.2,
+          "mean_turns_to_capture": 16.67
         }
       }
     },
     "both": {
       "games": 120,
       "capture_rate": 0.983,
-      "mean_turns_to_capture": 12.9,
+      "mean_turns_to_capture": 12.93,
       "endgame_fired_turns": 296,
       "per_evader": {
         "heuristic": {
@@ -100,7 +100,7 @@
         "random": {
           "games": 30,
           "capture_rate": 1.0,
-          "mean_turns_to_capture": 9.03
+          "mean_turns_to_capture": 9.17
         },
         "perfect": {
           "games": 30,
@@ -144,8 +144,8 @@
     },
     "trap4": {
       "games": 120,
-      "capture_rate": 0.667,
-      "mean_turns_to_capture": 16.36,
+      "capture_rate": 0.775,
+      "mean_turns_to_capture": 15.28,
       "endgame_fired_turns": 0,
       "per_evader": {
         "heuristic": {
@@ -155,18 +155,18 @@
         },
         "random": {
           "games": 30,
-          "capture_rate": 0.8,
-          "mean_turns_to_capture": 13.29
+          "capture_rate": 0.833,
+          "mean_turns_to_capture": 11.8
         },
         "perfect": {
           "games": 30,
-          "capture_rate": 0.767,
-          "mean_turns_to_capture": 21.04
+          "capture_rate": 0.633,
+          "mean_turns_to_capture": 19.68
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.1,
-          "mean_turns_to_capture": 26.67
+          "capture_rate": 0.633,
+          "mean_turns_to_capture": 17.16
         }
       }
     },
@@ -200,9 +200,9 @@
     },
     "both_trap4": {
       "games": 120,
-      "capture_rate": 0.808,
-      "mean_turns_to_capture": 18.59,
-      "endgame_fired_turns": 227,
+      "capture_rate": 0.717,
+      "mean_turns_to_capture": 12.92,
+      "endgame_fired_turns": 144,
       "per_evader": {
         "heuristic": {
           "games": 30,
@@ -211,26 +211,26 @@
         },
         "random": {
           "games": 30,
-          "capture_rate": 0.9,
-          "mean_turns_to_capture": 13.93
+          "capture_rate": 0.867,
+          "mean_turns_to_capture": 10.77
         },
         "perfect": {
           "games": 30,
-          "capture_rate": 1.0,
-          "mean_turns_to_capture": 25.0
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.333,
-          "mean_turns_to_capture": 29.0
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 14.8
         }
       }
     },
     "both_trap5": {
       "games": 120,
-      "capture_rate": 0.808,
-      "mean_turns_to_capture": 18.59,
-      "endgame_fired_turns": 227,
+      "capture_rate": 0.717,
+      "mean_turns_to_capture": 12.92,
+      "endgame_fired_turns": 144,
       "per_evader": {
         "heuristic": {
           "games": 30,
@@ -239,30 +239,88 @@
         },
         "random": {
           "games": 30,
-          "capture_rate": 0.9,
-          "mean_turns_to_capture": 13.93
+          "capture_rate": 0.867,
+          "mean_turns_to_capture": 10.77
+        },
+        "perfect": {
+          "games": 30,
+          "capture_rate": 0.0,
+          "mean_turns_to_capture": null
+        },
+        "deep_rl": {
+          "games": 30,
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 14.8
+        }
+      }
+    },
+    "land_off": {
+      "games": 120,
+      "capture_rate": 0.625,
+      "mean_turns_to_capture": 12.51,
+      "endgame_fired_turns": 0,
+      "per_evader": {
+        "heuristic": {
+          "games": 30,
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 13.33
+        },
+        "random": {
+          "games": 30,
+          "capture_rate": 0.933,
+          "mean_turns_to_capture": 9.57
+        },
+        "perfect": {
+          "games": 30,
+          "capture_rate": 0.4,
+          "mean_turns_to_capture": 12.0
+        },
+        "deep_rl": {
+          "games": 30,
+          "capture_rate": 0.167,
+          "mean_turns_to_capture": 25.2
+        }
+      }
+    },
+    "both_land_off": {
+      "games": 120,
+      "capture_rate": 0.983,
+      "mean_turns_to_capture": 12.9,
+      "endgame_fired_turns": 296,
+      "per_evader": {
+        "heuristic": {
+          "games": 30,
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 12.0
+        },
+        "random": {
+          "games": 30,
+          "capture_rate": 1.0,
+          "mean_turns_to_capture": 9.03
         },
         "perfect": {
           "games": 30,
           "capture_rate": 1.0,
-          "mean_turns_to_capture": 25.0
+          "mean_turns_to_capture": 12.0
         },
         "deep_rl": {
           "games": 30,
-          "capture_rate": 0.333,
-          "mean_turns_to_capture": 29.0
+          "capture_rate": 0.933,
+          "mean_turns_to_capture": 18.96
         }
       }
     }
   },
   "capture_delta_vs_baseline": {
-    "endgame": 0.225,
-    "info_gain": -0.067,
-    "both": 0.358,
-    "trap2": 0.075,
-    "trap4": 0.042,
-    "both_trap2": 0.358,
-    "both_trap4": 0.183,
-    "both_trap5": 0.183
+    "endgame": 0.084,
+    "info_gain": 0.034,
+    "both": 0.225,
+    "trap2": -0.058,
+    "trap4": 0.017,
+    "both_trap2": 0.225,
+    "both_trap4": -0.041,
+    "both_trap5": -0.041,
+    "land_off": -0.133,
+    "both_land_off": 0.225
   }
 }
