@@ -57,3 +57,22 @@ def test_clean_tree_keeps_the_bare_hash(monkeypatch) -> None:
 
     monkeypatch.setattr(code_identity.subprocess, "run", fake_run)
     assert git_commit_hash() == "abc123"
+
+
+def test_untracked_artifacts_do_not_stamp_dirty(monkeypatch) -> None:
+    """A playing series CREATES untracked logs — the commit identity must
+    key on TRACKED modifications only (git describe --dirty semantics), or
+    every window after the first signs a false -dirty declaration."""
+    from types import SimpleNamespace
+
+    from p2p_police.report import code_identity
+
+    def fake_run(args, capture_output, text, timeout):  # noqa: ARG001
+        if args[:2] == ["git", "rev-parse"]:
+            return SimpleNamespace(stdout="abc123\n")
+        if "--untracked-files=no" in args:
+            return SimpleNamespace(stdout="")  # tracked files all clean
+        return SimpleNamespace(stdout="?? results/log_x_g01.json\n")
+
+    monkeypatch.setattr(code_identity.subprocess, "run", fake_run)
+    assert git_commit_hash() == "abc123"

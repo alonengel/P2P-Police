@@ -16,6 +16,10 @@ def git_commit_hash() -> str:
         head = _git("rev-parse", "HEAD")
         if not head:
             return "unknown"
-        return f"{head}-dirty" if _git("status", "--porcelain") else head
+        # tracked modifications only (git describe --dirty semantics): a
+        # series CREATES untracked artifacts as it plays, and those must not
+        # stamp -dirty onto every later window's signed declaration
+        status = _git("status", "--porcelain", "--untracked-files=no")
+        return f"{head}-dirty" if status else head
     except OSError:
         return "unknown"
