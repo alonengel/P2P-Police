@@ -43,7 +43,7 @@ def my_half_turn(rt) -> None:
         step, rt.role.value, hint, codec.serialize_scent(rt.own.scent[rt.role]),
         commit,
         barrier_placed=[barrier[0], barrier[1]] if barrier else None,
-        capture_claim=(claims.capture_claim_for(action, rt.own)
+        capture_claim=(claims.capture_claim_for(action, rt.own, rt.perception, rt.config)
                        if rt.role is Role.POLICE else None),
         claim_response=response, win_claim=win))
     rt.fsm.transition(GamePhase.AWAITING_REVEAL)  # reveal deferred to audit

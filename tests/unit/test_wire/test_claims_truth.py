@@ -23,16 +23,32 @@ def test_answer_is_truthful_when_the_claim_misses():
 
 
 def test_no_strategy_input_can_reach_the_answer():
-    """Rules 21-22 enforced by SIGNATURE: the answer is a pure function of
+    """Rules 21-22 enforced by SIGNATURE: the ANSWER is a pure function of
     (own state, claimed cell) - no brain, config, policy or RNG parameter
     exists through which strategy code could bend the truth."""
     assert list(inspect.signature(claims.answer_capture_claim).parameters) == [
         "own", "claim_cell"]
     assert list(inspect.signature(claims.concede_declaration).parameters) == ["own"]
-    for fn in (claims.answer_capture_claim, claims.concede_declaration,
-               claims.capture_claim_for):
+    for fn in (claims.answer_capture_claim, claims.concede_declaration):
         names = set(inspect.signature(fn).parameters)
         assert not names & {"brain", "strategy", "config", "rng", "policy", "deceiver"}
+
+
+def test_the_outbound_claim_may_choose_silence_but_never_a_lie():
+    """The line the truth duty actually draws: WHETHER to claim is strategy
+    (a claim broadcasts our true cell, so claiming every turn is a leak);
+    WHAT a claim says is not. capture_claim_for may consult belief/config to
+    stay quiet, and every value it DOES return is our real cell."""
+    own = thief_at((2, 5))  # any OwnState: the claim reads its own cell
+    move = {"type": "move", "move": "E"}
+    from types import SimpleNamespace
+
+    sharp = SimpleNamespace(belief=SimpleNamespace(value_at=lambda _c: 1.0))
+    mute = SimpleNamespace(belief=SimpleNamespace(value_at=lambda _c: 0.0))
+    config = SimpleNamespace(private={})
+    assert claims.capture_claim_for(move, own, sharp, config) == [2, 5]
+    assert claims.capture_claim_for(move, own, mute, config) is None
+    assert claims.capture_claim_for(move, own) == [2, 5]  # unfiltered
 
 
 def test_concede_names_my_true_cell():
