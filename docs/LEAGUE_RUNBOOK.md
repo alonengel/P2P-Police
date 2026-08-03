@@ -101,10 +101,14 @@ ODD windows (1,3,5), the thief repo the EVEN ones (2,4,6).
 3. After the game: confirm the audit verdict is "Verified OK" on BOTH sides
    and the digests match (mutual audit, rules 35-36) BEFORE agreeing on the
    result.
-4. Verify the automatic report email went to rmisegal+uoh26finalgame@gmail.com
-   (rule 51) — EACH team sends its own (rule 35; we always send).
-5. Verify the game's config artifact landed in `config/games/` and commit it
-   (rules 3-4) with the log + result artifacts in `results/`.
+4. NO per-sub-game email exists (book §9.3.3, p. 79: the result file is THE
+   mandated report email, one per series from each team). Verify the ONE
+   series email after "Running the counted series" step 5-7 — to
+   rmisegal+uoh26finalgame@gmail.com (rule 51).
+5. Verify the game's config artifact landed in `config/games/` — then
+   COMMIT AND PUSH it (rules 3-5 + App ו §2) with the log + result
+   artifacts in `results/`; artifacts left uncommitted are invisible to the
+   lecturer's audit.
 6. Screenshot anything unusual; keep logs — they are the only accepted
    dispute evidence.
 

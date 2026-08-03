@@ -41,7 +41,7 @@ def test_sparring_disarms_deception_and_tuned_terms() -> None:
 
 def test_sparring_emails_nothing() -> None:
     config = load_sparring()
-    assert "email" not in config.private  # no recipient, no mode: maybe_email no-ops
+    assert "email" not in config.private  # no recipient, no mode: series email no-ops
 
 
 def test_sparring_wire_shape_is_selectable() -> None:

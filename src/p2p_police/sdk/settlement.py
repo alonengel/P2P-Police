@@ -3,9 +3,10 @@ for the 150-code-line cap.
 
 Two duties the happy path never exercises: when play() raised before the
 normal finisher could run, the rival may still be alive and is owed our
-audit disclosure (rules 35-36); and the artifacts+email funnel must never
-let its own exception eat a settled game's report (rule 32) — a failure
-lands ON the report, which still reaches stdout.
+audit disclosure (rules 35-36); and the artifact funnel must never let its
+own exception eat a settled game's report (rule 32) — a failure lands ON
+the report, which still reaches stdout. No email here: the one mandatory
+report email is the SERIES result (book §9.3.3), sent at aggregation.
 """
 
 from p2p_police.peer.deadline import Deadline
@@ -57,18 +58,14 @@ def emergency_audit(runtime, config) -> str | None:
         return f"failed: {type(error).__name__}: {error}"
 
 
-def settle_report(config, runtime, report: dict, gatekeeper) -> None:
-    """Rule-32 hardening: artifacts and email are EACH best-effort — an
-    exception in either is recorded on the report instead of raising, so
-    the settled outcome always reaches stdout and the email is attempted
-    even when the artifact writer broke."""
+def settle_report(config, runtime, report: dict) -> None:
+    """Rule-32 hardening: the artifact write is best-effort — an exception
+    is recorded on the report instead of raising, so the settled outcome
+    always reaches stdout. Sub-game ends never email (book §9.3.3: only
+    the series result is the mandated report email)."""
     try:
         report["artifacts"] = [
             str(p) for p in reporting.emit_artifacts(config, runtime, report)]
     except Exception as error:  # noqa: BLE001 - recorded, never fatal
         report["artifacts"] = []
         report["artifacts_error"] = f"{type(error).__name__}: {error}"
-    try:
-        reporting.maybe_email(config, report, gatekeeper)
-    except Exception as error:  # noqa: BLE001 - recorded, never fatal
-        report["email_error"] = f"{type(error).__name__}: {error}"

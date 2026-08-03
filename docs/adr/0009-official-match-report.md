@@ -89,3 +89,18 @@ canon.
   parity-locked `domain/`) beside the four builders; until then a
   Hebrew-report module would be unfalsifiable guesswork against a
   schema the book never states.
+
+## Addendum (2026-08-03) — one report email, at series close only
+
+Re-verification for the imreeyal friendly settled the email cadence: the
+book mandates exactly ONE report email per game (= the series) — §9.3.3
+p. 79 names the result file "הדוח המחייב הנשלח בדוא"ל", rule 32's "תוצאות
+המשחק" uses the book's series-level vocabulary (Table 18: a משחק holds 6
+משחקונים), and the reference kit's own `run_peer` sends a single
+series-result email. Our per-sub-game email (sdk/reporting.maybe_email)
+was an extra beyond the book; it is now REMOVED — sub-game settlement
+writes artifacts only, and `sdk/series.maybe_email_series` remains the
+sole sender (rule 34 kept: the report rides as an attached JSON file,
+where the reference sends body-text only — the book wins). The four
+artifacts must reach GitHub instead: commit + push per game (App ו §2
+rules 4-5, runbook "Per counted game" step 5).

@@ -1,7 +1,10 @@
-"""SDK reporting glue: artifacts, auto-email, technical-loss synthesis.
+"""SDK reporting glue: artifacts + technical-loss synthesis.
 
 Split from sdk.py (150-line cap); rules 32/35: EVERY game end - including a
-technical loss - emits the four artifacts and, in send mode, the email.
+technical loss - emits the four artifacts. Nothing emails here: the ONE
+mandatory report email is the SERIES result (book §9.3.3 p. 79 - the
+result file "is the binding report emailed to the agent-reports address");
+it fires from sdk/series.maybe_email_series at aggregation.
 """
 
 import hashlib
@@ -126,33 +129,3 @@ def emit_artifacts(config, runtime, report: dict) -> list:
             results, game_ids.result_name(game_id)),
     ]
     return written
-
-
-
-def maybe_email(config, report: dict, gatekeeper=None) -> None:
-    """Automatic end-of-game report (rule 32) when [email].mode == send.
-
-    Routed through the lecturer-address interlock: a run not doubly armed as
-    a counted game structurally cannot address the league — the refusal is
-    recorded ON THE REPORT (the game outcome must still reach stdout intact,
-    rule 32) and nothing is sent."""
-    email_cfg = config.private.get("email", {})
-    if email_cfg.get("mode") != "send":
-        return
-    from p2p_police.infra.email_sender import send_report
-    from p2p_police.shared.gatekeeper import ApiGatekeeper
-    from p2p_police.shared.interlock import EmailInterlockError, ensure_email_allowed
-
-    try:
-        ensure_email_allowed(config, email_cfg["recipient"])
-    except EmailInterlockError as refusal:
-        report["email_refused"] = str(refusal)
-        return
-    message_id = send_report(
-        gatekeeper or ApiGatekeeper(config.rate_limits),
-        email_cfg["recipient"],
-        f"P2P league report - {config.group_id} - {report['outcome']}",
-        "Automated end-of-game report (rule 32). JSON artifacts attached.",
-        [Path(p) for p in report["artifacts"]],
-    )
-    report["email_message_id"] = message_id

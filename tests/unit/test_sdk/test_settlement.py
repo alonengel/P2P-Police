@@ -1,6 +1,6 @@
 """Failure-path settlement (rules 32/35-36): the emergency audit fires ONLY
-when the normal finisher never sent ours, and the artifacts/email funnel
-records its own failures on the report instead of eating the report."""
+when the normal finisher never sent ours, and the artifact funnel records
+its own failures on the report instead of eating the report."""
 
 from types import SimpleNamespace
 
@@ -56,24 +56,11 @@ def test_unreachable_rival_is_recorded_not_raised() -> None:
     assert verdict.startswith("failed: ConnectionError")
 
 
-def test_settle_report_records_artifact_failure_and_still_emails(monkeypatch) -> None:
-    calls = []
+def test_settle_report_records_artifact_failure(monkeypatch) -> None:
     monkeypatch.setattr(settlement.reporting, "emit_artifacts",
                         lambda *a: (_ for _ in ()).throw(OSError("disk full")))
-    monkeypatch.setattr(settlement.reporting, "maybe_email",
-                        lambda *a: calls.append("email"))
     report: dict = {"outcome": "capture"}
-    settlement.settle_report(CONFIG, SimpleNamespace(), report, None)
+    settlement.settle_report(CONFIG, SimpleNamespace(), report)
     assert report["artifacts"] == []
     assert report["artifacts_error"].startswith("OSError")
-    assert calls == ["email"]  # rule 32: the send is still attempted
-
-
-def test_settle_report_records_email_failure(monkeypatch) -> None:
-    monkeypatch.setattr(settlement.reporting, "emit_artifacts", lambda *a: [])
-    monkeypatch.setattr(settlement.reporting, "maybe_email",
-                        lambda *a: (_ for _ in ()).throw(RuntimeError("smtp")))
-    report: dict = {"outcome": "survival"}
-    settlement.settle_report(CONFIG, SimpleNamespace(), report, None)
-    assert report["email_error"].startswith("RuntimeError")
-    assert report["outcome"] == "survival"  # the report itself survives
+    assert report["outcome"] == "capture"  # the report itself survives

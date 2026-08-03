@@ -100,7 +100,7 @@ class SimulationSdk:
             report = (self._play_with_gui(runtime, gui_screenshot, start_turn) if gui
                       else runtime.play(start_turn))
         except Exception as error:  # noqa: BLE001 - rules 32/35: EVERY game
-            # end (any failure whatsoever) must still be reported and emailed;
+            # end (any failure whatsoever) must still be reported;
             # an unreported forfeit is the worst outcome the league allows.
             report = reporting.technical_loss_report(MY_ROLE, runtime, error)
             # rules 35-36: the rival may be alive and owed our records even
@@ -124,7 +124,7 @@ class SimulationSdk:
         if report.get("outcome") in ("capture", "survival"):
             resume_mod.discard(self.config)  # a finished game never resumes
         report["gatekeeper"] = gatekeeper.queue_status()  # section-5 monitoring view
-        settle_report(self.config, runtime, report, gatekeeper)  # rule-32 hardened
+        settle_report(self.config, runtime, report)  # rule-32 hardened
         # Shutdown grace: our daemon server dies with the process; give the
         # opponent's in-flight final exchange a moment to complete cleanly.
         time.sleep(SHUTDOWN_GRACE_SEC)

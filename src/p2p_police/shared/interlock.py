@@ -6,8 +6,8 @@ Two guards that make rehearsal mistakes IMPOSSIBLE rather than discouraged:
   league/lecturer ONLY when a counted game is doubly armed — `[email]
   counted = true` in config AND the `--counted` CLI flag on this very
   invocation. Rehearsals and friendlies structurally cannot reach the
-  league inbox. Both sdk/reporting.maybe_email and the series email path
-  route through here.
+  league inbox. The series report email (sdk/series.maybe_email_series —
+  the ONE mandated email, book §9.3.3) routes through here.
 * Sparring posture assertion: `peer --sparring` refuses at load time any
   warm-up file that carries tuned play ([strategy] overrides / weight
   tables) or an armed email path.

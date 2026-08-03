@@ -1,9 +1,11 @@
-"""SDK glue: auto-email fires only in send mode (rule 32); verify_log paths."""
+"""Report-email cadence (book §9.3.3): sub-game ends NEVER email — the one
+mandated report email is the series result (tests/unit/test_sdk/
+test_series_email.py); verify_log paths."""
 
 import json
 from pathlib import Path
 
-from p2p_police.sdk import reporting
+from p2p_police.sdk import reporting, settlement
 from p2p_police.sdk.sdk import SimulationSdk
 
 
@@ -15,56 +17,24 @@ def make_sdk(config_dir: Path, mode: str) -> SimulationSdk:
     return SimulationSdk(str(config_dir))
 
 
-def test_disabled_mode_sends_nothing(config_dir: Path) -> None:
-    sdk = make_sdk(config_dir, "disabled")
-    report = {"outcome": "capture", "artifacts": []}
-    reporting.maybe_email(sdk.config, report)
+def test_game_end_never_emails_even_in_send_mode(config_dir: Path, monkeypatch) -> None:
+    """Book §9.3.3 (p. 79): the result file is THE mandated emailed report —
+    one per series, from the aggregation step. A sub-game settlement must not
+    email even when [email].mode == 'send'."""
+    sdk = make_sdk(config_dir, "send")
+    monkeypatch.setattr(
+        "p2p_police.infra.email_sender.send_report",
+        lambda *a, **k: (_ for _ in ()).throw(AssertionError("game end emailed")))
+    monkeypatch.setattr(settlement.reporting, "emit_artifacts", lambda *a: [])
+    report: dict = {"outcome": "capture"}
+    settlement.settle_report(sdk.config, object(), report)
     assert "email_message_id" not in report
+    assert "email_error" not in report
 
 
-def test_send_mode_calls_the_sender(config_dir: Path, monkeypatch, tmp_path: Path) -> None:
-    sdk = make_sdk(config_dir, "send")
-    attachment = tmp_path / "result_x.json"
-    attachment.write_text("{}", encoding="utf-8")
-    calls = {}
-
-    def fake_send(gate, recipient, subject, body, attachments):
-        calls.update(recipient=recipient, n=len(attachments))
-        return "msg-123"
-
-    monkeypatch.setattr("p2p_police.infra.email_sender.send_report", fake_send)
-    report = {"outcome": "survival", "artifacts": [str(attachment)]}
-    reporting.maybe_email(sdk.config, report)
-    assert report["email_message_id"] == "msg-123"
-    assert calls == {"recipient": "nobody@example.com", "n": 1}
-
-
-def test_league_recipient_without_arming_is_refused_on_the_report(
-        config_dir: Path, monkeypatch) -> None:
-    """Lecturer-address interlock through maybe_email: nothing sends, the
-    refusal lands ON the report (the game outcome must still surface)."""
-    sdk = make_sdk(config_dir, "send")
-    sdk.config.private["email"]["recipient"] = "rmisegal+uoh26finalgame@gmail.com"
-    calls: list = []
-    monkeypatch.setattr("p2p_police.infra.email_sender.send_report",
-                        lambda *a, **k: calls.append(a) or "never")
-    report = {"outcome": "survival", "artifacts": []}
-    reporting.maybe_email(sdk.config, report)
-    assert calls == []  # structurally cannot fire
-    assert "email_message_id" not in report
-    assert "counted" in report["email_refused"]
-
-
-def test_league_recipient_with_both_armings_sends(config_dir: Path, monkeypatch) -> None:
-    sdk = make_sdk(config_dir, "send")
-    sdk.config.private["email"].update(recipient="rmisegal@gmail.com",
-                                       counted=True, counted_cli_armed=True)
-    monkeypatch.setattr("p2p_police.infra.email_sender.send_report",
-                        lambda *a, **k: "msg-armed")
-    report = {"outcome": "survival", "artifacts": []}
-    reporting.maybe_email(sdk.config, report)
-    assert report["email_message_id"] == "msg-armed"
-    assert "email_refused" not in report
+def test_reporting_module_has_no_email_path() -> None:
+    """The per-sub-game email path stays deleted (book §9.3.3)."""
+    assert not hasattr(reporting, "maybe_email")
 
 
 def test_verify_log_both_verdicts(tmp_path: Path) -> None:
