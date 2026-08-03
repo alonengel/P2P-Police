@@ -1191,3 +1191,10 @@ sdk/series.maybe_email_series is now the sole sender, still behind the
 lecturer-address interlock. ADR-0009 addendum records the reading.
 Runbook step 4/5 rewritten: no per-game email; commit AND push the four
 artifacts per game. Friendly artifacts committed in both repos.
+
+**Round 2 (same day).** Prompt: verify the two book boxes (lie detection
+p. 30, scent-model lock p. 31), section 5.3.1, and the p. 40 commit-id
+box. First three verified implemented; the p. 40 box exposed a gap - the
+Step-0 handshake identity omitted github_commit (series report filled the
+rival column with "unknown"). Fixed: identity_block now declares
+git_commit_hash() (incl. -dirty marking) in both repos, with tests.

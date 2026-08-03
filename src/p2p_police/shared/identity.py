@@ -11,7 +11,14 @@ from p2p_police.shared.sysinfo import hardware_spec
 
 
 def identity_block(private: dict, group_id: str) -> dict:
-    """Rules 37-38/49 + rule 24: who we are, what we run, what we play on."""
+    """Rules 37-38/49 + rule 24: who we are, what we run, what we play on.
+
+    Also rule 53 + the book's p. 40 חובה box (§5.5): the Step-0 declaration
+    must name the EXACT commit id the declaring side runs — it is the only
+    way the rival can fill our column of its own declaration, and the series
+    report reads the rival's commit from exactly this block."""
+    from p2p_police.report.code_identity import git_commit_hash
+
     game = private.get("game", {})
     return {
         "repos": game.get("repos", {}),
@@ -21,4 +28,5 @@ def identity_block(private: dict, group_id: str) -> dict:
         "members": game.get("members", []),
         "llm_model": private.get("llm", {}).get("model", "template"),
         "hardware_spec": hardware_spec(),
+        "github_commit": git_commit_hash(),
     }
