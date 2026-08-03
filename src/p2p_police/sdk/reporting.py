@@ -117,7 +117,8 @@ def emit_artifacts(config, runtime, report: dict) -> list:
             artifacts.build_declaration(
                 config, game_id, game_uid,
                 int(config.private["game"].get("counted_games_played", 0)),
-                opponent=report.get("opponent_info", {})),
+                opponent=report.get("opponent_info", {}),
+                started_at=report.get("started_at")),
             results, game_ids.declaration_name(game_id)),
         artifacts.emit(
             artifacts.build_config_artifact(config, game_id, game_uid, sub_game),

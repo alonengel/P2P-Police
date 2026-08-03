@@ -19,13 +19,20 @@ def test_game_id_is_order_independent() -> None:
 
 
 def test_declaration_carries_step0_fields(config_dir: Path) -> None:
+    """Book-attached 1-pre-game-declaration shape: symmetric group_1/group_2
+    ordered by group_id, game times + token cap at top level."""
     config = Config.load(config_dir)
-    doc = artifacts.build_declaration(config, "a-vs-b", "uid1", games_played=2)
-    group = doc["group"]
-    assert group["group_id"] == "anrbj666"
-    assert group["counted_games_played"] == 2
-    assert group["hardware_spec"]["cpu_cores"] > 0
-    assert group["github_commit"]
+    doc = artifacts.build_declaration(config, "a-vs-b", "uid1", games_played=2,
+                                      started_at="2026-08-03T10:00:00+00:00")
+    assert doc["declaration_type"] == "pre_game_declaration"
+    assert doc["game_started_at"] and doc["game_ended_at"]
+    assert set(doc["links"]) == {"declaration", "config", "log", "result"}
+    assert set(doc["groups"]) == {"group_1", "group_2"}
+    ours = next(g for g in doc["groups"].values() if g["group_id"] == "anrbj666")
+    assert ours["counted_games_played"] == 2
+    assert ours["hardware_spec"]["cpu_cores"] > 0
+    assert ours["github_commit"] and ours["signature"].startswith("sha256:")
+    assert doc["max_tokens_per_game"] == 200000
     assert doc["token_budget_per_series"] == 200000
 
 
@@ -68,16 +75,19 @@ def test_result_reports_not_comparable_digest_as_null(config_dir: Path) -> None:
 
 
 def test_declaration_is_signed_and_carries_opponent(config_dir: Path) -> None:
-    """Rules 24/37-38/49: hardware sealed, opponent identity persisted,
-    sign-then-insert signature verifiable by a third party."""
+    """Rules 24/37-38/49: hardware sealed, the opponent's declared identity
+    fills its OWN group column, sign-then-insert verifiable by a third party."""
     config = Config.load(config_dir)
     opponent = {"group_id": "rival-88", "hardware_spec_sha256": "ab" * 32,
                 "identity": {"repos": {"cop": "u1", "thief": "u2"},
                              "counted_games_played": 1}}
     doc = artifacts.build_declaration(config, "a-vs-b", "uid1", 2, opponent=opponent)
-    assert doc["group"]["hardware_spec_sha256"]
-    assert doc["opponent"]["group_id"] == "rival-88"
-    assert doc["opponent"]["identity"]["counted_games_played"] == 1
+    ours = next(g for g in doc["groups"].values() if g["group_id"] == "anrbj666")
+    theirs = next(g for g in doc["groups"].values() if g["group_id"] == "rival-88")
+    assert ours["hardware_spec_sha256"]
+    assert theirs["hardware_spec_sha256"] == "ab" * 32
+    assert theirs["counted_games_played"] == 1
+    assert theirs["repos"] == {"cop": "u1", "thief": "u2"}
     signed = dict(doc)
     signature = signed.pop("consensus_signature")
     assert artifacts.consensus_signature(signed) == signature

@@ -14,8 +14,6 @@ from pathlib import Path
 from p2p_police.domain import game_ids
 from p2p_police.domain.negotiation import config_sha256
 from p2p_police.report.code_identity import git_commit_hash  # noqa: F401 (re-export)
-from p2p_police.shared.sysinfo import hardware_spec
-from p2p_police.shared.version import CODE_VERSION
 
 SCHEMA = "p2p-police-artifacts"
 SCHEMA_VERSION = "1.00"
@@ -34,6 +32,14 @@ def consensus_signature(body: dict) -> str:
     return hashlib.sha256(spaced.encode("utf-8")).hexdigest()
 
 
+def build_declaration(*args, **kwargs) -> dict:
+    """Book-attached shape — lives in report/declaration.py (150-line cap);
+    re-exported here so the sdk keeps one artifacts facade."""
+    from p2p_police.report.declaration import build_declaration as _build
+
+    return _build(*args, **kwargs)
+
+
 def _base(kind: str, game_id: str, game_uid: str, config) -> dict:
     repos = config.private["game"].get("repos", {})
     return {
@@ -44,46 +50,6 @@ def _base(kind: str, game_id: str, game_uid: str, config) -> dict:
         "game_uid": game_uid,
         "links": {"cop": repos.get("cop", ""), "thief": repos.get("thief", "")},
     }
-
-
-def build_declaration(config, game_id: str, game_uid: str, games_played: int,
-                      opponent: dict | None = None) -> dict:
-    """Step-0 sealed pre-game data: identity, hardware, commit, game count.
-
-    SIGNED (sign-then-insert, like the result) and carrying the opponent's
-    negotiated identity + hardware seal so a third party can verify both
-    sides' declarations from OUR artifact alone (rules 24/37-38/49)."""
-    doc = _base("declaration", game_id, game_uid, config)
-    spec = hardware_spec()
-    doc.update(
-        {
-            "declared_at": utc_now(),
-            "group": {
-                "group_id": config.group_id,
-                "members": config.private["game"].get("members", []),
-                "code_version": CODE_VERSION,
-                "github_commit": git_commit_hash(),
-                "counted_games_played": games_played,
-                "hardware_spec": spec,
-                "hardware_spec_sha256": config_sha256(spec),
-                "mcp_servers": config.private["game"].get("mcp_servers", {}),
-                "llm_model": (config.private.get("llm", {}).get("model")
-                              or config.private.get("trash_talk", {})
-                              .get("provider", "template")),
-            },
-            "opponent": {
-                "group_id": (opponent or {}).get("group_id")
-                or (opponent or {}).get("identity", {}).get("group_id", "unknown"),
-                "identity": (opponent or {}).get("identity", {}),
-                "hardware_spec_sha256": (opponent or {}).get("hardware_spec_sha256", ""),
-            },
-            "token_budget_per_series": config.shared["network_and_league"][
-                "token_budget_per_series"
-            ],
-        }
-    )
-    doc["consensus_signature"] = consensus_signature(doc)  # sign-then-insert
-    return doc
 
 
 def build_config_artifact(config, game_id: str, game_uid: str, sub_game: int) -> dict:
