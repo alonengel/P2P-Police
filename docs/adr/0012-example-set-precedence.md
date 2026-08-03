@@ -64,3 +64,33 @@ Table-20 name.
 - The g01–g06 friendly artifacts predate these shapes and stay as
   committed history; the next uncounted window validates the new chain
   live before the counted game.
+
+## Addendum (2026-08-03, evening) — the Moodle item-4 instruction
+
+The final-project Moodle page (the grader's own instructions, item 4)
+says: "לספר זה מצורפים 4 תבניות של קובצי JSON שאותם הסוכן צריך לשלוח
+למרצה בסיום המשחק שהם חתומים ומוסכמים על 2 הקבוצות" — send the lecturer
+all four attached templates at game end. The book mandates emailing ONE
+file (§9.3.3: the result is "הדוח המחייב הנשלח בדוא\"ל"; the p. 80 box
+speaks of the email's attachment in the singular) and homes the other
+three in GitHub (App ו §2 rule 4, §9.4). This is NOT a book-vs-example
+conflict (the standing rule above does not apply): it is the grader's
+assignment instruction — the channel the book itself arrives through —
+and it extends, not contradicts.
+
+**Resolution (superset, agreed with imreeyal):** the ONE series email
+attaches all four template TYPES, every instance — declaration (1),
+config g01..gNN, log g01..gNN, result (1); the result stays the report
+and the body, so the book's mandate is untouched. "4 תבניות" reads as
+four TYPES: the book's own Table-20 `g<NN>` naming makes configs and
+logs per-window, and the attached 4-final-result references per-window
+logs and commits. A partial evidence set is named and refused, never
+sent (sdk/series_email.py).
+
+**Same-day pair finding (both teams, same bug class):** the league
+standings fields asserted counted-game facts in an UNCOUNTED friendly
+(count bump + diversity reward). Fixed: `games_played_including_this`
+bumps and `diversity_reward_applied` fires only when the series is
+doubly ARMED as counted; a friendly passes the declared counts through
+unbumped, reward all-false. `first_meeting_between_groups` stays
+factual either way.

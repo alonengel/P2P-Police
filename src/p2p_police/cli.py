@@ -134,6 +134,7 @@ def main(argv: list[str] | None = None) -> int:
             maybe_email_series,
         )
         from p2p_police.shared.config import Config
+        from p2p_police.shared.interlock import EmailInterlockError, counted_armed
 
         config = Config.load(args.config_dir)
         if args.counted:  # CLI half of the lecturer-address interlock
@@ -145,7 +146,8 @@ def main(argv: list[str] | None = None) -> int:
         try:
             doc, excluded = aggregate_series(
                 dirs, args.game_id, config.score_table(),
-                config.shared["network_and_league"]["num_games"], ours)
+                config.shared["network_and_league"]["num_games"], ours,
+                counted=counted_armed(config))  # friendlies fabricate no count
             if args.counted:  # rule 52: one counted series per rival pairing
                 refuse_repeat_counted(dirs[0], args.game_id, doc["game_uid"])
         except SeriesSettlementError as error:
@@ -153,14 +155,11 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print("".join(f"excluded: {note}\n" for note in excluded), end="")
         path = emit(doc, Path(dirs[0]), result_name(args.game_id))
-        print(json.dumps(doc["final_result"], indent=2))
-        print(f"written: {path}")
+        print(json.dumps(doc["final_result"], indent=2) + f"\nwritten: {path}")
         if args.email:
-            from p2p_police.shared.interlock import EmailInterlockError
-
-            try:
-                message_id = maybe_email_series(config, doc, path)
-            except EmailInterlockError as error:
+            try:  # all four template types attached (grader's Moodle item 4)
+                message_id = maybe_email_series(config, doc, path, dirs=dirs)
+            except (EmailInterlockError, SeriesSettlementError) as error:
                 print(f"EMAIL REFUSED: {error}")
                 return 1
             if message_id and args.counted:  # ledger remembers league reports
