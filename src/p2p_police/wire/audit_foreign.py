@@ -23,6 +23,7 @@ import hashlib
 
 from p2p_police.domain.crypto import REQUIRED_RECORD_FIELDS, canonical
 from p2p_police.domain.primitives import Role
+from p2p_police.wire.dispute import own_barrier_timeline, unconceded_capture
 
 VERIFIED, TAMPERED = "Verified OK", "TAMPERED"
 NOT_COMPARABLE = None  # digest_match when the two constructions differ
@@ -104,37 +105,7 @@ def movement_ok(records: list, grid: int) -> bool:
     return True
 
 
-def unconceded_capture(their_records: list, barriers: list, grid: int) -> dict | None:
-    """Rule 46/47 adjudicated from a FOREIGN rival's own revealed positions.
-
-    A barrier capture is only ever SELF-declared: under hidden information the
-    cop cannot see that its wall sealed the thief, so a peer that never runs
-    its own imprisonment check simply plays on and claims survival (measured
-    live 2026-08-01). The reveal settles it after the fact — their positions
-    are in their own records — so the evidence exists even though the live
-    game could not use it. Returns the first breach as an evidence dict, or
-    None. Reported, never a unilateral rewrite: the logs decide (rule 35).
-    """
-    walls = {(cell[0], cell[1]) for cell in barriers}
-    for record in sorted((r for r in their_records if _step_of(r) is not None),
-                         key=_step_of):
-        cell = record.get("payload", {}).get("position")
-        if not (isinstance(cell, list) and len(cell) == 2):
-            continue
-        spot = (cell[0], cell[1])
-        neighbors = [(spot[0] + dr, spot[1] + dc)
-                     for dr, dc in ((-1, 0), (1, 0), (0, 1), (0, -1))]
-        sealed = all(not (0 <= r < grid and 0 <= c < grid) or (r, c) in walls
-                     for r, c in neighbors)
-        if spot in walls or sealed:
-            return {"step": _step_of(record), "cell": list(spot),
-                    "rule": "46 (barrier on the thief)" if spot in walls
-                            else "47 (fully surrounded)",
-                    "barriers": sorted(list(w) for w in walls)}
-    return None
-
-
-def judge(their_records: list, grid: int, barriers=None) -> dict:
+def judge(their_records: list, grid: int, barriers=None, outcome=None) -> dict:
     """Tier-b verdict over a commit-clean FOREIGN-schema half. 'Verified OK'
     means: commits clean + no derivable-rule violation. The digest tier is
     only defined when both sides share one construction — here it is not,
@@ -145,12 +116,15 @@ def judge(their_records: list, grid: int, barriers=None) -> dict:
     return {
         "audit": VERIFIED if ok else TAMPERED,
         "digest_match": NOT_COMPARABLE,
-        "disputed_capture": unconceded_capture(their_records, barriers or [], grid),
+        "disputed_capture": unconceded_capture(
+            their_records, barriers or [], grid, outcome),
     }
 
 
-def foreign_verdict(their_records: list, grid: int, barriers) -> tuple:
+def foreign_verdict(exchange, grid: int, outcome=None) -> tuple:
     """The tier-b triple the hidden runtime consumes: (audit, digest_match,
-    disputed_capture)."""
-    tier = judge(their_records, grid, barriers)
+    disputed_capture). Reads OUR barrier clock off the exchange, because a
+    wall constrains only from the step it was placed (unconceded_capture)."""
+    tier = judge(exchange.their_records, grid,
+                 own_barrier_timeline(exchange.own_records), outcome)
     return tier["audit"], tier["digest_match"], tier["disputed_capture"]

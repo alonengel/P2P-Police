@@ -155,8 +155,7 @@ def finish(rt) -> dict:
                 # rules 46/47 ride along: a barrier capture is self-declared
                 # live, so THEIR reveal is the only place we can prove it
                 verdict, digest_match, rt.disputed_capture = audit_foreign.foreign_verdict(
-                    rt.exchange.their_records, geometry(rt.config.shared)[0],
-                    getattr(getattr(rt.own, "board", None), "barriers", ()))
+                    rt.exchange, geometry(rt.config.shared)[0], rt.own.outcome.value)
     except DeadlineExpiredError:
         pass
     except GameRuleError:
