@@ -113,7 +113,10 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
     # (reference cadence: the thief opens every round).
     entries = sorted(
         ((r["payload"], verify_declared(r))
-         for r in list(own_records) + list(their_records) if "payload" in r),
+         for r in list(own_records) + list(their_records)
+         # typed records (the sealed step-zero declaration) are not actions:
+         # they replay nothing and their key set is their own
+         if "payload" in r and "type" not in r["payload"]),
         key=lambda e: (e[0]["step"], 0 if e[0]["role"] == Role.THIEF.value else 1))
     for payload, declared in entries:
         if expected_sub_game is not None \
@@ -166,7 +169,5 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
 
 def consistent(reconstruction: dict, outcome: Outcome, turns_completed: int) -> bool:
     """Does the revealed physics reproduce the game this peer lived?"""
-    return (
-        reconstruction["outcome"] == outcome.value
-        and reconstruction["turns_completed"] == turns_completed
-    )
+    return (reconstruction["outcome"] == outcome.value
+            and reconstruction["turns_completed"] == turns_completed)

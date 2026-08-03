@@ -43,10 +43,15 @@ def build_step_payload(
 
 
 def commit_hash(payload: dict, nonce: str) -> str:
-    """H_commit = SHA-256 over canonical(payload) + "|" + nonce (reference form)."""
-    missing = [f for f in REQUIRED_RECORD_FIELDS if f not in payload]
-    if missing:
-        raise ValueError(f"sealed payload missing fields: {missing}")
+    """H_commit = SHA-256 over canonical(payload) + "|" + nonce (reference form).
+
+    The pinned field set binds MOVE payloads only: a `type`-keyed payload is
+    a system record (the book-attached log's sealed step-zero declaration)
+    whose schema is its own — same hash construction, no field demands."""
+    if "type" not in payload:
+        missing = [f for f in REQUIRED_RECORD_FIELDS if f not in payload]
+        if missing:
+            raise ValueError(f"sealed payload missing fields: {missing}")
     material = f"{canonical(payload)}|{nonce}"
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
 

@@ -26,6 +26,12 @@ class HiddenExchange(SealedExchange):
         payload = crypto.build_step_payload(
             step, self.role.value, self.sub_game, state_digest, action, hint, verdict
         )
+        return self.seal_record(payload)
+
+    def seal_record(self, payload: dict) -> str:
+        """Seal ANY record (move or typed step-zero declaration) into
+        own_records; typed records never cross the live wire — the audit
+        reveal and the log carry them (reference step-0 convention)."""
         nonce = crypto.new_nonce()
         commit = crypto.commit_hash(payload, nonce)
         self.own_records.append({"payload": payload, "nonce": nonce, "commit": commit})

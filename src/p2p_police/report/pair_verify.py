@@ -27,7 +27,10 @@ def _by_key(records: list[dict]) -> dict:
     return {(r["payload"]["step"], r["payload"]["role"]): r
             for r in records
             if isinstance(r.get("payload"), dict)
-            and {"step", "role"} <= r["payload"].keys()}
+            and {"step", "role"} <= r["payload"].keys()
+            # typed step-zero declarations never cross the live wire, so the
+            # rival's view LEGITIMATELY lacks them — not a cross-mismatch
+            and "type" not in r["payload"]}
 
 
 def _public(payload: dict) -> dict:

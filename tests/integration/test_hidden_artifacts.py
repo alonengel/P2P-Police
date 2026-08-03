@@ -83,8 +83,10 @@ def test_illegal_revealed_action_is_tampering(hidden_pair):
     _reports, sides = hidden_pair
 
     def mutate(doc):
-        doc["records"][0]["payload"]["action"] = {"type": "move", "move": "N"}  # off-board
-        _reseal(doc["records"][0])
+        # first MOVE record: records[0] is the typed step-zero declaration
+        first = next(r for r in doc["records"] if "type" not in r["payload"])
+        first["payload"]["action"] = {"type": "move", "move": "N"}  # off-board
+        _reseal(first)
 
     bad = _rewritten(sides["police"]["log_anrbj666-vs-anrbj666_g01.json"], mutate)
     assert SimulationSdk.verify_log(str(bad)) == "TAMPERED"

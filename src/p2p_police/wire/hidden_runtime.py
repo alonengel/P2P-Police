@@ -157,6 +157,9 @@ class HiddenRuntime:
         try:
             if resume_from == 0:
                 self.negotiate()
+                from p2p_police.wire.step_zero import seal_step_zero
+
+                seal_step_zero(self)  # sealed commit-id declaration (rule 53)
             while self.own.outcome is Outcome.ONGOING:
                 self.watchdog.beat()  # heartbeat per half-turn (rule 7)
                 if self.own.next_actor is self.role:

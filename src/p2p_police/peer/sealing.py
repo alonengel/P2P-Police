@@ -142,8 +142,10 @@ class SealedExchange:
         return [record["nonce"] for record in self.own_records]
 
     def own_verdicts(self) -> list[bool]:
-        """Intent flags, disclosed only at audit alongside the nonces."""
-        return [record["payload"]["verdict"] for record in self.own_records]
+        """Intent flags, disclosed only at audit alongside the nonces (typed
+        step-zero declarations carry no intent — skipped, not crashed)."""
+        return [record["payload"]["verdict"] for record in self.own_records
+                if "verdict" in record["payload"]]
 
     def audit_theirs(self, revealed_nonces: list[str]) -> str:
         """'Verified OK' or 'TAMPERED' (binary; one forged step voids all).
