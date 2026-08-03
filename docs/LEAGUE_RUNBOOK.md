@@ -85,14 +85,20 @@ ODD windows (1,3,5), the thief repo the EVEN ones (2,4,6).
    and push them per game, step 5 below) — through shared/gatekeeper,
    recipient from config, and only when `[email] mode = "send"`. The
    subject carries the game_id, the final score and series_tie/winner.
-8. **Rule 53 stays manual**: email the lecturer the commit id used for each
-   counted game (see "Per counted game" step 1) — the code never does this.
+8. **Rule 53 is automatic** (corrected 2026-08-04 — the earlier "email the
+   lecturer the commit id manually" step here was NOT a book requirement):
+   rule 53 requires the commit hash IN THE STEP-ZERO DECLARATION, updated
+   every game (App ה #53, source ch. 5), and §5.5 adds it rides the
+   end-of-game emailed JSON's github_commit field. The code does all of
+   it: sealed step-zero (fresh rev-parse per window), declaration groups,
+   and the result's per-sub-game github_commit in the ONE auto-sent
+   report. Our only duty: play a pushed commit so the hash resolves.
 
 ## Per counted game
 
-1. **EMAIL THE LECTURER THE COMMIT ID** used for this game (rule 53 + App ו
-   §2.5) — to rmisegal@gmail.com, manually. The declaration artifact records
-   the hash; the email is OUR duty, not the code's.
+1. **Play a PUSHED commit** (rule 53's human half): commit + push before
+   launch so every sealed/declared hash resolves on GitHub. The code
+   records it everywhere the book requires — no manual email exists.
 2. Start `cloudflared tunnel run copthief`, then the peer
    (`uv run p2p-police peer --gui`).
 2b. **Probe your OWN public URL before declaring the counted game** — one
