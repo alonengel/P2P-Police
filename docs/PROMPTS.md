@@ -1224,3 +1224,11 @@ book-attached declaration shape (report/declaration.py), ADR-0012
 (two example sets: precedence + shape-vs-content standing rule, agreed
 with imreeyal), and the counted game.json draft
 (docs/drafts/game.counted.json, agreed_between anrbj666/imreeyal).
+
+**Round 4 (same day, evening).** Moodle item 4 (grader instruction:
+send the lecturer the 4 signed templates at game end) resolved as
+superset - the one series email now attaches every instance of all
+four template types, partial sets refused; imreeyal concurred and
+mirrors. Their diff of our 16:00 window caught the counted-record
+fabrication bug class (league fields in a friendly) - fixed keyed on
+the counted arming, both teams. VRAM now real via the driver registry.
