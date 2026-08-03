@@ -1217,3 +1217,10 @@ tolerance across crypto/reconstruct/pair-verify; role-aware commit
 columns; three league fields in final_result; mutual_agreement trimmed
 to {sha256, confirmed}; flat config artifact (back-compat reader);
 real hardware values + provider-named llm_model.
+
+**Round 3 (same day).** Prompt: "anything we are missing?" -> four gaps
+closed: the rival step-zero READER (two-channel mismatch finding), the
+book-attached declaration shape (report/declaration.py), ADR-0012
+(two example sets: precedence + shape-vs-content standing rule, agreed
+with imreeyal), and the counted game.json draft
+(docs/drafts/game.counted.json, agreed_between anrbj666/imreeyal).
