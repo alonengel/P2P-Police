@@ -1239,3 +1239,11 @@ attached - matching the reference implementation). Attachment policy
 REVERTED to the result as the single attachment; Moodle item 4 re-read
 as two-channel delivery (email + GitHub). ADR-0012 second addendum
 carries the quotes; flip coordinated with imreeyal.
+
+**Round 6 (same day, late night).** Imree signature finding resolved:
+their repeated sha256 is the reference symmetric_outcome scope, NOT a
+cached value - we reproduced 42f2a1ba independently from their body and
+from ours (identical outcome patterns across the two windows). Adopted
+the reference scope jointly for mutual_agreement (byte-identical across
+peers, machine-checkable agreement); step-0 reader accepts both type
+spellings (system_spec answered). ADR-0012 third addendum.
