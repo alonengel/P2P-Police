@@ -127,3 +127,34 @@ address, the format, the per-side duty, or the OAuth scope).
 Coordinated with imreeyal so both teams flip together; a forum
 confirmation question to the lecturer remains the recommended closer,
 and flipping back is a ten-minute change if he answers "all four".
+
+## Third addendum (2026-08-03, late night) — mutual_agreement: the reference symmetric scope, jointly
+
+Cross-diff of the 19:35 mails found imreeyal's `mutual_agreement.sha256`
+IDENTICAL across two different windows. Investigated to the end: their
+scope is the reference's `symmetric_outcome` VERBATIM (emit.py: "hash
+only the symmetric outcome … never per-peer tokens or wall-clock
+timestamps") — {game_id, aggregate, rows trimmed to number/roles/
+result/winner/score}, sort_keys + spaced separators. We reproduced
+their production value (42f2a1ba…) independently from their body AND
+from OUR body — the two windows' outcome patterns were identical, so
+the collision was legitimate, and the cross-side hashes are
+byte-identical by construction.
+
+ADOPTED on both sides for the counted series, replacing our
+whole-body-minus-agreement signature: a field named mutual_agreement
+carrying two permanently different per-side values (ours could never
+equal theirs — it signed our own timestamps and token counts) is the
+one shape a grader's diff can misread as "דיווח סותר" (rule 35). Under
+the reference scope both teams' files carry THE SAME hash — the only
+machine-checkable form of agreement. What the narrow scope omits stays
+covered elsewhere: commits and repo links are plain fields diffed both
+ways in both files; moves are bound by the commit-reveal chain the
+audit re-proves; the uid identifies the series in every artifact.
+A jointly-registered ENRICHED preimage (uid + commit columns) is
+agreed as a post-counted upgrade, never a change the week of the game.
+
+Step-0 `type` answered: theirs is `system_spec` (repo-set spelling);
+ours stays `step_zero` (book-attached, the standing rule's canonical).
+Both readers accept both spellings; recorded as a documented
+divergence, invited to converge post-counted.

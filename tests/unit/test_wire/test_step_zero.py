@@ -72,6 +72,11 @@ def test_read_theirs_two_channel_verdict() -> None:
     zero, finding = read_theirs(revealed, {"github_commit": "fff999"})
     assert zero is not None and "differs" in finding
     assert read_theirs([], {"github_commit": "abc123"}) == (None, None)
+    # the repo-set spelling reads too (imreeyal's step-0 is type system_spec)
+    foreign = [{"payload": {"step": 0, "type": "system_spec",
+                            "github_commit": "abc123"}, "nonce": "n", "commit": "c"}]
+    zero, finding = read_theirs(foreign, {"github_commit": "abc123"})
+    assert zero["github_commit"] == "abc123" and finding is None
 
 
 def test_reconstruct_skips_the_step_zero_declaration() -> None:

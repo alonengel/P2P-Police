@@ -119,15 +119,23 @@ def test_all_four_repo_links_survive_the_flattening(tmp_path) -> None:
     assert github["beta"]["cop"] == "https://example.test/their-cop"
 
 
-def test_mutual_agreement_signed_then_inserted_and_confirmed(tmp_path) -> None:
-    """EXACTLY the book-attached shape {sha256, confirmed}: enrichment
-    belongs in the LOG's agreement block, never here (Imree diff 2026-08-03)."""
+def test_mutual_agreement_is_the_reference_symmetric_scope(tmp_path) -> None:
+    """Byte-identical across the two peers by construction: hashes ONLY
+    game_id + aggregate + trimmed rows — never per-peer tokens, timestamps
+    or commits, which legitimately differ (reference emit.py scope; adopted
+    jointly with imreeyal 2026-08-03, ADR-0012 third addendum)."""
     doc = build(tmp_path)
     agreement = doc["mutual_agreement"]
     assert set(agreement) == REFERENCE_AGREEMENT_KEYS
     assert agreement["confirmed"] is True
-    body = {k: v for k, v in doc.items() if k != "mutual_agreement"}
-    assert agreement["sha256"] == consensus_signature(body)
+    final = doc["final_result"]
+    aggregate = {k: final[k] for k in ("total_score", "sub_games_won", "ties",
+                                       "winner_group", "series_tie")}
+    rows = [{"sub_game_number": s["sub_game_number"], "roles": s["roles"],
+             "result": s["result"], "winner_group": s["winner_group"],
+             "score": s["score"]} for s in doc["sub_games"]]
+    assert agreement["sha256"] == consensus_signature(
+        {"game_id": doc["game_id"], "aggregate": aggregate, "sub_games": rows})
 
 
 def test_league_fields_friendly_fabricates_no_counted_record(tmp_path) -> None:

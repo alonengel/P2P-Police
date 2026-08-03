@@ -35,9 +35,12 @@ def read_theirs(revealed: list, negotiate_identity: dict) -> tuple[dict | None, 
     the two-channel verdict: a sealed github_commit that differs from what
     the SAME window's negotiate identity declared is a FINDING recorded on
     the report (rule-36 evidence) — never an outcome rewrite."""
+    # both step-0 spellings read: book-attached "step_zero" (ours, the
+    # standing rule's canonical) and the repo set's "system_spec" (imreeyal)
     payload = next((r.get("payload") for r in revealed
                     if isinstance(r.get("payload"), dict)
-                    and r["payload"].get("type") == "step_zero"), None)
+                    and r["payload"].get("type") in ("step_zero", "system_spec")),
+                   None)
     if payload is None:
         return None, None
     declared = (negotiate_identity or {}).get("github_commit")

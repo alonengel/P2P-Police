@@ -40,6 +40,20 @@ def build_declaration(*args, **kwargs) -> dict:
     return _build(*args, **kwargs)
 
 
+def symmetric_outcome_signature(game_id: str, sub_games: list,
+                                aggregate: dict) -> str:
+    """The reference's mutual-agreement preimage, verbatim: hash ONLY the
+    symmetric outcome (game_id + aggregate + rows trimmed to number/roles/
+    result/winner/score) — never per-peer tokens or wall-clock timestamps,
+    so BOTH peers' values are byte-identical by construction (ADR-0012;
+    verified against imreeyal's production value, 2026-08-03)."""
+    rows = [{"sub_game_number": e["sub_game_number"], "roles": e["roles"],
+             "result": e["result"], "winner_group": e["winner_group"],
+             "score": e["score"]} for e in sub_games]
+    return consensus_signature({"game_id": game_id, "aggregate": aggregate,
+                                "sub_games": rows})
+
+
 def _base(kind: str, game_id: str, game_uid: str, config) -> dict:
     repos = config.private["game"].get("repos", {})
     return {

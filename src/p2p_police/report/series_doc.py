@@ -9,7 +9,7 @@ declaration file, and this document carries the flat id pair only.
 """
 
 from p2p_police.domain import game_ids
-from p2p_police.report.artifacts import consensus_signature
+from p2p_police.report.artifacts import symmetric_outcome_signature
 
 _SCHEMA = ("Summary and final result for the WHOLE series between two teams: "
            "per-sub-game scores + aggregate; identity lives in the declaration.")
@@ -141,6 +141,8 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
 
     theirs_declared = max((_declared(n) for n in by_slot), default=0)
     bump = 1 if counted else 0
+    aggregate = {"total_score": totals, "sub_games_won": won, "ties": ties,
+                 "winner_group": winner, "series_tie": series_tie}
     doc = {
         "_schema": _SCHEMA,
         "schema_version": SCHEMA_VERSION,
@@ -153,11 +155,7 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
         "num_sub_games": expected_games,
         "sub_games": sub_games,
         "final_result": {
-            "total_score": totals,
-            "sub_games_won": won,
-            "ties": ties,
-            "winner_group": winner,
-            "series_tie": series_tie,
+            **aggregate,
             "tokens_total_series": tokens,
             # league standings inputs (book-attached 4-final-result), keyed
             # on the COUNTED arming: a friendly must not fabricate a counted
@@ -171,10 +169,11 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
                 g: bool(counted and first_meeting and winner == g) for g in names},
         },
     }
-    doc["mutual_agreement"] = {  # sign-then-insert, like the game result;
-        # EXACTLY the book-attached shape — enrichment belongs in the LOG's
-        # agreement block, never here (Imree diff 2026-08-03)
-        "sha256": consensus_signature(doc),
+    doc["mutual_agreement"] = {  # the REFERENCE symmetric-outcome scope:
+        # byte-identical on BOTH peers by construction — the only form a
+        # grader can machine-check as agreement (rule 35; ADR-0012 third
+        # addendum, adopted jointly with imreeyal)
+        "sha256": symmetric_outcome_signature(game_id, sub_games, aggregate),
         "confirmed": all(e["audit"]["log_verified"] for e in sub_games),
     }
     return doc
