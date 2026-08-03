@@ -144,10 +144,13 @@ separately, team code `anrbj666`.
 - **Orphan guard**: peer startup connect-probes its role port (refuses if
   anything answers) and verifies its own server listens after start.
 
-### Clean-commit note (2026-08-03 friendly finding)
+### Clean-commit note (2026-08-03 friendly finding; updated same day)
 
-The runner's pre-series archive sweep DELETES the previous series'
-tracked artifacts at startup, so a series started on a committed tree
-still declares `<hash>-dirty`. Before the COUNTED T: run the sweep
-early (or move the old artifacts out by hand), commit, and only then
-launch - the counted declaration should carry a clean hash.
+The declared commit id is the bare `git rev-parse HEAD` (no dirty
+qualifier — pair decision with imreeyal, see report/code_identity.py),
+so artifact churn can no longer stain the declared hash. The pre-window
+ritual still carries the honesty burden the qualifier used to: archive
+the previous window's artifacts, COMMIT, PUSH, and only then launch —
+the declared hash claims "this pushed commit is what played", and a
+clean launch tree is what makes that claim true (rule 53: the lecturer
+must be able to rev-parse it).
