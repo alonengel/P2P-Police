@@ -1198,3 +1198,22 @@ box. First three verified implemented; the p. 40 box exposed a gap - the
 Step-0 handshake identity omitted github_commit (series report filled the
 rival column with "unknown"). Fixed: identity_block now declares
 git_commit_hash() (incl. -dirty marking) in both repos, with tests.
+
+## 2026-08-03 (2) - Book-attached example conformance (Imree round)
+
+**Prompt.** Imree letter: the course chatbot serves the book's own four
+attached example artifacts; their field-by-field diff vs both teams'
+chains. "Take a look, challenge if needed" then "start the fixes".
+
+**Method.** Pulled the four files (docs/googleBotMissingFiles), verified
+every claim byte-level before coding; challenged two (the two-sets
+contradiction: repo sample-run vs book-attached; the negotiate commit
+channel stays); flagged content quirks nobody should mirror (diagonal
+moves, role confusion, self-contradicting filenames).
+
+**Outcome.** Six fixes, both repos, gates green + parity: sealed
+step_zero record with github_commit (hidden wire only) + typed-record
+tolerance across crypto/reconstruct/pair-verify; role-aware commit
+columns; three league fields in final_result; mutual_agreement trimmed
+to {sha256, confirmed}; flat config artifact (back-compat reader);
+real hardware values + provider-named llm_model.
