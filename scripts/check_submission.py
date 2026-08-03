@@ -75,6 +75,15 @@ def _parity() -> bool:
     return result.returncode == 0
 
 
+@check("rule 55: explicit code-quality self-grade in the repo")
+def _self_grade() -> bool:
+    path = Path("SELF_GRADE.md")
+    if not path.is_file():
+        return False
+    text = path.read_text(encoding="utf-8")
+    return "Grade:" in text and "code quality" in text.lower()
+
+
 @check("v1.0-submission tag (WARN until league games played)")
 def _tag() -> bool:
     tags = subprocess.run(["git", "tag"], capture_output=True, text=True).stdout

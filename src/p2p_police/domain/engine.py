@@ -1,7 +1,9 @@
 """Single-process game engine: the authoritative turn loop of the physics.
 
 Round structure (PRD 01; the intra-round order is formally re-agreed per game
-in negotiation): the COP acts first — a move OR a barrier placement (placing
+in negotiation — this cop-first cadence is the BOOKLETTER wire's; the
+reference-v3 hidden wire we play cross-team is thief-first, see
+wire/own_state.py): the COP acts first — a move OR a barrier placement (placing
 forgoes the move) — then the THIEF moves, then the full-turn boundary fires:
 both scent fields update at the agents' current cells and the outcome is
 evaluated. Capture conditions are also checked mid-round the moment they
