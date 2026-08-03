@@ -1258,3 +1258,18 @@ kit's signed flat-term keys; their own app_f_table documents it);
 #2 (always-send on technical loss) held for JOINT shape alignment as
 they requested. Small items: limiter thresholds to config, engine
 docstring two-wire note, inbound hint view-cap (earlier round).
+
+**Round 8 (2026-08-04).** COUNTED series vs imreeyal played and reported:
+prep audit (repo sync, no-op constitution adoption, empty ledger, armed
+interlock, preflight-proven mail rail, tunnel probes), arming commits as
+the declared hashes, T=01:00 launch with --counted through the runner,
+6-0 / 90-30, all audits clean, one league email, rule-52 ledger
+committed both repos, posture de-armed after. Pre-counted rounds the
+same night: bare-hash validation friendly (23:25), evidence
+reorganization (dev-history + per-window friendlies as mini repo roots,
+empty top level = counted lands as pure adds), rule-53 correction (no
+manual email - the artifacts carry the commit id), counted_games_played
+0->1 after reporting. Contributed the pairing experience upstream:
+PR #20 on Imreec/copthief-league-protocol (PAIRING-PLAYBOOK lifecycle
+doc, E2E + connection contracts, generated 14-artifact example bundle
+passing their check_artifacts gate).

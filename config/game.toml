@@ -13,7 +13,7 @@ group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
 #                                  # for a whole series (both-declare: omission never refuses)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
-counted_games_played = 0    # UPDATE before every counted game (rules 37-38)
+counted_games_played = 1    # UPDATE before every counted game (rules 37-38): imreeyal series reported 2026-08-04
 repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
 mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief-mcp.alon.website/mcp" }
 
