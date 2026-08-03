@@ -141,3 +141,11 @@ separately, team code `anrbj666`.
   and nothing is aggregated (a report must never invent a game).
 - **Orphan guard**: peer startup connect-probes its role port (refuses if
   anything answers) and verifies its own server listens after start.
+
+### Clean-commit note (2026-08-03 friendly finding)
+
+The runner's pre-series archive sweep DELETES the previous series'
+tracked artifacts at startup, so a series started on a committed tree
+still declares `<hash>-dirty`. Before the COUNTED T: run the sweep
+early (or move the old artifacts out by hand), commit, and only then
+launch - the counted declaration should carry a clean hash.
