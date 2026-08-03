@@ -91,3 +91,30 @@ conceded, so the replay downgrades it to `disputed_capture` evidence
 LAW captures (barrier-on-thief / fully surrounded) stay strict: the thief
 self-detects those and playing past them remains tampering evidence.
 Regression tests: tests/unit/test_wire/test_audit_disputed.py.
+
+## Addendum (2026-08-03): where the step-0 hardware spec lives
+
+Section 5.5 (printed p. 39) says step-0 collects the machine spec (OS,
+CPU cores+frequency, RAM, GPU/VRAM, LLM name) plus code version, group
+name and game number, "packed into one JSON string and cryptographically
+signed". Two artifact layouts satisfy that sentence and both exist in
+the course materials:
+
+- The book-attached example file set (1-pre-game-declaration +
+  3-game-log): the declaration is "the single home" for hardware + LLM
+  model, "both teams sign it and lock it cryptographically before play
+  (book ch5 Step-0)", and the log's step-0 record carries ONLY what
+  changes per sub-game (github_commit, sub_game_number, role) plus a
+  declaration_ref pointer. OUR SHAPE - report/declaration.py seals the
+  spec (per-group signature + hardware_spec_sha256 also declared at
+  negotiate), wire/step_zero.py seals the slim log record.
+- The reference kit inlines the full spec in the log's step-0
+  ("system_spec") instead. imreeyal's shape.
+
+Both are defended readings of 5.5; the attached example is the
+professor's own mapping of the ceremony onto the file set, so we keep
+it. Interop is unaffected by the difference: each side's reader takes
+either spelling/shape (wire/step_zero.py::read_theirs), the declaration
+artifact archives BOTH teams' specs per window, and our log additionally
+preserves the rival's inline system_spec among the revealed records -
+verified across five clean cross-team windows on 2026-08-03.
