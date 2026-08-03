@@ -57,6 +57,7 @@ OUR_IDENTITY = {
               "thief": "https://example.test/our-thief"},
     "mcp_servers": {"cop": "http://127.0.0.1:8802/mcp"},
     "github_commit": "abc123",
+    "counted_games_played": 2,
 }
 
 
@@ -119,11 +120,24 @@ def test_all_four_repo_links_survive_the_flattening(tmp_path) -> None:
 
 
 def test_mutual_agreement_signed_then_inserted_and_confirmed(tmp_path) -> None:
+    """EXACTLY the book-attached shape {sha256, confirmed}: enrichment
+    belongs in the LOG's agreement block, never here (Imree diff 2026-08-03)."""
     doc = build(tmp_path)
     agreement = doc["mutual_agreement"]
-    assert set(agreement) >= REFERENCE_AGREEMENT_KEYS
+    assert set(agreement) == REFERENCE_AGREEMENT_KEYS
     assert agreement["confirmed"] is True
-    assert agreement["opponent_group_id"] == "beta"
-    assert set(agreement["per_sub_game_audit"]) == {"s1", "s2"}
     body = {k: v for k, v in doc.items() if k != "mutual_agreement"}
     assert agreement["sha256"] == consensus_signature(body)
+
+
+def test_league_standings_fields_book_attached_shape(tmp_path) -> None:
+    """The book-attached 4-final-result's three league fields: declared
+    counts INCLUDING this game, first meeting, reward for the winner only."""
+    final = build(tmp_path)["final_result"]
+    assert final["games_played_including_this"]["alpha"] \
+        == OUR_IDENTITY["counted_games_played"] + 1
+    assert final["games_played_including_this"]["beta"] >= 1
+    assert final["first_meeting_between_groups"] is True
+    winner = final["winner_group"]
+    assert all(applied == (group == winner) for group, applied
+               in final["diversity_reward_applied"].items())

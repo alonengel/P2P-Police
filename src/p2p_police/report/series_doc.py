@@ -50,7 +50,11 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
         "result": summary["outcome"],
         "winner_group": winner,
         "tie": winner is None,
-        "github_commit": {me: our_identity.get("github_commit", "unknown"),
+        # role-aware (book-attached example: commits VARY per sub-game): our
+        # column is the hash the EMITTING repo stamped into its own log
+        # summary; theirs is what that window's handshake identity declared
+        "github_commit": {me: summary.get("github_commit")
+                          or our_identity.get("github_commit", "unknown"),
                           them: identity.get("github_commit", "unknown")},
         "tokens": {me: int(summary.get("tokens_total") or 0),
                    them: int(identity.get("tokens_total") or 0)},
@@ -97,7 +101,7 @@ def _links(game_id: str, github: dict) -> dict:
 
 def build_series_result(game_id: str, game_uid: str, by_slot: dict,
                         score_table, expected_games: int,
-                        our_identity: dict) -> dict:
+                        our_identity: dict, first_meeting: bool = True) -> dict:
     """Assemble the full reference-conformant result document. The
     mutual_agreement sha256 is sign-then-insert over the rest of the doc
     (ADR-0004 settlement form); confirmed = every sub-game audit clean."""
@@ -125,6 +129,16 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
         winner = None
     else:
         winner = max(totals, key=lambda group: totals[group])
+    me = next(g for g in groups if g != them)
+
+    # Rules 37-38 declarations, INCLUDING this game: ours from our config's
+    # declared count, theirs the largest count any window's handshake declared
+    def _declared(n: int) -> int:
+        identity = ((by_slot[n]["summary"].get("opponent_info") or {})
+                    .get("identity") or {})
+        return int(identity.get("counted_games_played", 0))
+
+    theirs_declared = max((_declared(n) for n in by_slot), default=0)
     doc = {
         "_schema": _SCHEMA,
         "schema_version": SCHEMA_VERSION,
@@ -143,13 +157,20 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
             "winner_group": winner,
             "series_tie": series_tie,
             "tokens_total_series": tokens,
+            # league standings inputs (book-attached 4-final-result): the
+            # diversity reward rides a WIN in the first counted meeting only
+            "games_played_including_this": {
+                me: int(our_identity.get("counted_games_played", 0)) + 1,
+                them: theirs_declared + 1},
+            "first_meeting_between_groups": first_meeting,
+            "diversity_reward_applied": {
+                g: bool(first_meeting and winner == g) for g in names},
         },
     }
-    doc["mutual_agreement"] = {  # sign-then-insert, like the game result
+    doc["mutual_agreement"] = {  # sign-then-insert, like the game result;
+        # EXACTLY the book-attached shape — enrichment belongs in the LOG's
+        # agreement block, never here (Imree diff 2026-08-03)
         "sha256": consensus_signature(doc),
         "confirmed": all(e["audit"]["log_verified"] for e in sub_games),
-        "opponent_group_id": them,
-        "per_sub_game_audit": {f"s{e['sub_game_number']}": e["audit"]
-                               for e in sub_games},
     }
     return doc

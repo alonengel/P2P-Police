@@ -34,6 +34,18 @@ def refuse_repeat_counted(results_dir, game_id: str, uid: str) -> None:
             f"{prior.get('game_uid')}); one counted game per rival - refusing")
 
 
+def first_meeting(results_dir, game_id: str, uid: str) -> bool:
+    """League-standings input (book-attached 4-final-result): is this the
+    first counted meeting of the pairing? True unless a DIFFERENT series
+    against this pairing was already league-reported — the SAME uid is this
+    series re-closing (an email retry) and still the first meeting."""
+    path = _counted_ledger(results_dir)
+    if not path.is_file():
+        return True
+    prior = json.loads(path.read_text(encoding="utf-8")).get(game_id)
+    return not prior or prior.get("game_uid") == uid
+
+
 def record_counted(results_dir, game_id: str, uid: str, message_id) -> None:
     """Append this counted series to the ledger AFTER the league email sent."""
     path = _counted_ledger(results_dir)

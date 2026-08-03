@@ -119,8 +119,11 @@ def aggregate_series(results_dirs, game_id: str, score_table,
             else list(results_dirs))
     by_slot, excluded, uid = collect_logs(dirs, game_id, expected_games)
     require_settled(by_slot, game_id, expected_games, excluded)
+    from p2p_police.sdk.counted_ledger import first_meeting  # circular-safe here
+
     doc = build_series_result(game_id, uid, by_slot, score_table,
-                              int(expected_games), our_identity or {})
+                              int(expected_games), our_identity or {},
+                              first_meeting=first_meeting(dirs[0], game_id, uid))
     return doc, excluded
 
 

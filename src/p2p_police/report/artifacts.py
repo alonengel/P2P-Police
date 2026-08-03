@@ -67,7 +67,9 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int,
                 "hardware_spec": spec,
                 "hardware_spec_sha256": config_sha256(spec),
                 "mcp_servers": config.private["game"].get("mcp_servers", {}),
-                "llm_model": config.private.get("llm", {}).get("model", "template"),
+                "llm_model": (config.private.get("llm", {}).get("model")
+                              or config.private.get("trash_talk", {})
+                              .get("provider", "template")),
             },
             "opponent": {
                 "group_id": (opponent or {}).get("group_id")
@@ -85,13 +87,16 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int,
 
 
 def build_config_artifact(config, game_id: str, game_uid: str, sub_game: int) -> dict:
+    """FLAT agreed sections (both course example sets carry the terms at top
+    level, never nested; Imree diff 2026-08-03) — the shared file's own
+    _schema/_note/schema_version win over the artifact envelope's."""
     doc = _base("config", game_id, game_uid, config)
+    doc.update(config.shared)
     doc.update(
         {
             "sub_game_number": sub_game,
             "config_name": game_ids.config_name(game_id, sub_game),
             "config_sha256": config_sha256(config.shared),
-            "terms": config.shared,
         }
     )
     return doc
@@ -103,7 +108,12 @@ def build_log(config, game_id: str, game_uid: str, sub_game: int, report: dict,
     doc.update(
         {
             "sub_game_number": sub_game,
-            "summary": dict(report, group_id=config.group_id, ended_at=utc_now()),
+            # github_commit: the EMITTING repo's code identity — sub-games
+            # alternate role repos, so the series report reads each row's
+            # own-side commit from its log (book-attached 4-final-result:
+            # commits VARY per sub-game; one-hash-on-six-rows was the bug)
+            "summary": dict(report, group_id=config.group_id, ended_at=utc_now(),
+                            github_commit=git_commit_hash()),
             "records": own_records,          # payload + nonce + commit (post-game reveal)
             "opponent_records": their_records,  # payload + commit (their nonces arrive in audit)
         }

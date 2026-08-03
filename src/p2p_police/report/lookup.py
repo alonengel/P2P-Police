@@ -28,7 +28,9 @@ def terms_for_log(doc: dict, log_path: str | Path) -> dict | None:
         candidate = base / "config" / "games" / name
         if candidate.is_file():
             artifact = json.loads(candidate.read_text(encoding="utf-8"))
-            return artifact.get("terms")
+            # flat (example-shaped) artifacts ARE the terms — readers index
+            # sections only; pre-flatten artifacts nested them under "terms"
+            return artifact.get("terms", artifact)
     return None
 
 

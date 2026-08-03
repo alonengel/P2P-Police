@@ -29,10 +29,14 @@ def test_declaration_carries_step0_fields(config_dir: Path) -> None:
     assert doc["token_budget_per_series"] == 200000
 
 
-def test_config_artifact_locks_terms(config_dir: Path) -> None:
+def test_config_artifact_locks_terms_flat(config_dir: Path) -> None:
+    """Both course example sets carry the agreed sections FLAT at top level
+    (never nested under 'terms') — Imree diff 2026-08-03."""
     config = Config.load(config_dir)
     doc = artifacts.build_config_artifact(config, "a-vs-b", "uid1", 1)
-    assert doc["config_sha256"] and doc["terms"] == config.shared
+    assert doc["config_sha256"] and "terms" not in doc
+    for section, values in config.shared.items():
+        assert doc[section] == values
 
 
 def test_log_and_result_share_uid_and_emit(config_dir: Path, tmp_path: Path) -> None:
