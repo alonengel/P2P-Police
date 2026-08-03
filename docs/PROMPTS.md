@@ -1232,3 +1232,10 @@ four template types, partial sets refused; imreeyal concurred and
 mirrors. Their diff of our 16:00 window caught the counted-record
 fabrication bug class (league fields in a friendly) - fixed keyed on
 the counted arming, both teams. VRAM now real via the driver registry.
+
+**Round 5 (same day, night).** The course chatbot, asked about the
+email contents, ruled result-only (logs/configs referenced, never
+attached - matching the reference implementation). Attachment policy
+REVERTED to the result as the single attachment; Moodle item 4 re-read
+as two-channel delivery (email + GitHub). ADR-0012 second addendum
+carries the quotes; flip coordinated with imreeyal.
