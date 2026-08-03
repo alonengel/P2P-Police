@@ -8,13 +8,13 @@
   },
   "opponent_records": [
     {
-      "commit": "f1588c0e5f42b61fe5e5e78340941d976c9566874a71186a3869e1e2dca864ce",
+      "commit": "793163a341f654bf3ea2ecfb8a320bad772d46104ca2e0302e45d4d4a7009551",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "They say the crowds near Grand Central hide anyone."
       },
-      "nonce": "b643bf50bf71c00014f40f12714acc64",
+      "nonce": "06162660197f26531f609cfa9452be2e",
       "payload": {
         "hint": "They say the crowds near Grand Central hide anyone.",
         "intent": "truth",
@@ -24,7 +24,7 @@
           3,
           4
         ],
-        "response_seconds": 0.003,
+        "response_seconds": 0.002,
         "state": "grid=7x7;self=[3, 4];barriers=[]",
         "step": 1,
         "tokens_step": 0,
@@ -32,13 +32,13 @@
       }
     },
     {
-      "commit": "aa4720c90078ba28a543942fc9df2963428a3a7449a94a0f6359c56449a30d7f",
+      "commit": "87430befe6c60ed7d9102bec8f5b62878e7ed3027f648f13a5dbe71ec60438d6",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "I heard sirens somewhere around Grand Central."
       },
-      "nonce": "ac1eaf54d2835e179a8ceda56f03462f",
+      "nonce": "8441ea2f782777c5b681f5a086e570e7",
       "payload": {
         "hint": "I heard sirens somewhere around Grand Central.",
         "intent": "truth",
@@ -56,13 +56,13 @@
       }
     },
     {
-      "commit": "8623f7f4c8ac351ccfb58ccc8e1a34320056a50c928ad6d99f7a5a2202c368f6",
+      "commit": "0d8a625a883c5c0a35048a8fd09700151405a620a169b5197d7c157e2611128d",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "The shadows by Brooklyn Bridge feel busy tonight."
       },
-      "nonce": "637d27897ab5943a95aac80836c25dae",
+      "nonce": "8e11d2b89caaeb07c186518a8299da9a",
       "payload": {
         "hint": "The shadows by Brooklyn Bridge feel busy tonight.",
         "intent": "truth",
@@ -72,7 +72,7 @@
           4,
           5
         ],
-        "response_seconds": 0.003,
+        "response_seconds": 0.002,
         "state": "grid=7x7;self=[4, 5];barriers=[]",
         "step": 3,
         "tokens_step": 0,
@@ -80,13 +80,13 @@
       }
     },
     {
-      "commit": "3435391da28133749d2851716180aa0134f4b4ef39c8cbbe13a2e50543d2c94f",
+      "commit": "32274a827d3467bebf77f5cd8a0cca7d32fce7a2f18c64f71895deafb7df69da",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Word is, keep an eye on Brooklyn Bridge."
       },
-      "nonce": "b6fa05cf630dbe10afe6b1a038a23bb2",
+      "nonce": "38f697907eefa630be4b9052a341c1a6",
       "payload": {
         "hint": "Word is, keep an eye on Brooklyn Bridge.",
         "intent": "truth",
@@ -96,7 +96,7 @@
           4,
           5
         ],
-        "response_seconds": 0.004,
+        "response_seconds": 0.003,
         "state": "grid=7x7;self=[4, 5];barriers=[]",
         "step": 4,
         "tokens_step": 0,
@@ -104,13 +104,13 @@
       }
     },
     {
-      "commit": "b607ecab838ea08f01ada9f157884f866522246e89e4d97c04c229ffb5f603ce",
+      "commit": "af780a7c485e06d14b941ac4f40e0510ed47741f33326eb141237a053833318b",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Someone was asking about Brooklyn Bridge just now."
       },
-      "nonce": "fb21d819366ec515c6a996f06c85e955",
+      "nonce": "de222265efc7f1a6e0afb22b2c360936",
       "payload": {
         "hint": "Someone was asking about Brooklyn Bridge just now.",
         "intent": "truth",
@@ -128,13 +128,13 @@
       }
     },
     {
-      "commit": "bb93add2c9d0c14abb69ed67db4cd69ccd26781735cee797b671ad22a97f451a",
+      "commit": "e3a3f456883ca4f02ec37dcd7f63c9b59eeb766df6fab30f52b9b86093673e7b",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "All roads seem to lead to Brooklyn Bridge."
       },
-      "nonce": "625f3d5156d07bc2dd1d30f3e2050e5f",
+      "nonce": "24d78fbed8902014f27af1ebf380c5f3",
       "payload": {
         "hint": "All roads seem to lead to Brooklyn Bridge.",
         "intent": "truth",
@@ -152,13 +152,13 @@
       }
     },
     {
-      "commit": "ceb2a8370305732d60e600d3a0c33332e1806be9afb9dce1b31c721ba5a5a913",
+      "commit": "4bf49adc06d6ae888be5d1c1aba6606aeb19432a47379cc874650cc9f3329b45",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "They say the crowds near Brooklyn Bridge hide anyone."
       },
-      "nonce": "1424961231e30974f4fd2b2907b6b52d",
+      "nonce": "c30625ae0dba3767ffe4423c69988c43",
       "payload": {
         "hint": "They say the crowds near Brooklyn Bridge hide anyone.",
         "intent": "truth",
@@ -176,13 +176,13 @@
       }
     },
     {
-      "commit": "6753559c5b2b373eccfc88c7e65064fbb38e92fc702b91ea90cbed8998d881e4",
+      "commit": "967188ed17038b0ac066a77894b3acedad2227f936c27b284ed04218a34ed646",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "I heard sirens somewhere around Brooklyn Bridge."
       },
-      "nonce": "a3284acbb3ee714dc7c582613e6ced25",
+      "nonce": "ec905b78f0118f49bb94fb5760754b48",
       "payload": {
         "hint": "I heard sirens somewhere around Brooklyn Bridge.",
         "intent": "truth",
@@ -192,7 +192,7 @@
           6,
           6
         ],
-        "response_seconds": 0.002,
+        "response_seconds": 0.003,
         "state": "grid=7x7;self=[6, 6];barriers=[]",
         "step": 8,
         "tokens_step": 0,
@@ -200,13 +200,13 @@
       }
     },
     {
-      "commit": "75f7215282de1d8a9b1ce10f73ef8d919ac467c3cf928a36df0aa73c71654b26",
+      "commit": "c85eb1916475e55905662182200d86317c247d5a3da7ffd70a4320c10c2e6500",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "The shadows by Brooklyn Bridge feel busy tonight."
       },
-      "nonce": "0925766b38fe03c04712dfb259178ef0",
+      "nonce": "ece4c8444f57f4615a34b7f12f647932",
       "payload": {
         "hint": "The shadows by Brooklyn Bridge feel busy tonight.",
         "intent": "truth",
@@ -224,13 +224,13 @@
       }
     },
     {
-      "commit": "c7fe70816cf8ba5723ce8b51f9e8b32d7cb9ffbba4f53bb4e3dada103f830fb6",
+      "commit": "ec44fca791873d09f7cd221373f3cd75c67519edd3ae63b984283c12faaa33da",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Word is, keep an eye on Brooklyn Bridge."
       },
-      "nonce": "6a9811178465fd3b789f353ab5de3976",
+      "nonce": "f9534fb1a82d3b4a723d4a1fa89db249",
       "payload": {
         "hint": "Word is, keep an eye on Brooklyn Bridge.",
         "intent": "truth",
@@ -248,13 +248,13 @@
       }
     },
     {
-      "commit": "8447a07ee1d2c729bcf9290691240923def5fbc9c62e86a3ad3ee3a7a2668966",
+      "commit": "9cbd6de093175b10f51a434ba16eb11f99cd3573b00a07573b830717350fea74",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Someone was asking about Brooklyn Bridge just now."
       },
-      "nonce": "babb29150fcb935d99d18c445204e6fa",
+      "nonce": "ea579651339c42d337afdd8cfc23e6e2",
       "payload": {
         "hint": "Someone was asking about Brooklyn Bridge just now.",
         "intent": "truth",
@@ -264,7 +264,7 @@
           6,
           6
         ],
-        "response_seconds": 0.003,
+        "response_seconds": 0.002,
         "state": "grid=7x7;self=[6, 6];barriers=[]",
         "step": 11,
         "tokens_step": 0,
@@ -272,13 +272,13 @@
       }
     },
     {
-      "commit": "d936331666092376382dbf32632e4abc065760db17fe6d4b84ef7a6e0673c784",
+      "commit": "9725c83bbb0690286d882d9d72a9aa3f25b09b9e95860c59bbc32eea1446ed68",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "All roads seem to lead to Brooklyn Bridge."
       },
-      "nonce": "65c426ae4940f9a40b7f068d79144f81",
+      "nonce": "d20c21266d2e46b086afd209588331cc",
       "payload": {
         "hint": "All roads seem to lead to Brooklyn Bridge.",
         "intent": "truth",
@@ -296,13 +296,13 @@
       }
     },
     {
-      "commit": "a61961767f79f6c200c71d97976c80aa76a1fc90c0e26ac7ac94c2e7a2b37e8a",
+      "commit": "ed0ceab6a729e36c21b34c8ea551c99fcdbc118e4eb2e2a6f33f12088ea0515e",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "You got me."
       },
-      "nonce": "ed0f7bdd60d8017e2dd0e012bdd4d94e",
+      "nonce": "fa3097c178f20cd4d900f49c930daa31",
       "payload": {
         "hint": "You got me.",
         "intent": "truth",
@@ -322,11 +322,11 @@
   ],
   "records": [
     {
-      "commit": "a8c705d418aeee6ba07b6e1c8fe746cb47f67561f0c1a309b5c9bc7ecda2fce3",
-      "nonce": "cfbb41da2096f2100562d39941c09ae2",
+      "commit": "cee75cd0eaf706b32c48620210053234803caacccd2dfb492196d1db4788b550",
+      "nonce": "0c13310b838cc3c484370f4510b9a76f",
       "payload": {
         "declaration_ref": "declaration_anrbj666-vs-imreeyal.json",
-        "github_commit": "c5940c7b11166c072d69f845367593471c8b5c9a",
+        "github_commit": "adf19f6c32ed75d4acd7f459704c6b48fcd52573-dirty",
         "group_id": "anrbj666",
         "role": "police",
         "step": 0,
@@ -335,8 +335,8 @@
       }
     },
     {
-      "commit": "122dd28c0de41f0cc4ca5756eef18e5a16b52a9b9719292286c81ea05b9664d1",
-      "nonce": "5bf8d821056b6c49a09dcc4b6a13bc60",
+      "commit": "62d51eb9961778cf65f047d44aa2c71483514ea2eef3c3598cca724a133ad8c2",
+      "nonce": "86ea2dfda3c305f33bcf3d8f06b915f2",
       "payload": {
         "action": {
           "move": "E",
@@ -351,8 +351,8 @@
       }
     },
     {
-      "commit": "c2857ecc330538259ae964d7fea5ca980661ccee264359011252585447837cd2",
-      "nonce": "134a898b67cf56b3befe798bafef8e85",
+      "commit": "b2e3157ccdae1865f15bbe7a602e783572f01c99256f40c50495cda660b3944a",
+      "nonce": "7b7794bc35e1330dec7fa73a4374650e",
       "payload": {
         "action": {
           "move": "S",
@@ -367,8 +367,8 @@
       }
     },
     {
-      "commit": "5d88fad280a85e9facaade147932ff09fd9330163562f6505869844271d2f8b6",
-      "nonce": "08ca5ee0b38af8cf2277ed50b1ce7e3b",
+      "commit": "c3f749479c41ca677d233f5b4b58ee06468c25e5a51d6e434a323d8a61da3914",
+      "nonce": "d735df9fe2368102dd6cf2fd4c92e41c",
       "payload": {
         "action": {
           "move": "E",
@@ -383,8 +383,8 @@
       }
     },
     {
-      "commit": "609d9d9640d0e7c41fee1f44b22993a71825616ec555e41a0ac05dd5be0610be",
-      "nonce": "e9c0c194ab7e058be084d3b057eb538b",
+      "commit": "5d121987c6a7552864864aa2bc0f103edf8939c5ef806b693e854d3d09d44e98",
+      "nonce": "e13293c9217c09f8fc046dc0b61f1461",
       "payload": {
         "action": {
           "move": "E",
@@ -399,14 +399,14 @@
       }
     },
     {
-      "commit": "7ce8fb72e906848f9b375ec9e71372ef3c5437e4ddc332dd7b7f69bf1ec02021",
-      "nonce": "90c7ec6504b89ddf55e02a659038d7e7",
+      "commit": "08f33caf032214680d3486eeb8a75291e32740aee70e3c51580b6ca4eae47ab9",
+      "nonce": "b21734101d58290eef6679f1c5bab42c",
       "payload": {
         "action": {
           "move": "S",
           "type": "move"
         },
-        "hint": "Slipping south past the docks.",
+        "hint": "Downtown crowds hide me well.",
         "role": "police",
         "state_digest": "31db007c4819fb6eebe71b21e2c13c67e45202337f73084efcef476d966f6843",
         "step": 5,
@@ -415,8 +415,8 @@
       }
     },
     {
-      "commit": "5c7b472d18c6a2a24dce85111139da17fb82abff8aefd217f43613be7226e191",
-      "nonce": "6493c76bbce9a8b881f9e13f320f8593",
+      "commit": "f2e120954363fcb235bb95ae2c78a0d127189d2ef1e8a9ec00adb885b9239e93",
+      "nonce": "4d73a2f3d4f8b8b8172f09430e394e27",
       "payload": {
         "action": {
           "move": "S",
@@ -431,14 +431,14 @@
       }
     },
     {
-      "commit": "6c78231b061072da60f84967fb60c5eb45468c77f9fa2ed07a0f33bbd810c271",
-      "nonce": "8953c5a641c68f8991716bae4551c95c",
+      "commit": "07dc8cfcb674a098c9c3e9e1feeefa0be1fb344ae6a28e0bab341cb8b6f45e98",
+      "nonce": "413aabe6aa8cf15f3edca51856232b5e",
       "payload": {
         "action": {
           "move": "E",
           "type": "move"
         },
-        "hint": "Chasing sunrise eastward.",
+        "hint": "East side alleys are friendly tonight.",
         "role": "police",
         "state_digest": "376f961c9be32b9164ad805324f969e2cbed9647abc1ddd678678252cda8e4e5",
         "step": 7,
@@ -447,8 +447,8 @@
       }
     },
     {
-      "commit": "5539d27c9cd511b1ed69b40b9565d89463c0f0527cb82449424601a9af78b633",
-      "nonce": "faebb475d783c95f421be07d9140b043",
+      "commit": "02bba079f5d85797d6e8addd3a24fe8dcb893fef1a3e7d71ab26b33740b56836",
+      "nonce": "ec7511ce6ca2be0d6eeb57409e0961dd",
       "payload": {
         "action": {
           "move": "S",
@@ -463,14 +463,14 @@
       }
     },
     {
-      "commit": "c2eba0632aba20472eae0e15d334f3179d46763f914276a1bbae3a5e36d421f0",
-      "nonce": "451380cbcff6fcdb78d354c5a0aa8be1",
+      "commit": "a38c44f00b3f28558209e48bc1cf5e9436014137d89f3271433502f01b5de383",
+      "nonce": "e48ef35f9c0e2335826114200507230b",
       "payload": {
         "action": {
           "move": "E",
           "type": "move"
         },
-        "hint": "East side alleys are friendly tonight.",
+        "hint": "Chasing sunrise eastward.",
         "role": "police",
         "state_digest": "d3b30c75061bc9cec65e590cb5ecc0bb0653d50b9db4515dec091268654673e0",
         "step": 9,
@@ -479,8 +479,8 @@
       }
     },
     {
-      "commit": "1f6c360efea0593efc0f998e15154d73d5a97c7a2428072ce6a0dfe1e053a8f0",
-      "nonce": "66bf3874fc0848e447f76a96ead6b48c",
+      "commit": "761985d4cc7ff8aad9087439ffb411fe520ab88979cfb5523e8e5a2ebb0dac77",
+      "nonce": "cf1ddb223b4bc06e4163a71dc3a588d9",
       "payload": {
         "action": {
           "move": "S",
@@ -495,8 +495,8 @@
       }
     },
     {
-      "commit": "bf88ba3086a5b795fd11e86e694a99de3b141ec32116bc060f463bad38fbd8b6",
-      "nonce": "2b1dbc476f05b923fcba4612f6e9c5be",
+      "commit": "a6adf2f24e72598bdbc5d13ee52d8711135edc8e29ef3a3752192cabfdaef638",
+      "nonce": "0eb938a59b2743df680519bdb977e6e0",
       "payload": {
         "action": {
           "cell": [
@@ -514,8 +514,8 @@
       }
     },
     {
-      "commit": "1ed738c4c3429ba8aedbe4ee67f7409e089ca0709ad4d6cc104a7dc46297a9b8",
-      "nonce": "2e3f1d859a76c5ea23059e85ee6a79d6",
+      "commit": "5a88fb82483d24d0068f4537102367f73b2485376e7f0a8f4a1db4bea5e6daa5",
+      "nonce": "136b05df8d8cc615f753a6973a0ef5f4",
       "payload": {
         "action": {
           "cell": [
@@ -524,7 +524,7 @@
           ],
           "type": "barrier"
         },
-        "hint": "Not moving an inch, promise.",
+        "hint": "Comfortable right where I am.",
         "role": "police",
         "state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
         "step": 12,
@@ -541,7 +541,7 @@
     "digest_match": null,
     "disputed_capture": null,
     "end_state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
-    "ended_at": "2026-08-03T17:15:54+00:00",
+    "ended_at": "2026-08-03T19:56:03+00:00",
     "gatekeeper": {
       "calls_logged": 0,
       "dos_locked": {
@@ -559,7 +559,7 @@
         "openrouter"
       ]
     },
-    "github_commit": "c5940c7b11166c072d69f845367593471c8b5c9a",
+    "github_commit": "adf19f6c32ed75d4acd7f459704c6b48fcd52573-dirty",
     "group_id": "anrbj666",
     "opponent_group_id": "imreeyal",
     "opponent_info": {
@@ -594,10 +594,10 @@
         }
       },
       "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
-      "nonce": "83bb2047453928cd1fcc01a44d3d9e32",
+      "nonce": "3f4d7405cb0dde29204152ffc45b68cd",
       "role": "thief",
       "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
-      "signature": "8e472936484af72ce41315d08803b91b763ae04e2ae1045c4b6374f7d2b9eea7",
+      "signature": "ef39ce241217f0616e972c6a51088102941384c48b484dbae9b32fdbd628681a",
       "sub_game_number": 5,
       "terms": {
         "axis_origin_corner": "top-left",
@@ -646,7 +646,7 @@
     "outcome": "capture",
     "role": "police",
     "scent_readings_refused": 0,
-    "started_at": "2026-08-03T17:15:50+00:00",
+    "started_at": "2026-08-03T19:55:58+00:00",
     "step_zero_mismatch": null,
     "steps_sealed": 13,
     "turns_completed": 12

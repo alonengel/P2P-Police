@@ -1,8 +1,8 @@
 {
   "_schema": "p2p-police-artifacts",
   "agreed_between": [
-    "anrbj666-police",
-    "anrbj666-thief"
+    "anrbj666",
+    "imreeyal"
   ],
   "board_and_agents": {
     "axis_origin_corner": "top-left",
@@ -19,7 +19,7 @@
     ]
   },
   "config_name": "config_anrbj666-vs-imreeyal_g03.json",
-  "config_sha256": "3d38cde31370cff4b18bb6384499454c4c43cdaae52bbef5acfc601bf2b73dce",
+  "config_sha256": "9edde84af5e2a7873fc1857089bf3018d4a96dfa794f255b3a1d7b7367baf4a0",
   "game_id": "anrbj666-vs-imreeyal",
   "game_uid": "e351176a-8883-7ce6-aad8-8a50bff637d7",
   "links": {
