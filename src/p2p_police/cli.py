@@ -149,7 +149,7 @@ def main(argv: list[str] | None = None) -> int:
                 config.shared["network_and_league"]["num_games"], ours,
                 counted=counted_armed(config))  # friendlies fabricate no count
             if args.counted:  # rule 52: one counted series per rival pairing
-                refuse_repeat_counted(dirs[0], args.game_id, doc["game_uid"])
+                refuse_repeat_counted(dirs, args.game_id, doc["game_uid"])
         except SeriesSettlementError as error:
             print(f"REFUSED: {error}")
             return 1

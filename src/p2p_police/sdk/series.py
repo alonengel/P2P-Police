@@ -125,7 +125,7 @@ def aggregate_series(results_dirs, game_id: str, score_table,
 
     doc = build_series_result(game_id, uid, by_slot, score_table,
                               int(expected_games), our_identity or {},
-                              first_meeting=first_meeting(dirs[0], game_id, uid),
+                              first_meeting=first_meeting(dirs, game_id, uid),
                               counted=counted)
     return doc, excluded
 
