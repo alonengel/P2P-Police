@@ -61,10 +61,40 @@ def _gpu() -> tuple[str, int]:
              "(Get-CimInstance Win32_VideoController).Name"],
             capture_output=True, text=True, timeout=15).stdout.strip().splitlines()
         if lines and lines[0].strip():
-            return lines[0].strip(), 0
+            return lines[0].strip(), _vram_gb_registry()
     except Exception:
         pass
-    return "unknown", 0
+    return "unknown", _vram_gb_registry()
+
+
+@lru_cache(maxsize=1)
+def _vram_gb_registry() -> int:
+    """Driver-reported VRAM (HardwareInformation.qwMemorySize, a QWORD — no
+    Win32 AdapterRAM 4-GB saturation); 0 when no display key exposes it."""
+    try:
+        import winreg
+
+        base = (r"SYSTEM\CurrentControlSet\Control\Class"
+                r"\{4d36e968-e325-11ce-bfc1-08002be10318}")
+        best = 0
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, base) as root:
+            for i in range(32):
+                try:
+                    sub = winreg.EnumKey(root, i)
+                except OSError:
+                    break
+                if not sub.isdigit():
+                    continue
+                try:
+                    with winreg.OpenKey(root, sub) as key:
+                        raw = winreg.QueryValueEx(
+                            key, "HardwareInformation.qwMemorySize")[0]
+                        best = max(best, round(int(raw) / 1024 ** 3))
+                except OSError:
+                    continue
+        return best
+    except Exception:
+        return 0
 
 
 def _ram_gb() -> int:
