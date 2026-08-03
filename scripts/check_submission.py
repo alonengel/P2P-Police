@@ -41,7 +41,14 @@ def _assets() -> bool:
 def _config() -> bool:
     base = all((Path("config") / n).is_file()
                for n in ["game.json", "game.toml", "rate_limits.json"])
-    return base and any(Path("config/games").glob("config_*.json"))
+    # played-game configs count wherever they are archived: the live
+    # config/games/ (current series), the per-window friendly snapshots,
+    # or the dev-history archive (top level starts EMPTY before a counted
+    # series so its artifacts arrive as pure adds, 2026-08-04)
+    archived = (any(Path("config/games").glob("config_*.json"))
+                or any(Path("results/friendlies").rglob("config_*.json"))
+                or any(Path("results/dev-history/config/games").glob("config_*.json")))
+    return base and archived
 
 
 @check("notebook + experiment data present")
