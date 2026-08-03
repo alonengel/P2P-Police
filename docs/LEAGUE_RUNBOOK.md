@@ -79,12 +79,12 @@ ODD windows (1,3,5), the thief repo the EVEN ones (2,4,6).
    report never invents or completes a missing game. A refused series
    emails NOTHING; settle the missing window, then re-aggregate.
 7. **`--email` auto-fire**: on a successful emit only, ONE email goes out —
-   the result JSON as body plus ALL FOUR template types attached
-   (declaration, config g01..g06, log g01..g06, result — the grader's
-   Moodle item 4; ADR-0012 addendum) — through shared/gatekeeper,
-   recipient from config, and only when `[email] mode = "send"`. A
-   partial evidence set refuses loudly instead of sending. The subject
-   carries the game_id, the final score and series_tie/winner.
+   the result JSON as body plus the result file as THE attachment
+   (result-only per the course bot's ruling, ADR-0012 second addendum;
+   the other three template types reach the lecturer via GitHub — commit
+   and push them per game, step 5 below) — through shared/gatekeeper,
+   recipient from config, and only when `[email] mode = "send"`. The
+   subject carries the game_id, the final score and series_tie/winner.
 8. **Rule 53 stays manual**: email the lecturer the commit id used for each
    counted game (see "Per counted game" step 1) — the code never does this.
 

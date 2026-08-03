@@ -22,15 +22,6 @@ def settled_log(directory: Path, n: int = 1) -> None:
     (directory / f"log_{GAME_ID}_g{n:02d}.json").write_text(json.dumps(doc), encoding="utf-8")
 
 
-def evidence_files(results: Path) -> None:
-    """The rest of the four-template set the email must carry (Moodle item 4):
-    declaration beside the logs, config in the owning repo's config/games."""
-    (results / f"declaration_{GAME_ID}.json").write_text("{}", encoding="utf-8")
-    games = results.parent / "config" / "games"
-    games.mkdir(parents=True, exist_ok=True)
-    (games / f"config_{GAME_ID}_g01.json").write_text("{}", encoding="utf-8")
-
-
 def arm(config_dir: Path, mode: str, monkeypatch) -> dict:
     toml = config_dir / "game.toml"
     toml.write_text(toml.read_text(encoding="utf-8").replace('mode = "disabled"',
@@ -62,7 +53,6 @@ def test_send_mode_emits_then_emails_the_one_report(tmp_path, config_dir, capsys
     results = tmp_path / "results"
     results.mkdir()
     settled_log(results)
-    evidence_files(results)
     assert run_cli(results, config_dir) == 0
     assert calls["recipient"] == "nobody@example.com"  # from config, never hardcoded
     assert isinstance(calls["gatekeeper"], ApiGatekeeper)  # through shared/gatekeeper
@@ -71,27 +61,11 @@ def test_send_mode_emits_then_emails_the_one_report(tmp_path, config_dir, capsys
     assert "anrbj666:5" in calls["subject"] and "beta:10" in calls["subject"]
     body = json.loads(calls["body"])  # body IS the result JSON
     assert body["report_type"] == "final_game_result"
-    # ALL FOUR template types ride the one email (grader's Moodle item 4)
-    assert calls["attachments"] == [
-        results / f"declaration_{GAME_ID}.json",
-        results.parent / "config" / "games" / f"config_{GAME_ID}_g01.json",
-        results / f"log_{GAME_ID}_g01.json",
-        results / f"result_{GAME_ID}.json"]
+    # RESULT-ONLY attachment (ADR-0012 second addendum: the result is the
+    # emailed report and REFERENCES the logs/configs; those reach the
+    # lecturer via GitHub - course-bot-confirmed reference behavior)
+    assert calls["attachments"] == [results / f"result_{GAME_ID}.json"]
     assert "emailed: series-msg-1" in capsys.readouterr().out
-
-
-def test_partial_evidence_set_refuses_the_email(tmp_path, config_dir, capsys, monkeypatch):
-    """No declaration on disk -> the email names it and refuses; the emit
-    itself still happened (the result exists for a re-send after the fix)."""
-    calls = arm(config_dir, "send", monkeypatch)
-    results = tmp_path / "results"
-    results.mkdir()
-    settled_log(results)  # no evidence_files: declaration + config missing
-    assert run_cli(results, config_dir) == 1
-    assert calls == {}
-    out = capsys.readouterr().out
-    assert "EMAIL REFUSED" in out and f"declaration_{GAME_ID}.json" in out
-    assert (results / f"result_{GAME_ID}.json").is_file()
 
 
 def test_refused_unsettled_series_never_emails(tmp_path, config_dir, capsys, monkeypatch):
@@ -154,10 +128,9 @@ def test_series_email_to_the_league_with_both_armings_sends(
     results = tmp_path / "results"
     results.mkdir()
     settled_log(results)
-    evidence_files(results)
     argv = ["series-result", "--game-id", GAME_ID, "--results-dir", str(results),
             "--config-dir", str(config_dir), "--email", "--counted"]
     assert main(argv) == 0
     assert calls["recipient"] == "rmisegal+uoh26finalgame@gmail.com"
-    assert len(calls["attachments"]) == 4  # declaration, config, log, result
+    assert calls["attachments"] == [results / f"result_{GAME_ID}.json"]
     assert "emailed: series-msg-1" in capsys.readouterr().out

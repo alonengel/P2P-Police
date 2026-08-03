@@ -94,3 +94,36 @@ bumps and `diversity_reward_applied` fires only when the series is
 doubly ARMED as counted; a friendly passes the declared counts through
 unbumped, reward all-false. `first_meeting_between_groups` stays
 factual either way.
+
+## Second addendum (2026-08-03, night) — attachment policy REVERTED to result-only
+
+The superset above was implemented, mirrored by imreeyal, and proven
+live (14 attachments, message 19fc816a25fac67a). It is now REVERTED to
+the result as the single attachment, on new evidence about the author's
+intent — the course's official chatbot (grounded in the book + the
+reference repo), asked directly, answered:
+
+> "In the emails sent by the system, only the final summary result
+> report (result JSON) is included. The system does not attach the logs
+> or configurations for each individual sub-game to the email."
+> … "the final result report condenses the per-sub-game logs into an
+> aggregate outcome … Rather than embedding the full contents of the
+> logs or configurations, the final report simply includes references
+> to them" (log_files, links). "While these files are essential for the
+> Replay Viewer … they are not attached to the final automated email."
+
+That matches the reference implementation (emit_series returns only the
+result for emailing) and the book's design (the result REFERENCES the
+other files). Moodle item 4 is accordingly read as loose prose meaning
+the four templates are delivered across BOTH channels: the result by
+email, the declaration + configs + logs via GitHub (§9.4 + App ו §2
+rules 4-5 — committed and pushed per game, which we do). Precision
+note: the bot's phrase "a single attached JSON file" paraphrases the
+book's "מבנה JSON אחיד ומחייב" — אחיד means UNIFORM, not single; the
+book itself never bounds the attachment count in either direction
+(full audit: every exclusive word in the reporting surface targets the
+address, the format, the per-side duty, or the OAuth scope).
+
+Coordinated with imreeyal so both teams flip together; a forum
+confirmation question to the lecturer remains the recommended closer,
+and flipping back is a ten-minute change if he answers "all four".

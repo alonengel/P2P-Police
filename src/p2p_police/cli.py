@@ -157,9 +157,9 @@ def main(argv: list[str] | None = None) -> int:
         path = emit(doc, Path(dirs[0]), result_name(args.game_id))
         print(json.dumps(doc["final_result"], indent=2) + f"\nwritten: {path}")
         if args.email:
-            try:  # all four template types attached (grader's Moodle item 4)
-                message_id = maybe_email_series(config, doc, path, dirs=dirs)
-            except (EmailInterlockError, SeriesSettlementError) as error:
+            try:  # result-only attachment (ADR-0012 second addendum)
+                message_id = maybe_email_series(config, doc, path)
+            except EmailInterlockError as error:
                 print(f"EMAIL REFUSED: {error}")
                 return 1
             if message_id and args.counted:  # ledger remembers league reports
