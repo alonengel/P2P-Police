@@ -29,50 +29,28 @@ def test_missing_summary_digest_is_named(tmp_path) -> None:
     assert "end_state_digest" in verdict
 
 
-def test_dirty_working_tree_is_named_in_commit_hash(monkeypatch) -> None:
-    """Rule 53: the declared commit must not silently pretend a dirty tree
-    is the committed code."""
+def test_commit_hash_is_the_bare_head(monkeypatch) -> None:
+    """Rule 53 wants THE commit id: a plain hash a grader can rev-parse
+    (pair decision with imreeyal 2026-08-03 — no dirty qualifier; a series
+    rewrites its own tracked artifacts mid-run, so the marker fired on
+    every window after the first artifact commit and meant nothing)."""
     from types import SimpleNamespace
 
     from p2p_police.report import code_identity
 
     def fake_run(args, capture_output, text, timeout):  # noqa: ARG001
-        if args[:2] == ["git", "rev-parse"]:
-            return SimpleNamespace(stdout="abc123\n")
-        return SimpleNamespace(stdout=" M src/file.py\n")
-
-    monkeypatch.setattr(code_identity.subprocess, "run", fake_run)
-    assert git_commit_hash() == "abc123-dirty"
-
-
-def test_clean_tree_keeps_the_bare_hash(monkeypatch) -> None:
-    from types import SimpleNamespace
-
-    from p2p_police.report import code_identity
-
-    def fake_run(args, capture_output, text, timeout):  # noqa: ARG001
-        if args[:2] == ["git", "rev-parse"]:
-            return SimpleNamespace(stdout="abc123\n")
-        return SimpleNamespace(stdout="")
+        assert args[:2] == ["git", "rev-parse"]  # exactly one probe, no status call
+        return SimpleNamespace(stdout="abc123\n")
 
     monkeypatch.setattr(code_identity.subprocess, "run", fake_run)
     assert git_commit_hash() == "abc123"
 
 
-def test_untracked_artifacts_do_not_stamp_dirty(monkeypatch) -> None:
-    """A playing series CREATES untracked logs — the commit identity must
-    key on TRACKED modifications only (git describe --dirty semantics), or
-    every window after the first signs a false -dirty declaration."""
-    from types import SimpleNamespace
-
+def test_commit_hash_degrades_to_unknown_without_git(monkeypatch) -> None:
     from p2p_police.report import code_identity
 
-    def fake_run(args, capture_output, text, timeout):  # noqa: ARG001
-        if args[:2] == ["git", "rev-parse"]:
-            return SimpleNamespace(stdout="abc123\n")
-        if "--untracked-files=no" in args:
-            return SimpleNamespace(stdout="")  # tracked files all clean
-        return SimpleNamespace(stdout="?? results/log_x_g01.json\n")
+    def fake_run(*args, **kwargs):  # noqa: ARG001
+        raise OSError("git not available")
 
     monkeypatch.setattr(code_identity.subprocess, "run", fake_run)
-    assert git_commit_hash() == "abc123"
+    assert git_commit_hash() == "unknown"

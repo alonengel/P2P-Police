@@ -21,7 +21,7 @@ def test_identity_declares_the_exact_commit_id() -> None:
     block = identity_block(PRIVATE, "anrbj666")
     commit = block["github_commit"]
     assert commit == git_commit_hash()  # the declared id IS the code identity
-    # best-effort surface: a real hash (possibly -dirty) or the named fallback
+    # best-effort surface: a real bare hash or the named fallback
     assert commit == "unknown" or len(commit.split("-")[0]) == 40
 
 

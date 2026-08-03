@@ -5,21 +5,18 @@ import subprocess
 
 
 def git_commit_hash() -> str:
-    """The exact code identity that played this game; best effort.
-    A dirty working tree is NAMED (`<hash>-dirty`): declaring a commit that
-    does not contain the code actually running would be a false declaration."""
-    def _git(*args: str) -> str:
-        return subprocess.run(["git", *args], capture_output=True, text=True,
-                              timeout=10).stdout.strip()
+    """The HEAD commit of this checkout — the rule-53 provenance claim.
 
+    A plain resolvable hash, the exact form the book's examples show and a
+    grader's tooling can `git rev-parse`. No working-tree qualifier (pair
+    decision with imreeyal, 2026-08-03): a series rewrites its own tracked
+    artifact files mid-run, so a dirty marker fired on every window after
+    the first artifact commit — an always-on alarm carrying no information,
+    polluting a field whose spec is a commit id. "unknown" outside git.
+    """
     try:
-        head = _git("rev-parse", "HEAD")
-        if not head:
-            return "unknown"
-        # tracked modifications only (git describe --dirty semantics): a
-        # series CREATES untracked artifacts as it plays, and those must not
-        # stamp -dirty onto every later window's signed declaration
-        status = _git("status", "--porcelain", "--untracked-files=no")
-        return f"{head}-dirty" if status else head
+        head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                              text=True, timeout=10).stdout.strip()
+        return head or "unknown"
     except OSError:
         return "unknown"
