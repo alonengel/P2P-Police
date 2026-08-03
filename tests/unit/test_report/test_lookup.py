@@ -48,7 +48,7 @@ def test_geometry_from_terms_and_fallback() -> None:
 def test_verify_log_on_real_artifact_runs_physics_path() -> None:
     """The committed E2E log + its archived config: crypto AND physics pass."""
     assert SimulationSdk.verify_log(
-        "results/log_anrbj666-vs-anrbj666_g01.json") == "Verified OK"
+        "results/dev-history/results/log_anrbj666-vs-anrbj666_g01.json") == "Verified OK"
 
 
 def _foreign_doc(positions: list) -> dict:
@@ -78,11 +78,11 @@ def test_verify_log_flags_digest_mismatch(tmp_path) -> None:
     import json
     from pathlib import Path
 
-    doc = json.loads(Path("results/log_anrbj666-vs-anrbj666_g01.json")
+    doc = json.loads(Path("results/dev-history/results/log_anrbj666-vs-anrbj666_g01.json")
                      .read_text(encoding="utf-8"))
     doc["summary"]["end_state_digest"] = "0" * 64  # forged final state
     (tmp_path / "config" / "games").mkdir(parents=True)
-    src = Path("config/games")
+    src = Path("results/dev-history/config/games")
     for artifact in src.glob("config_*.json"):
         (tmp_path / "config" / "games" / artifact.name).write_text(
             artifact.read_text(encoding="utf-8"), encoding="utf-8")

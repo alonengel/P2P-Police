@@ -14,12 +14,12 @@
 
 - **2026-07-13** — first fully public bidirectional 35-turn sealed game
   over the tunnel: identical end-state digests, audits Verified OK both
-  directions (`results/public_bidirectional_e2e_2026-07-13.json`).
+  directions (`results/dev-history/results/public_bidirectional_e2e_2026-07-13.json`).
 - **2026-07-18** — repeated on the reference-aligned bytes AND the new
   symmetric hostnames, through the Host-header-rewriting ingress: same
   verdicts; the report now carries the gatekeeper monitoring view; the
   physics-recomputing `verify-log` re-validates the committed log
-  (`results/public_bidirectional_e2e_2026-07-18.json`).
+  (`results/dev-history/results/public_bidirectional_e2e_2026-07-18.json`).
 - Edge routing observed via Frankfurt + Tel Aviv Cloudflare POPs; the
   runbook's step 2b (probe your OWN public URL before declaring a counted
   game) exists because the 421 failure mode was observed live against the

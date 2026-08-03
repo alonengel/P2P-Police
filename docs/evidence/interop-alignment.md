@@ -28,7 +28,7 @@ audits as mutual TAMPERED (rule 19).
   kit's vectors (MIT, attributed in `tests/vectors/foreign/_README.md`) —
   including REJECTING the book's two divergent commit forms.
 - Full cross-repo E2E games on the aligned bytes: local and fully public
-  (`results/public_bidirectional_e2e_*.json`), audits Verified OK both
+  (`results/dev-history/results/public_bidirectional_e2e_*.json`), audits Verified OK both
   directions, identical derived game_uid on both peers.
 - Counterparty verification BOTH directions: we independently re-verified
   the rival team's six-game demo-interop package (35/35 commits, 35/35

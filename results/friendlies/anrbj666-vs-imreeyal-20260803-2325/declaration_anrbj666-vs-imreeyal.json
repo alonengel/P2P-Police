@@ -1,0 +1,87 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "7cb6331f920932771968c7b47f33ef7f30c113bcdd1646a0b26b676338e27b0f",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-03T20:26:04+00:00",
+  "game_ended_at": "2026-08-03T20:26:04+00:00",
+  "game_id": "anrbj666-vs-imreeyal",
+  "game_started_at": "2026-08-03T20:26:00+00:00",
+  "game_uid": "e351176a-8883-7ce6-aad8-8a50bff637d7",
+  "groups": {
+    "group_1": {
+      "code_version": "1.00",
+      "counted_games_played": 0,
+      "github_commit": "f171a7b26b45b14bc78df26ab423cdfbf02be33c",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:2e97608c973ee6eb8ec5d91afe7058e0b4527409242fc3b4bd731e1e58d7d562"
+    },
+    "group_2": {
+      "counted_games_played": 0,
+      "github_commit": "160d173646808385c84b444ea9d2ae51df91e1b1",
+      "group_id": "imreeyal",
+      "group_name": "ImreEyal-Police",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3693,
+        "cpu_type": "AMD64 Family 25 Model 33 Stepping 0, AuthenticAMD",
+        "gpu_cores_or_cuda": "cuda",
+        "gpu_type": "NVIDIA GeForce RTX 3080 Ti",
+        "os": "Windows (10.0.19045)",
+        "ram_gb": 31.9,
+        "vram_gb": 12.0
+      },
+      "hardware_spec_sha256": "",
+      "llm_model": "none",
+      "mcp_servers": {
+        "cop": "https://cop.imreeyal.com/mcp",
+        "thief": "https://thief.imreeyal.com/mcp"
+      },
+      "members": [
+        "Imree Cohen",
+        "Eyal Shtinmetz"
+      ],
+      "repos": {
+        "cop": "https://github.com/Imreec/copthief-p2p-cop",
+        "thief": "https://github.com/Imreec/copthief-p2p-thief"
+      },
+      "signature": "undeclared"
+    }
+  },
+  "links": {
+    "config": "config_anrbj666-vs-imreeyal_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-imreeyal.json",
+    "log": "log_anrbj666-vs-imreeyal_g<NN>.json",
+    "result": "result_anrbj666-vs-imreeyal.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}

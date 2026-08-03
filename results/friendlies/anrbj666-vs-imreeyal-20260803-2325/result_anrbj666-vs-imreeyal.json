@@ -1,0 +1,253 @@
+{
+  "_schema": "Summary and final result for the WHOLE series between two teams: per-sub-game scores + aggregate; identity lives in the declaration.",
+  "final_result": {
+    "diversity_reward_applied": {
+      "anrbj666": false,
+      "imreeyal": false
+    },
+    "first_meeting_between_groups": true,
+    "games_played_including_this": {
+      "anrbj666": 0,
+      "imreeyal": 0
+    },
+    "series_tie": false,
+    "sub_games_won": {
+      "anrbj666": 6,
+      "imreeyal": 0
+    },
+    "ties": 0,
+    "tokens_total_series": {
+      "anrbj666": 0,
+      "imreeyal": 0
+    },
+    "total_score": {
+      "anrbj666": 90,
+      "imreeyal": 30
+    },
+    "winner_group": "anrbj666"
+  },
+  "game_id": "anrbj666-vs-imreeyal",
+  "game_uid": "e351176a-8883-7ce6-aad8-8a50bff637d7",
+  "groups": [
+    "anrbj666",
+    "imreeyal"
+  ],
+  "links": {
+    "config": "config_anrbj666-vs-imreeyal_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-imreeyal.json",
+    "github": {
+      "anrbj666": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "imreeyal": {
+        "cop": "https://github.com/Imreec/copthief-p2p-cop",
+        "thief": "https://github.com/Imreec/copthief-p2p-thief"
+      }
+    },
+    "log": "log_anrbj666-vs-imreeyal_g<NN>.json",
+    "result": "result_anrbj666-vs-imreeyal.json"
+  },
+  "mutual_agreement": {
+    "confirmed": true,
+    "sha256": "0bcf3c072f0a7e995833115de9786f3b032de13b37946ed367df4c6b2cdb5105"
+  },
+  "num_sub_games": 6,
+  "report_type": "final_game_result",
+  "schema_version": "1.1",
+  "sub_games": [
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:25:18+00:00",
+      "github_commit": {
+        "anrbj666": "f171a7b26b45b14bc78df26ab423cdfbf02be33c",
+        "imreeyal": "160d173646808385c84b444ea9d2ae51df91e1b1"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g01.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g01.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "imreeyal": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:25:02+00:00",
+      "sub_game_number": 1,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:25:32+00:00",
+      "github_commit": {
+        "anrbj666": "5524890e029ff6f146a0083b7475d73f4785faf7",
+        "imreeyal": "c6b8e5fc171ffcbe1f9ea01967e14a5330e6cbc9"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g02.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g02.json"
+      },
+      "result": "survival",
+      "roles": {
+        "anrbj666": "thief",
+        "imreeyal": "police"
+      },
+      "score": {
+        "anrbj666": 10,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:25:21+00:00",
+      "sub_game_number": 2,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:25:41+00:00",
+      "github_commit": {
+        "anrbj666": "f171a7b26b45b14bc78df26ab423cdfbf02be33c",
+        "imreeyal": "160d173646808385c84b444ea9d2ae51df91e1b1"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g03.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g03.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "imreeyal": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:25:36+00:00",
+      "sub_game_number": 3,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:25:55+00:00",
+      "github_commit": {
+        "anrbj666": "5524890e029ff6f146a0083b7475d73f4785faf7",
+        "imreeyal": "c6b8e5fc171ffcbe1f9ea01967e14a5330e6cbc9"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g04.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g04.json"
+      },
+      "result": "survival",
+      "roles": {
+        "anrbj666": "thief",
+        "imreeyal": "police"
+      },
+      "score": {
+        "anrbj666": 10,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:25:45+00:00",
+      "sub_game_number": 4,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:26:04+00:00",
+      "github_commit": {
+        "anrbj666": "f171a7b26b45b14bc78df26ab423cdfbf02be33c",
+        "imreeyal": "160d173646808385c84b444ea9d2ae51df91e1b1"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g05.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g05.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "imreeyal": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:26:00+00:00",
+      "sub_game_number": 5,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-03T20:26:19+00:00",
+      "github_commit": {
+        "anrbj666": "5524890e029ff6f146a0083b7475d73f4785faf7",
+        "imreeyal": "c6b8e5fc171ffcbe1f9ea01967e14a5330e6cbc9"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-imreeyal_g06.json",
+        "imreeyal": "log_anrbj666-vs-imreeyal_g06.json"
+      },
+      "result": "survival",
+      "roles": {
+        "anrbj666": "thief",
+        "imreeyal": "police"
+      },
+      "score": {
+        "anrbj666": 10,
+        "imreeyal": 5
+      },
+      "started_at": "2026-08-03T20:26:08+00:00",
+      "sub_game_number": 6,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "imreeyal": 0
+      },
+      "winner_group": "anrbj666"
+    }
+  ],
+  "timezone": "Asia/Jerusalem"
+}

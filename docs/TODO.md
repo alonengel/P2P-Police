@@ -34,7 +34,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] domain/negotiation: byte-identity + config_sha256 + commit-order pinning + Appendix-VI limit enforcement
 - [x] peer/deadline: expiry on every awaited request
 - [x] domain/protocol + peer/runtime + sdk + cli peer subcommand
-- [x] Milestone: geometric game vs P2P-Thief process over localhost — MILESTONE OK (results/cross_match_prd02_2026-07-13.json)
+- [x] Milestone: geometric game vs P2P-Thief process over localhost — MILESTONE OK (results/dev-history/results/cross_match_prd02_2026-07-13.json)
 - [x] Spec-audit of Phase 2 done — fixes applied: move_set + technical_loss + league constants added to FIXED_TERMS; in-flight MCP calls bounded by response_timeout_sec (rule 6); COMMIT_ORDER/SHUTDOWN_GRACE noted for config promotion
 - [x] (done in Phase 6) GamePhaseMachine wired into the runtime; failures route to TECHNICAL_LOSS
 
@@ -53,7 +53,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 
 ## Phase 5 — Tunneling (PRD_05)
 - [x] Persistent single-session McpTransport (dedicated loop thread, session rebuild on failure)
-- [x] MILESTONE: full blind game over https://mcp.alon.website (named tunnel) - 35 turns, digests identical (results/public_tunnel_prd05_2026-07-13.json)
+- [x] MILESTONE: full blind game over https://mcp.alon.website (named tunnel) - 35 turns, digests identical (results/dev-history/results/public_tunnel_prd05_2026-07-13.json)
 - [x] peer/watchdog (rule 7) + persistent-session reconnect hardening
 - [x] Milestone: full game over public URL (PRD-05 evidence)
 
@@ -128,7 +128,7 @@ live in `docs/evidence/`:
 
 | Claim | Measured | Evidence |
 |---|---|---|
-| Public P2P games work end-to-end | 35-turn sealed games over the tunnel, identical digests, audits Verified OK both directions | `docs/evidence/public-games.md`, `results/public_bidirectional_e2e_*.json` |
+| Public P2P games work end-to-end | 35-turn sealed games over the tunnel, identical digests, audits Verified OK both directions | `docs/evidence/public-games.md`, `results/dev-history/results/public_bidirectional_e2e_*.json` |
 | Reference interop is proven, not assumed | 13/13 conformance tests over the league kit's vectors; counterparty package re-verified 35/35 | `docs/evidence/interop-alignment.md`, `tests/unit/test_reference_conformance.py` |
 | Disqualification rules are enforced | 5 rule-guard invariants in CI + tamper drills read TAMPERED | `docs/evidence/rule-guards.md`, `tests/unit/test_rule_guards.py` |
 | Strategy claims are measured | full RL campaign incl. four gated promotions (all held) and the wire-shape balance tables | `docs/evidence/rl-campaign.md`, `results/experiments/*.json` |
@@ -137,9 +137,9 @@ live in `docs/evidence/`:
 | A killed game recovers (2026-07-21) | resume drill: snapshot restored in 45 ms, 6 half-turns replayed, mutual audits Verified OK | `docs/evidence/crash-resume.md`, `docs/evidence/drills/resume_recovery_2026-07-21.jsonl` |
 | Lying is a policy, not a coin (2026-07-21) | 2.0 lies/game vs the coin's 18.0; thief tracking error 2.36 -> 1.43 | `docs/evidence/deception.md`, `results/experiments/deception_policy.json` |
 | Negative results ship honestly (2026-07-21) | endgame solver 0 fires in 160 games; info-gain capture rate unmoved — both OFF by keep-gate | `docs/evidence/cop-strength.md`, `results/experiments/cop_strength.json` |
-| The hidden wire is league-grade end-to-end (2026-07-22) | reference-v3 phase 2: sdk wire-shape routing, hidden artifacts verify (verify-log + pair verifier, both directions), hidden kill-and-resume drill restored in 0.062 s, LIVE cross-repo g03 game: 35-turn survival, identical digests, pair-verify Verified OK | `docs/adr/0008-hidden-audit-reconstruction.md`, `docs/evidence/drills/hidden_resume_recovery_2026-07-22.jsonl`, `results/log_anrbj666-vs-anrbj666_g03.json` |
+| The hidden wire is league-grade end-to-end (2026-07-22) | reference-v3 phase 2: sdk wire-shape routing, hidden artifacts verify (verify-log + pair verifier, both directions), hidden kill-and-resume drill restored in 0.062 s, LIVE cross-repo g03 game: 35-turn survival, identical digests, pair-verify Verified OK | `docs/adr/0008-hidden-audit-reconstruction.md`, `docs/evidence/drills/hidden_resume_recovery_2026-07-22.jsonl`, `results/dev-history/results/log_anrbj666-vs-anrbj666_g03.json` |
 | The counted format is rehearsed against a real rival (2026-07-24) | warm-up games: full 35 turns, audits Verified OK on BOTH sides, digest_match honestly null across per-team constructions; then all six sub-games of the counted format, roles alternating, every audit Verified OK, the predicted 47-47 structural tie + the ONE series email; the discarded series is committed history OUTSIDE the aggregation path | `docs/evidence/discarded-series/`, `config/games/config_anrbj666-vs-imreeyal_g*.json` |
-| One game, two logs, one third-party verdict (re-run 2026-07-25) | `verify_pair` on the committed twin logs: g01 (bookletter) and g03 (hidden) both `overall: Verified OK`; per-side `verify-log` on the rival-game logs: Verified OK in both repos; the hidden replay witness PNG regenerated from the committed CLI | `scripts/verify_pair.py`, `results/log_anrbj666-vs-anrbj666_g0*.json`, `assets/replay_hidden_verified.png` |
+| One game, two logs, one third-party verdict (re-run 2026-07-25) | `verify_pair` on the committed twin logs: g01 (bookletter) and g03 (hidden) both `overall: Verified OK`; per-side `verify-log` on the rival-game logs: Verified OK in both repos; the hidden replay witness PNG regenerated from the committed CLI | `scripts/verify_pair.py`, `results/dev-history/results/log_anrbj666-vs-anrbj666_g0*.json`, `assets/replay_hidden_verified.png` |
 | The belief tracks movers, not memories (2026-07-26) | reach-decoded evidence: posterior peak 3 cells behind an 8-step escapee and clear of the abandoned camp (raw-intensity weighting: 6 behind, still camp-anchored); a declared wall localizes its placer (>0.6 origin mass); landmark talk parses to regions | `tests/unit/test_domain/test_evidence.py`, `tests/unit/test_peer/test_barrier_perception.py`, `src/p2p_police/domain/evidence.py` |
 
 ## Dwell-plateau localization and the re-opened keep-gates (2026-07-26)

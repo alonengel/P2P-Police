@@ -14,7 +14,7 @@ this repo by the pre-league MUST-coverage audit.)
 | 6 | Deadline on every await | peer/deadline.py; in-flight timeouts in mcp_client | test_deadline; integration | IMPL |
 | 7 | Watchdog | peer/watchdog.py (+NullWatchdog); wired in sdk | test_watchdog | IMPL |
 | 8-9 | Live UI local truth only | peer/perception.py gate; gui/live_view.py | test_sealing_perception | IMPL |
-| 10 | Public tunnel | Cloudflare named tunnel; results/public_bidirectional_e2e | live E2E evidence | IMPL+OPER |
+| 10 | Public tunnel | Cloudflare named tunnel; results/dev-history/results/public_bidirectional_e2e | live E2E evidence | IMPL+OPER |
 | 11 | Config byte-identity + crypto lock | domain/negotiation.py config_sha256 | test_negotiation | IMPL |
 | 12 | Fixed exact / minimums upward | negotiation FIXED/MINIMUM maps + game.schema.json | test_negotiation, test_game_schema | IMPL |
 | 13-14 | Orthogonal only, no diagonals | domain/primitives.Move; board.apply_move | test_primitives, test_board | IMPL |

@@ -42,7 +42,7 @@ cloudflared tunnel run copthief                # keep running during games
 ```
 Credentials JSON + cert.pem live in `~/.cloudflared/` — NEVER in a repo.
 
-**Verified evidence:** `results/public_tunnel_prd05_2026-07-13.json` — full
+**Verified evidence:** `results/dev-history/results/public_tunnel_prd05_2026-07-13.json` — full
 35-turn blind game over `mcp.alon.website`, identical digests.
 
 ## Why not free ngrok
