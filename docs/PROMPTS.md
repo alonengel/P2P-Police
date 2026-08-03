@@ -1170,3 +1170,24 @@ finishers), counted delivery gates must leave training postures untouched
 on counted runs only (COUNTED_FIXED_TERMS, not the standard validator),
 live rival-barrier quota, rule-32 funnel hardening (sdk/settlement.py
 split). Gates green both repos; parity green on the domain commit.
+
+## 2026-08-03 - Report-email cadence verified against the book + demo repo
+
+**Prompt (friendly vs imreeyal).** "Does the prof ask for per-sub-game
+email? How many JSONs does he want and do we have the exact format today?
+Check his example repo." Then: "Keep only the result email, drop the
+per-sub-game one, and make sure the artifact JSONs actually get committed
+and pushed."
+
+**Method.** Primary source first: re-read section 9.3-9.3.3 (pp. 71-79),
+Appendix He rules 31-38/51-54, Appendix Vav Table 20 (p. 141); then diffed
+the professor's DemoExamples sample-run JSONs against our emitted g01-g06
+artifacts, and read his sdk/email_sender (one series email, result JSON,
+no per-sub-game email anywhere).
+
+**Outcome.** Per-sub-game email removed (sdk/reporting.maybe_email +
+settlement call + tests reworked); the series email in
+sdk/series.maybe_email_series is now the sole sender, still behind the
+lecturer-address interlock. ADR-0009 addendum records the reading.
+Runbook step 4/5 rewritten: no per-game email; commit AND push the four
+artifacts per game. Friendly artifacts committed in both repos.
