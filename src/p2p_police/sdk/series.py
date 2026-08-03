@@ -111,10 +111,12 @@ def require_settled(by_slot: dict, game_id: str, expected_games: int,
 
 def aggregate_series(results_dirs, game_id: str, score_table,
                      expected_games: int, our_identity: dict | None = None,
-                     ) -> tuple[dict, list[str]]:
+                     counted: bool = False) -> tuple[dict, list[str]]:
     """Fold the settled logs of sub-games 1..num_games (possibly spread over
     both role repos' results dirs) into the reference-conformant series
-    result. Returns (doc, excluded); excluded names every ignored log."""
+    result. Returns (doc, excluded); excluded names every ignored log.
+    `counted` keys the league-standings fields: a friendly passes False and
+    fabricates no counted record."""
     dirs = ([results_dirs] if isinstance(results_dirs, (str, Path))
             else list(results_dirs))
     by_slot, excluded, uid = collect_logs(dirs, game_id, expected_games)
@@ -123,42 +125,9 @@ def aggregate_series(results_dirs, game_id: str, score_table,
 
     doc = build_series_result(game_id, uid, by_slot, score_table,
                               int(expected_games), our_identity or {},
-                              first_meeting=first_meeting(dirs[0], game_id, uid))
+                              first_meeting=first_meeting(dirs[0], game_id, uid),
+                              counted=counted)
     return doc, excluded
 
 
-def maybe_email_series(config, doc: dict, result_path, gatekeeper=None) -> str | None:
-    """The ONE end-of-series report email, auto-fired only in send mode.
-
-    Called strictly AFTER aggregate_series returned - the settlement guard
-    has already refused any unsettled series (rule 35), so nothing invented
-    can ever be mailed. Body carries the full result JSON, the emitted
-    result file rides along as the attachment, the recipient comes from
-    config, and the send goes through shared/gatekeeper like every other
-    external call. Returns the message id, or None when the mode gate held."""
-    from p2p_police.shared.interlock import ensure_counted_posture
-
-    ensure_counted_posture(config)  # a counted close must deliver to the league
-    email_cfg = config.private.get("email", {})
-    if email_cfg.get("mode") != "send":
-        return None
-    from p2p_police.infra.email_sender import send_report
-    from p2p_police.shared.gatekeeper import ApiGatekeeper
-    from p2p_police.shared.interlock import ensure_email_allowed
-
-    # lecturer-address interlock: an unarmed run cannot address the league
-    # (EmailInterlockError propagates; the CLI reports the refusal)
-    ensure_email_allowed(config, email_cfg["recipient"])
-
-    final = doc["final_result"]
-    verdict = ("series_tie" if final["series_tie"]
-               else f"winner={final['winner_group']}")
-    score = " ".join(f"{group}:{points}"
-                     for group, points in sorted(final["total_score"].items()))
-    message_id = send_report(
-        gatekeeper or ApiGatekeeper(config.rate_limits),
-        email_cfg["recipient"],
-        f"P2P league SERIES result - {doc['game_id']} - {verdict} - {score}",
-        json.dumps(doc, indent=2),
-        [Path(result_path)])
-    return str(message_id)
+from p2p_police.sdk.series_email import maybe_email_series  # noqa: E402,F401 (re-export)

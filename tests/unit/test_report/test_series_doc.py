@@ -130,14 +130,30 @@ def test_mutual_agreement_signed_then_inserted_and_confirmed(tmp_path) -> None:
     assert agreement["sha256"] == consensus_signature(body)
 
 
-def test_league_standings_fields_book_attached_shape(tmp_path) -> None:
-    """The book-attached 4-final-result's three league fields: declared
-    counts INCLUDING this game, first meeting, reward for the winner only."""
+def test_league_fields_friendly_fabricates_no_counted_record(tmp_path) -> None:
+    """UNCOUNTED default: declared counts pass through UNBUMPED and no
+    diversity reward — a rehearsal must not assert counted-game facts
+    (imreeyal pair diff 2026-08-03, same bug class both teams)."""
     final = build(tmp_path)["final_result"]
     assert final["games_played_including_this"]["alpha"] \
+        == OUR_IDENTITY["counted_games_played"]
+    assert final["games_played_including_this"]["beta"] == 0
+    assert final["first_meeting_between_groups"] is True  # factually true
+    assert all(applied is False for applied
+               in final["diversity_reward_applied"].values())
+
+
+def test_league_fields_counted_series_bumps_and_rewards(tmp_path) -> None:
+    """COUNTED arming: counts include this game; the diversity reward rides
+    the winner of a first counted meeting only (book-attached shape)."""
+    write_log(tmp_path, 1, "survival")
+    write_log(tmp_path, 2, "capture", role="thief")
+    doc, _ = aggregate_series(tmp_path, "a-vs-b", TABLE, 2, OUR_IDENTITY,
+                              counted=True)
+    final = doc["final_result"]
+    assert final["games_played_including_this"]["alpha"] \
         == OUR_IDENTITY["counted_games_played"] + 1
-    assert final["games_played_including_this"]["beta"] >= 1
-    assert final["first_meeting_between_groups"] is True
+    assert final["games_played_including_this"]["beta"] == 1
     winner = final["winner_group"]
     assert all(applied == (group == winner) for group, applied
                in final["diversity_reward_applied"].items())

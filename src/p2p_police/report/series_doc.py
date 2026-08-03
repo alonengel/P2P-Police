@@ -11,10 +11,8 @@ declaration file, and this document carries the flat id pair only.
 from p2p_police.domain import game_ids
 from p2p_police.report.artifacts import consensus_signature
 
-_SCHEMA = ("Summary and final result for the WHOLE series between two "
-           "teams: per-group score for every sub-game plus the aggregate "
-           "outcome. Static team metadata is carried in the linked "
-           "declaration.")
+_SCHEMA = ("Summary and final result for the WHOLE series between two teams: "
+           "per-sub-game scores + aggregate; identity lives in the declaration.")
 # The sample's fixed label, not a tunable: our timestamps stay UTC ISO-8601
 # with explicit offsets, so this tags the league's wall-clock zone only.
 TIMEZONE = "Asia/Jerusalem"
@@ -104,7 +102,8 @@ def _links(game_id: str, github: dict) -> dict:
 
 def build_series_result(game_id: str, game_uid: str, by_slot: dict,
                         score_table, expected_games: int,
-                        our_identity: dict, first_meeting: bool = True) -> dict:
+                        our_identity: dict, first_meeting: bool = True,
+                        counted: bool = False) -> dict:
     """Assemble the full reference-conformant result document. The
     mutual_agreement sha256 is sign-then-insert over the rest of the doc
     (ADR-0004 settlement form); confirmed = every sub-game audit clean."""
@@ -141,6 +140,7 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
         return int((info.get("identity") or {}).get("counted_games_played", 0))
 
     theirs_declared = max((_declared(n) for n in by_slot), default=0)
+    bump = 1 if counted else 0
     doc = {
         "_schema": _SCHEMA,
         "schema_version": SCHEMA_VERSION,
@@ -159,14 +159,16 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
             "winner_group": winner,
             "series_tie": series_tie,
             "tokens_total_series": tokens,
-            # league standings inputs (book-attached 4-final-result): the
-            # diversity reward rides a WIN in the first counted meeting only
+            # league standings inputs (book-attached 4-final-result), keyed
+            # on the COUNTED arming: a friendly must not fabricate a counted
+            # record — no count bump, no reward (imreeyal pair diff
+            # 2026-08-03: both teams converged on this bug class)
             "games_played_including_this": {
-                me: int(our_identity.get("counted_games_played", 0)) + 1,
-                them: theirs_declared + 1},
+                me: int(our_identity.get("counted_games_played", 0)) + bump,
+                them: theirs_declared + bump},
             "first_meeting_between_groups": first_meeting,
             "diversity_reward_applied": {
-                g: bool(first_meeting and winner == g) for g in names},
+                g: bool(counted and first_meeting and winner == g) for g in names},
         },
     }
     doc["mutual_agreement"] = {  # sign-then-insert, like the game result;
