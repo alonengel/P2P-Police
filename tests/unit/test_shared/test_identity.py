@@ -32,3 +32,12 @@ def test_identity_keeps_the_declaration_fields() -> None:
     assert block["counted_games_played"] == 2
     assert block["llm_model"] == "template"
     assert "hardware_spec" in block
+
+
+def test_empty_llm_model_declares_the_provider_not_an_empty_string() -> None:
+    """[llm] model = "" means the zero-token template chain runs — the
+    declaration names the PROVIDER (Imree diff 2026-08-03), never ''."""
+    private = dict(PRIVATE, llm={"model": ""}, trash_talk={"provider": "template"})
+    assert identity_block(private, "anrbj666")["llm_model"] == "template"
+    private["trash_talk"] = {"provider": "ollama"}
+    assert identity_block(private, "anrbj666")["llm_model"] == "ollama"

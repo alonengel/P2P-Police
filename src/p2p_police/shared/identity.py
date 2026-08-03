@@ -26,7 +26,10 @@ def identity_block(private: dict, group_id: str) -> dict:
         "counted_games_played": int(game.get("counted_games_played", 0)),
         "group_name": game.get("group_name", group_id),
         "members": game.get("members", []),
-        "llm_model": private.get("llm", {}).get("model", "template"),
+        # empty [llm].model means the zero-token template chain runs — declare
+        # the PROVIDER truthfully, never an empty string (Imree diff 2026-08-03)
+        "llm_model": (private.get("llm", {}).get("model")
+                      or private.get("trash_talk", {}).get("provider", "template")),
         "hardware_spec": hardware_spec(),
         "github_commit": git_commit_hash(),
     }
