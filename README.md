@@ -222,6 +222,23 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   plus the derivable-rule tiers instead — never called tampered for its
   schema.)
 
+- **Convergence day against the rival team (2026-08-03).** Four full
+  six-window friendly series over the public tunnels in a single day,
+  every audit **Verified OK on both sides**, the two teams' report mails
+  cross-diffed after each window until the final diff returned **zero
+  findings**. What converged, per the book's attached example set and the
+  grader's Moodle instructions (ADR-0012 + its three addenda): a sealed
+  `step_zero` record opens every log (the commit id declared through TWO
+  channels — negotiate identity and sealed record — with any mismatch a
+  recorded finding); commit columns are role-aware per window; the
+  `final_result` carries the book-attached league fields keyed on the
+  counted arming (a friendly fabricates no counted record); the ONE
+  series email attaches the result file per the course chatbot's ruling;
+  and `mutual_agreement.sha256` uses the reference's symmetric-outcome
+  scope — **byte-identical across the two teams' independently emitted
+  files, verified live**. The full negotiation record: `docs/PROMPTS.md`
+  rounds 1-6.
+
 - **The settlement guard (rule 35).** `series-result` folds sub-game logs
   (pooling BOTH role repos' results dirs) into the reference-conformant
   series result and **refuses** to emit unless every sub-game
@@ -368,13 +385,18 @@ the game's structure, measured, not assumed.
   18.0 → **2.0** vs the stage-2 honesty coin while the thief's tracking
   error moves 2.36 → 1.43 (`docs/evidence/deception.md`).
 - `strategy/endgame.py` — exact forced-capture solver (belief-correct
-  minimax over the belief support), keep-gated: **0 solver fires in 160
-  measured games** — the scent-floor belief never sharpens to a provable
-  support — so it ships **OFF** (`[strategy.endgame] enabled = false`;
-  honest negative result in `docs/evidence/cop-strength.md`).
+  minimax over the belief support). First measurement keep-gated it OFF
+  (**0 solver fires in 160 games** — the scent-floor belief never sharpened
+  to a provable support); after the dwell-plateau pin sharpened the belief
+  it was **re-measured and re-opened: ships ON** — 230 fires, pool capture
+  0.625 → 0.850 (§3 item 6; the original negative verdict was about the
+  belief, not the module — both readings preserved in
+  `docs/evidence/cop-strength.md`).
 - `strategy/info_gain.py` — expected belief-entropy-reduction term blended
-  into the pursuit score: capture rate unmoved at every weight swept
-  (0.5-4.0), so it ships **OFF** (same keep-gate document).
+  into the pursuit score: still **negative alone** (0.558 vs the 0.625
+  baseline) and therefore shipped **ON only as a pair** with the solver,
+  whose support gate it opens 29% more often — 0.983 together;
+  `[strategy.info_gain]` is never enabled without `[strategy.endgame]`.
 
 ### 4. Screenshots (mandatory evidence, from real cross-repo games)
 
@@ -396,8 +418,8 @@ of this one game pair-verify `Verified OK` (§2, Cross-team verification):
 
 ### 5. Quality mapping (ISO/IEC 25010)
 
-Functional suitability — milestone-gated PRDs 01-09, 646 tests, branch
-coverage 93.27%. Reliability — deadlines, watchdog-style FSM exits, session
+Functional suitability — milestone-gated PRDs 01-09, 765 tests, branch
+coverage 94.1%. Reliability — deadlines, watchdog-style FSM exits, session
 rebuilds, chaos drills + crash-resume on both wire shapes,
 bystander-tolerant pairing, orphan-port guard, 20-seed self-play.
 Performance — template provider plays whole series at 0 LLM tokens. Security —

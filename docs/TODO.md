@@ -149,7 +149,7 @@ live in `docs/evidence/`:
 - [x] Barrier gate lifted out of frozen constants into `[strategy.trap]` and swept (2/3/4/5 -> 3); the policy had been placing 0.00 walls/game, starved of information rather than badly designed
 - [x] Keep-gates RE-MEASURED on the shipped Perception pipeline (the arena harnesses had been bypassing it): endgame solver and info-gain both re-opened and flipped ON as a PAIR (pool capture 0.625 -> 0.983); thief survival certificate re-opened (0 -> 120 fires, survival-neutral, kept for proof over coincidence); area-denial herding measured byte-identical to shipped and REJECTED
 - [x] Live E2E on the reference wire, both sub-games: capture on turn 15 with three barriers spent, both sides Verified OK with matching end-state digests
-- [ ] Team #2 outreach for the second counted series (passing condition; the only open item that is not code)
+- [x] Team #2 outreach for the second counted series (passing condition) — second team FOUND; counted series scheduled for the weekend of 2026-08-08
 
 ## Information regimes and the deferred `derived` mode (2026-07-27)
 - [x] `shared/info_modes.py`: regimes are a registry with declared wire-shape legality, resolved once at construction; unknown or unserviceable regimes are startup errors instead of silent downgrades (ADR-0006 addendum). `brain_view` is the single extension point.
@@ -157,3 +157,17 @@ live in `docs/evidence/`:
 - [ ] **DEFERRED - `info_mode = "derived"`** (invert the transmitted scent field to the sender's exact cell, ADR-0010). Designed, measured, not built: belief mode already measures at ceiling under league conditions (cop 1.000 vs the live opponent, 0.983 across the evader pool; thief 1.000 vs every blind hunter), so it buys nothing we need and it would contradict the Dec-POMDP framing the report is built on.
   - **Trigger to revisit:** an opponent proposes the bookletter wire with `info_mode = "exact"`. That legitimately hands them our true position every turn and puts our thief back against a full-information wall-builder (arena: 0.611 overall, 0.00 vs the deep-RL trap cop). Response options: decline `exact` (our default is reference + belief, so declining is the status quo), or counter-propose `derived` under a both-declare acceptance so the information is symmetric.
   - Shipping it would require: a registry row, a `brain_view` branch, a both-declare acceptance field in the handshake, and disclosure to the peer - never a silent flip.
+
+## Cross-team convergence campaign vs imreeyal + grader-instruction rounds (2026-08-03)
+- [x] Report cadence settled against book s9.3.3 + the reference: per-sub-game email REMOVED; the ONE series email is the mandated report (ADR-0009 addendum)
+- [x] Step-0 commit-id declaration on TWO channels: negotiate identity + the SEALED step_zero record (book-attached shape); the rival's copy is read back and a cross-channel mismatch is a recorded finding (rule 53 / p. 40 box)
+- [x] Book-attached example set adopted (docs/googleBotMissingFiles): role-aware commit columns per window, the three league fields keyed on the COUNTED arming (a friendly fabricates no counted record), mutual_agreement trimmed, flat config artifact, declaration in symmetric group_1/group_2 shape (ADR-0012)
+- [x] Moodle item-4 resolved: superset (14 attachments) first, then REVERTED to result-only on the course chatbot's ruling; four templates reach the lecturer via email (result) + GitHub (rest) (ADR-0012 second addendum)
+- [x] mutual_agreement.sha256 = the reference symmetric-outcome scope, adopted JOINTLY: byte-identical across both teams' independently emitted files, proven live (ADR-0012 third addendum)
+- [x] Four validation windows in one day (16:00 / 17:45 / 19:35 / 20:15): 24 sub-games, every audit Verified OK on both sides; final pair diff ZERO findings
+- [x] Clean-tree procedure: pre-archive artifacts before T so declarations seal clean commit hashes (runbook clean-commit note)
+- [x] Truthful hardware declaration (registry VRAM, real CPU freq/GPU) + llm_model names the provider; inbound hint VIEW capped at the signed word limit (audit comparisons untouched)
+- [x] Counted game.json draft ready and rival-reviewed (docs/drafts/game.counted.json - agreed_between anrbj666/imreeyal; adopt byte-identically at T)
+- [x] Rival-repo rulebook audit run (their request-symmetric): disqualification tier clean; findings shared (stale M0 README, fifth-artifact citation, dual game-id residue)
+- [ ] COUNTED series vs imreeyal: T to be named this week (deadline 2026-08-12)
+- [ ] COUNTED series vs team #2: scheduled for the weekend
