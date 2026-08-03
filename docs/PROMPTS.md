@@ -1247,3 +1247,14 @@ from ours (identical outcome patterns across the two windows). Adopted
 the reference scope jointly for mutual_agreement (byte-identical across
 peers, machine-checkable agreement); step-0 reader accepts both type
 spellings (system_spec answered). ADR-0012 third addendum.
+
+**Round 7 (2026-08-03, late).** imreeyal audited OUR repos back. Their
+finding #1 CONFIRMED by repro and fixed (unclaimed landing capture no
+longer self-destructs an honest audit - disputed evidence instead,
+ADR-0011 addendum); #4 fixed (counted ledger now committed + all-dirs
+reads); #3 fixed (SELF_GRADE.md + submission gate); #5 CHALLENGED with
+receipts (min_center_intensity IS read - wire/terms.py:64, one of the
+kit's signed flat-term keys; their own app_f_table documents it);
+#2 (always-send on technical loss) held for JOINT shape alignment as
+they requested. Small items: limiter thresholds to config, engine
+docstring two-wire note, inbound hint view-cap (earlier round).
