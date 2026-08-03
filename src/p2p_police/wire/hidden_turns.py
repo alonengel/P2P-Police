@@ -15,7 +15,8 @@ import contextlib
 from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import GamePhase, Move, Outcome, Role
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
-from p2p_police.wire import audit, audit_foreign, claims, codec
+from p2p_police.report.lookup import geometry
+from p2p_police.wire import audit, audit_foreign, claims, codec, step_zero
 
 
 def my_half_turn(rt) -> None:
@@ -131,15 +132,15 @@ def finish(rt) -> dict:
     derivable checks instead of reading TAMPERED; (c) the digest comparison
     only where one construction exists on both sides — foreign pairs report
     digest_match as not-comparable (None), never false."""
-    own_digest = rt.own.digest()
     with contextlib.suppress(DeadlineExpiredError):
         rt.transport.send_audit(
             audit.build_audit_payload(rt.exchange, rt.role.value, rt.own.outcome.value),
             Deadline(rt.config.turn_timeout_seconds))
         rt.audit_sent = True  # normal-path disclosure done (rules 35-36)
-    verdict, digest_match, end_digest = "not received", False, own_digest
+    verdict, digest_match, end_digest = "not received", False, rt.own.digest()
     try:
         theirs = rt._wait(rt.inboxes.audits, "opponent audit (records + nonces)")
+        step_zero.read_for(rt, theirs)  # rival's sealed commit declaration
         verdict = rt.exchange.audit_reveals(theirs.get("records", []))
         if verdict == "Verified OK":
             if audit_foreign.parses_as_ours(rt.exchange.their_records):
@@ -150,8 +151,6 @@ def finish(rt) -> dict:
                 digest_match = audit.consistent(
                     reconstruction, rt.own.outcome, rt.own.turns_completed)
             else:
-                from p2p_police.report.lookup import geometry
-
                 # rules 46/47 ride along: a barrier capture is self-declared
                 # live, so THEIR reveal is the only place we can prove it
                 verdict, digest_match, rt.disputed_capture = audit_foreign.foreign_verdict(
@@ -176,6 +175,10 @@ def finish(rt) -> dict:
             getattr(rt, "perception", None), "refused_readings", 0),
         "opponent_group_id": getattr(rt, "opponent_group_id", "unknown"),
         "opponent_info": getattr(rt, "opponent_info", {}),
+        # The rival's SEALED commit-id declaration (its revealed step-zero)
+        # + the two-channel verdict vs its negotiate identity (a mismatch is
+        # rule-36 evidence; the series report prefers the sealed copy).
+        **step_zero.evidence(rt),
         # Rule-36 evidence: a capture their own reveal proves, that their peer
         # never conceded. Recorded for the logs to settle (rule 35), never a
         # unilateral outcome rewrite - absent on every honest game.

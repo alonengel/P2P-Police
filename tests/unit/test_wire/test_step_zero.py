@@ -60,6 +60,20 @@ def _move(step: int, role: str, move: str) -> dict:
             "commit": crypto.commit_hash(payload, nonce)}
 
 
+def test_read_theirs_two_channel_verdict() -> None:
+    """The rival's revealed step-zero vs its negotiate identity: same commit
+    = no finding; different = a recorded finding; absent = (None, None)."""
+    from p2p_police.wire.step_zero import read_theirs
+
+    revealed = [{"payload": {"step": 0, "type": "step_zero",
+                             "github_commit": "abc123"}, "nonce": "n", "commit": "c"}]
+    zero, finding = read_theirs(revealed, {"github_commit": "abc123"})
+    assert zero["github_commit"] == "abc123" and finding is None
+    zero, finding = read_theirs(revealed, {"github_commit": "fff999"})
+    assert zero is not None and "differs" in finding
+    assert read_theirs([], {"github_commit": "abc123"}) == (None, None)
+
+
 def test_reconstruct_skips_the_step_zero_declaration() -> None:
     """A typed record replays nothing: the reconstruction with and without
     the step-zero record derives the SAME digest (survival at threshold 2)."""

@@ -52,10 +52,13 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
         "tie": winner is None,
         # role-aware (book-attached example: commits VARY per sub-game): our
         # column is the hash the EMITTING repo stamped into its own log
-        # summary; theirs is what that window's handshake identity declared
+        # summary; theirs prefers the SEALED copy (their revealed step-zero)
+        # over that window's negotiate-declared identity
         "github_commit": {me: summary.get("github_commit")
                           or our_identity.get("github_commit", "unknown"),
-                          them: identity.get("github_commit", "unknown")},
+                          them: (summary.get("opponent_step_zero") or {})
+                          .get("github_commit")
+                          or identity.get("github_commit", "unknown")},
         "tokens": {me: int(summary.get("tokens_total") or 0),
                    them: int(identity.get("tokens_total") or 0)},
         "score": score,
@@ -134,9 +137,8 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
     # Rules 37-38 declarations, INCLUDING this game: ours from our config's
     # declared count, theirs the largest count any window's handshake declared
     def _declared(n: int) -> int:
-        identity = ((by_slot[n]["summary"].get("opponent_info") or {})
-                    .get("identity") or {})
-        return int(identity.get("counted_games_played", 0))
+        info = by_slot[n]["summary"].get("opponent_info") or {}
+        return int((info.get("identity") or {}).get("counted_games_played", 0))
 
     theirs_declared = max((_declared(n) for n in by_slot), default=0)
     doc = {

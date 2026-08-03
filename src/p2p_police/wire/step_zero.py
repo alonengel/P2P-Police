@@ -28,3 +28,36 @@ def seal_step_zero(rt) -> None:
         "sub_game_number": rt.exchange.sub_game,
         "github_commit": git_commit_hash(),
     })
+
+
+def read_theirs(revealed: list, negotiate_identity: dict) -> tuple[dict | None, str | None]:
+    """The rival's revealed step-zero payload (None when it sent none) plus
+    the two-channel verdict: a sealed github_commit that differs from what
+    the SAME window's negotiate identity declared is a FINDING recorded on
+    the report (rule-36 evidence) — never an outcome rewrite."""
+    payload = next((r.get("payload") for r in revealed
+                    if isinstance(r.get("payload"), dict)
+                    and r["payload"].get("type") == "step_zero"), None)
+    if payload is None:
+        return None, None
+    declared = (negotiate_identity or {}).get("github_commit")
+    if declared and payload.get("github_commit") != declared:
+        return payload, (f"sealed step-zero commit {payload.get('github_commit')!r}"
+                         f" differs from the negotiate-declared {declared!r}")
+    return payload, None
+
+
+def read_for(rt, audit_message: dict) -> None:
+    """Extract + cross-check the rival's step-zero from its audit message,
+    storing the report evidence on the runtime (hidden_turns' line budget)."""
+    zero, finding = read_theirs(
+        audit_message.get("records", []),
+        (getattr(rt, "opponent_info", {}) or {}).get("identity", {}))
+    rt.step_zero_evidence = {"opponent_step_zero": zero,
+                             "step_zero_mismatch": finding}
+
+
+def evidence(rt) -> dict:
+    """The two report keys — None-safe when no audit ever arrived."""
+    return getattr(rt, "step_zero_evidence",
+                   {"opponent_step_zero": None, "step_zero_mismatch": None})
