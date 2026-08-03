@@ -39,6 +39,16 @@ def test_observe_without_barrier_keeps_prior_flat() -> None:
     assert origin_mass(perception.belief) < 0.2  # no phantom localization
 
 
+def test_inbound_hint_view_capped_at_signed_words() -> None:
+    """An overlong rival hint never reaches belief/GUI beyond the signed
+    hint_max_words — the VIEW is capped; the wire message stays untouched
+    for the audit's live-vs-sealed comparison (inbound hardening)."""
+    engine = GameEngine(7, (3, 3), (0, 0), RULES)
+    perception = Perception(Role.THIEF, 7, hint_cap=15)
+    perception.observe(engine, Role.POLICE, " ".join(["word"] * 40))
+    assert len(perception.last_hint.split()) == 15
+
+
 def test_geometric_runtime_feeds_declared_barriers_to_belief() -> None:
     """_their_half_turn passes the sealed barrier action into Perception."""
     engine = GameEngine(7, (3, 3), (0, 0), RULES)

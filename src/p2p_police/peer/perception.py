@@ -33,10 +33,16 @@ class Perception:
     keeps a forged trail from being believed.
     """
 
-    def __init__(self, role: Role, grid_size: int, rival_start=None) -> None:
+    def __init__(self, role: Role, grid_size: int, rival_start=None,
+                 hint_cap: int = 15) -> None:
         self.role = role
         self.belief = BeliefMap(grid_size)
         self.last_hint = ""
+        # Inbound VIEW cap (the signed hint_max_words): belief/GUI/profiler
+        # never consume more words than the rival signed for; the MESSAGE
+        # stays untouched — the audit's live-vs-sealed hint check must
+        # compare originals (imreeyal parity hardening, 2026-08-03).
+        self._hint_cap = int(hint_cap)
         self.on_snapshot = None  # optional live-GUI feed
         self.profiler = OpponentProfiler()
         self.opponent_id = "unknown"
@@ -66,7 +72,8 @@ class Perception:
         is a public term both sides committed to, and it is what makes the
         very first forged reading checkable instead of merely plausible."""
         rival_start = config.thief_start if role is Role.POLICE else config.cop_start
-        return cls(role, config.grid_size, rival_start=rival_start)
+        return cls(role, config.grid_size, rival_start=rival_start,
+                   hint_cap=int(config.shared["world"].get("hint_max_words", 15)))
 
     def observe(
         self, engine: GameEngine, rival: Role, hint_text: str | None,
@@ -76,6 +83,8 @@ class Perception:
 
         A freshly declared barrier placement (passed by the runtime the turn
         it lands) first pins the placer's origin cells — law of barriers."""
+        if hint_text:  # inbound view capped at the signed word limit
+            hint_text = " ".join(hint_text.split()[: self._hint_cap])
         self.last_hint = hint_text or ""
         self.belief.diffuse(engine.board)
         if barrier_cell is not None:
