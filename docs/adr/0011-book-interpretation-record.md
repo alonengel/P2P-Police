@@ -71,3 +71,23 @@ MCP-only.
 - If the course staff ever rules against one of these readings, the affected
   value/behavior is config-driven or single-module in every case above; an
   ADR supersession + paired commit adapts it without touching physics.
+
+## Addendum (2026-08-03, imreeyal repo review #1): the unclaimed-landing capture
+
+Their review found a case section 4 above did not cover, verified by repro
+before fixing: the cop can LAND on the thief's true cell while its belief
+gate (claim threshold 0.10) keeps it from claiming - under the hidden wire
+neither peer can know, the game legitimately plays on, but the strict audit
+reconstruction fired CAPTURE on the co-location and then read the next
+honest action as "a real action after game end" -> TAMPERED -> rule 19 ->
+rule 35: an honest game self-destructing to 0/0 for both teams.
+
+Resolution (wire/audit.py reconstruct): a LANDING capture is now
+PROVISIONAL, matching the live game's claim-mediated semantics - if the
+thief's sealed closure follows, the capture stands exactly as before; if a
+real action follows instead, the landing was evidently never claimed or
+conceded, so the replay downgrades it to `disputed_capture` evidence
+(mirroring the foreign tier) and continues to the outcome the peers lived.
+LAW captures (barrier-on-thief / fully surrounded) stay strict: the thief
+self-detects those and playing past them remains tampering evidence.
+Regression tests: tests/unit/test_wire/test_audit_disputed.py.

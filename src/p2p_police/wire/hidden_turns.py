@@ -35,8 +35,8 @@ def my_half_turn(rt) -> None:
     win = None
     if rt.role is Role.THIEF and not captured:
         rt.own.close_full_turn()  # the thief's step ticks the round clock
-        if rt.own.survival_reached():
-            win = {"type": "survival"}  # claimed at MY 35th step (demo timing)
+        # survival claimed at MY 35th step (demo timing)
+        win = {"type": "survival"} if rt.own.survival_reached() else None
     response, rt.pending_claim_response = rt.pending_claim_response, None
     response = claims.concede_declaration(rt.own) if captured else response  # honest
     commit = rt.exchange.seal_step(rt.own.digest(), step, action, hint, truth)
@@ -148,6 +148,7 @@ def finish(rt) -> dict:
                     rt.exchange.own_records, rt.exchange.their_records,
                     rt.config.shared, expected_sub_game=rt.exchange.sub_game)
                 end_digest = reconstruction["digest"]
+                rt.disputed_capture = reconstruction.get("disputed_capture")
                 digest_match = audit.consistent(
                     reconstruction, rt.own.outcome, rt.own.turns_completed)
             else:

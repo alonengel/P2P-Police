@@ -26,6 +26,7 @@ from p2p_police.domain.errors import GameRuleError
 from p2p_police.domain.primitives import Move, Outcome, Role
 from p2p_police.domain.rules import RuleSet, validate_barrier_placement
 from p2p_police.report.lookup import geometry
+from p2p_police.wire.declared import verify_declared  # noqa: F401 (re-export)
 
 _CLOSURE_ACTION = {"type": "move", "move": "STAY"}
 
@@ -43,34 +44,6 @@ def build_audit_payload(exchange, sender: str, outcome: str) -> dict:
         "records": list(exchange.own_records),
         "result_claim": outcome,
     }
-
-
-def _sealed_barrier(payload: dict) -> list | None:
-    action = payload.get("action")
-    if not (isinstance(action, dict) and action.get("type") == "barrier"):
-        return None
-    return [action["cell"][0], action["cell"][1]]
-
-
-def verify_declared(record: dict) -> dict:
-    """Rules 15-16: what a peer DECLARED live beside its commit must match
-    what its reveal proves it sealed. Returns the declared block ({} when
-    the record carries none — commit-only halves, geometric records and
-    pre-upgrade logs derive nothing, they are not refused)."""
-    payload, declared = record.get("payload"), record.get("declared")
-    if not isinstance(payload, dict) or not isinstance(declared, dict):
-        return {}
-    placed = declared.get("barrier_placed")
-    if (list(placed) if placed is not None else None) != _sealed_barrier(payload):
-        raise GameRuleError(
-            f"step {payload.get('step')}: live barrier declaration {placed} "
-            "does not match the sealed action - tampering evidence")
-    hint = declared.get("hint")
-    if hint is not None and hint != payload.get("hint"):
-        raise GameRuleError(
-            f"step {payload.get('step')}: live hint differs from the sealed "
-            "hint - tampering evidence")
-    return declared
 
 
 def _rules_from(terms: dict) -> RuleSet:
@@ -108,6 +81,8 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
     board, rules = Board(grid), _rules_from(shared_terms)
     positions = {Role.POLICE: cop_start, Role.THIEF: thief_start}
     turns, outcome = 0, Outcome.ONGOING
+    disputed = None       # rules 46/47 evidence: proven, never conceded live
+    pending = None        # a LANDING capture awaiting the thief's closure
     # Per-sender numbering: BOTH sides seal steps 1, 2, 3... — the game
     # order is (step, actor) with the thief first at equal step numbers
     # (reference cadence: the thief opens every round).
@@ -127,10 +102,18 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
                 f"{expected_sub_game!r} - a re-presented record from another "
                 "game is tampering evidence")
         if outcome is not Outcome.ONGOING:
-            if payload["action"] != _CLOSURE_ACTION or Role(payload["role"]) is Role.POLICE:
+            if payload["action"] == _CLOSURE_ACTION and Role(payload["role"]) is not Role.POLICE:
+                pending = None  # the thief conceded — the capture stands
+                continue
+            if pending is not None:
+                # A LANDING co-location the cop never claimed: under the
+                # claim-mediated wire neither peer could know, so the game
+                # legitimately played on. Evidence, never a self-destruct
+                # (imreeyal review 2026-08-03 #1; mirrors the foreign tier).
+                disputed, pending, outcome = pending, None, Outcome.ONGOING
+            else:
                 raise GameRuleError(
                     f"step {payload['step']}: a real action after game end - tampering evidence")
-            continue
         _apply(payload, board, positions, rules)
         cop_cell, thief_cell = positions[Role.POLICE], positions[Role.THIEF]
         if Role(payload["role"]) is Role.POLICE:
@@ -140,11 +123,19 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
                     f"step {payload['step']}: live capture claim {list(claim)} "
                     "names a cell the revealed action never reached - a false "
                     "claim (rules 21-22) is tampering evidence")
-            # Only the cop's OWN action can prove a capture live (claim or
-            # barrier declaration); the truth duty makes the thief concede.
-            if cop_cell == thief_cell or board.is_barrier(thief_cell) \
-                    or board.is_surrounded(thief_cell):
+            # Only the cop's OWN action can prove a capture live. LAW
+            # captures (wall on the thief / fully surrounded) are strict —
+            # the thief self-detects and MUST concede; a LANDING is
+            # claim-mediated, so it stays provisional until the closure.
+            if board.is_barrier(thief_cell) or board.is_surrounded(thief_cell):
+                outcome, pending = Outcome.CAPTURE, None
+            elif cop_cell == thief_cell:
                 outcome = Outcome.CAPTURE
+                pending = {"step": payload["step"],
+                           "cell": [cop_cell[0], cop_cell[1]],
+                           "rule": "46-47 evidence: landing co-location "
+                                   "proven by the reveals, never claimed "
+                                   "or conceded live"}
         else:
             if board.is_surrounded(thief_cell) or board.is_barrier(thief_cell):
                 outcome = Outcome.CAPTURE  # walked into a pocket: must concede
@@ -164,6 +155,7 @@ def reconstruct(own_records: list, their_records: list, shared_terms: dict,
         "digest": hashlib.sha256(canonical(state).encode("utf-8")).hexdigest(),
         "outcome": outcome.value,
         "turns_completed": turns,
+        "disputed_capture": disputed,
     }
 
 
