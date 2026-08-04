@@ -119,6 +119,27 @@ ODD windows (1,3,5), the thief repo the EVEN ones (2,4,6).
    lecturer's audit.
 6. Screenshot anything unusual; keep logs — they are the only accepted
    dispute evidence.
+7. **Third-party verification (optional, and know the layout caveat).** The
+   interop kit's gate (github.com/Imreec/copthief-league-protocol,
+   `tools/check_artifacts.py`) expects all four Table-20 artifact kinds in
+   ONE directory. Our repos split them by kind on purpose — configs in
+   `config/games/`, the rest in `results/` — so pointed at `results/` the
+   gate FAILS "at least one config artifact" even though the bundle is
+   conformant. Assemble a bundle first:
+
+   ```bash
+   mkdir -p /tmp/bundle && cp results/*<game_id>*.json \
+     config/games/config_<game_id>_g*.json /tmp/bundle/
+   python <kit>/tools/check_artifacts.py /tmp/bundle
+   ```
+
+   Verified 2026-08-04 on the counted imreeyal artifacts: assembled this
+   way both halves pass, and the two-directory join across our police and
+   thief bundles prints ALL SETS AGREE. Do NOT point the two-directory
+   join at a repo root or at `results/` — it globs RECURSIVELY, so it
+   sweeps `results/friendlies/` and `results/dev-history/` and reports our
+   own archived history as a rule-35 contradiction (reported to the kit,
+   with a probe).
 
 ## Counting rules (don't burn games)
 
