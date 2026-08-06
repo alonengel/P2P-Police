@@ -18,9 +18,9 @@ mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief
 
 [network]
 my_port = 8802                                  # police MCP server port
-opponent_url = "http://127.0.0.1:8801/mcp"      # point at the sparring partner's URL
+opponent_url = "https://defense-surrounding-drove-firmware.trycloudflare.com/mcp"  # nis-yar1's THIEF (our cop's counterpart); CAUTION: trycloudflare quick tunnel — re-confirm before T
 turn_timeout_seconds = 180
-wire_shape = "bookletter"       # selectable per warm-up: "bookletter" | "reference"
+wire_shape = "reference"        # selectable per warm-up: "bookletter" | "reference"
                                 # (or override with `--wire-shape` on the CLI)
 
 # no [strategy] table: the shipped baseline brain runs — no class override, and
