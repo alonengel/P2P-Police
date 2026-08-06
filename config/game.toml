@@ -19,7 +19,7 @@ mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief
 
 [network]
 my_port = 8802                                  # police MCP server port
-opponent_url = "https://thief.imreeyal.com/mcp"  # series-test overlay (local only)      # the ONLY thing we know about the opponent
+opponent_url = "https://defense-surrounding-drove-firmware.trycloudflare.com/mcp"  # series-test overlay (local only)      # the ONLY thing we know about the opponent
 turn_timeout_seconds = 180
 wire_shape = "reference"        # the negotiated cross-team wire (hidden-information reference-v3);
                                 # declares wire_shape_sha256 at negotiation. "bookletter" = lockstep wire
