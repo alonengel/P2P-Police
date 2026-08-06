@@ -49,8 +49,8 @@ model = ""
 step_deadline_seconds = 30      # hard cap on LLM thinking per step
 
 [email]
-recipient = "alonisrael.engel@gmail.com, Imree.c@gmail.com"  # warm-up posture: reports reach ONLY us; league address restored per counted game
-mode = "disabled"               # dev default; league games switch to "send" (rule 32: automatic reporting)
+recipient = "alonisrael.engel@gmail.com, nissimderi123@gmail.com"  # FRIENDLY posture (team #2 pairing): reports reach us + their contact ONLY; league address restored per counted game
+mode = "send"                   # friendly sends to the two personal addresses above; the lecturer stays structurally unreachable (interlock: counted=false)
 counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals
                                 # and friendlies structurally cannot (shared/interlock.py)
