@@ -21,7 +21,7 @@ from p2p_police.domain.trail_forensics import (
     incredible_saturation,
     transition_emitters,
 )
-from p2p_police.strategy.hints import landmark_region, parse_claim
+from p2p_police.strategy.hints import landmark_region, parse_claim, parse_move_echo
 from p2p_police.strategy.profiler import OpponentProfiler
 
 
@@ -86,7 +86,13 @@ class Perception:
         if hint_text:  # inbound view capped at the signed word limit
             hint_text = " ".join(hint_text.split()[: self._hint_cap])
         self.last_hint = hint_text or ""
-        self.belief.diffuse(engine.board)
+        # A literal move-echo IS the movement model for this turn (league
+        # rival 2026-08-08); anything else keeps the one-step diffusion.
+        echo = parse_move_echo(hint_text) if hint_text else None
+        if echo:
+            self.belief.observe_motion(echo, engine.board)
+        else:
+            self.belief.diffuse(engine.board)
         if barrier_cell is not None:
             self.belief.observe_barrier(
                 (barrier_cell[0], barrier_cell[1]), engine.board)
@@ -118,7 +124,8 @@ class Perception:
         # Hint tiers: directional claim first; place-name talk falls through
         # to the gazetteer and lands as a region observation. Both carry the
         # profiler's reputation weights; both stay scent-lie-checked.
-        claim = parse_claim(hint_text) if hint_text else None
+        # An echo already consumed the hint as motion — no region double-count.
+        claim = None if echo else (parse_claim(hint_text) if hint_text else None)
         weights = self.profiler.advised_weights(self.opponent_id)
         if claim:
             self.belief.observe_hint(claim, rival_scent, weights)

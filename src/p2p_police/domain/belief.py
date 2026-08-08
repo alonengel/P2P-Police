@@ -9,46 +9,15 @@ origin likelihood (a declared placement pins the placer — law of barriers).
 
 from p2p_police.domain.board import Board
 from p2p_police.domain.evidence import plateau_origin, scent_evidence
+from p2p_police.domain.hint_regions import claimed_region, region_is_lie
 from p2p_police.domain.primitives import Cell, Move
 from p2p_police.domain.scent import ScentField
 
 SCENT_LIKELIHOOD_FLOOR = 0.05  # silent cell is missing info, not impossible
 TRUE_CLAIM_WEIGHT = 3.0
 FALSE_CLAIM_WEIGHT = 0.4
-# Book p.30: a truthful fresh trail reads (1-rho)*0.9 ~= 0.81; claims backed by
-# far weaker evidence are treated as lies.
-LIE_EVIDENCE_FLOOR = 0.4
 BARRIER_ORIGIN_BOOST = 25.0  # placement-origin cells: near-certain evidence
 PLATEAU_ORIGIN_BOOST = 25.0  # a fitted dwell plateau: the same evidence grade
-
-
-def claimed_region(claim: str, grid_size: int) -> set[Cell]:
-    """Cells consistent with a directional claim (board halves; STAY = all)."""
-    half = grid_size / 2
-    cells = set()
-    for row in range(grid_size):
-        for col in range(grid_size):
-            if (
-                claim == "STAY"
-                or (claim == "N" and row < half)
-                or (claim == "S" and row >= half)
-                or (claim == "W" and col < half)
-                or (claim == "E" and col >= half)
-            ):
-                cells.add((row, col))
-    return cells
-
-
-def region_is_lie(region: set[Cell], scent) -> bool:
-    """The scent map cannot lie: a region with no fresh trail exposes the
-    verbal hint (deviation from (1-rho)-decay expectations)."""
-    freshest = max((scent.value_at(cell) for cell in region), default=0.0)
-    return freshest < LIE_EVIDENCE_FLOOR
-
-
-def claim_is_lie(claim: str, scent: ScentField, grid_size: int) -> bool:
-    """Directional-claim form of the region lie check (ch. 4 p. 30)."""
-    return region_is_lie(claimed_region(claim, grid_size), scent)
 
 
 class BeliefMap:
@@ -136,6 +105,27 @@ class BeliefMap:
     ) -> None:
         """Directional claim -> board-half region observation."""
         self.observe_region(claimed_region(claim, self.grid_size), scent, weights)
+
+    def observe_motion(self, direction: str, board: Board) -> None:
+        """Move-echo observation ("moving s" league templates): the rival
+        named its literal step, so the whole posterior translates with it —
+        mass whose step is blocked stays put, exactly like the physics.
+        Replaces diffusion for the turn (a named step IS the movement
+        model); a truthful STAY echo means no movement at all."""
+        if direction == "STAY":
+            return
+        move = Move[direction]
+        fresh = [[0.0] * self.grid_size for _ in range(self.grid_size)]
+        for row in range(self.grid_size):
+            for col in range(self.grid_size):
+                mass = self._p[row][col]
+                if mass == 0.0:
+                    continue
+                target = move.applied_to((row, col))
+                r, c = target if board.is_passable(target) else (row, col)
+                fresh[r][c] += mass
+        self._p = fresh
+        self._normalize()
 
     def observe_plateau(self, scent: ScentField, board: Board) -> Cell | None:
         """Pin a dwelling rival to the cell its saturated plateau fits.

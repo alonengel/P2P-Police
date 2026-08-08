@@ -4,8 +4,9 @@ test_evidence.py."""
 
 import pytest
 
-from p2p_police.domain.belief import BeliefMap, claim_is_lie, region_is_lie
+from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.board import Board
+from p2p_police.domain.hint_regions import claim_is_lie, region_is_lie
 from p2p_police.domain.scent import ScentField
 
 
@@ -140,3 +141,17 @@ def test_annihilated_posterior_resets_to_uniform(board: Board) -> None:
         tiny_board.add_barrier(cell)
     belief.observe_scent(ScentField(2, kernel_size=5), tiny_board)
     assert total(belief) == pytest.approx(1.0)
+
+
+def test_motion_echo_translates_the_posterior() -> None:
+    """A truthful move-echo shifts every hypothesis one named step; mass
+    against a wall stays put, mirroring the board physics."""
+    board = Board(3)
+    belief = BeliefMap(3)
+    belief._p = [[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]]
+    belief.observe_motion("E", board)
+    assert belief.value_at((1, 2)) == 1.0
+    belief.observe_motion("E", board)  # wall: mass has nowhere to go
+    assert belief.value_at((1, 2)) == 1.0
+    belief.observe_motion("STAY", board)  # truthful stay: untouched
+    assert belief.value_at((1, 2)) == 1.0

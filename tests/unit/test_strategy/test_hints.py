@@ -13,6 +13,7 @@ from p2p_police.strategy.hints import (
     enforce_word_limit,
     landmark_region,
     parse_claim,
+    parse_move_echo,
 )
 
 
@@ -104,3 +105,14 @@ def test_landmark_tier_uses_injected_gazetteer_entries() -> None:
     region = landmark_region("back to my lair", 4, entries)
     assert region == {(0, 2), (0, 3), (1, 2), (1, 3)}
     assert landmark_region("back to my lair", 4, {}) is None
+
+
+def test_move_echo_tier_parses_only_the_exact_template() -> None:
+    """League rival 2026-08-08: the hint names the literal step. The echo is
+    a MOTION claim consumed before the region tier ever sees it."""
+    assert parse_move_echo("moving s") == "S"
+    assert parse_move_echo("Moving N") == "N"
+    assert parse_move_echo("  moving stay ") == "STAY"
+    assert parse_move_echo("moving se") is None
+    assert parse_move_echo("moving place_e") is None
+    assert parse_move_echo("heading south now") is None

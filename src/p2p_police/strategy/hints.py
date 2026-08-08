@@ -7,6 +7,7 @@ later — passes through enforce_word_limit (hint_max_words applies to ALL).
 
 import json
 import random
+import re
 from pathlib import Path
 
 from p2p_police.domain.primitives import Cell, Move
@@ -65,6 +66,17 @@ DIRECTION_WORDS: dict[str, tuple[str, ...]] = {
     "STAY": ("stay", "not moving", "right where", "standing still", "same spot",
              "not an inch", "holding"),
 }
+
+
+# Literal move-echo template (league 2026-08-08): the rival's hint names its
+# exact step. A MOTION claim, not a region claim — belief translates with it.
+MOVE_ECHO = re.compile(r"^\s*moving\s+([nsew]|stay)\s*$", re.IGNORECASE)
+
+
+def parse_move_echo(text: str) -> str | None:
+    """Exact move-echo hints ("moving s") -> the named step, else None."""
+    match = MOVE_ECHO.match(text)
+    return match.group(1).upper() if match else None
 
 
 def parse_claim(text: str) -> str | None:
