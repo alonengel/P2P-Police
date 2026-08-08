@@ -1,17 +1,17 @@
 {
   "_schema": "p2p-police-artifacts",
-  "consensus_signature": "93b6bf1de66c85812576ce6af1498b9b60d3a1ebefff5aa048f8da831182bc2f",
+  "consensus_signature": "6c8ccf077b6718ad332e87ee61084d3fe52b04a4a5d45af41a550c7214bac947",
   "declaration_type": "pre_game_declaration",
-  "declared_at": "2026-08-08T10:55:37+00:00",
-  "game_ended_at": "2026-08-08T10:55:37+00:00",
+  "declared_at": "2026-08-08T14:23:03+00:00",
+  "game_ended_at": "2026-08-08T14:23:03+00:00",
   "game_id": "anrbj666-vs-unknown",
-  "game_started_at": "2026-08-08T10:55:20+00:00",
+  "game_started_at": "2026-08-08T14:20:02+00:00",
   "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
   "groups": {
     "group_1": {
       "code_version": "1.00",
       "counted_games_played": 1,
-      "github_commit": "0a89b476c3dc0794a2426574b31aedb914a67b37",
+      "github_commit": "babd57c1f178b23c02bfc3b4b9be625001db843d",
       "group_id": "anrbj666",
       "group_name": "anrbj666",
       "hardware_spec": {
@@ -38,7 +38,7 @@
         "cop": "https://github.com/alonengel/P2P-Police",
         "thief": "https://github.com/alonengel/P2P-Thief"
       },
-      "signature": "sha256:75a9ef046591e9d9a745f6957b2bcd2b5173ea411ac131b989402abc09d6ad51"
+      "signature": "sha256:99104053d94b4b830da66a21625e65fb215d14d3463f04104a56e4ab2198db0f"
     },
     "group_2": {
       "counted_games_played": 0,
