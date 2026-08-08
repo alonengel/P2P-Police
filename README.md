@@ -197,15 +197,19 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
 - **League record: TWO counted games, both filed, both won** (rule 52's
   minimum of two counted games vs different teams — satisfied):
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
-    (league report `19fc9a53c7f458f9`);
+    (league report `19fc9a53c7f458f9`; evidence commit
+    [`67741d8`](https://github.com/alonengel/P2P-Police/commit/67741d8));
   - `anrbj666-vs-vibecode` — **75-35, 5-1**, filed 2026-08-08
-    (league report `19fe2cdf49a26b0d`), after six uncounted friendlies
-    that converged both stacks to zero-delta artifact diffs.
+    (league report `19fe2cdf49a26b0d`; evidence commit
+    [`2469ff4`](https://github.com/alonengel/P2P-Police/commit/2469ff4)), after six uncounted
+    friendlies that converged both stacks to zero-delta artifact diffs.
   Both series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
   true` with byte-identical hashes across the two teams' independently
-  emitted results, diversity flag earned on both first meetings, and the
-  full four-kind artifact sets archived immutably (with byte manifests)
-  under `docs/evidence/counted_games/<team>/`.
+  emitted results, diversity flag earned on both first meetings. Browse
+  the artifacts: working set in [results/](results/) +
+  [config/games/](config/games/); immutable per-team archives with byte
+  manifests in [docs/evidence/counted_games/](docs/evidence/counted_games/)
+  (archive commit [`d58c340`](https://github.com/alonengel/P2P-Police/commit/d58c340)).
 
 - **Real games against a rival league team** (2026-07-24, T-protocol
   window): warm-up games over the public tunnels ran the full 35 turns to
