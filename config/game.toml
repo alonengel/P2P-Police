@@ -13,7 +13,7 @@ group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
 #                                  # for a whole series (both-declare: omission never refuses)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
-counted_games_played = 1    # UPDATE before every counted game (rules 37-38): imreeyal series reported 2026-08-04
+counted_games_played = 2    # UPDATE before every counted game (rules 37-38): imreeyal 2026-08-04, vibecode 2026-08-08
 repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
 mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief-mcp.alon.website/mcp" }
 
@@ -52,9 +52,9 @@ step_deadline_seconds = 30      # hard cap on LLM thinking per step
 sibling_results = "../P2P-Thief/results"  # read-only series-span source (ADR-0001: file access, never an import)
 
 [email]
-recipient = "alonisrael.engel@gmail.com, rmisegal+uoh26finalgame@gmail.com"  # COUNTED posture (vibecode, rule 51): league address armed + our copy; friendly recipients restored after filing
-mode = "send"                   # counted: THE one report email per team goes to the league on series close
-counted = true                  # lecturer-address interlock, config half: with the --counted CLI flag
+recipient = "alonisrael.engel@gmail.com, agentsorch@gmail.com"  # FRIENDLY posture (vibecode pairing): reports reach us + their contact ONLY; league address restored per counted game
+mode = "send"                   # friendly sends to the two personal addresses above; the lecturer stays structurally unreachable (interlock: counted=false)
+counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals
                                 # and friendlies structurally cannot (shared/interlock.py)
 league_addresses = ["rmisegal@gmail.com", "rmisegal+uoh26finalgame@gmail.com"]  # the league/lecturer
