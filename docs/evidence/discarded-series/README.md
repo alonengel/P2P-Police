@@ -1,5 +1,10 @@
 # Discarded first attempt (2026-08-03) — dead-end evidence, kept on purpose
 
+**This was a FRIENDLY (uncounted) series — NOT a counted game.** No counter moved,
+no league report was sent, and nothing here entered the rule-52 ledger. The one
+counted imreeyal series is a different, later run (`game_uid e351176a-…`), archived
+at `docs/evidence/counted_games/imreeyal/`.
+
 This folder archives the abandoned first series attempt against `imreeyal`, preserved
 under the project's evidence guardrail ("archived on both sides, never deleted" — logs
 are the only accepted dispute evidence). Nothing in the counted series depends on it.
