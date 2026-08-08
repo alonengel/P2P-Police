@@ -91,3 +91,20 @@ def test_verify_log_flags_digest_mismatch(tmp_path) -> None:
     forged = dict(doc, game_id=doc["game_id"])
     log.write_text(json.dumps(forged), encoding="utf-8")
     assert SimulationSdk.verify_log(str(log)) == "TAMPERED"
+
+
+def test_terms_resolve_from_the_friendlies_subdir(tmp_path) -> None:
+    """config/games/ top level means COUNTED; uncounted sets live in
+    config/games/friendlies/ — the replay verifier must find both, so a
+    committed friendly log never degrades to seals-only verification."""
+    import json
+
+    name = "config_a-vs-b_g01.json"
+    sub = tmp_path / "config" / "games" / "friendlies"
+    sub.mkdir(parents=True)
+    (sub / name).write_text(json.dumps(TERMS), encoding="utf-8")
+    results = tmp_path / "results"
+    results.mkdir()
+    doc = {"game_id": "a-vs-b", "sub_game_number": 1}
+    resolved = lookup.terms_for_log(doc, results / "log_a-vs-b_g01.json")
+    assert resolved is not None and resolved["board_and_agents"]["grid_size"] == 7

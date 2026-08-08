@@ -19,18 +19,20 @@ from p2p_police.domain.rules import RuleSet
 
 
 def terms_for_log(doc: dict, log_path: str | Path) -> dict | None:
-    """The agreed terms archived for THIS game (config/games/), or None."""
+    """The agreed terms archived for THIS game — config/games/ top level
+    (counted sets) or its friendlies/ room (uncounted sets) — or None."""
     game_id = doc.get("game_id", "")
     sub_game = int(doc.get("sub_game_number", 1))
     name = game_ids.config_name(game_id, sub_game)
     log_dir = Path(log_path).resolve().parent
     for base in (log_dir.parent, Path.cwd()):
-        candidate = base / "config" / "games" / name
-        if candidate.is_file():
-            artifact = json.loads(candidate.read_text(encoding="utf-8"))
-            # flat (example-shaped) artifacts ARE the terms — readers index
-            # sections only; pre-flatten artifacts nested them under "terms"
-            return artifact.get("terms", artifact)
+        games = base / "config" / "games"
+        for candidate in (games / name, games / "friendlies" / name):
+            if candidate.is_file():
+                artifact = json.loads(candidate.read_text(encoding="utf-8"))
+                # flat (example-shaped) artifacts ARE the terms — readers
+                # index sections only; pre-flatten nested them under "terms"
+                return artifact.get("terms", artifact)
     return None
 
 
