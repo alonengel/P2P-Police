@@ -10,6 +10,9 @@ can source the opponent locally. Signature format stays per-team (documented
 divergence): ours is sha256 over the canonical group block.
 """
 
+import json
+from pathlib import Path
+
 from p2p_police.domain import game_ids
 from p2p_police.domain.negotiation import config_sha256
 from p2p_police.report.code_identity import git_commit_hash
@@ -17,6 +20,32 @@ from p2p_police.shared.sysinfo import hardware_spec
 from p2p_police.shared.version import CODE_VERSION
 
 TIMEZONE = "Asia/Jerusalem"
+
+
+def _series_span(game_id: str, game_uid: str, results_dirs,
+                 window_start: str | None) -> tuple[str | None, str | None]:
+    """Reference semantics (demo emit_series): the declaration covers the
+    WHOLE series — first settled sub-game start to last settled end — read
+    from every visible log of this uid (own repo + read-only sibling dir,
+    ADR-0001: file access, never an import). Same-pairing series share a
+    deterministic uid, so series separation rests on the series-start
+    archive step; the uid check guards cross-pairing junk only."""
+    starts = [window_start] if window_start else []
+    ends: list[str] = []
+    for directory in results_dirs or []:
+        for path in sorted(Path(directory).glob(f"log_{game_id}_g*.json")):
+            try:
+                doc = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue  # an unreadable neighbor never blocks a declaration
+            if doc.get("game_uid") != game_uid:
+                continue
+            summary = doc.get("summary") or {}
+            if summary.get("started_at"):
+                starts.append(summary["started_at"])
+            if summary.get("ended_at"):
+                ends.append(summary["ended_at"])
+    return (min(starts) if starts else None), (max(ends) if ends else None)
 
 
 def _links(game_id: str) -> dict:
@@ -72,7 +101,8 @@ def _their_group(opponent: dict | None) -> dict:
 
 def build_declaration(config, game_id: str, game_uid: str, games_played: int,
                       opponent: dict | None = None,
-                      started_at: str | None = None) -> dict:
+                      started_at: str | None = None,
+                      results_dirs: list | None = None) -> dict:
     """The book-attached 1-pre-game-declaration key set, plus our additive
     evidence fields (github_commit, counted_games_played, consensus seal)."""
     from p2p_police.report.artifacts import (  # local: artifacts re-exports us
@@ -84,6 +114,7 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int,
 
     ours, theirs = _our_group(config, games_played), _their_group(opponent)
     pair = sorted((ours, theirs), key=lambda g: str(g.get("group_id")))
+    span_start, span_end = _series_span(game_id, game_uid, results_dirs, started_at)
     budget = config.shared["network_and_league"]["token_budget_per_series"]
     doc = {
         "_schema": SCHEMA,
@@ -94,8 +125,8 @@ def build_declaration(config, game_id: str, game_uid: str, games_played: int,
         "game_uid": game_uid,
         "links": _links(game_id),
         "timezone": TIMEZONE,
-        "game_started_at": started_at,
-        "game_ended_at": utc_now(),
+        "game_started_at": span_start,
+        "game_ended_at": span_end or utc_now(),
         "declared_at": utc_now(),
         "num_sub_games": int(config.shared["network_and_league"]["num_games"]),
         "max_tokens_per_game": budget,

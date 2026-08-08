@@ -36,6 +36,31 @@ def test_declaration_carries_step0_fields(config_dir: Path) -> None:
     assert doc["token_budget_per_series"] == 200000
 
 
+def test_declaration_spans_the_whole_series(config_dir: Path, tmp_path: Path) -> None:
+    """Reference semantics (demo emit_series): game_started_at/game_ended_at =
+    FIRST settled sub-game start -> LAST settled end, across every visible
+    results dir (own + read-only sibling); foreign-uid logs never widen."""
+    import json
+
+    own, sib = tmp_path / "own", tmp_path / "sib"
+    own.mkdir(), sib.mkdir()
+
+    def log(dirp: Path, n: int, uid: str, start: str, end: str) -> None:
+        (dirp / f"log_a-vs-b_g{n:02d}.json").write_text(json.dumps(
+            {"game_uid": uid, "summary": {"started_at": start, "ended_at": end}}),
+            encoding="utf-8")
+
+    log(own, 1, "uid1", "2026-08-08T10:00:00+00:00", "2026-08-08T10:00:30+00:00")
+    log(sib, 2, "uid1", "2026-08-08T10:00:35+00:00", "2026-08-08T10:01:00+00:00")
+    log(own, 3, "other", "2026-08-08T09:00:00+00:00", "2026-08-08T09:30:00+00:00")
+    config = Config.load(config_dir)
+    doc = artifacts.build_declaration(config, "a-vs-b", "uid1", 0,
+                                      started_at="2026-08-08T10:00:35+00:00",
+                                      results_dirs=[own, sib])
+    assert doc["game_started_at"] == "2026-08-08T10:00:00+00:00"
+    assert doc["game_ended_at"] == "2026-08-08T10:01:00+00:00"
+
+
 def test_config_artifact_locks_terms_flat(config_dir: Path) -> None:
     """Both course example sets carry the agreed sections FLAT at top level
     (never nested under 'terms') — Imree diff 2026-08-03."""

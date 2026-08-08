@@ -112,18 +112,23 @@ def emit_artifacts(config, runtime, report: dict) -> list:
         # Hidden-wire log: verify-log must replay it through the audit
         # reconstruction, not the engine (ADR-0008) — the marker routes it.
         log_doc["wire_shape"] = "reference"
+    # Log lands FIRST so the declaration's series-span scan (reference
+    # semantics: first sub-game start -> last end) sees the window it closes.
+    sibling = config.private.get("report", {}).get("sibling_results")
+    span_dirs = [results] + ([Path(sibling)] if sibling else [])
     written = [
+        artifacts.emit(log_doc, results, game_ids.log_name(game_id, sub_game)),
         artifacts.emit(
             artifacts.build_declaration(
                 config, game_id, game_uid,
                 int(config.private["game"].get("counted_games_played", 0)),
                 opponent=report.get("opponent_info", {}),
-                started_at=report.get("started_at")),
+                started_at=report.get("started_at"),
+                results_dirs=span_dirs),
             results, game_ids.declaration_name(game_id)),
         artifacts.emit(
             artifacts.build_config_artifact(config, game_id, game_uid, sub_game),
             Path("config/games"), game_ids.config_name(game_id, sub_game)),
-        artifacts.emit(log_doc, results, game_ids.log_name(game_id, sub_game)),
         artifacts.emit(
             artifacts.build_result(config, game_id, game_uid, report, score,
                                    runtime.talk.meter.total),
