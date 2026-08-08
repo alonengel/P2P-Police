@@ -55,11 +55,13 @@ def build_hint(
 
 
 # Free-text direction vocabulary: real rivals speak prose, not our templates.
+# Padded single letters catch move-echo templates ("moving s", league
+# 2026-08-08); the pad spaces keep letters inside words from matching.
 DIRECTION_WORDS: dict[str, tuple[str, ...]] = {
-    "N": ("north", "uptown", "upward", "up ", "top"),
-    "S": ("south", "downtown", "downward", "down ", "bottom", "docks"),
-    "E": ("east", "sunrise", "right side", "rightward"),
-    "W": ("west", "sunset", "left side", "leftward"),
+    "N": ("north", "uptown", "upward", "up ", "top", " n "),
+    "S": ("south", "downtown", "downward", "down ", "bottom", "docks", " s "),
+    "E": ("east", "sunrise", "right side", "rightward", " e "),
+    "W": ("west", "sunset", "left side", "leftward", " w "),
     "STAY": ("stay", "not moving", "right where", "standing still", "same spot",
              "not an inch", "holding"),
 }

@@ -59,6 +59,20 @@ def test_ambiguous_or_opaque_free_text_yields_none() -> None:
     assert parse_claim("The pigeons know where I am.") is None
 
 
+def test_bare_compass_letters_parse() -> None:
+    """League rival 2026-08-08: template hints name the raw move letter
+    ("moving s"). A standalone compass letter is a directional claim."""
+    assert parse_claim("moving s") == "S"
+    assert parse_claim("moving n") == "N"
+    assert parse_claim("moving e") == "E"
+    assert parse_claim("moving w") == "W"
+
+
+def test_bare_letters_ambiguity_and_substrings_stay_safe() -> None:
+    assert parse_claim("n e corner is nice") is None  # two letters -> ambiguous
+    assert parse_claim("newspaper says west") == "W"  # letters inside words never match
+
+
 def test_landmark_talk_resolves_to_a_board_region() -> None:
     """Place-name prose that the direction tier cannot read (parse_claim is
     None) resolves through config/gazetteer.json into a cell region."""
