@@ -1273,3 +1273,17 @@ manual email - the artifacts carry the commit id), counted_games_played
 PR #20 on Imreec/copthief-league-protocol (PAIRING-PLAYBOOK lifecycle
 doc, E2E + connection contracts, generated 14-artifact example bundle
 passing their check_artifacts gate).
+
+## 2026-08-08 — vibecode friendly post-mortem (Claude Fable session)
+
+**Prompt (operator):** "take a look in the logs regarding the other 3 games, see if
+they actually won 2 of them, see their own repo and see if you can improve so we can
+beat them more"
+
+**Outcome:** verified g01/g02/g03 audits + reconstructed both paths from the sealed
+records; found our cop reached the rival thief's cell (step 11, g01+g03) but never
+fired a capture claim (belief below the 0.10 gate), and found the rival's hint
+template announces its literal move ("moving s") while our direction vocabulary only
+knew full words. Fix: padded single-letter compass tokens in DIRECTION_WORDS
+(TDD, both twins) + per-opponent claim-threshold overlay (private config, uncommitted).
+Rival repo check confirmed their thief is argmax-deterministic and open-loop.
