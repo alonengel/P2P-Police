@@ -49,7 +49,7 @@ model = ""
 step_deadline_seconds = 30      # hard cap on LLM thinking per step
 
 [email]
-recipient = "alonisrael.engel@gmail.com, nissimderi123@gmail.com"  # FRIENDLY posture (team #2 pairing): reports reach us + their contact ONLY; league address restored per counted game
+recipient = "alonisrael.engel@gmail.com, agentsorch@gmail.com"  # FRIENDLY posture (vibecode pairing): reports reach us + their contact ONLY; league address restored per counted game
 mode = "send"                   # friendly sends to the two personal addresses above; the lecturer stays structurally unreachable (interlock: counted=false)
 counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals
