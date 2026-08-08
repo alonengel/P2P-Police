@@ -5,12 +5,12 @@
     "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9"
   },
   "audit": "Verified OK",
-  "consensus_signature": "0dd120a4546ed263e413f7767d4fca11b1f5a36eaf933b6c7f79d0127854546c",
+  "consensus_signature": "ca6a62e1cfb9094e25ef632672d07638a76348ffc631f9a0b800577b9741b4a3",
   "digest_match": null,
   "end_state_digest": "b58f7c2798cd1ded6fe318a105d10d470ad4c48f75a8db7066084b9284859344",
   "game_id": "anrbj666-vs-vibecode",
   "game_uid": "b2a16946-2cad-909f-60aa-b0cc8a8b7c4f",
-  "github_commit": "5f90438674c3617e0983c2647d24388071d1d6b5",
+  "github_commit": "99a1da40de1691793affdec03ffd1ce5616d4bea",
   "group_id": "anrbj666",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
@@ -23,7 +23,7 @@
   "opponent_group_id": "vibecode",
   "outcome": "capture",
   "report_type": "result",
-  "reported_at": "2026-08-08T15:38:32+00:00",
+  "reported_at": "2026-08-08T16:13:03+00:00",
   "schema_version": "1.00",
   "score": {
     "cop": 20,
