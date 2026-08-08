@@ -194,6 +194,19 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
+- **League record: TWO counted games, both filed, both won** (rule 52's
+  minimum of two counted games vs different teams — satisfied):
+  - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
+    (league report `19fc9a53c7f458f9`);
+  - `anrbj666-vs-vibecode` — **75-35, 5-1**, filed 2026-08-08
+    (league report `19fe2cdf49a26b0d`), after six uncounted friendlies
+    that converged both stacks to zero-delta artifact diffs.
+  Both series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
+  true` with byte-identical hashes across the two teams' independently
+  emitted results, diversity flag earned on both first meetings, and the
+  full four-kind artifact sets archived immutably (with byte manifests)
+  under `docs/evidence/counted_games/<team>/`.
+
 - **Real games against a rival league team** (2026-07-24, T-protocol
   window): warm-up games over the public tunnels ran the full 35 turns to
   survival with audits **Verified OK on both sides** — the registered
