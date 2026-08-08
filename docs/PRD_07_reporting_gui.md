@@ -17,7 +17,12 @@ the runtime's finish path).
   gatekeeper monitoring view.
 - **Email** (rule 32): send-only Gmail scope (rule 30, guard-tested),
   through the single per-run gatekeeper, `[email] mode` config-gated —
-  disabled in dev, send for counted games; attachments = the four JSONs.
+  disabled in dev, send for counted games. ONE attachment: the result
+  JSON only (same canonical bytes as the body) — NOT all four kinds and
+  never the 14-file set. Superseded here per ADR-0012 second addendum:
+  the course repo's own bot ruled the automated email carries only
+  result_<game_id>.json; logs/configs/declaration reach the lecturer via
+  GitHub, and logs serve the Replay Viewer, not the mail.
 - **Live GUI** (rules 8-9): own position + belief heatmap + received hints
   ONLY — never the objective board; YOUR-TURN/LOCKED banner mirrors the
   FSM. `info_mode=exact` changes what the BRAIN sees, never the display.
