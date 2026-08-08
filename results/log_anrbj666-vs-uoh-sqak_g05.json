@@ -1,0 +1,647 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-uoh-sqak",
+  "game_uid": "f2765c2f-604d-5a53-b42a-6e5e7245c222",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "dc344326ccb65f0b66de2448fb180351763fb385430ee0e3bbe703f60a34ff24",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "b76285fea05a0cbb7f1e1de52a77cf37",
+      "payload": {
+        "intent": "truth",
+        "move": "E",
+        "state": {
+          "barriers": [],
+          "pos": [
+            3,
+            3
+          ]
+        },
+        "step": 1
+      }
+    },
+    {
+      "commit": "c0eb8c8c99bea7c0ccfebd5a8dc45c990a81d2f78025e5325d2bc06be5407db4",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "b03bec6bc2791b6cbc8742dcaeb802cd",
+      "payload": {
+        "intent": "truth",
+        "move": "E",
+        "state": {
+          "barriers": [],
+          "pos": [
+            3,
+            4
+          ]
+        },
+        "step": 2
+      }
+    },
+    {
+      "commit": "427746967301a4c4206853955075df68170d48eaccf6b8dd2d779686bda1ec51",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Brooklyn Bridge was crowded. I kept going south."
+      },
+      "nonce": "1af5e2fb833c041edfe5be29caf3ff83",
+      "payload": {
+        "intent": "truth",
+        "move": "S",
+        "state": {
+          "barriers": [],
+          "pos": [
+            3,
+            5
+          ]
+        },
+        "step": 3
+      }
+    },
+    {
+      "commit": "36b2ef2a1e919a5fb6a267386cfd318bdcee40afc7751e71ddc6305e86759f76",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "64537a204c5b2ecf12950498359cf8d6",
+      "payload": {
+        "intent": "truth",
+        "move": "S",
+        "state": {
+          "barriers": [],
+          "pos": [
+            4,
+            5
+          ]
+        },
+        "step": 4
+      }
+    },
+    {
+      "commit": "57adc664bdd49c9558356076349f53f8e7251b0e0556155037c29894bc94b3f1",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "b90bf00d7e383b8fe5c551407d1888a8",
+      "payload": {
+        "intent": "truth",
+        "move": "S",
+        "state": {
+          "barriers": [],
+          "pos": [
+            5,
+            5
+          ]
+        },
+        "step": 5
+      }
+    },
+    {
+      "commit": "edd9009fedceadafb1a34863eefb0bb05b1656a1f25c40e0c5cfbc496157f94f",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Resting at Harlem. Not moving tonight."
+      },
+      "nonce": "793d3ba955274d5e6390f386b6c843cf",
+      "payload": {
+        "intent": "lie",
+        "move": "N",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            5
+          ]
+        },
+        "step": 6
+      }
+    },
+    {
+      "commit": "30a6617c8745a6401a6cefccaefd735123c5361472f833478c95d37f72b6ce13",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "896777b8b4b844af7e795d898f5ec80b",
+      "payload": {
+        "intent": "truth",
+        "move": "E",
+        "state": {
+          "barriers": [],
+          "pos": [
+            5,
+            5
+          ]
+        },
+        "step": 7
+      }
+    },
+    {
+      "commit": "c9375d58ec90bac76bee370d5bbe899f1b16e562f23054f326050abd61c23734",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "33e7c77f534a475987190263cd03e7bf",
+      "payload": {
+        "intent": "truth",
+        "move": "S",
+        "state": {
+          "barriers": [],
+          "pos": [
+            5,
+            6
+          ]
+        },
+        "step": 8
+      }
+    },
+    {
+      "commit": "1fd9575f4a551cda2a3dc67fc4ab81d402d9939a726b25470a32d1d668a55acd",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I am cornered by Brooklyn Bridge. Come and get me."
+      },
+      "nonce": "013ee7a8ddb94bf20f06799aa0e2c4f1",
+      "payload": {
+        "intent": "lie",
+        "move": "W",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            6
+          ]
+        },
+        "step": 9
+      }
+    },
+    {
+      "commit": "733f69a5d825d705f3911538250f6dfdabd297c56c244b435285b4d8e0c5388a",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "0f0c11732076707b611ed6c41960609f",
+      "payload": {
+        "intent": "truth",
+        "move": "N",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            5
+          ]
+        },
+        "step": 10
+      }
+    },
+    {
+      "commit": "db70b5ecc452d549f37fcafe9375333a79e0de81c306bd823a1a5e81e6b779ae",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "920a409476a6b3d27b82f24cc0f46514",
+      "payload": {
+        "intent": "truth",
+        "move": "S",
+        "state": {
+          "barriers": [],
+          "pos": [
+            5,
+            5
+          ]
+        },
+        "step": 11
+      }
+    },
+    {
+      "commit": "a7c32505bb592ee2a75603d0d7f1bf4b36b8f1258d5cfc891ef950aa4bb8dadd",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Doubling back west past Harlem."
+      },
+      "nonce": "1eed2c25caf40637c9e9566238d86c1a",
+      "payload": {
+        "intent": "lie",
+        "move": "E",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            5
+          ]
+        },
+        "step": 12
+      }
+    },
+    {
+      "commit": "a392b381847cc6138cd011c4f531c497803311fdaaf0509b1302e9f3239b2bb3",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "69c03ad6063d914cc3f01bf0ef942e8f",
+      "payload": {
+        "intent": "truth",
+        "move": "W",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            6
+          ]
+        },
+        "step": 13
+      }
+    },
+    {
+      "commit": "6a511cc7629bf4a9ca9ffae0ea5b8095363210de2206873484c9d89561d824c1",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You got me."
+      },
+      "nonce": "119c66823865cf641eb0b32ee30afbe8",
+      "payload": {
+        "intent": "truth",
+        "move": "STAY",
+        "state": {
+          "barriers": [],
+          "pos": [
+            6,
+            5
+          ]
+        },
+        "step": 14
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "e856ca047c0a28508ebe9f01d6fdebda5ebda50654d1f4c5af16e14c6e6bc83c",
+      "nonce": "2f794520e07f054c5567816e951b9693",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-uoh-sqak.json",
+        "github_commit": "0a89b476c3dc0794a2426574b31aedb914a67b37",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 5,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "f17bf6b0690aadf69c116fe4ecced23f9ede47dc5a24cd7bdf1010c02bb64eda",
+      "nonce": "fc39bd7637567ff5a8b49686dca2561f",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "039faeb112612eb5857a37616d686183bd6a2faf8fbd764762145b24d741f602",
+        "step": 1,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "bc5666aca76df2fc907bf918c527223b653775fea59df7f726c9a7c00f5c19ae",
+      "nonce": "0f7fe1969d68810d899bc0b7a9d64d0f",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 2,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "b905af6a1ec9445ac031f591d4d3835e8a3c0267a164cef8c062bc184d692fba",
+      "nonce": "48267f5a41f101d1fca7cb3b5ee87531",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "64e61c2303445c81f46a1105d94b5801663e8496df3f94720e2329a4df22ea5c",
+        "step": 3,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "17f1adb06949659eeff679776a1ec67c703c61b2074f6b07529990634da62d1d",
+      "nonce": "0097e139cb08ccedaa5938814721adee",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "dcf2d7887b5997252164ce869619a01cedc5b26ee2d434a7db0d55d90d488448",
+        "step": 4,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "0acf62b415f14121bf2003e1b5799a0f0d549640fa8bbb1b0b6c51392f2c7667",
+      "nonce": "54a341cc838559c7c57cd9daf44df65c",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "31db007c4819fb6eebe71b21e2c13c67e45202337f73084efcef476d966f6843",
+        "step": 5,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3cd6769ce5812f4beeea66ffd133852fc07f6e7c092a3c212171419ba3b693cf",
+      "nonce": "7019b7616fbf70260d915cc4c2009319",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "0c5ca9f08652e92f20c81ed58187e277be20384203a4be0748df24fc896aec52",
+        "step": 6,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "2152e29dc5bfbe13e1f0e036d81122e70991eafce0466a47808b9190e41e824c",
+      "nonce": "b2544f8bce15c00f26c0f3c8a8327df3",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "376f961c9be32b9164ad805324f969e2cbed9647abc1ddd678678252cda8e4e5",
+        "step": 7,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "43f4a63bdfd0206381f1e2bb84c051f69b05d13dd8c72de930f3c655af0c91bd",
+      "nonce": "7f748f033c144d0c44c8198b98d376c0",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
+        "step": 8,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "dda82ca4ef783c697c90a7e8fdfc94beff20bfe48cb129895729c2aa02f6e288",
+      "nonce": "bf46f06353ffa6870b816271f3e591da",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "d3b30c75061bc9cec65e590cb5ecc0bb0653d50b9db4515dec091268654673e0",
+        "step": 9,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "1983d94d5ea3865a37b384e854a014479920c40f1a7cab367933f260d7b51586",
+      "nonce": "d1e422804f052aba0a285e7bdb259ad9",
+      "payload": {
+        "action": {
+          "cell": [
+            4,
+            6
+          ],
+          "type": "barrier"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "32775ea254522f0bfd9f853f7736a01b7b13a9a9b983c596b7093be3d2d3783f",
+        "step": 10,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "cb1a9109111d10ede8a251e8c0a739f71628885facf8ba71aa27e0b09d859204",
+      "nonce": "2eb6c70ff9d99c6daefb4cd0070f6493",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "097fafe06ffdbcd171f182309244129b5ad39e024e58826f2c76f26bb72c5028",
+        "step": 11,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "a9dc0a55d1b23f2d70913fb2be9adf2e5365db6e6ec1e1cc84843aee6cc3bfc8",
+      "nonce": "b0414ec355f13c41c76b3243823958da",
+      "payload": {
+        "action": {
+          "cell": [
+            5,
+            6
+          ],
+          "type": "barrier"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "2bfb7fb71b26ce6b8099c324827271ae0be0309d624cfb634293e43e7d443b4e",
+        "step": 12,
+        "sub_game": 5,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "7d46c048fdb5c1ec217d45d29295e6053dc9b51cb74fa869eb7818d587730ba0",
+      "nonce": "ba5cf6c85c259f4f6bb6dec825b41a84",
+      "payload": {
+        "action": {
+          "cell": [
+            6,
+            5
+          ],
+          "type": "barrier"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "c12af1ead47e867d940c5170b45bf20827ef425b315c5235bb5c3392e1049f21",
+        "step": 13,
+        "sub_game": 5,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 5,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "c12af1ead47e867d940c5170b45bf20827ef425b315c5235bb5c3392e1049f21",
+    "ended_at": "2026-08-08T12:01:52+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "0a89b476c3dc0794a2426574b31aedb914a67b37",
+    "group_id": "anrbj666",
+    "opponent_group_id": "uoh-sqak",
+    "opponent_info": {
+      "identity": {
+        "counted_games_played": 0,
+        "group_id": "uoh-sqak",
+        "group_name": "uoh-sqak",
+        "llm_model": "template",
+        "mcp_servers": {
+          "thief": "https://d87d-176-229-170-175.ngrok-free.app/mcp"
+        },
+        "members": [
+          "Salah Qadah:323039974",
+          "Andalus Kalash:211435797"
+        ],
+        "repos": {
+          "cop": "https://github.com/salah-dev-stu/uoh-sqak-cop",
+          "thief": "https://github.com/salah-dev-stu/uoh-sqak-thief"
+        },
+        "spec": {
+          "cpu": "arm",
+          "cpu_count": 8,
+          "gpu": "Apple Silicon",
+          "os": "Darwin 25.2.0",
+          "python": "3.13.12",
+          "ram_gb": 8.6
+        }
+      },
+      "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
+      "nonce": "efa5197e61dd403119da6ad3ef8c4c9d",
+      "role": "thief",
+      "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
+      "signature": "01feeababd6c9ee5de82a1c20a4c01ba0b740f3055aba09040248f05b2a7b564",
+      "sub_game_number": 5,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      }
+    },
+    "opponent_step_zero": {
+      "code_version": "1.00",
+      "github_commit": "d0bb80f7ada703722b614cab4e96d848ad1b4212",
+      "group_name": "uoh-sqak",
+      "model": "template",
+      "spec": {
+        "cpu": "arm",
+        "cpu_count": 8,
+        "gpu": "Apple Silicon",
+        "os": "Darwin 25.2.0",
+        "python": "3.13.12",
+        "ram_gb": 8.6
+      },
+      "step": 0,
+      "sub_game_number": 5,
+      "type": "system_spec"
+    },
+    "outcome": "capture",
+    "role": "police",
+    "scent_readings_refused": 0,
+    "started_at": "2026-08-08T12:01:30+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 14,
+    "turns_completed": 13
+  },
+  "wire_shape": "reference"
+}
