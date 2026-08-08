@@ -46,9 +46,11 @@ def test_sparring_emails_nothing() -> None:
 
 def test_sparring_wire_shape_is_selectable() -> None:
     config = load_sparring()
-    assert lock.wire_shape(config) == lock.BOOKLETTER  # committed default
-    config.private["network"]["wire_shape"] = "reference"  # the --wire-shape seam
+    # Committed default is the league wire since fad7113 (cross-team warm-ups
+    # all speak reference-v3); the --wire-shape seam still selects bookletter.
     assert lock.wire_shape(config) == lock.REFERENCE
+    config.private["network"]["wire_shape"] = "bookletter"
+    assert lock.wire_shape(config) == lock.BOOKLETTER
 
 
 def test_sparring_identity_stays_real() -> None:
