@@ -1,0 +1,10 @@
+sha256 (of the exact bytes committed here)  |  anrbj666-vs-imreeyal counted series
+--------------------------------------------------------------------
+a9b2fdd8c6a7a015  config_anrbj666-vs-imreeyal_g01.json
+2d93977f954a2ff0  config_anrbj666-vs-imreeyal_g03.json
+c8cde982472752fd  config_anrbj666-vs-imreeyal_g05.json
+f9c3f991c0986727  declaration_anrbj666-vs-imreeyal.json
+9ff8cff0e6a8d0ff  log_anrbj666-vs-imreeyal_g01.json
+89ced61376f06df7  log_anrbj666-vs-imreeyal_g03.json
+d443a0b64b86e149  log_anrbj666-vs-imreeyal_g05.json
+021c314b1d35e8f9  result_anrbj666-vs-imreeyal.json
