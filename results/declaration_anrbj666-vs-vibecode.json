@@ -1,0 +1,69 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "3c85deece11f03b77807d2dbb9bb871c789ef7222e6815ab2dec5b0855b4bedf",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-08T15:38:32+00:00",
+  "game_ended_at": "2026-08-08T15:38:32+00:00",
+  "game_id": "anrbj666-vs-vibecode",
+  "game_started_at": "2026-08-08T15:38:17+00:00",
+  "game_uid": "b2a16946-2cad-909f-60aa-b0cc8a8b7c4f",
+  "groups": {
+    "group_1": {
+      "code_version": "1.00",
+      "counted_games_played": 1,
+      "github_commit": "5f90438674c3617e0983c2647d24388071d1d6b5",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:c63e7bdd0e20069f3d5248000209d174fb2b878e8c9076d1698a25b20a0f7bad"
+    },
+    "group_2": {
+      "counted_games_played": 0,
+      "github_commit": "unknown",
+      "group_id": "vibecode",
+      "group_name": "vibecode",
+      "hardware_spec": {},
+      "hardware_spec_sha256": "",
+      "llm_model": "role-specific-recurrent-policy",
+      "mcp_servers": {},
+      "members": [],
+      "repos": {},
+      "signature": "undeclared"
+    }
+  },
+  "links": {
+    "config": "config_anrbj666-vs-vibecode_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-vibecode.json",
+    "log": "log_anrbj666-vs-vibecode_g<NN>.json",
+    "result": "result_anrbj666-vs-vibecode.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}
