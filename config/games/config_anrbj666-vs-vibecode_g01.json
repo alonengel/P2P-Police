@@ -2,7 +2,7 @@
   "_schema": "p2p-police-artifacts",
   "agreed_between": [
     "anrbj666",
-    "imreeyal"
+    "vibecode"
   ],
   "board_and_agents": {
     "axis_origin_corner": "top-left",
@@ -19,7 +19,7 @@
     ]
   },
   "config_name": "config_anrbj666-vs-vibecode_g01.json",
-  "config_sha256": "9edde84af5e2a7873fc1857089bf3018d4a96dfa794f255b3a1d7b7367baf4a0",
+  "config_sha256": "9ed3b2e9601d3378b838740edadf03ad12ff17adefead7d18397de68cf860c23",
   "game_id": "anrbj666-vs-vibecode",
   "game_uid": "b2a16946-2cad-909f-60aa-b0cc8a8b7c4f",
   "links": {
