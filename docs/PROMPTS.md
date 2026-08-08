@@ -1287,3 +1287,24 @@ template announces its literal move ("moving s") while our direction vocabulary 
 knew full words. Fix: padded single-letter compass tokens in DIRECTION_WORDS
 (TDD, both twins) + per-opponent claim-threshold overlay (private config, uncommitted).
 Rival repo check confirmed their thief is argmax-deterministic and open-loop.
+
+## 2026-08-08 (evening) — vibecode convergence day + COUNTED series #2 (Claude Fable session)
+
+**Operator prompts (sequence):** verify rival artifact sets ("check theirs.
+everything, fields, timestamp, sha256 and more"); converge the two hash
+preimages; "make sure we beat them"; five scheduled friendlies (18:37, 19:12,
+19:40, 21:12 + the aborted attempts); "prepare us to a counted game"; freeze
+decision ("don't do those changes unless 100% certain — just play without
+changing"); token re-mint; "arm it for a counted game"; counted T set to 22:14;
+post-game bookkeeping and evidence layout ("counted_games dir per team",
+"config/games separation", stale-doc sweep).
+
+**Outcomes:** motion-echo belief tier + claim-gate rehearsals (earlier entry)
+carried five friendly wins (75-35, 90-30, 85-45, 75-35, 70-50); protocol
+converged to zero-delta artifact diffs both directions (mutual_agreement
+byte-identical, step-0 sealed AND on the wire both ways, whole-file
+config_sha256 adopted from our game.json, series-span declarations); COUNTED
+series #2 filed — 75-35, 5-1, league report 19fe2cdf49a26b0d, counters
+{anrbj666: 2, vibecode: 1}, diversity flag to the winner; counters bumped,
+friendly posture restored, permanent evidence archive created
+(docs/evidence/counted_games/), README league record with commit links.
