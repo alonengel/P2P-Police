@@ -155,3 +155,14 @@ def test_motion_echo_translates_the_posterior() -> None:
     assert belief.value_at((1, 2)) == 1.0
     belief.observe_motion("STAY", board)  # truthful stay: untouched
     assert belief.value_at((1, 2)) == 1.0
+
+
+def test_a_capture_claim_pins_the_claimant() -> None:
+    """League 2026-08-09: a claim-per-move cop broadcasts its true landing
+    cell in every claim — near-certain rival-position evidence, applied as
+    a recoverable boost like the plateau and barrier pins."""
+    belief = BeliefMap(5)
+    before = belief.value_at((2, 3))
+    belief.observe_claimed_cell((2, 3))
+    assert belief.value_at((2, 3)) > before * 5  # boosted, renormalized
+    assert abs(sum(sum(row) for row in belief.values()) - 1.0) < 1e-9

@@ -42,8 +42,7 @@ def my_half_turn(rt) -> None:
     commit = rt.exchange.seal_step(rt.own.digest(), step, action, hint, truth)
     rt.exchange.send_message(codec.build_turn_message(
         step, rt.role.value, hint, codec.serialize_scent(rt.own.scent[rt.role]),
-        commit,
-        barrier_placed=[barrier[0], barrier[1]] if barrier else None,
+        commit, barrier_placed=[barrier[0], barrier[1]] if barrier else None,
         capture_claim=(claims.capture_claim_for(action, rt.own, rt.perception, rt.config)
                        if rt.role is Role.POLICE else None),
         claim_response=response, win_claim=win))
@@ -86,7 +85,8 @@ def their_half_turn(rt) -> None:
         # a FALSE refused-reading against an honest rival (E2E g90 finding).
         # The game is over on receipt: expect no particular final, judge none.
         rt.perception.observe(rt.own, rival, message["hint"],
-                              barrier_cell=(placed[0], placed[1]) if fresh_wall else None)
+                              barrier_cell=(placed[0], placed[1]) if fresh_wall else None,
+                              claim_cell=message["capture_claim"])
     if conceded:
         rt.own.outcome = Outcome.CAPTURE  # rival honestly declared itself caught
     elif message["win_claim"]:

@@ -18,6 +18,7 @@ TRUE_CLAIM_WEIGHT = 3.0
 FALSE_CLAIM_WEIGHT = 0.4
 BARRIER_ORIGIN_BOOST = 25.0  # placement-origin cells: near-certain evidence
 PLATEAU_ORIGIN_BOOST = 25.0  # a fitted dwell plateau: the same evidence grade
+CLAIM_ORIGIN_BOOST = 25.0    # a capture claim names the claimant's own cell
 
 
 class BeliefMap:
@@ -39,10 +40,8 @@ class BeliefMap:
         return [row.copy() for row in self._p]
 
     def argmax_cell(self) -> Cell:
-        return max(
-            ((r, c) for r in range(self.grid_size) for c in range(self.grid_size)),
-            key=lambda cell: self._p[cell[0]][cell[1]],
-        )
+        cells = ((r, c) for r in range(self.grid_size) for c in range(self.grid_size))
+        return max(cells, key=self.value_at)
 
     def _normalize(self) -> None:
         total = sum(sum(row) for row in self._p)
@@ -60,11 +59,9 @@ class BeliefMap:
                 mass = self._p[row][col]
                 if mass == 0.0 or board.is_barrier((row, col)):
                     continue
-                targets = [(row, col)] + [
-                    m.applied_to((row, col))
-                    for m in (Move.N, Move.S, Move.E, Move.W)
-                    if board.is_passable(m.applied_to((row, col)))
-                ]
+                steps = [m.applied_to((row, col)) for m in (Move.N, Move.S, Move.E, Move.W)
+                         if board.is_passable(m.applied_to((row, col)))]
+                targets = [(row, col)] + steps
                 share = mass / len(targets)
                 for r, c in targets:
                     fresh[r][c] += share
@@ -141,6 +138,16 @@ class BeliefMap:
         self._p[origin[0]][origin[1]] *= PLATEAU_ORIGIN_BOOST
         self._normalize()
         return origin
+
+    def observe_claimed_cell(self, cell: Cell) -> None:
+        """A rival CAPTURE CLAIM pins the claimant: the reference protocol
+        (and every league peer we have audited, 2026-08-09) claims the
+        claimant's OWN landing cell, so the claim is near-certain evidence
+        of the rival's position. A boost rather than a collapse — a
+        protocol-breaking false claim must stay recoverable by the next
+        turn's evidence, same design as the plateau and barrier pins."""
+        self._p[cell[0]][cell[1]] *= CLAIM_ORIGIN_BOOST
+        self._normalize()
 
     def observe_barrier(self, barrier: Cell, board: Board) -> None:
         """A declared placement localizes the placer: the target lies on the

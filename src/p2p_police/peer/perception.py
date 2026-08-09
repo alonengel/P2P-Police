@@ -77,12 +77,15 @@ class Perception:
 
     def observe(
         self, engine: GameEngine, rival: Role, hint_text: str | None,
-        barrier_cell=None,
+        barrier_cell=None, claim_cell=None,
     ) -> None:
         """Diffuse, weigh rival scent, then the (lie-checked) hint (ch. 4).
 
         A freshly declared barrier placement (passed by the runtime the turn
-        it lands) first pins the placer's origin cells — law of barriers."""
+        it lands) first pins the placer's origin cells — law of barriers.
+        An inbound CAPTURE CLAIM pins the claimant the same way: the claim
+        names the claimant's own landing cell (league rehearsal 2026-08-09:
+        a claim-per-move cop broadcasts its true path all game)."""
         if hint_text:  # inbound view capped at the signed word limit
             hint_text = " ".join(hint_text.split()[: self._hint_cap])
         self.last_hint = hint_text or ""
@@ -96,6 +99,8 @@ class Perception:
         if barrier_cell is not None:
             self.belief.observe_barrier(
                 (barrier_cell[0], barrier_cell[1]), engine.board)
+        if claim_cell is not None:
+            self.belief.observe_claimed_cell((claim_cell[0], claim_cell[1]))
         rival_scent = engine.scent[rival]
         self._anchor_age += 1
         allowed = credible_cells(engine.board, self._anchor,
