@@ -16,8 +16,8 @@
     "audit_disclosure": "sent",
     "digest_match": false,
     "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
-    "ended_at": "2026-08-08T10:54:42+00:00",
-    "failure": "ToolError: Error calling tool 'negotiate': agreement inbox at capacity",
+    "ended_at": "2026-08-09T17:47:06+00:00",
+    "failure": "DeadlineExpiredError: opponent at https://adipex-mixer-companies-kerry.trycloudflare.com/mcp unreachable until deadline: in-flight call to https://adipex-mixer-companies-kerry.trycloudflare.com/mcp timed out",
     "gatekeeper": {
       "calls_logged": 0,
       "dos_locked": {
@@ -35,12 +35,12 @@
         "openrouter"
       ]
     },
-    "github_commit": "0a89b476c3dc0794a2426574b31aedb914a67b37",
+    "github_commit": "dbd6b6197a89a48ac40920d01a4d138d7d9eaeb0",
     "group_id": "anrbj666",
     "opponent_group_id": "unknown",
     "outcome": "technical_loss",
     "role": "police",
-    "started_at": "2026-08-08T10:54:26+00:00",
+    "started_at": "2026-08-09T17:41:58+00:00",
     "steps_sealed": 0,
     "turns_completed": 0
   },

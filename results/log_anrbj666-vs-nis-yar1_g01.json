@@ -1,0 +1,545 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-nis-yar1",
+  "game_uid": "bc77e467-4522-c355-cf69-868515ecc8a7",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "56689e7bc4c35348e8ce80645cfb5d5945c9368cb143a4909e2229190f5c86b0",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You just missed me at Grand Central; the crowd was lovely."
+      },
+      "nonce": "a8fc8777357952c0534ea2b5ab99b973",
+      "payload": {
+        "hint": "You just missed me at Grand Central; the crowd was lovely.",
+        "intent": "lie",
+        "model": "stub",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          3
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "lie",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0006187998224049807,
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 1,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "lie"
+      }
+    },
+    {
+      "commit": "6c4efd047236e1c3ceec045280ef20ed635a4698a4113278c3683d0e73c09339",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Waiting out the night at the Village, cozy as ever."
+      },
+      "nonce": "cb9ea8c5dcd7b17696cffc9e301702bb",
+      "payload": {
+        "hint": "Waiting out the night at the Village, cozy as ever.",
+        "intent": "lie",
+        "model": "stub",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "lie",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0006135001312941313,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 2,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "lie"
+      }
+    },
+    {
+      "commit": "050213371ced245087b09be1936458939db8b724858e20d4090adee755b83a37",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "The view from Times Square is wasted on you."
+      },
+      "nonce": "59eb7c09ca4388d843f344a90921ddd8",
+      "payload": {
+        "hint": "The view from Times Square is wasted on you.",
+        "intent": "lie",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "lie",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0006016998086124659,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 3,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "lie"
+      }
+    },
+    {
+      "commit": "e1897575c819ab4b7773217e8377f20e3ea12f3acc85d07165ec39ecd75bf264",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I am resting right beside Central Park, come say hello."
+      },
+      "nonce": "79fcd847f5ff1e949d0eeeaa92d8e9c3",
+      "payload": {
+        "hint": "I am resting right beside Central Park, come say hello.",
+        "intent": "lie",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "lie",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0005342999938875437,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 4,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "lie"
+      }
+    },
+    {
+      "commit": "e6a9e92516129be4f23934c2d69c5db33b144b28eaa6c87bbef111f00813b9dc",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I am wherever the lamplight fails you."
+      },
+      "nonce": "5b8441ec876187ab1cf2450fc2657d2c",
+      "payload": {
+        "hint": "I am wherever the lamplight fails you.",
+        "intent": "truth",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "truth",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0005711999256163836,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 5,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "truth"
+      }
+    },
+    {
+      "commit": "e3f5e9b9b42651217bc1b31ca578448f01e7408cad88d332afbe5a10b8546947",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "The streets remember me; your boots they only tolerate."
+      },
+      "nonce": "9b46a98288c9d8559aceff15c5c79c97",
+      "payload": {
+        "hint": "The streets remember me; your boots they only tolerate.",
+        "intent": "truth",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "truth",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0004412000998854637,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 6,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "truth"
+      }
+    },
+    {
+      "commit": "131053ec73c80a0a3631d8e37ad383b76f7272b1aceed806cc8b9f8acc0e6702",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still breathing, still moving; catch me if you can."
+      },
+      "nonce": "f48c1b4614cacf33b34862db0f0fdf8f",
+      "payload": {
+        "hint": "Still breathing, still moving; catch me if you can.",
+        "intent": "truth",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "truth",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.00037540006451308727,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 7,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "truth"
+      }
+    },
+    {
+      "commit": "de0c15306914408a8fdbd468f4d91d2c42a996857c8dc2773acd6d60e357d883",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I trade in shadows and the market is generous tonight."
+      },
+      "nonce": "b2a11a7e80622b6a7a604ba926ccc4f0",
+      "payload": {
+        "hint": "I trade in shadows and the market is generous tonight.",
+        "intent": "truth",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "truth",
+          "llm_prompt": "",
+          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
+        },
+        "random_move": false,
+        "response_seconds": 0.0002883998677134514,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 8,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "truth"
+      }
+    },
+    {
+      "commit": "b0948daa79fd3a5d63670795d05644192f81d9314f1584c404a3045693fcbe24",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You got me."
+      },
+      "nonce": "c680d05c7581428c08e218f7fd5148e3",
+      "payload": {
+        "hint": "You got me.",
+        "intent": "truth",
+        "model": "stub",
+        "move": "HOLD:-",
+        "position": [
+          4,
+          4
+        ],
+        "prompt_discussion": {
+          "bluff_classification": "truth",
+          "llm_prompt": "",
+          "llm_reasoning": "capture concession (rule 21)"
+        },
+        "random_move": false,
+        "response_seconds": 0.0,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 9,
+        "tokens_step": 0,
+        "tokens_total": 0,
+        "verdict": "truth"
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "305eef4f25f604aa34e9e648d975f019ea2e977414e5e59e9638596cb7acc403",
+      "nonce": "3abdfb9d28a5c3e2fe3c1a34e106c9c5",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-nis-yar1.json",
+        "github_commit": "dbd6b6197a89a48ac40920d01a4d138d7d9eaeb0",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 1,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "0c80713c197aed74d049d203ea73ff09fa07d40931a0a39a91ec0e58d25c864c",
+      "nonce": "9835869f1190a0649beefb3080d2e39a",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 1,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "483e32d6733448570485aecb6fc5c428900d6decf87d45b211a3e95c60a81265",
+      "nonce": "9e6aa27f7cc3812fbbb5e57cb0c129c1",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 2,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "47b10c34232942743b327d248873543e74cf75b5d55bfa979b11f7367698dc9f",
+      "nonce": "61121c361bf5e8b5dff948d413596c8f",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "f2b359a1154c0c36d24cb1fed1cdec0567137cb0766e326c009b04b41d13fdb7",
+        "step": 3,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "cfa3f2f916e9e09731abab15a99df6f26bfb8aff8346d8d04c8ae248d1fab051",
+      "nonce": "0a7c77a66936c3a7361927888348e93e",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "b5b37ce511eeb6187d7c83b550a205b629309179344b17f7661ba394b545ff4c",
+        "step": 4,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "1dbf23de32af562364e16e44c184effa589356ab17f37376948c4d5d6172fcd5",
+      "nonce": "b95f3a12682733bc830b209c16668d30",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 5,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "a44e94fc5c34d6d07e4da85c82b0abf3eb1109c317ab77726df7e639d45445cd",
+      "nonce": "2ec2be4950ba0e0e9ece125b92e9867f",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "0c5ca9f08652e92f20c81ed58187e277be20384203a4be0748df24fc896aec52",
+        "step": 6,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "72f39b606ce002619700fe2e11f9260af6f6544c71f3955251a3563eb9607967",
+      "nonce": "c7bcbce34ed7073191a9b150da699dd1",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "4b8aa95e480314a81eef86c36e0bbc38cd0d8cd04dbae7426c1feb19bcc6ac3d",
+        "step": 7,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "ed248cc7710f64ebd26e485bb51b005d004543b227b004bb32fa11ce12c466f5",
+      "nonce": "d14853f6087b586d8250827d8b658926",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
+        "step": 8,
+        "sub_game": 1,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 1,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
+    "ended_at": "2026-08-09T17:35:23+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "dbd6b6197a89a48ac40920d01a4d138d7d9eaeb0",
+    "group_id": "anrbj666",
+    "opponent_group_id": "nis-yar1",
+    "opponent_info": {
+      "commit_order": "thief_first",
+      "config_sha256": "32483c7bbc21ba83741fed8cfeab60e4670577feef84dba38daf3ad7179bcbc6",
+      "identity": {
+        "counted_games_so_far": 0,
+        "ed25519_public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAsjuCoZcsvwRzXFeQSCy/2iqD5b1dg7sTbCUZMUM43RU=\n-----END PUBLIC KEY-----\n",
+        "group_id": "nis-yar1",
+        "group_name": "nis-yar1",
+        "llm_model": "qwen3:14b",
+        "mcp_servers": {
+          "cop": "http://127.0.0.1:8802/mcp",
+          "thief": "http://127.0.0.1:8801/mcp"
+        },
+        "members": [
+          "Nissim Deri",
+          "Yarden Tziar"
+        ],
+        "repos": {
+          "cop": "https://github.com/NisoDeri/nis-yar1-cop",
+          "thief": "https://github.com/NisoDeri/nis-yar1-thief"
+        }
+      },
+      "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
+      "nonce": "9dc8c318447dbff6a5812293c7ebce11",
+      "role": "thief",
+      "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
+      "schema_version": "1.3",
+      "signature": "589401d341e0825ee5ad679ba248945222ef026b9930fe4724bd3f44d620b996",
+      "sub_game_number": 1,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      },
+      "wire_shape_sha256": "229ae6487a418c3fcb6da9be404de2f2533c288ebc228811bff6dedc4164d6f7"
+    },
+    "opponent_step_zero": {
+      "code_version": "0.1.0",
+      "counted_games": 0,
+      "github_commit": "4acbfbd",
+      "group_name": "nis-yar1",
+      "model": "qwen3:14b",
+      "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAsjuCoZcsvwRzXFeQSCy/2iqD5b1dg7sTbCUZMUM43RU=\n-----END PUBLIC KEY-----\n",
+      "signature": "ed25519:0Xi6Lcdql26+hqx+JAwwK7HMRueAKiVYuZk1OUQqO0AzUbKY8aO5p/GLxnVuRqDmIH+tR4uRkMMqkUvAjORQCg==",
+      "spec": {
+        "cpu_cores": 16,
+        "cpu_freq_mhz": 2904,
+        "cpu_type": "Intel64 Family 6 Model 165 Stepping 5, GenuineIntel",
+        "gpu_model": "NVIDIA GeForce GTX 1660 Ti",
+        "os": "Windows 10 (10.0.19045)",
+        "ram_gb": 16.0,
+        "vram_gb": 6.0
+      },
+      "step": 0,
+      "sub_game_number": 1,
+      "type": "system_spec"
+    },
+    "outcome": "capture",
+    "role": "police",
+    "scent_readings_refused": 0,
+    "started_at": "2026-08-09T17:35:11+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 9,
+    "turns_completed": 8
+  },
+  "wire_shape": "reference"
+}

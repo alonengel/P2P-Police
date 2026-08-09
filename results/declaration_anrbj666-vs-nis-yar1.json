@@ -1,12 +1,12 @@
 {
   "_schema": "p2p-police-artifacts",
-  "consensus_signature": "e8065a3c616787ce1922f8517453b81e57e832c19a6d959f3c428e618c26ece0",
+  "consensus_signature": "c5e8ac7bc60f139c598ed0f7c8ccc528ce0835d0ea70700ed5071495319676ed",
   "declaration_type": "pre_game_declaration",
-  "declared_at": "2026-08-09T17:47:06+00:00",
-  "game_ended_at": "2026-08-09T17:47:06+00:00",
-  "game_id": "anrbj666-vs-unknown",
-  "game_started_at": "2026-08-08T10:54:46+00:00",
-  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
+  "declared_at": "2026-08-09T17:35:23+00:00",
+  "game_ended_at": "2026-08-09T17:35:23+00:00",
+  "game_id": "anrbj666-vs-nis-yar1",
+  "game_started_at": "2026-08-09T17:35:11+00:00",
+  "game_uid": "bc77e467-4522-c355-cf69-868515ecc8a7",
   "groups": {
     "group_1": {
       "code_version": "1.00",
@@ -43,22 +43,31 @@
     "group_2": {
       "counted_games_played": 0,
       "github_commit": "unknown",
-      "group_id": "unknown",
-      "group_name": "unknown",
+      "group_id": "nis-yar1",
+      "group_name": "nis-yar1",
       "hardware_spec": {},
       "hardware_spec_sha256": "",
-      "llm_model": "undeclared",
-      "mcp_servers": {},
-      "members": [],
-      "repos": {},
+      "llm_model": "qwen3:14b",
+      "mcp_servers": {
+        "cop": "http://127.0.0.1:8802/mcp",
+        "thief": "http://127.0.0.1:8801/mcp"
+      },
+      "members": [
+        "Nissim Deri",
+        "Yarden Tziar"
+      ],
+      "repos": {
+        "cop": "https://github.com/NisoDeri/nis-yar1-cop",
+        "thief": "https://github.com/NisoDeri/nis-yar1-thief"
+      },
       "signature": "undeclared"
     }
   },
   "links": {
-    "config": "config_anrbj666-vs-unknown_g<NN>.json",
-    "declaration": "declaration_anrbj666-vs-unknown.json",
-    "log": "log_anrbj666-vs-unknown_g<NN>.json",
-    "result": "result_anrbj666-vs-unknown.json"
+    "config": "config_anrbj666-vs-nis-yar1_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-nis-yar1.json",
+    "log": "log_anrbj666-vs-nis-yar1_g<NN>.json",
+    "result": "result_anrbj666-vs-nis-yar1.json"
   },
   "max_tokens_per_game": 200000,
   "num_sub_games": 6,
