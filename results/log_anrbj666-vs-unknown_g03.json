@@ -16,7 +16,7 @@
     "audit_disclosure": "sent",
     "digest_match": false,
     "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
-    "ended_at": "2026-08-09T17:38:48+00:00",
+    "ended_at": "2026-08-09T18:06:58+00:00",
     "failure": "DeadlineExpiredError: deadline expired while waiting for opponent agreement",
     "gatekeeper": {
       "calls_logged": 0,
@@ -35,12 +35,12 @@
         "openrouter"
       ]
     },
-    "github_commit": "dbd6b6197a89a48ac40920d01a4d138d7d9eaeb0",
+    "github_commit": "7e2548e0d13c364a8b772f9d21c0c3a967fe1c5d",
     "group_id": "anrbj666",
     "opponent_group_id": "unknown",
     "outcome": "technical_loss",
     "role": "police",
-    "started_at": "2026-08-09T17:35:48+00:00",
+    "started_at": "2026-08-09T18:03:58+00:00",
     "steps_sealed": 0,
     "turns_completed": 0
   },
