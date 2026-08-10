@@ -1,11 +1,11 @@
 {
   "_schema": "p2p-police-artifacts",
-  "consensus_signature": "430513f0a09dac25a26be317e596303649e33977e4d656d40ff3e32d27b58a06",
+  "consensus_signature": "57eab19c4053f6dd3e225548558dac9483b1f0d748cec5e4ba180dba43073551",
   "declaration_type": "pre_game_declaration",
-  "declared_at": "2026-08-10T18:20:22+00:00",
-  "game_ended_at": "2026-08-10T18:20:22+00:00",
+  "declared_at": "2026-08-10T17:18:15+00:00",
+  "game_ended_at": "2026-08-10T17:18:15+00:00",
   "game_id": "anrbj666-vs-nis-yar1",
-  "game_started_at": "2026-08-10T18:18:04+00:00",
+  "game_started_at": "2026-08-10T17:16:07+00:00",
   "game_uid": "bc77e467-4522-c355-cf69-868515ecc8a7",
   "groups": {
     "group_1": {

@@ -8,17 +8,17 @@
   },
   "opponent_records": [
     {
-      "commit": "5f8338a0050674dbd41b0be8857b84c10bf1c7302557f3cd3b643d0f774ebf12",
+      "commit": "e3a11a423dbc97e1155e389af5b7f136e28070a085105177668c47da15ac73d9",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "You just missed me at Grand Central; the crowd was lovely."
       },
-      "nonce": "382d8aaef563aa3a590843675ccff647",
+      "nonce": "2fd3c8b13d503ec57bd1e3562a9353cc",
       "payload": {
         "hint": "You just missed me at Grand Central; the crowd was lovely.",
         "intent": "lie",
-        "model": "qwen3:14b",
+        "model": "stub",
         "move": "MOVE:S",
         "position": [
           4,
@@ -30,7 +30,7 @@
           "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.0009801997803151608,
+        "response_seconds": 0.0006227998528629541,
         "state": "grid=7x7;self=[4, 3];barriers=[]",
         "step": 1,
         "tokens_step": 0,
@@ -39,17 +39,17 @@
       }
     },
     {
-      "commit": "050db6c0da43ae6d957bece58707c632d0fb92402ea7dd11246f52a7aaef7095",
+      "commit": "13f8a2793ea274d25153c5fb4284c1c78a7c2075d83ce786938c981c056517e5",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Waiting out the night at the Village, cozy as ever."
       },
-      "nonce": "6f0f23087c82a2f51ce6d5a9d6aa5b96",
+      "nonce": "b5172074d2a72ace772709c386eaed78",
       "payload": {
         "hint": "Waiting out the night at the Village, cozy as ever.",
         "intent": "lie",
-        "model": "qwen3:14b",
+        "model": "stub",
         "move": "MOVE:E",
         "position": [
           4,
@@ -61,7 +61,7 @@
           "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.0008593997918069363,
+        "response_seconds": 0.0006321999244391918,
         "state": "grid=7x7;self=[4, 4];barriers=[]",
         "step": 2,
         "tokens_step": 0,
@@ -70,17 +70,17 @@
       }
     },
     {
-      "commit": "fa7a0f3330d8db4453c8701c3bd28d30fc68c580b3b023f52b49c6fdd240bf22",
+      "commit": "525983b77240eed2e59bc8c6aac00fabb025bc79e64389bfc06f83063df9d621",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "The view from Times Square is wasted on you."
       },
-      "nonce": "88a6c1c17614c7ac43ee8994afc2bd43",
+      "nonce": "7a1815971c923453d300fe2837be2552",
       "payload": {
         "hint": "The view from Times Square is wasted on you.",
         "intent": "lie",
-        "model": "qwen3:14b",
+        "model": "stub",
         "move": "MOVE:S",
         "position": [
           5,
@@ -92,7 +92,7 @@
           "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.0013888999819755554,
+        "response_seconds": 0.00120749999769032,
         "state": "grid=7x7;self=[5, 4];barriers=[]",
         "step": 3,
         "tokens_step": 0,
@@ -101,21 +101,21 @@
       }
     },
     {
-      "commit": "8bf99cc8f0e8167eab806948b86b192215347f8b5c4cef570620fc081d191f6a",
+      "commit": "8dae832d0b02b3defb04d69281f431d85fc0a75644946439144d88df6b6281e4",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "I am resting right beside Central Park, come say hello."
       },
-      "nonce": "af1f1659d98b40efe671e8ae32afcefe",
+      "nonce": "456cc41876d2753ed2823f919d255c1c",
       "payload": {
         "hint": "I am resting right beside Central Park, come say hello.",
         "intent": "lie",
-        "model": "qwen3:14b",
-        "move": "MOVE:E",
+        "model": "stub",
+        "move": "MOVE:N",
         "position": [
-          5,
-          5
+          4,
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "lie",
@@ -123,8 +123,8 @@
           "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.001379600027576089,
-        "state": "grid=7x7;self=[5, 5];barriers=[]",
+        "response_seconds": 0.000566599890589714,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
         "step": 4,
         "tokens_step": 0,
         "tokens_total": 0,
@@ -132,21 +132,21 @@
       }
     },
     {
-      "commit": "82d8d0dcbbecdc70e400c50d7a0592fdf376852183505b93fef7ea128e4e3fe1",
+      "commit": "ceb17100699dd7693d3c6c1857bc49b37db3aba5db08a3ecac96e77b5e4d9035",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "I am wherever the lamplight fails you."
       },
-      "nonce": "fdebbacdde6590ebba178d6298658fa1",
+      "nonce": "077d76475a4da48c90fd6db3badd8a86",
       "payload": {
         "hint": "I am wherever the lamplight fails you.",
         "intent": "truth",
-        "model": "qwen3:14b",
+        "model": "stub",
         "move": "MOVE:S",
         "position": [
-          6,
-          5
+          5,
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "truth",
@@ -154,8 +154,8 @@
           "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.00111109996214509,
-        "state": "grid=7x7;self=[6, 5];barriers=[]",
+        "response_seconds": 0.0008905001450330019,
+        "state": "grid=7x7;self=[5, 4];barriers=[]",
         "step": 5,
         "tokens_step": 0,
         "tokens_total": 0,
@@ -163,21 +163,21 @@
       }
     },
     {
-      "commit": "e2ea88afd483d8a5633c8655819e9ea11916662d29854edfee2e6e1eddd56a7a",
+      "commit": "6985dd7066bed33804f40f35d655ec87e067bb55b5f9af5a72106d31c34d5d16",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "The streets remember me; your boots they only tolerate."
       },
-      "nonce": "8be758b8cf1b213beb0a7d984cb42d99",
+      "nonce": "e7e922763508fcf18e22d33a1e936b71",
       "payload": {
         "hint": "The streets remember me; your boots they only tolerate.",
         "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "MOVE:E",
+        "model": "stub",
+        "move": "MOVE:N",
         "position": [
-          6,
-          6
+          4,
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "truth",
@@ -185,8 +185,8 @@
           "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.0007412000559270382,
-        "state": "grid=7x7;self=[6, 6];barriers=[]",
+        "response_seconds": 0.0004249999765306711,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
         "step": 6,
         "tokens_step": 0,
         "tokens_total": 0,
@@ -194,21 +194,21 @@
       }
     },
     {
-      "commit": "e6a8260c32237f84cfa990f5c5d556f287182f1a92320d2cbacec584b03752cf",
+      "commit": "f7eef3881d19b14df6d1481e51b719a631b8e55e5ddcdd1dd3e8c4bb60a739aa",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "Still breathing, still moving; catch me if you can."
       },
-      "nonce": "af91d6c0e2e5968eac9b8673008de8c1",
+      "nonce": "a8fe7f4d3d8332541f4db65f99f8e41f",
       "payload": {
         "hint": "Still breathing, still moving; catch me if you can.",
         "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "MOVE:N",
+        "model": "stub",
+        "move": "MOVE:S",
         "position": [
           5,
-          6
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "truth",
@@ -216,8 +216,8 @@
           "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.00046410015784204006,
-        "state": "grid=7x7;self=[5, 6];barriers=[]",
+        "response_seconds": 0.0005709999240934849,
+        "state": "grid=7x7;self=[5, 4];barriers=[]",
         "step": 7,
         "tokens_step": 0,
         "tokens_total": 0,
@@ -225,21 +225,21 @@
       }
     },
     {
-      "commit": "ddfb3e95fa614523df5216df32055bef29768dfa420f122928b9ecd959fc4d3f",
+      "commit": "a3012214318e3683e4bd7775dd9d376aa339dc1c97908d76d260dba39400620e",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "I trade in shadows and the market is generous tonight."
       },
-      "nonce": "a494eb9592953bcb9e67d282f2997a59",
+      "nonce": "73902160cc1c702de4f81eee2a1a61e5",
       "payload": {
         "hint": "I trade in shadows and the market is generous tonight.",
         "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "MOVE:S",
+        "model": "stub",
+        "move": "MOVE:N",
         "position": [
-          6,
-          6
+          4,
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "truth",
@@ -247,8 +247,8 @@
           "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
         },
         "random_move": false,
-        "response_seconds": 0.0005320999771356583,
-        "state": "grid=7x7;self=[6, 6];barriers=[]",
+        "response_seconds": 0.00030419998802244663,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
         "step": 8,
         "tokens_step": 0,
         "tokens_total": 0,
@@ -256,145 +256,21 @@
       }
     },
     {
-      "commit": "2c15673bf92ea9e425ec51fd6ace432172698b1b7ff0780772df88911ae86108",
-      "declared": {
-        "barrier_placed": null,
-        "capture_claim": null,
-        "hint": "I am wherever the lamplight fails you."
-      },
-      "nonce": "8a561779351a86674d7795bf124c9e20",
-      "payload": {
-        "hint": "I am wherever the lamplight fails you.",
-        "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "HOLD:-",
-        "position": [
-          6,
-          6
-        ],
-        "prompt_discussion": {
-          "bluff_classification": "truth",
-          "llm_prompt": "",
-          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
-        },
-        "random_move": false,
-        "response_seconds": 0.0003349999897181988,
-        "state": "grid=7x7;self=[6, 6];barriers=[]",
-        "step": 9,
-        "tokens_step": 0,
-        "tokens_total": 0,
-        "verdict": "truth"
-      }
-    },
-    {
-      "commit": "89d3d41c132efb6a2f32ab9c8f5b98821db5cf76f86a03f3da17716a6d5f9735",
-      "declared": {
-        "barrier_placed": null,
-        "capture_claim": null,
-        "hint": "The streets remember me; your boots they only tolerate."
-      },
-      "nonce": "cd56251685a6327b0202d88251e97924",
-      "payload": {
-        "hint": "The streets remember me; your boots they only tolerate.",
-        "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "HOLD:-",
-        "position": [
-          6,
-          6
-        ],
-        "prompt_discussion": {
-          "bluff_classification": "truth",
-          "llm_prompt": "",
-          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
-        },
-        "random_move": false,
-        "response_seconds": 0.00022529996931552887,
-        "state": "grid=7x7;self=[6, 6];barriers=[]",
-        "step": 10,
-        "tokens_step": 0,
-        "tokens_total": 0,
-        "verdict": "truth"
-      }
-    },
-    {
-      "commit": "dcbc82623bb008d6e06bbe48d7b2180096df6c72bb603737eebb8d2a7e1ab961",
-      "declared": {
-        "barrier_placed": null,
-        "capture_claim": null,
-        "hint": "Your footsteps echo; mine never do."
-      },
-      "nonce": "56775ae528e8801a61153c8b8b7f167f",
-      "payload": {
-        "hint": "Your footsteps echo; mine never do.",
-        "intent": "truth",
-        "model": "qwen3:14b",
-        "move": "HOLD:-",
-        "position": [
-          6,
-          6
-        ],
-        "prompt_discussion": {
-          "bluff_classification": "truth",
-          "llm_prompt": "",
-          "llm_reasoning": "template bank (truth) for the New York setting; zero tokens"
-        },
-        "random_move": false,
-        "response_seconds": 0.00020519993267953396,
-        "state": "grid=7x7;self=[6, 6];barriers=[]",
-        "step": 11,
-        "tokens_step": 0,
-        "tokens_total": 0,
-        "verdict": "truth"
-      }
-    },
-    {
-      "commit": "dc2fa9e5994cf3cdb5d19bbe88babef9c35762e446e926b0f69e2fd55e32debc",
-      "declared": {
-        "barrier_placed": null,
-        "capture_claim": null,
-        "hint": "Meet me by the Village if you dare."
-      },
-      "nonce": "0b9c13a6aa4943fdb3b7f9c7a368b024",
-      "payload": {
-        "hint": "Meet me by the Village if you dare.",
-        "intent": "lie",
-        "model": "qwen3:14b",
-        "move": "MOVE:W",
-        "position": [
-          6,
-          5
-        ],
-        "prompt_discussion": {
-          "bluff_classification": "lie",
-          "llm_prompt": "",
-          "llm_reasoning": "template bank (lie) for the New York setting; zero tokens"
-        },
-        "random_move": false,
-        "response_seconds": 0.0001238998956978321,
-        "state": "grid=7x7;self=[6, 5];barriers=[[5, 6]]",
-        "step": 12,
-        "tokens_step": 0,
-        "tokens_total": 0,
-        "verdict": "lie"
-      }
-    },
-    {
-      "commit": "4ff6fefb43dacd3f4159fd0de20054788e212de8733ea78255bbc615916ab51d",
+      "commit": "6fccdfb332c9500c36e016e247ba7b2dedfd86c37cbb49c9a53b182ee769a3ea",
       "declared": {
         "barrier_placed": null,
         "capture_claim": null,
         "hint": "You got me."
       },
-      "nonce": "de5456126cc24d6c4c2d46fc9f065d0b",
+      "nonce": "6393ae548c58dfd3de77cc95b0e4b2f0",
       "payload": {
         "hint": "You got me.",
         "intent": "truth",
-        "model": "qwen3:14b",
+        "model": "stub",
         "move": "HOLD:-",
         "position": [
-          6,
-          5
+          4,
+          4
         ],
         "prompt_discussion": {
           "bluff_classification": "truth",
@@ -403,8 +279,8 @@
         },
         "random_move": false,
         "response_seconds": 0.0,
-        "state": "grid=7x7;self=[6, 5];barriers=[[5, 6], [6, 5]]",
-        "step": 13,
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 9,
         "tokens_step": 0,
         "tokens_total": 0,
         "verdict": "truth"
@@ -413,8 +289,8 @@
   ],
   "records": [
     {
-      "commit": "2c8e027f52ebf911bccb20ca17aec3eff65c557d48463ea9ac204994785c54b0",
-      "nonce": "eaca6970cfd126c7b188f160479808a5",
+      "commit": "b1019eb3bb129054da48d2df6b4d30a5901331a6f628a7cdc6c808a34fdc6a98",
+      "nonce": "191840d404d6c93c6cc8c866678d427f",
       "payload": {
         "declaration_ref": "declaration_anrbj666-vs-nis-yar1.json",
         "github_commit": "acdd6c189773ed7511c9cc9e21cc6f55f727811f",
@@ -426,8 +302,8 @@
       }
     },
     {
-      "commit": "a86cc331642fb36f5d9b1af294974ddc4deb0ec8a08e17a29179a6815e8b650f",
-      "nonce": "166b1983c5b6372a33c00bba51b14f7c",
+      "commit": "88b5c48f5c21aee96646c9558e8de6eb39a26db0ecdc03796079fbe26055c514",
+      "nonce": "f7ef4e25864e44bbbac363a84a1ff852",
       "payload": {
         "action": {
           "move": "S",
@@ -442,8 +318,8 @@
       }
     },
     {
-      "commit": "3787f81cecaffb41eef8291ffe5684ab1d9923169eee472313c8f284fb7f1a35",
-      "nonce": "ec6be0a2845c66da01b60f16b9504f82",
+      "commit": "c4f8b35af48a41fd495753df51034e415d01ab1471372a8ccc9e8ed1e6512448",
+      "nonce": "df524b5e1141dff70a2222c680babd87",
       "payload": {
         "action": {
           "move": "E",
@@ -458,14 +334,14 @@
       }
     },
     {
-      "commit": "08a7ff9d3cfe8d3675abd76644df1626dd60b0ca8573a43735d66638096113dd",
-      "nonce": "6963f66806bf78223e816257998ed20f",
+      "commit": "1a49ed71cdf4e13888f5d253225547e5283c954b4a8331428e5d1a72366fb471",
+      "nonce": "cdafe5484485d5d4ec0f40fcc163e236",
       "payload": {
         "action": {
           "move": "S",
           "type": "move"
         },
-        "hint": "Slipping south past the docks.",
+        "hint": "Downtown crowds hide me well.",
         "role": "police",
         "state_digest": "f2b359a1154c0c36d24cb1fed1cdec0567137cb0766e326c009b04b41d13fdb7",
         "step": 3,
@@ -474,14 +350,14 @@
       }
     },
     {
-      "commit": "f5917726b787c81a98a99956f5fe414df002fb3f59cac1f91454c5e097eeda4b",
-      "nonce": "11627150a364461aabe740459a52d182",
+      "commit": "85d052f57e2c92ff3182c97461b33f40a3a2d062a5f672f5505f091153b4c227",
+      "nonce": "36bc4ae7ac3412ecde2cd7f73b3c026d",
       "payload": {
         "action": {
           "move": "E",
           "type": "move"
         },
-        "hint": "Chasing sunrise eastward.",
+        "hint": "East side alleys are friendly tonight.",
         "role": "police",
         "state_digest": "b5b37ce511eeb6187d7c83b550a205b629309179344b17f7661ba394b545ff4c",
         "step": 4,
@@ -490,14 +366,14 @@
       }
     },
     {
-      "commit": "ce47b41189451924c0c9859a5f1704186d158c94f79b79247e2c7a2997776f13",
-      "nonce": "eb1caf8921a8cb1588ab32834c02e933",
+      "commit": "779e78c8d629402c788c0007292050c3693bce6ef8b4e3c890e1bb79fdb321d3",
+      "nonce": "f18594895830acef9d536bd001edcc28",
       "payload": {
         "action": {
           "move": "S",
           "type": "move"
         },
-        "hint": "Downtown crowds hide me well.",
+        "hint": "Slipping south past the docks.",
         "role": "police",
         "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
         "step": 5,
@@ -506,8 +382,8 @@
       }
     },
     {
-      "commit": "690ed8a7182da48a5847c92e33261ca806ddfbf0357cc303afd4b17eed08aba0",
-      "nonce": "209209230125484cbfa637db2b2a4d54",
+      "commit": "42ac675ec0dda2aab8f80fca3b1af9d77c87367500d4993a75a9185462b97c23",
+      "nonce": "32f6e97b32aa6d1e76163f81a69deed3",
       "payload": {
         "action": {
           "move": "E",
@@ -522,14 +398,14 @@
       }
     },
     {
-      "commit": "9e4367d0555facf47870eee4e6ba206783d4527b9ec95a62fd783526f7885ffb",
-      "nonce": "4d2151bbfb5e7a162020788dd188c73d",
+      "commit": "b795b01444bc895ad8194db8810a6e50d377c62c3424b35d1ed6374986bc1194",
+      "nonce": "0757841420730c052e073beeb1418059",
       "payload": {
         "action": {
           "move": "S",
           "type": "move"
         },
-        "hint": "Slipping south past the docks.",
+        "hint": "Downtown crowds hide me well.",
         "role": "police",
         "state_digest": "4b8aa95e480314a81eef86c36e0bbc38cd0d8cd04dbae7426c1feb19bcc6ac3d",
         "step": 7,
@@ -538,8 +414,8 @@
       }
     },
     {
-      "commit": "12576cf0fe4d35288bd31e8234b1029f479381a23e216a1f57770f97209a9d5f",
-      "nonce": "d3008142a12a3009e799705023fdc924",
+      "commit": "dfd6bf8faa9c4538945d308645a4336de8da4529ffcf73b49a593f149d3c2310",
+      "nonce": "f31df3b47461a8bf55b9f12dff002187",
       "payload": {
         "action": {
           "move": "E",
@@ -552,76 +428,6 @@
         "sub_game": 1,
         "verdict": true
       }
-    },
-    {
-      "commit": "8410a80df175e2caedd650f138a00c9c76f8b1a8a9e7d6fed3409fa1132278c5",
-      "nonce": "2cc33727f37479fe5801f2ab15c31c67",
-      "payload": {
-        "action": {
-          "move": "S",
-          "type": "move"
-        },
-        "hint": "Downtown crowds hide me well.",
-        "role": "police",
-        "state_digest": "7f3b4333cd662949fcd22bb4c5a90c1b571974f9764a36dd1256874bcf884ad8",
-        "step": 9,
-        "sub_game": 1,
-        "verdict": true
-      }
-    },
-    {
-      "commit": "0311bd9b93431b5197bf0373244f1e0251c2ba382f69e80d897c6d0532773961",
-      "nonce": "2b81fc20ff498b76101b2ed767e26064",
-      "payload": {
-        "action": {
-          "move": "E",
-          "type": "move"
-        },
-        "hint": "East side alleys are friendly tonight.",
-        "role": "police",
-        "state_digest": "cefb82c87e3571154c80c803538645d99254a9b095affd3f781a9a6812eba4d3",
-        "step": 10,
-        "sub_game": 1,
-        "verdict": true
-      }
-    },
-    {
-      "commit": "9e4554cf434fe6add726e9a32e74f3532d5fe42ac2726f7108af843a759beedd",
-      "nonce": "1ce84edce86cb87985266e33cc8ed410",
-      "payload": {
-        "action": {
-          "cell": [
-            5,
-            6
-          ],
-          "type": "barrier"
-        },
-        "hint": "Not moving an inch, promise.",
-        "role": "police",
-        "state_digest": "f880ad35db55250495579a6709ff703f94db16fc2dc652affb27c2c79ed8d217",
-        "step": 11,
-        "sub_game": 1,
-        "verdict": true
-      }
-    },
-    {
-      "commit": "b37406752be8bbf6c0d2fc567ce5406d3d69bc1fba6f7d343a80f25e360b15dc",
-      "nonce": "faa1b2ec9406769122f2a942b6af6501",
-      "payload": {
-        "action": {
-          "cell": [
-            6,
-            5
-          ],
-          "type": "barrier"
-        },
-        "hint": "Comfortable right where I am.",
-        "role": "police",
-        "state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
-        "step": 12,
-        "sub_game": 1,
-        "verdict": true
-      }
     }
   ],
   "report_type": "log",
@@ -631,8 +437,8 @@
     "audit": "Verified OK",
     "digest_match": null,
     "disputed_capture": null,
-    "end_state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
-    "ended_at": "2026-08-10T18:18:20+00:00",
+    "end_state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
+    "ended_at": "2026-08-10T17:16:19+00:00",
     "gatekeeper": {
       "calls_logged": 0,
       "dos_locked": {
@@ -658,7 +464,7 @@
       "config_sha256": "32483c7bbc21ba83741fed8cfeab60e4670577feef84dba38daf3ad7179bcbc6",
       "identity": {
         "counted_games_so_far": 0,
-        "ed25519_public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA8DY6G5q2Xd9mBCMPcw7y10OYTWC2XsFJKR5LZdul5cA=\n-----END PUBLIC KEY-----\n",
+        "ed25519_public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAFDkj3+ouz72sk12hn/goJpJ1zNMBQL6cNZ9LucMMoZ4=\n-----END PUBLIC KEY-----\n",
         "group_id": "nis-yar1",
         "group_name": "nis-yar1",
         "llm_model": "qwen3:14b",
@@ -676,11 +482,11 @@
         }
       },
       "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
-      "nonce": "7fe6579db13da4024142129d75d3cff5",
+      "nonce": "0e352bcf2e644b94e5f93142e9265b7f",
       "role": "thief",
       "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
       "schema_version": "1.3",
-      "signature": "a65c6e397569dc83cbc958a649fbdc7aaf1a85dfa852832e41d1f87fa2603b8e",
+      "signature": "74f4802499f79616fa40653948f26c82876fb6d585a5f21138c2004dc25b6d08",
       "sub_game_number": 1,
       "terms": {
         "axis_origin_corner": "top-left",
@@ -709,11 +515,11 @@
     "opponent_step_zero": {
       "code_version": "0.1.0",
       "counted_games": 0,
-      "github_commit": "e88b4ac",
+      "github_commit": "10a86db",
       "group_name": "nis-yar1",
       "model": "qwen3:14b",
-      "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA8DY6G5q2Xd9mBCMPcw7y10OYTWC2XsFJKR5LZdul5cA=\n-----END PUBLIC KEY-----\n",
-      "signature": "ed25519:QWczA6VZHLF4n4DdxV3S0GcldOvvOod6BUHN6wF+DoeQEpG1PmraHCcTdQJnPj+kR856cOk2tgavp+xgu1x5BA==",
+      "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAFDkj3+ouz72sk12hn/goJpJ1zNMBQL6cNZ9LucMMoZ4=\n-----END PUBLIC KEY-----\n",
+      "signature": "ed25519:Ay9GQwJvGEZ7tqoAaStnUMCnyYcyJrsV+dAn8I5MKXvSqoSWD3Ma+9bztxb6Rlh6v5WzX2iKIs3PC4ZQDAn+Bw==",
       "spec": {
         "cpu_cores": 16,
         "cpu_freq_mhz": 2904,
@@ -730,10 +536,10 @@
     "outcome": "capture",
     "role": "police",
     "scent_readings_refused": 0,
-    "started_at": "2026-08-10T18:18:04+00:00",
+    "started_at": "2026-08-10T17:16:07+00:00",
     "step_zero_mismatch": null,
-    "steps_sealed": 13,
-    "turns_completed": 12
+    "steps_sealed": 9,
+    "turns_completed": 8
   },
   "wire_shape": "reference"
 }

@@ -4,12 +4,12 @@
     "config_sha256": "32483c7bbc21ba83741fed8cfeab60e4670577feef84dba38daf3ad7179bcbc6",
     "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9"
   },
-  "audit": "Verified OK",
-  "consensus_signature": "77ab6e44cb496791307c3ea039269a725d14c84c1934552718510ec8b1ddfc29",
-  "digest_match": null,
-  "end_state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
-  "game_id": "anrbj666-vs-nis-yar1",
-  "game_uid": "bc77e467-4522-c355-cf69-868515ecc8a7",
+  "audit": "unavailable (technical loss)",
+  "consensus_signature": "84ddfe0f168865ebb5fb9c83c7c5b63c9913afc1521f09c0d4b4f7485dc7a996",
+  "digest_match": false,
+  "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+  "game_id": "anrbj666-vs-unknown",
+  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
   "github_commit": "acdd6c189773ed7511c9cc9e21cc6f55f727811f",
   "group_id": "anrbj666",
   "links": {
@@ -20,16 +20,16 @@
     "cop": "https://cop-mcp.alon.website/mcp",
     "thief": "https://thief-mcp.alon.website/mcp"
   },
-  "opponent_group_id": "nis-yar1",
-  "outcome": "capture",
+  "opponent_group_id": "unknown",
+  "outcome": "technical_loss",
   "report_type": "result",
-  "reported_at": "2026-08-10T18:20:22+00:00",
+  "reported_at": "2026-08-10T16:52:32+00:00",
   "schema_version": "1.00",
   "score": {
-    "cop": 20,
-    "thief": 5
+    "cop": 0,
+    "thief": 0
   },
   "tokens_total": 0,
-  "turns_completed": 12,
-  "winner_group": "anrbj666"
+  "turns_completed": 0,
+  "winner_group": "unknown"
 }

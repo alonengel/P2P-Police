@@ -5,9 +5,9 @@
     "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9"
   },
   "audit": "Verified OK",
-  "consensus_signature": "77ab6e44cb496791307c3ea039269a725d14c84c1934552718510ec8b1ddfc29",
+  "consensus_signature": "80795b4cd8d2984cc8665c988c34d3fc3ae61f41a35722f621082b00312d13b5",
   "digest_match": null,
-  "end_state_digest": "6f8cec63985c1949a6a16ac3ef69b9753ef753a069b6e684c5b7aad85fc13bb5",
+  "end_state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
   "game_id": "anrbj666-vs-nis-yar1",
   "game_uid": "bc77e467-4522-c355-cf69-868515ecc8a7",
   "github_commit": "acdd6c189773ed7511c9cc9e21cc6f55f727811f",
@@ -23,13 +23,13 @@
   "opponent_group_id": "nis-yar1",
   "outcome": "capture",
   "report_type": "result",
-  "reported_at": "2026-08-10T18:20:22+00:00",
+  "reported_at": "2026-08-10T17:18:15+00:00",
   "schema_version": "1.00",
   "score": {
     "cop": 20,
     "thief": 5
   },
   "tokens_total": 0,
-  "turns_completed": 12,
+  "turns_completed": 8,
   "winner_group": "anrbj666"
 }
