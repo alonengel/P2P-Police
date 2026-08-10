@@ -1308,3 +1308,44 @@ series #2 filed — 75-35, 5-1, league report 19fe2cdf49a26b0d, counters
 {anrbj666: 2, vibecode: 1}, diversity flag to the winner; counters bumped,
 friendly posture restored, permanent evidence archive created
 (docs/evidence/counted_games/), README league record with commit links.
+
+## 2026-08-10 (evening) — nis-yar1 debugging marathon + two 6-0 friendlies (Claude Fable session)
+
+**Operator prompts (sequence):** launch-on-green vs nis-yar1's "fix pushed"
+claim (probe list_tools, launch friendly six); "what is the game status
+right now? if it failed again, send a detailed report explaining how to fix
+it"; evidence-based rival debugging across four failure generations
+("go over the logs, see everything makes sense", "check, and report, and
+write a detailed message to them", "give me a markdown detailing how to fix
+it on their side... explain in details the flow, the setup and all. give
+examples"); scheduled friendlies at 19:46 -> "do 7:50 instead" -> 19:52 ->
+20:05 -> 20:12 -> "it didn't open for them, do 20:16" (first settled series,
+6-0); post-series checklist ("what's left to check regarding the reports and
+jsons"); artifact cross-verification ("check his stuff: <zip>", "check ...
+aligned ... the latest", "check ... aligned_v2"); "we should tell them what
+to fix and give example of how it should be, no?"; rehearsal proposal ("one
+more friendly, send to our own mail, validate the jsons, then counted");
+T=21:16 -> launch 21:18 (rehearsal, 6-0); report-email format guide for the
+rival ("their format is not ok, explain... json schema and values... even
+let him copy our title"); their emailed report challenged ("validate it,
+challenge it") — mutual_agreement.sha256 exposed as a pasted config-lock
+prefix, correct value derived from THEIR OWN rows; "also recompute the
+sha256, make sure its correct" (triple verification); bookkeeping pass.
+
+**Outcomes:** four rival-side infrastructure generations diagnosed from our
+wire evidence alone (proxy ACK-without-response framing; restricted-shell
+egress block proven by a 0->2 tunnel-counter control experiment while their
+endpoints returned 200s; crash-on-first-inbound-contact on BOTH their peers;
+scent_model_sha256 mismatch refused by the both-declare rule in 6s/window)
+— each with a written root-cause report to the rival; first settled series
+vs nis-yar1 20:16 (90-30, 6-0, report 19fecaf5c92fd4d5) and dress rehearsal
+21:18 (90-30, 6-0, report 19fece82ee5cdbd4); thief banked 6/6 35-turn
+survivals — live debut of observe_claimed_cell + SHARP_BELIEF trap-forecast
+gate vs the sealer cop that beat the pre-fix thief; artifact bundles
+exchanged + cross-verified both directions (their v2 aggregation bug and
+pasted mutual-agreement hash caught with reproducible-preimage analysis;
+their consensus signature verified honest); mutual_agreement 7f688ab0...
+independently recomputed by both teams; end-state digest recipe agreed for
+the counted game; evidence archived (friendlies-nisyar1/ + burned-attempts
+root-cause READMEs); email token re-minted to all three locations after the
+7-day expiry (peers read repo-root token.json — runbook note).

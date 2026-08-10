@@ -211,6 +211,21 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   manifests in [docs/evidence/counted_games/](docs/evidence/counted_games/)
   (archive commit [`d58c340`](https://github.com/alonengel/P2P-Police/commit/d58c340)).
 
+- **nis-yar1 pairing (2026-08-10): two clean 6-0 friendlies, cross-verified
+  both directions.** After five burned attempts spanning four generations of
+  rival-side infrastructure bugs — proxy response framing, restricted-shell
+  egress, crash-on-first-contact, scent-lock mismatch, each diagnosed from
+  our wire evidence and archived with root-cause READMEs in
+  [docs/evidence/discarded-series/nisyar1-burned-attempts/](docs/evidence/discarded-series/nisyar1-burned-attempts/)
+  — the first completed series swept **90-30, 6-0** (report
+  `19fecaf5c92fd4d5`) and the counted-flow dress rehearsal repeated it
+  (**90-30, 6-0**, report `19fece82ee5cdbd4`). Artifact bundles exchanged
+  and verified after each series; `mutual_agreement.sha256`
+  (`7f688ab0…`) independently recomputed by BOTH teams from their own rows;
+  a shared end-state-digest recipe agreed for the upcoming counted game.
+  Uncounted throughout — no rule-52 counter moved, nothing to the lecturer.
+  Archives: [docs/evidence/friendlies-nisyar1/](docs/evidence/friendlies-nisyar1/).
+
 - **Real games against a rival league team** (2026-07-24, T-protocol
   window): warm-up games over the public tunnels ran the full 35 turns to
   survival with audits **Verified OK on both sides** — the registered
