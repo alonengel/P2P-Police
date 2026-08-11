@@ -86,6 +86,17 @@ def test_newest_runner_tape_g03new_is_caught_with_margin() -> None:
         assert turns <= 30, f"g03new seed {seed}: caught only at turn {turns}"
 
 
+def test_recovered_live_survivor_tape_is_caught() -> None:
+    """The 2026-08-11 16:28 g01 — the game their thief SURVIVED live against
+    our pre-interception cop (tape recovered from their archive after ours
+    was lost to a cleanup sweep). The intercepting cop converts it at turn
+    21; the bound leaves margin for a live thief stronger than its tape."""
+    for seed in SEEDS:
+        outcome, turns = play_tape(seed, "g01surv")
+        assert outcome is Outcome.CAPTURE, f"g01surv seed {seed}: {outcome}"
+        assert turns <= 30, f"g01surv seed {seed}: caught only at turn {turns}"
+
+
 def test_ditherer_tape_g01_stays_fast() -> None:
     """Regression pin: the g01 capture our cop already owns must not regress
     — caught, and caught fast (live: 10 turns; allow slack to 14)."""
