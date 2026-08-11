@@ -63,7 +63,8 @@ class Perception:
         self.refused_readings = 0  # evidence counter, surfaced in the summary
         self.scent_trusted = True  # latches false on a physically impossible reading
         self._previous_field: list | None = None  # last accepted frame
-        self._law_breaks = 0  # consecutive frames no single emitter explains
+        # law-break streak; unique law-solved emitter for the trail-head pin
+        self._law_breaks, self._last_emitter = 0, None
 
     @classmethod
     def for_peer(cls, role: Role, config) -> "Perception":
@@ -97,8 +98,7 @@ class Perception:
         else:
             self.belief.diffuse(engine.board)
         if barrier_cell is not None:
-            self.belief.observe_barrier(
-                (barrier_cell[0], barrier_cell[1]), engine.board)
+            self.belief.observe_barrier(tuple(barrier_cell), engine.board)
         if claim_cell is not None:
             self.belief.observe_claimed_cell((claim_cell[0], claim_cell[1]))
         rival_scent = engine.scent[rival]
@@ -141,6 +141,18 @@ class Perception:
         # Last, and deliberately: a fitted dwell plateau is physics the rival
         # emitted about itself, so it outranks anything it CHOSE to say.
         self.belief.observe_plateau(rival_scent, engine.board)
+        # Very last: the TRAIL HEAD — the unique emitter that solves this
+        # frame transition under the signed update law (computed by the law
+        # check itself). Raw field argmax cannot serve here: the 5x5 kernel
+        # keeps every cell near the path saturated, so max() reads the OLDEST
+        # plateau cell. The law's emitter is the rival's position derived
+        # from its own physics — a beacon it cannot decline to send (a
+        # claim-silent cop kept our posterior 4 cells stale while walking in,
+        # league 2026-08-11 g02/g04). Pinned after every tier so nothing the
+        # rival SAYS can dilute it.
+        if (head := self._last_emitter) is not None:  # one pin per solved frame
+            self._last_emitter = None
+            self.belief.observe_claimed_cell(head)
 
     def _breaks_the_law(self, rival_scent, board) -> bool:
         """Do two consecutive frames admit NO single emitter (ADR-0010)?
@@ -167,9 +179,13 @@ class Perception:
             # empty field explains no emitter at all, so without this the
             # checker refuses every frame of such a game.)
             return False
-        if transition_emitters(self._previous_field, rival_scent.values(),
-                               board, self.grid_size):
-            self._law_breaks = 0
+        if emitters := transition_emitters(self._previous_field,
+                                           rival_scent.values(), board,
+                                           self.grid_size):
+            # A SINGLE law-consistent emitter is the rival's position, solved
+            # from its own physics — stashed for the trail-head pin.
+            self._law_breaks, self._last_emitter = 0, (
+                emitters[0] if len(emitters) == 1 else None)
             return False
         self._law_breaks += 1
         if self._law_breaks >= 3:
