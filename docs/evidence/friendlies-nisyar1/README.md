@@ -9,10 +9,18 @@ the two team inboxes only, never the lecturer; no rule-52 counter moved.
 |--------|--------|-----------|----------|--------------|
 | `20260810-2016-first-series/` | 20:16 | 3830 | captures in 8 (g01/g03/g05), survivals 35 (g02/g04/g06) | `19fecaf5c92fd4d5` |
 | `20260810-2118-rehearsal/` | 21:18 | 3840 | captures in 12, survivals 35 | `19fece82ee5cdbd4` |
+| `20260811-1429-third-friendly/` | 2026-08-11 14:29 | 3860 | captures g01 (10t), their thief survived g03/g05; our thief 3x35t. 4-2, 60-40 | `19ff09bbc2e6eb0b` |
 
 Each folder holds THIS repo's role artifacts verbatim (odd windows here;
 even windows in the sibling repo). `game_uid` (locked pre-series):
 `bc77e467-4522-c355-cf69-868515ecc8a7`.
+
+The third friendly broke the sweeps: their RUNNER thief (perimeter loops,
+landmark-lying prose) survived g03/g05 against our cop - 4-2, 60-40, our
+thief still 3/3 survivals. The loss tapes became the cop rehearsal
+(tests/unit/test_strategy/test_league_rehearsal_nisyar1_cop.py) that
+produced the sharp-mass wall gate + never-wall-out clock rule
+(police repo commit e51fbb8): g03 runner 0/5 -> 5/5 captured.
 
 Cross-verification (documented in the workspace `docs/docsVersusNisYar1/`
 dossier): artifact bundles exchanged both directions after each series;
