@@ -60,8 +60,7 @@ def my_half_turn(rt) -> None:
 def their_half_turn(rt) -> None:
     """Absorb the rival's next own-numbered message (their_step + 1)."""
     rt.their_step += 1  # the rival's steps count 1, 2, 3... independently
-    step = rt.their_step
-    message = codec.parse_turn_message(rt.exchange.receive_turn(step))
+    message = codec.parse_turn_message(rt.exchange.receive_turn(rt.their_step))
     rival = Role(message["sender"])
     placed = message["barrier_placed"]
     # Only a NEW declaration is evidence; redeliveries are transport noise.
@@ -105,7 +104,7 @@ def their_half_turn(rt) -> None:
                 rt.pending_claim_response = claims.concede_declaration(rt.own)
             rt.own.outcome = Outcome.CAPTURE
             send_concede(rt)
-    rt.perception.emit(rt.own, step)
+    rt.perception.emit(rt.own, rt.their_step)
 
 
 def send_concede(rt) -> None:
@@ -160,6 +159,7 @@ def finish(rt) -> dict:
         pass
     except GameRuleError:
         verdict = "TAMPERED"  # illegal revealed physics voids the audit
+    percep = getattr(rt, "perception", None)
     return {
         "role": rt.role.value,
         "started_at": getattr(rt, "started_at", None),
@@ -172,8 +172,12 @@ def finish(rt) -> dict:
         # Evidence for the mutual audit (rule 36): how many transmitted trail
         # readings we refused as physically impossible. Zero on every honest
         # game ever measured; non-zero is a claim a third party can check.
-        "scent_readings_refused": getattr(
-            getattr(rt, "perception", None), "refused_readings", 0),
+        "scent_readings_refused": getattr(percep, "refused_readings", 0),
+        # Where the rival's OWN transmitted trail placed it each turn (the
+        # emitter that solves its frame transition under the signed update
+        # law). Diffed at audit against the positions it reveals: an honest
+        # trail reproduces the rival's path, one turn behind.
+        "rival_trail_track": getattr(percep, "trail_track", []),
         "opponent_group_id": getattr(rt, "opponent_group_id", "unknown"),
         "opponent_info": getattr(rt, "opponent_info", {}),
         # The rival's SEALED commit-id declaration (its revealed step-zero)
