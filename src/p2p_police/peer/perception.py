@@ -63,8 +63,8 @@ class Perception:
         self.refused_readings = 0  # evidence counter, surfaced in the summary
         self.scent_trusted = True  # latches false on a physically impossible reading
         self._previous_field: list | None = None  # last accepted frame
-        # law-break streak; unique law-solved emitter for the trail-head pin
-        self._law_breaks, self._last_emitter = 0, None
+        # law-break streak; unique law-solved emitter; per-turn emitter track
+        self._law_breaks, self._last_emitter, self.trail_track = 0, None, []
 
     @classmethod
     def for_peer(cls, role: Role, config) -> "Perception":
@@ -87,9 +87,8 @@ class Perception:
         An inbound CAPTURE CLAIM pins the claimant the same way: the claim
         names the claimant's own landing cell (league rehearsal 2026-08-09:
         a claim-per-move cop broadcasts its true path all game)."""
-        if hint_text:  # inbound view capped at the signed word limit
-            hint_text = " ".join(hint_text.split()[: self._hint_cap])
-        self.last_hint = hint_text or ""
+        hint_text = " ".join(hint_text.split()[: self._hint_cap]) if hint_text else ""
+        self.last_hint = hint_text
         # A literal move-echo IS the movement model for this turn (league
         # rival 2026-08-08); anything else keeps the one-step diffusion.
         echo = parse_move_echo(hint_text) if hint_text else None
@@ -132,12 +131,11 @@ class Perception:
         # An echo already consumed the hint as motion — no region double-count.
         claim = None if echo else (parse_claim(hint_text) if hint_text else None)
         weights = self.profiler.advised_weights(self.opponent_id)
+        region = landmark_region(hint_text, self.belief.grid_size) if hint_text else None
         if claim:
             self.belief.observe_hint(claim, rival_scent, weights)
-        else:
-            region = landmark_region(hint_text, self.belief.grid_size) if hint_text else None
-            if region:
-                self.belief.observe_region(region, rival_scent, weights)
+        elif region:
+            self.belief.observe_region(region, rival_scent, weights)
         # Last, and deliberately: a fitted dwell plateau is physics the rival
         # emitted about itself, so it outranks anything it CHOSE to say.
         self.belief.observe_plateau(rival_scent, engine.board)
@@ -150,8 +148,12 @@ class Perception:
         # claim-silent cop kept our posterior 4 cells stale while walking in,
         # league 2026-08-11 g02/g04). Pinned after every tier so nothing the
         # rival SAYS can dilute it.
-        if (head := self._last_emitter) is not None:  # one pin per solved frame
-            self._last_emitter = None
+        head, self._last_emitter = self._last_emitter, None
+        # Mutual-audit evidence (rule 36): what the rival's OWN trail said its
+        # position was, turn by turn. Compared at audit against the positions
+        # it reveals — an honest emitter track matches the reveals exactly.
+        self.trail_track.append(list(head) if head else None)
+        if head is not None:
             self.belief.observe_claimed_cell(head)
 
     def _breaks_the_law(self, rival_scent, board) -> bool:

@@ -168,6 +168,10 @@ class GeometricRuntime:
             # Mutual-audit evidence (rule 36): trail readings refused as
             # physically impossible. Zero on every honest game measured.
             "scent_readings_refused": self.perception.refused_readings,
+            # Where the rival's OWN transmitted trail placed it each turn
+            # (emitter solved from the signed update law). Diffed at audit
+            # against the positions it reveals: an honest trail matches.
+            "rival_trail_track": self.perception.trail_track,
             "opponent_group_id": getattr(self, "opponent_group_id", "unknown"),
             "opponent_info": getattr(self, "opponent_info", {}),
         }
