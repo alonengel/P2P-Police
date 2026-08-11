@@ -25,6 +25,25 @@ TEMPLATES: dict[str, list[str]] = {
     "STAY": ["Comfortable right where I am.", "Not moving an inch, promise."],
 }
 
+# Contentless talk: arena-flavoured pressure lines that assert NOTHING about
+# where this cop stands or where it is going. The templates above narrate the
+# heading, which hands a fleeing thief the one thing it needs. Free language
+# is required (rule 27); informative language is not. Cop voice deliberately
+# differs from the thief twin's bank (role policies must not be shared code
+# OR shared wording). Selected per game by [trash_talk] hint_mode.
+TAUNTS: list[str] = [
+    "Every door in this city eventually opens for me.",
+    "The paperwork is already written; only the name is blank.",
+    "Sleep is optional when the shift never ends.",
+    "This borough has fewer corners than you think.",
+    "I have all night and the city has walls.",
+    "Somebody always talks. Somebody always has.",
+    "Your luck is a loan, and I collect.",
+    "The streets are shorter than your confidence.",
+    "Enjoy the air while the map allows it.",
+    "Nothing personal — the arithmetic simply favours me.",
+]
+
 
 def enforce_word_limit(text: str, hint_max_words: int) -> str:
     """Hard cap from the signed config — applies to every provider (rule)."""

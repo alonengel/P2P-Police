@@ -7,7 +7,7 @@ import random
 
 from p2p_police.infra.llm_provider import PROVIDERS, TokenMeter
 from p2p_police.shared.gatekeeper import ApiGatekeeper
-from p2p_police.strategy.hints import TEMPLATES, enforce_word_limit
+from p2p_police.strategy.hints import TAUNTS, TEMPLATES, enforce_word_limit
 
 
 class TalkChain:
@@ -20,20 +20,23 @@ class TalkChain:
         arena: str,
         max_words: int,
         rng: random.Random,
+        opaque: bool = False,
     ) -> None:
         self.provider = provider  # None => template only
         self.every_n_steps = max(1, every_n_steps)
         self.arena = arena
         self.max_words = max_words
         self.rng = rng
+        self.opaque = opaque  # taunts only: never narrate our heading
         self.meter = provider.meter if provider else TokenMeter()
 
     def _template_text(self, claim: str) -> str:
-        return enforce_word_limit(self.rng.choice(TEMPLATES[claim]), self.max_words)
+        bank = TAUNTS if self.opaque else TEMPLATES[claim]
+        return enforce_word_limit(self.rng.choice(bank), self.max_words)
 
     def render(self, claim: str, step: int) -> str:
         """LLM only every N steps; template otherwise and on ANY failure."""
-        if self.provider is None or step % self.every_n_steps != 0:
+        if self.opaque or self.provider is None or step % self.every_n_steps != 0:
             return self._template_text(claim)
         try:
             text = self.provider.generate(claim, self.arena, self.max_words)
@@ -59,4 +62,5 @@ def build_talk_chain(config, rng: random.Random, gatekeeper=None) -> TalkChain:
         world.get("map_area", ""),
         int(world["hint_max_words"]),
         rng,
+        opaque=str(trash.get("hint_mode", "candid")).lower() == "opaque",
     )
