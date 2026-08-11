@@ -91,15 +91,17 @@ class Perception:
         self.last_hint = hint_text
         # A literal move-echo IS the movement model for this turn (league
         # rival 2026-08-08); anything else keeps the one-step diffusion.
-        echo = parse_move_echo(hint_text) if hint_text else None
-        if echo:
+        if echo := (parse_move_echo(hint_text) if hint_text else None):
             self.belief.observe_motion(echo, engine.board)
         else:
             self.belief.diffuse(engine.board)
         if barrier_cell is not None:
             self.belief.observe_barrier(tuple(barrier_cell), engine.board)
-        if claim_cell is not None:
-            self.belief.observe_claimed_cell((claim_cell[0], claim_cell[1]))
+        # NOTE: the inbound capture-claim pin moved BELOW the law check and is
+        # now physics-gated. Truth duty binds the claim's ANSWER, never the
+        # claim itself, so claim cells are free probes — a rival spamming
+        # decoy claims steered the ungated pin to the mirror corner and
+        # converted 15/15 survivals into 0/15 (red-team, 2026-08-11).
         rival_scent = engine.scent[rival]
         self._anchor_age += 1
         allowed = credible_cells(engine.board, self._anchor,
@@ -153,8 +155,19 @@ class Perception:
         # position was, turn by turn. Compared at audit against the positions
         # it reveals — an honest emitter track matches the reveals exactly.
         self.trail_track.append(list(head) if head else None)
-        if head is not None:
-            self.belief.observe_claimed_cell(head)
+        # PHYSICS OUTRANKS TALK. The emitter pin defers to a same-turn wall
+        # declaration (walls carry truth duty — book 3.4 חובת הצהרה — so a
+        # trail whose emitter sits >1 from a fresh wall provably lies), and
+        # a claim cell pins ONLY when it agrees with the emitter: claims are
+        # free probes with no truth duty, and ungated they steer the belief
+        # wherever the claimant likes (red-team 2026-08-11: 15/15 -> 0/15).
+        def near(c, a, r=2): return abs(c[0] - a[0]) + abs(c[1] - a[1]) <= r  # noqa: E704
+        if head is not None and (barrier_cell is None or near(head, barrier_cell, 1)):
+            if claim_cell is not None and near(tuple(claim_cell), head):
+                # agreeing claim is FRESHER than the lag-1 emitter: pin it alone
+                self.belief.observe_claimed_cell((claim_cell[0], claim_cell[1]))
+            else:
+                self.belief.observe_claimed_cell(head)
 
     def _breaks_the_law(self, rival_scent, board) -> bool:
         """Do two consecutive frames admit NO single emitter (ADR-0010)?

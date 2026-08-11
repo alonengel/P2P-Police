@@ -99,3 +99,40 @@ def test_intercepting_cop_converts_both_percher_shapes() -> None:
     for cls in (PercherMimic, RunnerPercher):
         captures = sum(_play(seed, cls) is Outcome.CAPTURE for seed in range(10))
         assert captures >= 9, f"{cls.__name__}: only {captures}/10 captured"
+
+
+class ZigzagRunner:
+    """Anti-interception red team: alternates axes every step, so the
+    steady-heading gate never arms. Measured self-defeating at ship time
+    (15/15 captured, turns 10-12): alternating axes halves net escape speed,
+    and plain pursuit converts what interception never needed to."""
+
+    def __init__(self, rng: random.Random) -> None:
+        self.rng, self.last_axis = rng, None
+
+    def act(self, engine) -> dict:
+        me = engine.positions[Role.THIEF]
+        cop = engine.positions[Role.POLICE]
+        dist = bfs_distances(engine.board, cop)
+        axis = {"N": "v", "S": "v", "E": "h", "W": "h"}
+        moves = [m for m in (Move.N, Move.S, Move.E, Move.W)
+                 if engine.board.is_passable(m.applied_to(me))]
+        pool = [m for m in moves if axis[m.name] != self.last_axis] or moves
+        self.rng.shuffle(pool)
+        if not pool:
+            return {"type": "move", "move": "STAY"}
+
+        def key(move):
+            cell = move.applied_to(me)
+            exits = sum(1 for x in (Move.N, Move.S, Move.E, Move.W)
+                        if engine.board.is_passable(x.applied_to(cell)))
+            return (min(exits, 3), dist.get(cell, 0))
+        best = max(pool, key=key)
+        self.last_axis = axis[best.name]
+        return {"type": "move", "move": best.name}
+
+
+def test_zigzag_anti_interception_stays_caught() -> None:
+    captures = sum(_play(seed, ZigzagRunner) is Outcome.CAPTURE
+                   for seed in range(10))
+    assert captures >= 9, f"zigzag runner: only {captures}/10 captured"
