@@ -74,13 +74,16 @@ def test_looper_tape_g05_is_caught() -> None:
     assert captures >= 4, f"g05 looper caught only {captures}/5"
 
 
-def test_newest_runner_tape_g03new_is_caught() -> None:
+def test_newest_runner_tape_g03new_is_caught_with_margin() -> None:
     """Their 2026-08-11 15:25 thief — the one that survived our fixed cop
-    live (pre trail-pin). With the pin the belief tracks it at lag 0 and the
-    chase converts (turn 33, inside the clock). Guards the cop window for
-    the counted game."""
-    captures = _captures("g03new")
-    assert captures >= 4, f"g03new runner caught only {captures}/5"
+    live (pre trail-pin). Following-only pursuit converted this tape at turn
+    33 of 35: zero margin, and their next iteration survived live. The
+    INTERCEPTING cop must beat the tape with room to spare — assume the live
+    thief is stronger than its recording."""
+    for seed in SEEDS:
+        outcome, turns = play_tape(seed, "g03new")
+        assert outcome is Outcome.CAPTURE, f"g03new seed {seed}: {outcome}"
+        assert turns <= 30, f"g03new seed {seed}: caught only at turn {turns}"
 
 
 def test_ditherer_tape_g01_stays_fast() -> None:

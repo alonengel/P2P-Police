@@ -21,6 +21,7 @@ from p2p_police.shared.tuning import endgame_table, info_gain_table, trap_table
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.endgame import EndgameSolver
 from p2p_police.strategy.info_gain import expected_gain
+from p2p_police.strategy.intercept import intercept_target, unit_velocity
 
 
 class PoliceBrain(BrainBase):
@@ -32,6 +33,8 @@ class PoliceBrain(BrainBase):
         self.endgame = EndgameSolver(endgame_table(private))
         self.info_gain = info_gain_table(private)
         self.trap = trap_table(private)
+        self._prev_peak: Cell | None = None  # last belief peak, for velocity
+        self._prev_vel = None  # last unit velocity, for the steady-heading gate
 
     def decide(self, engine: GameEngine, belief=None) -> dict:
         if belief is not None:  # exact pre-check: play a PROVEN forcing line
@@ -52,6 +55,21 @@ class PoliceBrain(BrainBase):
                                      distances.get(me, UNREACHABLE), sharpness)
         if barrier is not None:
             return protocol.barrier_action(barrier)
+
+        # Interception: a sharp peak holding a CONSISTENT heading (two equal
+        # consecutive steps — a corner-dancer flips direction every turn and
+        # must be followed, not led) marks a runner; pursue the first lane
+        # cell WE reach no later than it, instead of its tail (a same-speed
+        # follower never closes; league 2026-08-11, two live survivals at
+        # constant distance). Walls above still key on the PEAK.
+        velocity = unit_velocity(self._prev_peak, thief) if belief is not None else None
+        self._prev_peak = thief if belief is not None else None
+        steady = velocity is not None and velocity == self._prev_vel
+        self._prev_vel = velocity
+        if steady and sharpness >= self.trap["wall_mass_threshold"]:
+            cut = intercept_target(engine.board, me, thief, velocity)
+            if cut is not None and cut != thief:
+                distances = bfs_distances(engine.board, cut)
 
         blend = belief is not None and self.info_gain["enabled"]
         best_move, best_score = Move.STAY, self._score(me, distances, belief, blend)
