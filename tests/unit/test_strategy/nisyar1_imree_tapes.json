@@ -1,0 +1,649 @@
+{
+ "imree_g01_theirthief": [
+  {
+   "step": 1,
+   "position": [
+    4,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "You just missed me at Grand Central; the crowd was lovely."
+  },
+  {
+   "step": 2,
+   "position": [
+    4,
+    4
+   ],
+   "move": "MOVE:E",
+   "hint": "Waiting out the night at the Village, cozy as ever."
+  },
+  {
+   "step": 3,
+   "position": [
+    5,
+    4
+   ],
+   "move": "MOVE:S",
+   "hint": "Still breathing, still moving; catch me if you can."
+  },
+  {
+   "step": 4,
+   "position": [
+    5,
+    5
+   ],
+   "move": "MOVE:E",
+   "hint": "You look tired; I could run this dance forever."
+  },
+  {
+   "step": 5,
+   "position": [
+    6,
+    5
+   ],
+   "move": "MOVE:S",
+   "hint": "Heading straight for Grand Central, no detours this time."
+  },
+  {
+   "step": 6,
+   "position": [
+    6,
+    4
+   ],
+   "move": "MOVE:W",
+   "hint": "I am resting right beside Wall Street, come say hello."
+  },
+  {
+   "step": 7,
+   "position": [
+    6,
+    5
+   ],
+   "move": "MOVE:E",
+   "hint": "I trade in shadows and the market is generous tonight."
+  },
+  {
+   "step": 8,
+   "position": [
+    6,
+    5
+   ],
+   "move": "HOLD:-",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 9,
+   "position": [
+    5,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "The streets remember me; your boots they only tolerate."
+  },
+  {
+   "step": 10,
+   "position": [
+    4,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 11,
+   "position": [
+    3,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "Meet me by the Village if you dare."
+  },
+  {
+   "step": 12,
+   "position": [
+    2,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 13,
+   "position": [
+    1,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "I trade in shadows and the market is generous tonight."
+  },
+  {
+   "step": 14,
+   "position": [
+    0,
+    5
+   ],
+   "move": "MOVE:N",
+   "hint": "Patience is your enemy and my oldest friend."
+  },
+  {
+   "step": 15,
+   "position": [
+    0,
+    4
+   ],
+   "move": "MOVE:W",
+   "hint": "Heading straight for Times Square, no detours this time."
+  },
+  {
+   "step": 16,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "The city hides those who listen to it."
+  },
+  {
+   "step": 17,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Strolling past Central Park as we speak, officer."
+  },
+  {
+   "step": 18,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "I am camped in the shadow of Grand Central tonight."
+  },
+  {
+   "step": 19,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "The view from Central Park is wasted on you."
+  },
+  {
+   "step": 20,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  },
+  {
+   "step": 21,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Still breathing, still moving; catch me if you can."
+  },
+  {
+   "step": 22,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Still breathing, still moving; catch me if you can."
+  },
+  {
+   "step": 23,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 24,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 25,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Keep chasing rumors, officer; I collect them for fun."
+  },
+  {
+   "step": 26,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 27,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Ask the pigeons at Grand Central; they saw me pass."
+  },
+  {
+   "step": 28,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 29,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 30,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  },
+  {
+   "step": 31,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "The streets remember me; your boots they only tolerate."
+  },
+  {
+   "step": 32,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Ask the pigeons at the Village; they saw me pass."
+  },
+  {
+   "step": 33,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "The wind changes faster than your plans."
+  },
+  {
+   "step": 34,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Keep chasing rumors, officer; I collect them for fun."
+  },
+  {
+   "step": 35,
+   "position": [
+    0,
+    4
+   ],
+   "move": "HOLD:-",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  }
+ ],
+ "imree_g02_theircop": [
+  {
+   "step": 1,
+   "position": [
+    1,
+    0
+   ],
+   "move": "MOVE:S",
+   "hint": "The walls you fear are the ones I have not built yet."
+  },
+  {
+   "step": 2,
+   "position": [
+    1,
+    1
+   ],
+   "move": "MOVE:E",
+   "hint": "The clock is my partner and it never takes bribes."
+  },
+  {
+   "step": 3,
+   "position": [
+    1,
+    2
+   ],
+   "move": "MOVE:E",
+   "hint": "The city closes like a hand, finger by finger."
+  },
+  {
+   "step": 4,
+   "position": [
+    1,
+    3
+   ],
+   "move": "MOVE:E",
+   "hint": "I am doubling back toward Wall Street as we speak."
+  },
+  {
+   "step": 5,
+   "position": [
+    2,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "I lost your scent somewhere around Central Park."
+  },
+  {
+   "step": 6,
+   "position": [
+    3,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 7,
+   "position": [
+    4,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "The walls you fear are the ones I have not built yet."
+  },
+  {
+   "step": 8,
+   "position": [
+    4,
+    4
+   ],
+   "move": "MOVE:E",
+   "hint": "I lost your scent somewhere around Grand Central."
+  },
+  {
+   "step": 9,
+   "position": [
+    5,
+    4
+   ],
+   "move": "MOVE:S",
+   "hint": "Your options are thinner than yesterday's alibi."
+  },
+  {
+   "step": 10,
+   "position": [
+    5,
+    5
+   ],
+   "move": "MOVE:E",
+   "hint": "The clock is my partner and it never takes bribes."
+  },
+  {
+   "step": 11,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:E",
+   "hint": "Run all you like; the map is on my side."
+  },
+  {
+   "step": 12,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:S",
+   "hint": "The clock is my partner and it never takes bribes."
+  }
+ ],
+ "imree_g04_theircop": [
+  {
+   "step": 1,
+   "position": [
+    1,
+    0
+   ],
+   "move": "MOVE:S",
+   "hint": "The walls you fear are the ones I have not built yet."
+  },
+  {
+   "step": 2,
+   "position": [
+    2,
+    0
+   ],
+   "move": "MOVE:S",
+   "hint": "My patrol never sleeps and never guesses twice."
+  },
+  {
+   "step": 3,
+   "position": [
+    2,
+    1
+   ],
+   "move": "MOVE:E",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 4,
+   "position": [
+    3,
+    1
+   ],
+   "move": "MOVE:S",
+   "hint": "I have patience, a budget, and your pattern."
+  },
+  {
+   "step": 5,
+   "position": [
+    3,
+    2
+   ],
+   "move": "MOVE:E",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 6,
+   "position": [
+    3,
+    3
+   ],
+   "move": "MOVE:E",
+   "hint": "Your options are thinner than yesterday's alibi."
+  },
+  {
+   "step": 7,
+   "position": [
+    4,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "My patrol never sleeps and never guesses twice."
+  },
+  {
+   "step": 8,
+   "position": [
+    4,
+    4
+   ],
+   "move": "MOVE:E",
+   "hint": "Paperwork chains me to Grand Central this evening."
+  },
+  {
+   "step": 9,
+   "position": [
+    4,
+    5
+   ],
+   "move": "MOVE:E",
+   "hint": "I do not chase; I herd."
+  },
+  {
+   "step": 10,
+   "position": [
+    5,
+    5
+   ],
+   "move": "MOVE:S",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 11,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:E",
+   "hint": "I have patience, a budget, and your pattern."
+  },
+  {
+   "step": 12,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:S",
+   "hint": "I do not chase; I herd."
+  }
+ ],
+ "imree_g06_theircop": [
+  {
+   "step": 1,
+   "position": [
+    1,
+    0
+   ],
+   "move": "MOVE:S",
+   "hint": "The city closes like a hand, finger by finger."
+  },
+  {
+   "step": 2,
+   "position": [
+    1,
+    1
+   ],
+   "move": "MOVE:E",
+   "hint": "My best guess puts you nowhere near the Brooklyn Bridge."
+  },
+  {
+   "step": 3,
+   "position": [
+    2,
+    1
+   ],
+   "move": "MOVE:S",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 4,
+   "position": [
+    3,
+    1
+   ],
+   "move": "MOVE:S",
+   "hint": "I do not chase; I herd."
+  },
+  {
+   "step": 5,
+   "position": [
+    3,
+    2
+   ],
+   "move": "MOVE:E",
+   "hint": "Each barrier is a promise I intend to keep."
+  },
+  {
+   "step": 6,
+   "position": [
+    3,
+    3
+   ],
+   "move": "MOVE:E",
+   "hint": "Each barrier is a promise I intend to keep."
+  },
+  {
+   "step": 7,
+   "position": [
+    4,
+    3
+   ],
+   "move": "MOVE:S",
+   "hint": "You repeat yourself; thieves always do."
+  },
+  {
+   "step": 8,
+   "position": [
+    4,
+    4
+   ],
+   "move": "MOVE:E",
+   "hint": "You repeat yourself; thieves always do."
+  },
+  {
+   "step": 9,
+   "position": [
+    5,
+    4
+   ],
+   "move": "MOVE:S",
+   "hint": "The walls you fear are the ones I have not built yet."
+  },
+  {
+   "step": 10,
+   "position": [
+    5,
+    5
+   ],
+   "move": "MOVE:E",
+   "hint": "My patrol never sleeps and never guesses twice."
+  },
+  {
+   "step": 11,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:E",
+   "hint": "Every step you take costs you a street."
+  },
+  {
+   "step": 12,
+   "position": [
+    5,
+    5
+   ],
+   "move": "BARRIER:S",
+   "hint": "The net is tightening and you already feel it."
+  }
+ ]
+}

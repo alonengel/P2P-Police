@@ -104,3 +104,25 @@ def test_ditherer_tape_g01_stays_fast() -> None:
         outcome, turns = play_tape(seed, "g01")
         assert outcome is Outcome.CAPTURE, f"g01 seed {seed}: {outcome}"
         assert turns <= 14, f"g01 seed {seed}: caught only at turn {turns}"
+
+
+_IMREE_TAPES = json.loads(
+    (Path(__file__).parent / "nisyar1_imree_tapes.json").read_text(encoding="utf-8"))
+
+
+def test_their_best_escape_is_caught() -> None:
+    """Their thief's strongest recorded game (2026-08-11 vs imreeyal g01):
+    SE drift, column-5 run north, top-edge perch — a full 35-turn survival
+    against the counted-champion's cop. Ours must cut the column run. The
+    tape rides the imreeyal jsonl audit reveals, hints included."""
+    tape = _IMREE_TAPES["imree_g01_theirthief"]
+    moves, hints = [], []
+    for row in tape:
+        arg = row["move"].partition(":")[2] or "STAY"
+        moves.append(arg if arg in ("N", "S", "E", "W") else "-")
+        hints.append(row.get("hint", ""))
+    _TAPES["imree_escape"] = {"moves": moves, "hints": hints}
+    for seed in SEEDS:
+        outcome, turns = play_tape(seed, "imree_escape")
+        assert outcome is Outcome.CAPTURE, f"seed {seed}: {outcome}"
+        assert turns <= 30, f"seed {seed}: caught only at turn {turns}"
