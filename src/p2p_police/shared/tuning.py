@@ -47,6 +47,13 @@ TRAP_DEFAULTS: dict = {
     #                                spending a step earlier - swept 2/3/4/5
     #                                over 60-150 games, 3 wins outright
     #                                (docs/evidence/cop-strength.md)
+    "wall_mass_threshold": 0.45,   # spend a barrier only when the belief mass
+    #                                at the peak is at least this - below it
+    #                                the peak is a ghost of a runner already
+    #                                gone (nis-yar1 g03: four walls at
+    #                                0.17-0.39, all behind the thief; the
+    #                                honest holds we DO want to wall measure
+    #                                0.5-0.96). Exact mode passes 1.0.
     "prefer_landing_capture": True,  # when the believed cell is a legal STEP,
     #                                take the step instead of walling it. A
     #                                LANDING capture is claim-mediated: the
