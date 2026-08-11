@@ -74,6 +74,15 @@ def test_looper_tape_g05_is_caught() -> None:
     assert captures >= 4, f"g05 looper caught only {captures}/5"
 
 
+def test_newest_runner_tape_g03new_is_caught() -> None:
+    """Their 2026-08-11 15:25 thief — the one that survived our fixed cop
+    live (pre trail-pin). With the pin the belief tracks it at lag 0 and the
+    chase converts (turn 33, inside the clock). Guards the cop window for
+    the counted game."""
+    captures = _captures("g03new")
+    assert captures >= 4, f"g03new runner caught only {captures}/5"
+
+
 def test_ditherer_tape_g01_stays_fast() -> None:
     """Regression pin: the g01 capture our cop already owns must not regress
     — caught, and caught fast (live: 10 turns; allow slack to 14)."""
