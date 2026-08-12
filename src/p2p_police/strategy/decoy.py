@@ -30,3 +30,33 @@ class DecoyPoliceBrain(PoliceBrain):
         self._prev_peak = None
         self._prev_vel = None
         return super().decide(engine, belief)
+
+
+class StallDecoyPoliceBrain(DecoyPoliceBrain):
+    """Metronome impersonation for FRIENDLY sparring: approach to gap 2 on
+    the believed cell and HOLD — never close to 1, never place a wall.
+
+    The bait: rivals who study the tape see the gap-2 hold they themselves
+    play and read it as us adopting their cop. The natural counter-tune is
+    a thief CONFIDENT at gap 2 — lingering, slipping past the holder — and
+    that confidence is exactly what the counted-day brain's contact-dwell
+    quota release converts. Selected only by the friendly overlay:
+        [strategy]
+        police_class = "p2p_police.strategy.decoy:StallDecoyPoliceBrain"
+    """
+
+    def decide(self, engine, belief=None) -> dict:
+        from p2p_police.domain import protocol
+        from p2p_police.domain.pathfind import bfs_distances
+        from p2p_police.domain.primitives import Move, Role
+        me = engine.positions[Role.POLICE]
+        prey = belief.argmax_cell() if belief is not None else engine.positions[Role.THIEF]
+        distances = bfs_distances(engine.board, prey)
+        if distances.get(me, 99) <= 2:
+            return protocol.move_action(Move.STAY)   # the hold, faithfully
+        moves = [m for m in (Move.N, Move.S, Move.E, Move.W)
+                 if engine.board.is_passable(m.applied_to(me))]
+        if not moves:
+            return protocol.move_action(Move.STAY)
+        step = min(moves, key=lambda m: distances.get(m.applied_to(me), 99))
+        return protocol.move_action(step)

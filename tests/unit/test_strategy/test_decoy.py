@@ -42,3 +42,19 @@ def test_overlay_seam_selects_the_decoy_and_defaults_to_the_real_brain() -> None
     assert type(picked) is DecoyPoliceBrain
     bare = resolve_brain(SimpleNamespace(private={}), Role.POLICE, random.Random(0))
     assert type(bare) is PoliceBrain
+
+
+def test_stall_decoy_holds_the_metronome_gap() -> None:
+    """The bait must be faithful: at believed gap <= 2 it STAYs (never closes,
+    never walls); beyond it, it chases like any follower."""
+    from p2p_police.strategy.decoy import StallDecoyPoliceBrain
+    engine = GameEngine(7, (3, 3), (3, 5), RULES)   # gap 2
+    brain = StallDecoyPoliceBrain(Role.POLICE, random.Random(0))
+    belief = BeliefMap(7)
+    belief.observe_claimed_cell((3, 5))
+    for _ in range(6):
+        action = brain.decide(engine, belief)
+        assert action == {"type": "move", "move": "STAY"}
+    far = BeliefMap(7)
+    far.observe_claimed_cell((6, 6))
+    assert brain.decide(engine, far)["move"] != "STAY"   # chases when far
