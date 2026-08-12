@@ -1349,3 +1349,43 @@ independently recomputed by both teams; end-state digest recipe agreed for
 the counted game; evidence archived (friendlies-nisyar1/ + burned-attempts
 root-cause READMEs); email token re-minted to all three locations after the
 7-day expiry (peers read repo-root token.json — runbook note).
+
+## 2026-08-11 (afternoon-night) — the arms race day: losses, forensics, counter-build (Claude Fable session)
+
+**Operator prompts (sequence):** friendlies at 14:27->14:29 (won 4-2), 15:23->15:25
+(lost 1-5 after their same-day rebuild), 16:26/16:28 (burned: our port squatter),
+17:15 (lost 1-5); "check the logs afterward... make sure it makes sense"; "can we
+improve the cop window a bit more? I want to bully him"; "check why g2 failed! btw
+I got their logs including g1"; "I think their hint is not ok... check what the
+book says"; "what they are doing is legal? ... are they doing something not legal?"
+(twice, answered with evidence both times); "check our old logs versus theirs";
+"check the book, I think it's not ok to do those moves" (barrier legality —
+resolved from the rulebook text); "we shouldn't wander there... we shouldn't
+report the direction we go... prepare for counted game"; "keep the moves as
+well, don't delete as you did — maybe the monitor should get those" (tape
+vault + keeper born); "keep true on friendlies, and in the real game give the
+same type of hints as they do"; "go over my code and improve it... Imree played
+against them, check his repos" (collaborator access); "in friendlies do a dumb
+brain... a lot of tricks"; "decoy of both, and a decoy that helps us learn — go
+to specific locations to see how theirs behave... so we can learn from the
+logs"; "check what they did in the game against imree"; "I need to see each
+move of my cop/thief"; "if they tuned it versus us, we might want to change
+the logic — think about it in more detail" (red-team pass).
+
+**Outcomes:** interception cop (strategy/intercept.py — meet the runner, never
+follow; their best recorded escape, which beat imreeyal's cop for 35 turns,
+caught 8/8 at 16); room-first thief (imprisonment-is-capture scoring; their
+13-turn seal broken, adaptive herder mimic 30/30); trail-head pin via the
+transition-law emitter, then RED-TEAMED and physics-gated (claim-spam decoys
+took the ungated pin 15/15->0/15; claims now pin only in emitter agreement,
+emitter defers to truth-duty walls; zigzag anti-interception measured
+self-defeating 15/15 caught); opaque hint mode both roles (distinct taunt
+voices, overlay-gated — friendlies stay candid); decoy brains (yesterday's
+shapes) + probe brains (waypoint tours / bearing stalks) overlay-selected;
+rival trail telemetry in the live wire; forensics cleared nis-yar1 of every
+suspicion raised (moves, barriers p.21-22, hints/intent flags, scent law,
+their-logs-vs-ours 129 steps zero mismatch, per-opponent wire personalities
+documented from the imreeyal jsonl); tape vault + keeper (append-only,
+5-second sweep) after one tape was lost to a cleanup; GUI passthrough
+(LEAGUE_GUI=1) for live local-truth viewing; imreeyal intel: their counted
+6-0 pre-dates the rebuild that now beats them 4-2.

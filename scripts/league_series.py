@@ -78,9 +78,10 @@ def run_window(window: int, seed_base: int | None, runner,
     # a FRESH window must never inherit a dead game's context: wipe this
     # sub-game's stale local resume state (resume is an explicit --resume
     # operator action, never an accident of leftover disk state)
-    for stale in (ROOT / "results" / "local").glob(f"resume_*_g{window:02d}.json"):
-        stale.unlink(missing_ok=True)
+    for stale in (ROOT / "results" / "local").glob(f"resume_*_g{window:02d}.json"): stale.unlink(missing_ok=True)  # noqa: E701
     command = ["uv", "run", CLI, "peer", "--sub-game", str(window)]
+    # LEAGUE_GUI=1 -> watch our local truth live (own view only, rules 8-9)
+    command += ["--gui"] if os.environ.get("LEAGUE_GUI") else []
     if seed_base is not None:
         command += ["--seed", str(seed_base + window)]
     if counted:  # arms the CLI half of the lecturer-address interlock

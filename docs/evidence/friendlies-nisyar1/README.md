@@ -10,6 +10,8 @@ the two team inboxes only, never the lecturer; no rule-52 counter moved.
 | `20260810-2016-first-series/` | 20:16 | 3830 | captures in 8 (g01/g03/g05), survivals 35 (g02/g04/g06) | `19fecaf5c92fd4d5` |
 | `20260810-2118-rehearsal/` | 21:18 | 3840 | captures in 12, survivals 35 | `19fece82ee5cdbd4` |
 | `20260811-1429-third-friendly/` | 2026-08-11 14:29 | 3860 | captures g01 (10t), their thief survived g03/g05; our thief 3x35t. 4-2, 60-40 | `19ff09bbc2e6eb0b` |
+| `20260811-1525-fourth-friendly-unsettled/` | 2026-08-11 15:25 | 3870 | their same-day rebuild: quiet sealer caught our thief 13t (g02/g04); g05/g06 technical (their transport) | none (unsettled) |
+| `20260811-1715-fifth-friendly/` | 2026-08-11 17:15 | 3890 | 1-5, 45-85: interception cop converted g05 (23t, live validation); their sealer swept our pre-fix thief | `19ff133014a12501` |
 
 Each folder holds THIS repo's role artifacts verbatim (odd windows here;
 even windows in the sibling repo). `game_uid` (locked pre-series):
