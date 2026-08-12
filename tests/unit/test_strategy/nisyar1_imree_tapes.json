@@ -645,5 +645,139 @@
    "move": "BARRIER:S",
    "hint": "The net is tightening and you already feel it."
   }
+ ],
+ "imree_g03_theirthief": [
+  {
+   "step": 1,
+   "move": "MOVE:S",
+   "hint": "Strolling past Grand Central as we speak, officer."
+  },
+  {
+   "step": 2,
+   "move": "MOVE:E",
+   "hint": "Keep chasing rumors, officer; I collect them for fun."
+  },
+  {
+   "step": 3,
+   "move": "MOVE:E",
+   "hint": "Patience is your enemy and my oldest friend."
+  },
+  {
+   "step": 4,
+   "move": "MOVE:S",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  },
+  {
+   "step": 5,
+   "move": "MOVE:S",
+   "hint": "Patience is your enemy and my oldest friend."
+  },
+  {
+   "step": 6,
+   "move": "MOVE:W",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  },
+  {
+   "step": 7,
+   "move": "MOVE:E",
+   "hint": "Still breathing, still moving; catch me if you can."
+  },
+  {
+   "step": 8,
+   "move": "HOLD:-",
+   "hint": "Heading straight for Wall Street, no detours this time."
+  },
+  {
+   "step": 9,
+   "move": "MOVE:N",
+   "hint": "I am circling Central Park until sunrise."
+  },
+  {
+   "step": 10,
+   "move": "MOVE:E",
+   "hint": "The wind changes faster than your plans."
+  },
+  {
+   "step": 11,
+   "move": "MOVE:N",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 12,
+   "move": "HOLD:-",
+   "hint": "You got me."
+  }
+ ],
+ "imree_g05_theirthief": [
+  {
+   "step": 1,
+   "move": "MOVE:S",
+   "hint": "Every alley whispers my name and none of them repeat it."
+  },
+  {
+   "step": 2,
+   "move": "MOVE:E",
+   "hint": "The wind changes faster than your plans."
+  },
+  {
+   "step": 3,
+   "move": "MOVE:E",
+   "hint": "Strolling past Central Park as we speak, officer."
+  },
+  {
+   "step": 4,
+   "move": "MOVE:S",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 5,
+   "move": "MOVE:E",
+   "hint": "The streets remember me; your boots they only tolerate."
+  },
+  {
+   "step": 6,
+   "move": "MOVE:N",
+   "hint": "I am wherever the lamplight fails you."
+  },
+  {
+   "step": 7,
+   "move": "MOVE:S",
+   "hint": "You look tired; I could run this dance forever."
+  },
+  {
+   "step": 8,
+   "move": "HOLD:-",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 9,
+   "move": "MOVE:W",
+   "hint": "You look tired; I could run this dance forever."
+  },
+  {
+   "step": 10,
+   "move": "MOVE:S",
+   "hint": "Your footsteps echo; mine never do."
+  },
+  {
+   "step": 11,
+   "move": "HOLD:-",
+   "hint": "Waiting out the night at the Village, cozy as ever."
+  },
+  {
+   "step": 12,
+   "move": "HOLD:-",
+   "hint": "Waiting out the night at the Brooklyn Bridge, cozy as ever."
+  },
+  {
+   "step": 13,
+   "move": "HOLD:-",
+   "hint": "Patience is your enemy and my oldest friend."
+  },
+  {
+   "step": 14,
+   "move": "HOLD:-",
+   "hint": "You got me."
+  }
  ]
 }

@@ -126,3 +126,22 @@ def test_their_best_escape_is_caught() -> None:
         outcome, turns = play_tape(seed, "imree_escape")
         assert outcome is Outcome.CAPTURE, f"seed {seed}: {outcome}"
         assert turns <= 30, f"seed {seed}: caught only at turn {turns}"
+
+
+def test_the_imree_kill_victims_convert_for_us_too() -> None:
+    """Their g03/g05 thief shapes from the imreeyal friendly (imreeyal's cop
+    converted them at 11/13; ours at 22/18 — slower, but capture speed does
+    not score and inside-the-clock does). With these, EVERY recorded
+    nis-yar1 thief tape in existence converts against this cop."""
+    for key in ("imree_g03_theirthief", "imree_g05_theirthief"):
+        tape = _IMREE_TAPES[key]
+        moves, hints = [], []
+        for row in tape:
+            arg = row["move"].partition(":")[2] or "STAY"
+            moves.append(arg if arg in ("N", "S", "E", "W") else "-")
+            hints.append(row.get("hint", ""))
+        _TAPES[key] = {"moves": moves, "hints": hints}
+        for seed in SEEDS:
+            outcome, turns = play_tape(seed, key)
+            assert outcome is Outcome.CAPTURE, f"{key} seed {seed}: {outcome}"
+            assert turns <= 30, f"{key} seed {seed}: caught only at {turns}"
