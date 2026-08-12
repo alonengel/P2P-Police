@@ -35,6 +35,7 @@ class PoliceBrain(BrainBase):
         self.trap = trap_table(private)
         self._prev_peak: Cell | None = None  # last belief peak, for velocity
         self._prev_vel = None  # last unit velocity, for the steady-heading gate
+        self._contact_dwell = 0  # consecutive sharp knife-range turns
 
     def decide(self, engine: GameEngine, belief=None) -> dict:
         if belief is not None:  # exact pre-check: play a PROVEN forcing line
@@ -51,8 +52,17 @@ class PoliceBrain(BrainBase):
         # at mass 0.17-0.39 while the runner was 2-3 cells past the peak).
         sharpness = 1.0 if belief is None else float(
             getattr(belief, "value_at", lambda _c: 1.0)(thief))
+        # Contact dwell: consecutive sharp turns at knife range. A dodger that
+        # sidesteps every landing can hold gap 1 forever (live g01 2026-08-11:
+        # FOURTEEN contact turns, zero conversions) — sustained contact earns
+        # a quota release in _trap_barrier: walls stop waiting for a corner.
+        gap = distances.get(me, UNREACHABLE)
+        if gap <= 2 and sharpness >= self.trap["wall_mass_threshold"]:
+            self._contact_dwell += 1
+        elif gap > 2:
+            self._contact_dwell = 0
         barrier = self._trap_barrier(engine, me, thief,
-                                     distances.get(me, UNREACHABLE), sharpness)
+                                     gap, sharpness, self._contact_dwell)
         if barrier is not None:
             return protocol.barrier_action(barrier)
 
@@ -94,11 +104,17 @@ class PoliceBrain(BrainBase):
         return score
 
     def _trap_barrier(self, engine: GameEngine, me: Cell, thief: Cell,
-                      my_distance: int, sharpness: float = 1.0) -> Cell | None:
+                      my_distance: int, sharpness: float = 1.0,
+                      dwell: int = 0) -> Cell | None:
         """A barrier is worth its quota only if the thief is close and nearly
         cornered AND the barrier cell is within our reach (own cell or
         orthogonal neighbor) AND it removes one of the thief's last escapes
-        AND the peak is sharp enough to be the thief and not its ghost."""
+        AND the peak is sharp enough to be the thief and not its ghost.
+        RELEASE: past `dwell_release` consecutive sharp contact turns the
+        cornered-ness gate opens — a dodger that sidesteps every landing is
+        never cornered and never will be; quota spent on it is quota earned
+        (live g01 2026-08-11: 14 contact turns, zero walls, survival)."""
+        released = dwell >= self.trap["dwell_release"]
         if len(engine.board.barriers) >= engine.rules.max_barriers:
             return None
         if my_distance == UNREACHABLE or my_distance > self.trap["range"]:
@@ -110,7 +126,7 @@ class PoliceBrain(BrainBase):
             for m in (Move.N, Move.S, Move.E, Move.W)
             if engine.board.is_passable(m.applied_to(thief))
         ]
-        if len(thief_escapes) > self.trap["escape_limit"]:
+        if not released and len(thief_escapes) > self.trap["escape_limit"]:
             return None
         my_reach = {me} | {
             m.applied_to(me)
@@ -128,8 +144,10 @@ class PoliceBrain(BrainBase):
             # their world permanently — and with no turns left to recover, an
             # unrecoverable miss IS the loss. Inside the deadline, take the
             # wall (rule 46 capture, and provable from their own reveal).
+            # ...and not against a proven dodger: past the dwell release the
+            # step-in has already whiffed for turns — take the wall.
             remaining = engine.rules.survival_threshold - engine.turns_completed
-            step_in = (self.trap["prefer_landing_capture"]
+            step_in = (self.trap["prefer_landing_capture"] and not released
                        and thief != me and engine.board.is_passable(thief)
                        and remaining > self.trap["landing_deadline_turns"])
             return None if step_in else thief

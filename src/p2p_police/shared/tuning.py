@@ -47,6 +47,11 @@ TRAP_DEFAULTS: dict = {
     #                                spending a step earlier - swept 2/3/4/5
     #                                over 60-150 games, 3 wins outright
     #                                (docs/evidence/cop-strength.md)
+    "dwell_release": 4,           # consecutive sharp contact turns after
+    #                                which the cornered-ness gate opens: a
+    #                                dodger that sidesteps every landing is
+    #                                never cornered (live g01 2026-08-11:
+    #                                14 contact turns, zero conversions)
     "wall_mass_threshold": 0.45,   # spend a barrier only when the belief mass
     #                                at the peak is at least this - below it
     #                                the peak is a ghost of a runner already
