@@ -158,3 +158,15 @@ Step-0 `type` answered: theirs is `system_spec` (repo-set spelling);
 ours stays `step_zero` (book-attached, the standing rule's canonical).
 Both readers accept both spellings; recorded as a documented
 divergence, invited to converge post-counted.
+
+### Provenance note on 42f2a1ba… (2026-08-14, after kit PR #55)
+
+Imree could not find `42f2a1ba…` in their tree while independently
+verifying the kit's §6 scope drift (our report; fixed in kit PR #55).
+Expected: that value is MAIL-BORNE — the 2026-08-03 19:35
+validation-window mail bodies, where it appeared identically in both
+windows because their outcome patterns were identical. It was never a
+tree artifact on either side. The counted series' value (`0bcf3c07…`)
+differs because the outcome pattern differs — the hash moving with the
+outcome is the consensus-not-cache property this addendum verified.
+Both values reproduce under the same 5-key reference scope.
