@@ -39,7 +39,10 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
     score = {me: cop_points if role == "police" else thief_points,
              them: cop_points if other == "police" else thief_points}
     winner = None if score[me] == score[them] else max(score, key=score.get)
-    identity = (summary.get("opponent_info") or {}).get("identity") or {}
+    info = summary.get("opponent_info") or {}
+    # tolerant reader: some peers nest identity, some send it flat (best2934
+    # 2026-08-15 — the fields arrived and our reader looked one level deep)
+    identity = info.get("identity") or info
     return {
         "sub_game_number": parsed["sub"],
         "roles": {me: role, them: other},
@@ -82,8 +85,8 @@ def _repo_map(by_slot: dict, our_identity: dict) -> dict:
     """Both teams' repo URLs: ours from config, theirs from the identity they
     declared at the handshake (rule 49 — all four links in the emailed file)."""
     me, them, _, _ = _names(by_slot[min(by_slot)]["summary"])
-    theirs = ((by_slot[min(by_slot)]["summary"].get("opponent_info") or {})
-              .get("identity") or {})
+    info = by_slot[min(by_slot)]["summary"].get("opponent_info") or {}
+    theirs = info.get("identity") or info  # nested wins, flat is the fallback
     return {me: dict(our_identity.get("repos", {})),
             them: dict(theirs.get("repos", {}))}
 
@@ -137,7 +140,7 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
     # declared count, theirs the largest count any window's handshake declared
     def _declared(n: int) -> int:
         info = by_slot[n]["summary"].get("opponent_info") or {}
-        return int((info.get("identity") or {}).get("counted_games_played", 0))
+        return int((info.get("identity") or info).get("counted_games_played", 0))
 
     theirs_declared = max((_declared(n) for n in by_slot), default=0)
     bump = 1 if counted else 0

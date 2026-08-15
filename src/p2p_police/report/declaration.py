@@ -80,7 +80,9 @@ def _our_group(config, games_played: int) -> dict:
 
 
 def _their_group(opponent: dict | None) -> dict:
-    identity = (opponent or {}).get("identity") or {}
+    # tolerant reader: nested identity wins, a flat block is the fallback
+    # (best2934 2026-08-15 sent the fields flat and we recorded defaults)
+    identity = (opponent or {}).get("identity") or (opponent or {})
     group_id = ((opponent or {}).get("group_id")
                 or identity.get("group_id", "unknown"))
     return {
