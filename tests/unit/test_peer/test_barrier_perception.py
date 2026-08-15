@@ -7,7 +7,7 @@ once transport) must never double-boost."""
 from types import SimpleNamespace
 
 from p2p_police.domain.engine import GameEngine
-from p2p_police.domain.primitives import Role
+from p2p_police.domain.primitives import Move, Role
 from p2p_police.domain.rules import RuleSet
 from p2p_police.peer.perception import Perception
 from p2p_police.peer.runtime import GeometricRuntime
@@ -60,6 +60,31 @@ def test_geometric_runtime_feeds_declared_barriers_to_belief() -> None:
     GeometricRuntime._their_half_turn(rt, 1)
     assert engine.board.is_barrier((3, 4))
     assert origin_mass(rt.perception.belief) > 0.5
+
+
+def test_wall_echo_claim_never_eats_the_emitter_pin() -> None:
+    """A claim naming the JUST-DECLARED wall is the placement echo, not a
+    position: nobody stands on their own wall (law of barriers), and the
+    wall's origin evidence already rides observe_barrier. A claim-per-turn
+    rival names its barrier cell on placement turns (league best2934
+    2026-08-15: 42/42 barrier turns), and the echo must not consume the
+    claim branch — the emitter-head pin must still fire, leaving the
+    posterior byte-equal to an unclaimed placement."""
+    posteriors = []
+    for claim_names_wall in (False, True):
+        engine = GameEngine(7, (0, 0), (6, 6), RULES)
+        perception = Perception(Role.THIEF, 7, rival_start=(0, 0))
+        for _ in range(2):  # two honest frames so the law solves an emitter
+            engine.police_move(Move.E)
+            engine.thief_move(Move.STAY)
+            perception.observe(engine, Role.POLICE, None)
+        engine.police_place_barrier((1, 2))  # cop at (0, 2), wall to its S
+        engine.thief_move(Move.STAY)
+        perception.observe(engine, Role.POLICE, None, barrier_cell=(1, 2),
+                           claim_cell=(1, 2) if claim_names_wall else None)
+        assert perception.trail_track[-1] is not None  # emitter head existed
+        posteriors.append(perception.belief.values())
+    assert posteriors[0] == posteriors[1]
 
 
 def test_hidden_wire_feeds_fresh_barrier_declarations_once() -> None:

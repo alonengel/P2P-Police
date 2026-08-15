@@ -162,12 +162,15 @@ class Perception:
         # free probes with no truth duty, and ungated they steer the belief
         # wherever the claimant likes (red-team 2026-08-11: 15/15 -> 0/15).
         def near(c, a, r=2): return abs(c[0] - a[0]) + abs(c[1] - a[1]) <= r  # noqa: E704
+        # A claim naming the JUST-DECLARED wall is the placement echo, not a
+        # position — nobody stands on their own wall, and the wall's origin
+        # evidence already rode observe_barrier (claim-per-turn rivals name
+        # the barrier cell on placement turns: league best2934, 42/42).
+        echo = claim_cell is not None and tuple(claim_cell) == tuple(barrier_cell or ())
         if head is not None and (barrier_cell is None or near(head, barrier_cell, 1)):
-            if claim_cell is not None and near(tuple(claim_cell), head):
-                # agreeing claim is FRESHER than the lag-1 emitter: pin it alone
-                self.belief.observe_claimed_cell((claim_cell[0], claim_cell[1]))
-            else:
-                self.belief.observe_claimed_cell(head)
+            # an agreeing (non-echo) claim is FRESHER than the lag-1 emitter
+            fresh = claim_cell is not None and not echo and near(tuple(claim_cell), head)
+            self.belief.observe_claimed_cell(tuple(claim_cell) if fresh else head)
 
     def _breaks_the_law(self, rival_scent, board) -> bool:
         """Do two consecutive frames admit NO single emitter (ADR-0010)?
