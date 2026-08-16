@@ -65,6 +65,8 @@ class SimulationSdk:
                 self.config.opponent_url,
                 self.config.retry_backoff_sec,
                 self.config.response_timeout_sec,
+                extra_headers=self.config.private.get("network", {})
+                .get("opponent_headers"),
             ),
             self.config,
         )

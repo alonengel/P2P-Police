@@ -1,7 +1,7 @@
-"""Outbound transport to the opponent's FastMCP server (rulebook ch. 2).
+﻿"""Outbound transport to the opponent's FastMCP server (rulebook ch. 2).
 
 ONE persistent MCP session lives on a dedicated event-loop thread and is
-reused across calls — per-call sessions churn through tunnels/proxies and get
+reused across calls â€” per-call sessions churn through tunnels/proxies and get
 terminated (Phase-5 field finding; ex6 hit the same and fixed it the same
 way). On any connection-flavored failure the session is rebuilt and the call
 retried until its deadline lapses (rule 6: a lapsed wait is failure).
@@ -15,6 +15,7 @@ import time
 from collections.abc import Callable
 
 from fastmcp import Client
+from fastmcp.client.transports import StreamableHttpTransport
 
 from p2p_police.peer.deadline import Deadline, DeadlineExpiredError
 
@@ -33,8 +34,10 @@ class McpTransport:
         response_timeout_sec: float = 30.0,
         sleep: Callable[[float], None] = time.sleep,
         beat_slice_sec: float = 2.0,
+        extra_headers: dict | None = None,
     ) -> None:
         self.opponent_url = opponent_url
+        self.extra_headers = dict(extra_headers or {})
         self.retry_backoff_sec = retry_backoff_sec
         self.response_timeout_sec = response_timeout_sec
         self.beat_slice_sec = beat_slice_sec  # max un-beaten single wait
@@ -57,7 +60,7 @@ class McpTransport:
         """Await a loop-thread coroutine in SHORT beat-sized slices:
         response_timeout still bounds the call, but no single silent block
         may span the watchdog window while the MCP client's internals (e.g.
-        its GET-stream reconnect) hold the await — the liveness heartbeat
+        its GET-stream reconnect) hold the await â€” the liveness heartbeat
         keeps firing and only the DEADLINE judges the rival (live-outage
         finding)."""
         future = asyncio.run_coroutine_threadsafe(coro, self._ensure_loop())
@@ -82,9 +85,19 @@ class McpTransport:
             self._sleep(step)
             seconds -= step
 
+    def _build_client(self) -> Client:
+        """Config-declared extra headers ride an explicit HTTP transport
+        (ngrok's free tier answers header-less calls with an HTML
+        interstitial at HTTP 200 — league best2934 door, 2026-08-16);
+        with none declared the client is built exactly as before."""
+        if self.extra_headers:
+            return Client(StreamableHttpTransport(
+                self.opponent_url, headers=dict(self.extra_headers)))
+        return Client(self.opponent_url)
+
     async def _call_once(self, tool: str, payload: dict) -> dict:
         if self._client is None:
-            client = Client(self.opponent_url)
+            client = self._build_client()
             await client.__aenter__()  # persistent session (closed on reset)
             self._client = client
         # reference tool-arg contract (interop, verified against the demo):
