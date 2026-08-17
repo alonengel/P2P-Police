@@ -1389,3 +1389,33 @@ documented from the imreeyal jsonl); tape vault + keeper (append-only,
 5-second sweep) after one tape was lost to a cleanup; GUI passthrough
 (LEAGUE_GUI=1) for live local-truth viewing; imreeyal intel: their counted
 6-0 pre-dates the rebuild that now beats them 4-2.
+
+
+## 2026-08-17 (night) — uoh-sqak marathon: two 6-0 friendlies + COUNTED series #3 (Claude Fable session)
+
+**Prompts:** "see the last chat we did, we are playing now against salah again"
++ their bind message (slot 22:20, single URL both roles, inverted parity — our
+thief opens s1); "we shouldn't play with our real brain against them in
+friendly, no?" (posture debate: real brains kept as a deliberate validation
+slot); "keep the moves… we need the report of their moves" (series moves
+report v2 — their wire shape reveals in payload.state.pos, lag-aligned
+telemetry scoring); "check his repos" (intel review: ApexCop's only
+conversion path needs edge+gap<=4+belief>=0.5, EvaderBrain corner-dives on a
+defaulted w_reach, hints unparsed bluff_weight=0, email disabled); "is their
+report ok or not" (settlement forensics x3: byte-agreed 46dfb429 every time —
+identical outcomes sign identical bytes, the 5-key scope excluding
+timestamps); "ask them if its ok to play the counted today"; "prepare
+yourself to counted against salah"; "launch".
+
+**Outcomes:** three 90-30 sweeps in one evening (friendlies #2-#3, then
+COUNTED #3 — diversity reward earned on the first counted meeting);
+LEAGUE_PARITY_FLIP runner override for role-inverted pairings; counted email
+interlock exercised end-to-end (league address armed config+CLI, report
+1a0115fdd83f0f4c filed to rmisegal+uoh26finalgame); cross-team interop
+hardened in-flight — our step_zero/system_spec dual-read guided their reader
+fix (e3d4d51), our per-row role-aware commit finding guided their aggregator
+fix (ebb329b, independently confirmed on their side within the hour); first
+fully complete filed artifact pair (both commit columns populated per window,
+their sealed revision fetchable and byte-verified against play); their prose
+counter slip ("yours 3 going in, filing as 4") caught pre-settlement, filed
+correctly as {3,3}; evidence archived under docs/evidence/counted_games/uoh-sqak/.

@@ -194,18 +194,25 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
-- **League record: TWO counted games, both filed, both won** (rule 52's
-  minimum of two counted games vs different teams — satisfied):
+- **League record: THREE counted games, all filed, all won** (rule 52's
+  minimum of two counted games vs different teams — exceeded):
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
     (league report `19fc9a53c7f458f9`; evidence commit
     [`67741d8`](https://github.com/alonengel/P2P-Police/commit/67741d8));
   - `anrbj666-vs-vibecode` — **75-35, 5-1**, filed 2026-08-08
     (league report `19fe2cdf49a26b0d`; evidence commit
     [`2469ff4`](https://github.com/alonengel/P2P-Police/commit/2469ff4)), after six uncounted
-    friendlies that converged both stacks to zero-delta artifact diffs.
-  Both series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
+    friendlies that converged both stacks to zero-delta artifact diffs;
+  - `anrbj666-vs-uoh-sqak` — **90-30, 6-0**, filed 2026-08-17
+    (league report `1a0115fdd83f0f4c`; evidence commit
+    [`4f85988`](https://github.com/alonengel/P2P-Police/commit/4f85988)), played under the
+    pairing's agreed inverse parity (our thief opened sub-game 1) after two
+    6-0 friendlies the same evening; the first artifact pair in the league
+    with both `github_commit` columns populated per window from the sealed
+    step-0s of each side.
+  All series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
   true` with byte-identical hashes across the two teams' independently
-  emitted results, diversity flag earned on both first meetings. Browse
+  emitted results, diversity flag earned on all first meetings. Browse
   the artifacts: working set in [results/](results/) +
   [config/games/](config/games/); immutable per-team archives with byte
   manifests in [docs/evidence/counted_games/](docs/evidence/counted_games/)
