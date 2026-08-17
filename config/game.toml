@@ -7,20 +7,20 @@ version = "1.10"
 [game]
 group_name = "anrbj666"
 group_id = "anrbj666"          # 8-character team code, no spaces (rule 45)
-# opponent_group_id = "imreeyal"   # the peer expected this session: lets us DECLARE the
+opponent_group_id = "uoh-sqak"   # the peer expected this session: lets us DECLARE the
 #                                  # derived game_uid at the handshake, so a peer deriving it from a
 #                                  # different input is refused in seconds instead of diverging silently
 #                                  # for a whole series (both-declare: omission never refuses)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
-counted_games_played = 2    # UPDATE before every counted game (rules 37-38): imreeyal 2026-08-04, vibecode 2026-08-08
+counted_games_played = 3    # UPDATE before every counted game (rules 37-38): imreeyal 2026-08-04, vibecode 2026-08-08, uoh-sqak 2026-08-17
 repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
 mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief-mcp.alon.website/mcp" }
 
 [network]
 my_port = 8802                                  # police MCP server port
-opponent_url = "https://defense-surrounding-drove-firmware.trycloudflare.com/mcp"  # series-test overlay (local only)      # the ONLY thing we know about the opponent
-turn_timeout_seconds = 180
+opponent_url = "https://d87d-176-229-170-175.ngrok-free.app/mcp"  # series-test overlay (local only)      # the ONLY thing we know about the opponent
+turn_timeout_seconds = 900
 wire_shape = "reference"        # the negotiated cross-team wire (hidden-information reference-v3);
                                 # declares wire_shape_sha256 at negotiation. "bookletter" = lockstep wire
 agreement_repush_sec = 7.0      # hidden-wire negotiate: re-send our agreement this often until the
@@ -52,7 +52,7 @@ step_deadline_seconds = 30      # hard cap on LLM thinking per step
 sibling_results = "../P2P-Thief/results"  # read-only series-span source (ADR-0001: file access, never an import)
 
 [email]
-recipient = "alonisrael.engel@gmail.com, agentsorch@gmail.com"  # FRIENDLY posture (vibecode pairing): reports reach us + their contact ONLY; league address restored per counted game
+recipient = "alonisrael.engel@gmail.com, skadah324@gmail.com"  # FRIENDLY posture (uoh-sqak pairing): reports reach us + their contact ONLY; league address restored per counted game
 mode = "send"                   # friendly sends to the two personal addresses above; the lecturer stays structurally unreachable (interlock: counted=false)
 counted = false                 # lecturer-address interlock, config half: with the --counted CLI flag
                                 # (the other half) a counted game may address the league; rehearsals
