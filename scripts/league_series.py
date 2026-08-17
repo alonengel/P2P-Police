@@ -38,7 +38,7 @@ from p2p_police.report.archive import archive_for_pairing  # noqa: E402
 from p2p_police.shared.config import Config  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-ROLE, CLI, PARITY = "police", "p2p-police", 1  # the police plays the ODD windows
+ROLE, CLI, PARITY = "police", "p2p-police", 0 if os.environ.get("LEAGUE_PARITY_FLIP") else 1  # police: ODD windows (FLIP: this pairing gives our police the evens)
 LOCK_PATH = ROOT / "results" / "local" / "league_series.lock"
 # The twin repo's results dir: read-only FILE access for the series close -
 # never an import (workspace iron rule); its runner owns the other windows.
