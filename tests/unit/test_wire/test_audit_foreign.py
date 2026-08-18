@@ -132,3 +132,53 @@ def test_commit_clean_is_schema_agnostic() -> None:
     assert audit_foreign.commit_clean(sealed)
     assert not audit_foreign.commit_clean(dict(sealed, nonce="00" * 16))
     assert not audit_foreign.commit_clean({"commit": sealed["commit"]})
+
+
+def _seal_merged(payload: dict) -> dict:
+    """The OTHER registered sound construction (league `merged_nonce_v1` /
+    gal-roy1's `nonce_in_payload`): the nonce inside the hashed object."""
+    nonce = crypto.new_nonce()
+    material = crypto.canonical({**payload, "nonce": nonce})
+    commit = hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return {"payload": payload, "nonce": nonce, "commit": commit}
+
+
+def test_declared_form_governs_the_recompute() -> None:
+    """A rival that DECLARES the merged form is verified under it (the
+    declared form is the pair's agreed spelling, SPEC §3 — gal-roy1 declare
+    `nonce_in_payload`); the same seal under a pipe declaration stays
+    dirty, because accepting spellings a rival did not declare would mask
+    exactly the declaration-vs-sealer drift the audit exists to surface
+    (2026-08-18 best2934 finding: a merged-sealed step-0 under a
+    kit_pipe_v1 declaration voided six otherwise-clean windows)."""
+    merged = _seal_merged({"step": 0, "type": "system_spec", "spec": {}})
+    assert audit_foreign.commit_clean(merged, audit_foreign.MERGED_FORM)
+    assert not audit_foreign.commit_clean(merged)  # pipe declaration
+    assert not audit_foreign.commit_clean(
+        dict(merged, nonce="00" * 16), audit_foreign.MERGED_FORM)
+
+
+def test_declared_form_reads_the_negotiate_label() -> None:
+    assert audit_foreign.declared_form({"commit_form": "kit_pipe_v1"}) == \
+        audit_foreign.PIPE_FORM
+    assert audit_foreign.declared_form({"commit_form": "nonce_in_payload"}) == \
+        audit_foreign.MERGED_FORM
+    assert audit_foreign.declared_form({"commit_form": "merged_nonce_v1"}) == \
+        audit_foreign.MERGED_FORM
+    for silent in ({}, None, {"commit_form": "someday_v9"}):
+        assert audit_foreign.declared_form(silent) == audit_foreign.PIPE_FORM
+
+
+def test_merged_declaring_rival_chain_verifies_and_mixed_does_not() -> None:
+    """A whole chain sealed merged verifies under a merged declaration
+    (the gal-roy1 pairing shape); the 2026-08-18 best2934 shape — pipe
+    turns plus one merged step-0 under a PIPE declaration — stays
+    TAMPERED, which is the verdict that found their bug."""
+    merged_walk = [_seal_merged(dict(r["payload"])) for r in rival_walk()]
+    exchange = exchange_with_live_commits(merged_walk)
+    merged_zero = _seal_merged({"step": 0, "type": "system_spec", "spec": {}})
+    assert exchange.audit_reveals([merged_zero, *merged_walk],
+                                  audit_foreign.MERGED_FORM) == "Verified OK"
+    pipe_walk = rival_walk()
+    exchange2 = exchange_with_live_commits(pipe_walk)
+    assert exchange2.audit_reveals([merged_zero, *pipe_walk]) == "TAMPERED"

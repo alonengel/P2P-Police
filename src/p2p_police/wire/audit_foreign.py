@@ -20,38 +20,85 @@ per-team constructions is meaningless: it reports not-comparable (None).
 """
 
 import hashlib
+import logging
 
 from p2p_police.domain.crypto import REQUIRED_RECORD_FIELDS, canonical
 from p2p_police.domain.primitives import Role
 from p2p_police.wire.dispute import own_barrier_timeline, unconceded_capture
 
+_LOG = logging.getLogger(__name__)
+
 VERIFIED, TAMPERED = "Verified OK", "TAMPERED"
 NOT_COMPARABLE = None  # digest_match when the two constructions differ
 
+#: The two registered constructions (kit SPEC §3). The kit pins PIPE; a
+#: rival that DECLARES the merged form at negotiate is verified under its
+#: declaration — the declared form governs, silence means the kit default.
+PIPE_FORM, MERGED_FORM = "kit_pipe_v1", "merged_nonce_v1"
+#: Wire labels seen for each form (gal-roy1 call merged `nonce_in_payload`).
+_FORM_LABELS = {"kit_pipe_v1": PIPE_FORM, "pipe": PIPE_FORM,
+                "merged_nonce_v1": MERGED_FORM, "nonce_in_payload": MERGED_FORM}
 
-def commit_clean(record: dict) -> bool:
-    """The SHARED contract only: does SHA256(canonical(payload)+'|'+nonce)
-    recompute to the commit — for ANY payload schema (no field demands)."""
+
+def declared_form(opponent_info: dict | None) -> str:
+    """The commit construction the rival declared at negotiate — its
+    `commit_form` label normalized, the kit default (PIPE) on silence or an
+    unknown label. Verifying under the declaration is not tolerance: a
+    declared form is the pair's agreed spelling (SPEC §3), and refusing a
+    sound seal the rival declared out loud calls honesty a crime."""
+    label = str((opponent_info or {}).get("commit_form", "")).strip().lower()
+    return _FORM_LABELS.get(label, PIPE_FORM)
+
+
+def reveal_verdict(rt, audit_message: dict) -> str:
+    """The tier-a verdict for a received audit message, under the form the
+    rival declared at negotiate (hidden_turns' line budget lives here)."""
+    return rt.exchange.audit_reveals(
+        audit_message.get("records", []),
+        declared_form(getattr(rt, "opponent_info", None)))
+
+
+def commit_clean(record: dict, form: str = PIPE_FORM) -> bool:
+    """Does the commit recompute under the DECLARED construction — for ANY
+    payload schema (no field demands). One form per rival, never a menu:
+    accepting spellings a rival did not declare would mask the exact
+    declaration-vs-sealer drift the audit exists to surface (2026-08-18
+    finding: a merged-sealed step-0 under a kit_pipe_v1 declaration)."""
     try:
-        material = f"{canonical(record['payload'])}|{record['nonce']}"
-        return hashlib.sha256(material.encode("utf-8")).hexdigest() == record["commit"]
+        payload, nonce, announced = record["payload"], record["nonce"], record["commit"]
+        if form == MERGED_FORM:
+            material = canonical({**payload, "nonce": nonce})
+        else:
+            material = f"{canonical(payload)}|{nonce}"
+        return hashlib.sha256(material.encode("utf-8")).hexdigest() == announced
     except (KeyError, TypeError, ValueError):
         return False
 
 
-def verify_reveals(live_records: list, revealed: list) -> str:
-    """Tamper criterion (tier a): every revealed record commit-clean AND
-    every commit RECEIVED LIVE re-proven by one of them. Alignment is BY
-    COMMIT, never by list position: a reference rival's reveal set also
-    carries its step-0 spec record, which anchors no live step and so can
-    rewrite nothing — tolerated. Matched payloads+nonces merge into the
-    live records for the later tiers."""
-    if not all(commit_clean(record) for record in revealed):
-        return TAMPERED
+def verify_reveals(live_records: list, revealed: list,
+                   form: str = PIPE_FORM) -> str:
+    """Tamper criterion (tier a): every revealed record commit-clean under
+    the rival's DECLARED construction AND every commit RECEIVED LIVE
+    re-proven by one of them. Alignment is BY COMMIT, never by list
+    position: a reference rival's reveal set also carries its step-0 spec
+    record, which anchors no live step and so can rewrite nothing —
+    tolerated. Matched payloads+nonces merge into the live records for the
+    later tiers. Refusals NAME what failed and the expected form (SPEC §4:
+    a bare TAMPERED sent both teams diffing values that already agreed)."""
+    for index, record in enumerate(revealed):
+        if not commit_clean(record, form):
+            _LOG.warning(
+                "audit refusal: revealed record %d (step %r) does not "
+                "recompute under the declared construction %s", index,
+                record.get("payload", {}).get("step") if isinstance(record, dict) else None,
+                form)
+            return TAMPERED
     by_commit = {record["commit"]: record for record in revealed}
     for live in live_records:
         full = by_commit.get(live.get("commit"))
         if full is None:
+            _LOG.warning("audit refusal: live commit %.16s... re-proven by no "
+                         "revealed record", str(live.get("commit")))
             return TAMPERED  # a live step the reveal cannot re-prove
         live.update(payload=full["payload"], nonce=full["nonce"])
     return VERIFIED

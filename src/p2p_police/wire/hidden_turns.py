@@ -140,7 +140,7 @@ def finish(rt) -> dict:
     try:
         theirs = rt._wait(rt.inboxes.audits, "opponent audit (records + nonces)")
         step_zero.read_for(rt, theirs)  # rival's sealed commit declaration
-        verdict = rt.exchange.audit_reveals(theirs.get("records", []))
+        verdict = audit_foreign.reveal_verdict(rt, theirs)
         if verdict == "Verified OK":
             if audit_foreign.parses_as_ours(rt.exchange.their_records):
                 reconstruction = audit.reconstruct(

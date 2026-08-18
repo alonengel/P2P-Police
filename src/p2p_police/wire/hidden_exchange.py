@@ -70,11 +70,13 @@ class HiddenExchange(SealedExchange):
         }})
         return {k: v for k, v in message.items() if k not in ("kind", "turn")}
 
-    def audit_reveals(self, revealed: list[dict]) -> str:
+    def audit_reveals(self, revealed: list[dict],
+                      form: str = audit_foreign.PIPE_FORM) -> str:
         """'Verified OK' or 'TAMPERED' (binary, ch. 7): every commit RECEIVED
         LIVE must be re-proven by a commit-clean reveal — the live commit is
         the anchor a post-hoc rewrite cannot move. The check is the SHARED
-        contract only (schema-agnostic hash, alignment by commit): a foreign
-        rival's reveal set may carry extra sealed records (reference step-0
-        spec) and a payload schema that is not ours (2026-07-24 finding)."""
-        return audit_foreign.verify_reveals(self.their_records, revealed)
+        contract only (schema-agnostic hash under the rival's DECLARED
+        construction, alignment by commit): a foreign rival's reveal set may
+        carry extra sealed records (reference step-0 spec) and a payload
+        schema that is not ours (2026-07-24 finding)."""
+        return audit_foreign.verify_reveals(self.their_records, revealed, form)
