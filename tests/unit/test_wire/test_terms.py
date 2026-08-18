@@ -111,3 +111,21 @@ def test_each_message_gets_a_fresh_nonce(config_dir):
     second = wire_terms.build_negotiate_message(config)
     assert first["nonce"] != second["nonce"]
     assert first["signature"] != second["signature"]
+
+
+def test_scent_declaration_suppressed_by_pairing_knob(config_dir):
+    """`[game] declare_scent_model = false` — the pairwise arrangement for a
+    rival locked to the OTHER registered scent model who cannot suppress its
+    own declaration (najamjad, 2026-08-18): the registry's refusal rule fires
+    only when BOTH sides declare, so omitting ours lets its lone declaration
+    play while the default stays declare-and-refuse-on-mismatch."""
+    config = Config.load(config_dir)
+    config.private.setdefault("game", {})["declare_scent_model"] = False
+    message = wire_terms.build_negotiate_message(config)
+    assert "scent_model_sha256" not in message
+    theirs = {"scent_model_sha256": "81" * 32}
+    wire_terms.verify_declarations(message, theirs)  # lone declaration: plays
+    declared = wire_terms.build_negotiate_message(Config.load(config_dir))
+    assert len(declared["scent_model_sha256"]) == 64  # default unchanged
+    with pytest.raises(GameRuleError, match="scent_model_sha256"):
+        wire_terms.verify_declarations(declared, theirs)  # both declare: refuse

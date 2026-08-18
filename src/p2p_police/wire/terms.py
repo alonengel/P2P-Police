@@ -100,9 +100,15 @@ def build_negotiate_message(config, hardware: dict | None = None,
         "signature": sign_terms(terms, nonce),
         "group_id": config.group_id,
         "identity": {**config.identity_block(), "group_id": config.group_id},
-        "scent_model_sha256": config_sha256(scent_model_spec()),
         "info_mode": info_mode,
     }
+    # The registry refusal rule fires only when BOTH sides declare a family;
+    # `[game] declare_scent_model = false` omits ours — the pairwise
+    # arrangement for a rival locked to the OTHER registered model who cannot
+    # suppress its own declaration (its lone value then plays; ours would
+    # refuse it). Default: declare, and refuse on mismatch as always.
+    if bool(config.private.get("game", {}).get("declare_scent_model", True)):
+        message["scent_model_sha256"] = config_sha256(scent_model_spec())
     if hardware is not None:
         message["hardware_spec_sha256"] = config_sha256(hardware)
     if sub_game is not None:  # rides OUTSIDE the signed terms, like info_mode
