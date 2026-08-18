@@ -64,3 +64,15 @@ def test_edge_parker_tapes_convert_with_margin() -> None:
             outcome, turns = play_tape(seed, game)
             assert outcome is Outcome.CAPTURE, f"{game} seed {seed}: {outcome}"
             assert turns <= 25, f"{game} seed {seed}: caught only at {turns}"
+
+
+def test_current_roamer_tape_converts_with_margin() -> None:
+    """Their CURRENT thief (galroy counted g04/g05/g06, byte-identical all
+    three): same fixed opening, then a perimeter roam that gal-roy1's cop
+    caught at step 19. Our series cop must convert the recorded roam with
+    the same margin bound — the tape parks at (4,0) after step 19, so a cop
+    that has not closed by then is chasing, not intercepting."""
+    for seed in SEEDS:
+        outcome, turns = play_tape(seed, "galroy_g04_roamer")
+        assert outcome is Outcome.CAPTURE, f"roamer seed {seed}: {outcome}"
+        assert turns <= 25, f"roamer seed {seed}: caught only at {turns}"
