@@ -2,7 +2,7 @@
   "_schema": "p2p-police-artifacts",
   "agreed_between": [
     "anrbj666",
-    "najamjad"
+    "best2934"
   ],
   "board_and_agents": {
     "axis_origin_corner": "top-left",
@@ -18,10 +18,10 @@
       3
     ]
   },
-  "config_name": "config_anrbj666-vs-unknown_g01.json",
-  "config_sha256": "6ce85c0cac1f2a30cb8fded4bd56c3e63faa88ce3371f6e3a0678a05f46096ce",
-  "game_id": "anrbj666-vs-unknown",
-  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
+  "config_name": "config_anrbj666-vs-best2934_g01.json",
+  "config_sha256": "b93de3ee905a8110409a800addaa91e9d340eb3a1d55e4c72fc1de66842bcc42",
+  "game_id": "anrbj666-vs-best2934",
+  "game_uid": "c82e9a5f-8800-85da-eea6-2b57b4fab4f6",
   "links": {
     "cop": "https://github.com/alonengel/P2P-Police",
     "thief": "https://github.com/alonengel/P2P-Thief"

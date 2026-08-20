@@ -2,7 +2,7 @@
   "_schema": "p2p-police-artifacts",
   "agreed_between": [
     "anrbj666",
-    "nis-yar1"
+    "najamjad"
   ],
   "board_and_agents": {
     "axis_origin_corner": "top-left",
@@ -19,7 +19,7 @@
     ]
   },
   "config_name": "config_anrbj666-vs-unknown_g03.json",
-  "config_sha256": "32483c7bbc21ba83741fed8cfeab60e4670577feef84dba38daf3ad7179bcbc6",
+  "config_sha256": "6ce85c0cac1f2a30cb8fded4bd56c3e63faa88ce3371f6e3a0678a05f46096ce",
   "game_id": "anrbj666-vs-unknown",
   "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
   "links": {
