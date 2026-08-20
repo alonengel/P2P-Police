@@ -1,0 +1,559 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-best2934",
+  "game_uid": "c82e9a5f-8800-85da-eea6-2b57b4fab4f6",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "f33445fe1b8c32d4e917f7ecb0fdaf65d15698f95e9a29487c3340551ea4f672",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Heading south, near Chinatown. Catch me if you can."
+      },
+      "nonce": "d6d5c2dd0819d4c0437bd0a41e116d64",
+      "payload": {
+        "hint": "Heading south, near Chinatown. Catch me if you can.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "role": "THIEF",
+        "state": [
+          4,
+          3
+        ],
+        "step": 1
+      }
+    },
+    {
+      "commit": "936cfe5f7eb9ffbc2707a73a26dacefe9478f84a24c77878b88a9e53992af14b",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Moving south past Chinatown. Still breathing."
+      },
+      "nonce": "ba14c286341bc2a2f0eb6163d7243f21",
+      "payload": {
+        "hint": "Moving south past Chinatown. Still breathing.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "role": "THIEF",
+        "state": [
+          5,
+          3
+        ],
+        "step": 2
+      }
+    },
+    {
+      "commit": "3611ce551d9c367cfd1e8d962dc6c1a4ae43951c5d847fdcbf13e27f11a45287",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Moving south past Times Square. Still breathing."
+      },
+      "nonce": "f9de9eef4cf2e97f88c468926c460680",
+      "payload": {
+        "hint": "Moving south past Times Square. Still breathing.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "role": "THIEF",
+        "state": [
+          6,
+          3
+        ],
+        "step": 3
+      }
+    },
+    {
+      "commit": "41d44541e80d33065134a400053b63be9a9c5fd2bd1ab5b9b885f60410f8ede6",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Heading east, near Harlem. Catch me if you can."
+      },
+      "nonce": "22385e108f27b971e403bdb91a5e2899",
+      "payload": {
+        "hint": "Heading east, near Harlem. Catch me if you can.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "role": "THIEF",
+        "state": [
+          6,
+          4
+        ],
+        "step": 4
+      }
+    },
+    {
+      "commit": "bd574645229753b2fb1cd9ccf096fd718e006f479291015c06ef0d3c0efd8d08",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Moving east past Queens. Still breathing."
+      },
+      "nonce": "b5ffa10d58beb1914bfa51633af0a662",
+      "payload": {
+        "hint": "Moving east past Queens. Still breathing.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "role": "THIEF",
+        "state": [
+          6,
+          5
+        ],
+        "step": 5
+      }
+    },
+    {
+      "commit": "28562d1c7e1017c2816138edfacbf2710bae18b37f9ff4d28cfc1e9b34426e9d",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Honest one: north, by the Bowery."
+      },
+      "nonce": "7551001a5c4964152568ba89dc497979",
+      "payload": {
+        "hint": "Honest one: north, by the Bowery.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "role": "THIEF",
+        "state": [
+          5,
+          5
+        ],
+        "step": 6
+      }
+    },
+    {
+      "commit": "9448e0042e5ddc207010d3578d3e67bc834aa05ef5cd66fbe20805f94579bac7",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Moving east past Chinatown. Still breathing."
+      },
+      "nonce": "9796af4ad35d6acbbb4f889726c777b8",
+      "payload": {
+        "hint": "Moving east past Chinatown. Still breathing.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "role": "THIEF",
+        "state": [
+          5,
+          6
+        ],
+        "step": 7
+      }
+    },
+    {
+      "commit": "be87b07b80c65eb4f33c3376d18389dd542708ea59cdc37d75811d0040c5fb06",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Harlem is behind me now, going north."
+      },
+      "nonce": "632095db373a503f10f6ef2d290a4334",
+      "payload": {
+        "hint": "Harlem is behind me now, going north.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "role": "THIEF",
+        "state": [
+          4,
+          6
+        ],
+        "step": 8
+      }
+    },
+    {
+      "commit": "19be82c4ad16ef04d7e9ef0020138e972aceda241e4f274c107d83228c337b60",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Heading south, near the Bowery. Catch me if you can."
+      },
+      "nonce": "9fe9c8f1addbb850b10c84da512f973a",
+      "payload": {
+        "hint": "Heading south, near the Bowery. Catch me if you can.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "role": "THIEF",
+        "state": [
+          5,
+          6
+        ],
+        "step": 9
+      }
+    },
+    {
+      "commit": "e0392484a1801562dcdb56bb0839243250d44a4bba673e0628d84ab3bafcfaa6",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "the East River is behind me now, going west."
+      },
+      "nonce": "c9d255a11d4ce855c6d1bd161949c852",
+      "payload": {
+        "hint": "the East River is behind me now, going west.",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "role": "THIEF",
+        "state": [
+          5,
+          5
+        ],
+        "step": 10
+      }
+    },
+    {
+      "commit": "e569e4dcb848b3cf55048dd641042f144c834a8d827af33f957942fa539ea330",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Caught. Standing still and closing out the sub-game."
+      },
+      "nonce": "f04aa97d11c861053c062154e5f97db6",
+      "payload": {
+        "hint": "Caught. Standing still and closing out the sub-game.",
+        "intent": "truth",
+        "move": "MOVE:STAY",
+        "role": "THIEF",
+        "state": [
+          5,
+          5
+        ],
+        "step": 11
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "c38975e72719d6b05e37fa27d73069097439e2654c4bf4861289498e9cd54ac5",
+      "nonce": "a96c7399b23c65f15303b7cd5c1af12c",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-best2934.json",
+        "github_commit": "e00fa0c12cf66776763cd44aec090f18955233f9",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 1,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "ca5ca7f717708bee5d8b0756a0295155f2df1390e8bf366482730034ac95845c",
+      "nonce": "e87ce41574cf2de7dc437624a0287e36",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 1,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "dcd33d0e0385538b058c29c984497bbc175dd398fb2be95b8fe782358618b825",
+      "nonce": "c349546419273bee8381432fbd78ac41",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 2,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "288ad9e89860c73fc1329c75cb95fdc20b40af34b8c45bd9d93ac99dd8d097f4",
+      "nonce": "726d11b1c31da6273a92d7374cb974b9",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "f2b359a1154c0c36d24cb1fed1cdec0567137cb0766e326c009b04b41d13fdb7",
+        "step": 3,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "b080ab3397456016271cc17b02dde47e6edc52ed1bdbeb2734a68a6ada227d74",
+      "nonce": "fe326ac2568a25fc3432b679480360fe",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "8dc910c2d2b4e1e0a819520c19174cbee24e17bcad04a9017865b22e3e4891d8",
+        "step": 4,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d1a79e118af67ec6d6ad6b66b4b8bcfbf0269496271df23ac75eaa2fdf182e33",
+      "nonce": "974669881e180d850282da21a5ab72f5",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 5,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d5bb08f9e9c3fb9319ff72d2e0f632f088a3d443fb6e39f0f455112bc9016f6a",
+      "nonce": "59ad4c65658729bfbd8839ec22b704ef",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 6,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "b4b888b67e5f4bfb7ff1bb6e4ea321168cbdb22a8f86cc14684e02fb9320811d",
+      "nonce": "9964bf31bcaf279e9ee86cbc232de684",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "4b8aa95e480314a81eef86c36e0bbc38cd0d8cd04dbae7426c1feb19bcc6ac3d",
+        "step": 7,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "ababd576b85611af7a61aae8738100216ac2595a6aad3a79a078217bc7ad8784",
+      "nonce": "78bd9e602d657801b2d41eed7c9ca561",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "5aaf5dc588fd68822cd2f40eced451b89672324c7d94a8d618c891f21fe3be2d",
+        "step": 8,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "abbb26f1447945b14b371b1961d556ff7480973d3a331d3050631af988e05263",
+      "nonce": "102575d64de0c1bedcf3a3805b292a19",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "d3b30c75061bc9cec65e590cb5ecc0bb0653d50b9db4515dec091268654673e0",
+        "step": 9,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "e338219905f7f7249747dc67acfc85b20d553eb34ffbd85e5c7a778159ea2765",
+      "nonce": "441859793d6d4d9f7338e8741eac76fd",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "cefb82c87e3571154c80c803538645d99254a9b095affd3f781a9a6812eba4d3",
+        "step": 10,
+        "sub_game": 1,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 1,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "cefb82c87e3571154c80c803538645d99254a9b095affd3f781a9a6812eba4d3",
+    "ended_at": "2026-08-20T19:43:14+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "e00fa0c12cf66776763cd44aec090f18955233f9",
+    "group_id": "anrbj666",
+    "opponent_group_id": "best2934",
+    "opponent_info": {
+      "code_version": "1.00",
+      "commit_form": "kit_pipe_v1",
+      "commit_formula": "sha256(canonical_json(payload) + '|' + nonce)",
+      "config_sha256": "cd420c71424d85a0b91df7983a6fb03866f8b6d70504573603af8ddd00da9f7d",
+      "counted_games_played": 2,
+      "github_commit": "1ac172e227da613fbc36f8da0f9e77b120ab4080",
+      "group_id": "best2934",
+      "group_name": "best2934",
+      "identity": {
+        "counted_games_played": 2,
+        "github_commit": "1ac172e227da613fbc36f8da0f9e77b120ab4080",
+        "group_id": "best2934",
+        "group_name": "best2934",
+        "repos": {
+          "cop": "https://github.com/Krayz1a/best2934-cop",
+          "thief": "https://github.com/Krayz1a/best2934-thief"
+        }
+      },
+      "mcp_url": "https://monogram-radio-blooper.ngrok-free.dev/thief/mcp",
+      "nonce": "a8c488671d861364931702b3acfee3b6",
+      "repos": {
+        "cop": "https://github.com/Krayz1a/best2934-cop",
+        "thief": "https://github.com/Krayz1a/best2934-thief"
+      },
+      "role": "thief",
+      "scent_fingerprint": "e6a37eba68fc217534d08d0aba710515801fa218c24cd491d4e41fd96b3e8b2d",
+      "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
+      "schema_version": "1.2",
+      "signature": "f738d8b74b18e65658a46e6971212e3168f596f58c3fc5384b73a307056727b1",
+      "sub_game_number": 1,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      }
+    },
+    "opponent_step_zero": {
+      "code_version": "1.0.0",
+      "github_commit": "1ac172e227da613fbc36f8da0f9e77b120ab4080",
+      "group_id": "best2934",
+      "group_name": "best2934",
+      "model": "claude-haiku-4-5",
+      "role": "thief",
+      "signature": "daa8625b544af916e4f25126a73a2997ad2f19011c66ae4bf9be1b741cc0eb88",
+      "spec": {
+        "cpu_cores": 8,
+        "cpu_freq_mhz": 4200,
+        "cpu_type": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+        "gpu_cores_or_cuda": "n/a",
+        "gpu_type": "none (CPU only)",
+        "os": "Linux 7.0.0-29-generic",
+        "ram_gb": 6.7,
+        "vram_gb": 0.0
+      },
+      "step": 0,
+      "sub_game_number": 1,
+      "type": "system_spec"
+    },
+    "outcome": "capture",
+    "rival_trail_track": [
+      null,
+      [
+        5,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "role": "police",
+    "scent_readings_refused": 0,
+    "started_at": "2026-08-20T19:43:05+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 11,
+    "turns_completed": 10
+  },
+  "wire_shape": "reference"
+}

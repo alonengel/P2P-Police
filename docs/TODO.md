@@ -86,7 +86,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Series support: --sub-game override + series-result aggregator (per-group totals, sub-games won, tie at tie_score); 2-sub-game local series proven end-to-end
 - [x] notebooks/analysis.ipynb + docs/COST.md (see Phase 8 status)
 - [ ] v1.0-submission annotated tags (AFTER the real league games)
-- [ ] REAL league games: >=2 counted vs different teams (LEAGUE_RUNBOOK.md)
+- [x] REAL league games: FOUR counted vs four different teams, all won, all filed (imreeyal, vibecode, uoh-sqak, best2934) - rule-52 minimum doubled
 
 ## Final tri-audit fixes (2026-07-13, full PDF re-validation)
 - [x] BLOCKER: technical loss now still emits artifacts + email (rules 32/35)
@@ -172,5 +172,5 @@ live in `docs/evidence/`:
 - [x] COUNTED series vs imreeyal: played and filed 2026-08-04 — 90-30, 6-0
 - [x] COUNTED series vs team #2 (vibecode): played and filed 2026-08-08 — 75-35, 5-1
 - [x] COUNTED series vs uoh-sqak: played and filed 2026-08-17 — 90-30, 6-0, diversity reward
-- [x] COUNTED series vs best2934: played and filed 2026-08-20 (deadline night) — 90-30, 6-0, diversity reward; digests matched digit-for-digit, filings cross-forwarded
+- [x] COUNTED series vs best2934: played and filed 2026-08-20 — 90-30, 6-0, diversity reward; digests matched digit-for-digit, filings cross-forwarded
 - [x] League campaign COMPLETE: 4 counted, 4 wins, rule-52 minimum doubled; kit conformance + pairing verification process documented in docs/OPPONENT_ONBOARDING.md (kit: https://github.com/Imreec/copthief-league-protocol)

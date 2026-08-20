@@ -215,7 +215,7 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     with both `github_commit` columns populated per window from the sealed
     step-0s of each side;
   - `anrbj666-vs-best2934` — **90-30, 6-0 + the diversity reward**, filed
-    2026-08-20 on deadline night (league report `1a020b7e99d9d832`;
+    2026-08-20 (league report `1a020b7e99d9d832`;
     evidence commit
     [`5020dc0`](https://github.com/alonengel/P2P-Police/commit/5020dc0)),
     after a seven-series friendly campaign in which five interop defects

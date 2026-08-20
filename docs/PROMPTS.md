@@ -1420,7 +1420,7 @@ their sealed revision fetchable and byte-verified against play); their prose
 counter slip ("yours 3 going in, filing as 4") caught pre-settlement, filed
 correctly as {3,3}; evidence archived under docs/evidence/counted_games/uoh-sqak/.
 
-## 2026-08-20 — deadline night: the best2934 endgame (counted #4)
+## 2026-08-20 evening — the best2934 endgame (counted #4)
 
 Operator-driven session, agent prompts logged in substance: (1) "make sure we
 are ready against best2934 code wise" — full Salah-era config audit caught the

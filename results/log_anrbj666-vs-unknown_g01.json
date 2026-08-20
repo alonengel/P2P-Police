@@ -1,0 +1,48 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-unknown",
+  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [],
+  "records": [],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 1,
+  "summary": {
+    "audit": "unavailable (technical loss)",
+    "audit_disclosure": "sent",
+    "digest_match": false,
+    "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+    "ended_at": "2026-08-18T18:48:56+00:00",
+    "failure": "GameRuleError: negotiate declaration mismatch on 'scent_model_sha256': mine='934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9' theirs='81ebee59640e80eae8ca9ee5f86abd26e7edf5cdbb27d15925cb6ee45ca6ddf4'",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "b5fdc0c2e9ae8b54eecc3e9ba903413addbcb115",
+    "group_id": "anrbj666",
+    "opponent_group_id": "unknown",
+    "outcome": "technical_loss",
+    "role": "police",
+    "started_at": "2026-08-18T18:45:31+00:00",
+    "steps_sealed": 0,
+    "turns_completed": 0
+  },
+  "wire_shape": "reference"
+}
