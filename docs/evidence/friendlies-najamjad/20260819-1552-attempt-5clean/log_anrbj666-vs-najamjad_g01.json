@@ -1,0 +1,1547 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "f630551fb4e47b3ebce3c725628e07949046481436b94078b22028c8a065d5b2",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "44d9b0d68bcf587d754d967046417fea",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 1,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "af31fa5d32956fa238caa7c968d4e724ec6bfc3fccc683e3335b558d146443b7",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "bf35d690d2b33631ba9e08bfefe23798",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 2,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "12c1ac91d36dfd1e25f22667d6811535c99a1b529cf3f7bbda440e456c472216",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "3187ab50807c78d3dd8c5d4923af2f30",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 3,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "4c6b9d5d900e858ca4ee825e555d3757f3f9751f4585488debe5226d318268c2",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "bb909c06c656c7c8b4cd66fbff9718ca",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 4,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "50043e9d7c927a8b25a33cc8e7c0e79c072f3b5e43763a5b1a4ce37c2b48b2c0",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "6d83c4b2e4d323f31dd5284f445d8300",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 5,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "5467e11c7cfe32d0a8e12d39b52688fc483f533dcf0d90844ca77eb5998601ab",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d762503f38cd7a6683af8aafcfa4ce53",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 6,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "4e7f46b386774485d92f2f9989299c9c62be6167bc767f5c2e1b51c2808b61fa",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "e25c4bc85f4cdeaaaf08f7e24793a010",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 7,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "0e6e3aa7e6bcf8850d60408e9600f7e55c5584f4eb99225c5000f3eb58900711",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "519fea5809d9d8075cef68373f579a28",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 8,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "90e91691744dc1c69e8c66323378b45ff246f960ee7ff8c71bfee27d4f689650",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d4a0b3f7cbca8b93556b0dd599ddebc6",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 9,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "d0d481177192af77bce90e3d86b432b1aef47e1ffb607934f92b29d8c028d1ac",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "2160675a98d4d9b4869609f68773aca8",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 10,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "6657428e10d8566a7ffe1219941d652c9128baa5042b50d3004f2180bbdfb2fd",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "9566b03522d9f28088f3191790de3b0c",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 11,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "bcc31defb10b8a5f72a420a8ee8acb87eb52f8fbf54d02bd296c6bf1d23dcb85",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "54c4d9d6e2b3f2deb56ecce4869054d8",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 12,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "e8b3f50a21a8ee9dd0cfe0d8562ed6fa8fe52d938ae4a1d19e6e1da10b8bfabd",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "ef306c42476171377013101ddff59607",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 13,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "1dbaf9e85a3b58bf611bf06937a8f41436714b7f358b8136faddcea53fde9307",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "04cccb582b24f3ea27c551a57924d704",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 14,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "1227ac61538f15b24b8c85d0377c0c5f1a31cf181f2cb309063fe4ad9c0e595e",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "13a4744bc3e5e637fd3a225008936e55",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 15,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "169cc0bee3c2590ad49aab459a10b16401c6b9f05eb0b6e8d0c3aec0f6cd7ea6",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d9906121e9578cd1a0ce6abe975c62bc",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 16,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "403bc78d2ef94c614b550e4c383b52637b2edd72e75831889109a90e32e4b88c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "743a9d97bd2d7cd3cfb992430af9d099",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 17,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "32456f7b13ed36e43d1e7cf5396c9974143729a26ccff7976fae298379e50652",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "66b17c49fe85e5b08d2a91840d08d536",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 18,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "3c7fb10a76dee36eca43ad289893f61d52d842c855c538b131bbfb581aef18f1",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "06c7cfad3336f37412f367bc1c14fe39",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 19,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "3cedd8a3365c378963daab1c0501887e56e3fd6fba2343f96eb45ddb66d196c4",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "34f987dae552011e425d75588791e3b2",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 20,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "04f703004cc0d6bdca61adbab0026c49c73a37a4b8a0282082f287ca8d2f1f98",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "b7381e4a37cc5717a28e19129319e829",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 21,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "6b344ffdc0587d01f0ed409dfc9ad20b2115c2ffbc456a82b81b4adcb7269863",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "45ccdab79e2bab9857f25e83ff497ec9",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 22,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "aabb3b5cbd819f8176938d5e6b86c71738324de193da7bb2d8bb89c7e26bb8a3",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "6708351797c0b3160dfd8c921ae93196",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 23,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "258b9c170c3c38ca5bc68b0642a3dbe3497dc20cc87e73b3025bb6f92e95b010",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d5f894ffa951251b039b38b39b2688a3",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 24,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "10f7f8f985122f970ad2d36022349a499d8baffd7bd9ee72059618469b68ebbf",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "1b916ef5c82216496d8e2384101eec60",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 25,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "b674df126d14dbccd1266969114b0e3d89848170ef7531e8be849f884292bbe0",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "1121b262b5600d9c1d00bc971e26105a",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 26,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "60eca2466b709fbe99f9d786d12b7b5d0b2689dda18d913e98a5100f2420a53c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "432dc31f16c83d52199e324c8c4a4d3c",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 27,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "8ed3cd41a37373c779700f85b32c7cbddf3102a189c1a936583e50ae5ea8bbc3",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "654bbc48a8c2ef9339e06f873c890d65",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 28,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "b7b146d618f88eda205acad1736c9f0d5f1e11f915405099124a8f41749042a7",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "4ad1a66ed352f20e4ff5a6552691e9de",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 29,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "9e701259e429c66227bb1c7e39d9fff57ed900da227832a6cd26148829321883",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "e6797b0d39f58a276eedc02bf232113a",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 30,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "ed3909fdc87bfabc780a549d548fa49e2c09c254b752e372d205ba08b9ae698c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d8031aca412981fbf33abbc3997db1c0",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 31,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "94f48c6837d0f93fdcddbeace6b634eaa74b3ef324c0198de6ef182b31673cc5",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "978aa0b225909941cc75380c7879bf55",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 32,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "c24468b23c623abf2d156bc32b1ffc7f07f0ef5cfdd0216b9233517a2195f9a7",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "f8030cfc32c08854342bc9f86fa70e00",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 33,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "5a522d842aa02c26441aa45eaed868a313624d1134a048834813b1a614f11220",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "7add37561473fb2407ed89450da19375",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 34,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "9a65b140b0060491105250c4a7f5b00873dd9e75915d6ee70540eba60af54b66",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "d75d3ab50e3efa02eaca6634a4dbffd7",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 35,
+        "sub_game": 1,
+        "win_claim": {
+          "type": "survival"
+        }
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "b59553012e7a32414dcf09e99858f018f4603d2adfc6b08fbeed055b72593da4",
+      "nonce": "309bb6410d09a0fa257640d586973acb",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-najamjad.json",
+        "github_commit": "ab5cc9236c4ce367da2317abccf264bd8d11c8ef",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 1,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "f781b94c99f8ed3d7dfde8a56aeed6aa65e1c3317524cf86f5f596059be13c03",
+      "nonce": "9ffecdad60792217f4089f3ff009f00b",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 1,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "a6f3f5fef6c05882e3e5ea0a76cbf1c81279b2196ca36c3bf13afe2a611ca4a8",
+      "nonce": "b5ae5db553d88c4b31a4ff79a838b80a",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 2,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "5c1e3ddb3d986e42218a3d438cba34daedb9500738e2303ceaa87a6f236ffd47",
+      "nonce": "b2d4b8dc6e9edf90c921156b1e2753cb",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 3,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "60fa6ff863f7071a4975d8e7ae3fc0a092ffca8bb467d7ef065e8ab4e8b93237",
+      "nonce": "e84bfa92a5be3acc0c0c45eb482c0d21",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 4,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "78f73d1c9247b880362bd6a1edcf9f273225f5d6d829dbde68772a7f70f8406d",
+      "nonce": "42799d088306c9363339e7acbbe6acf7",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 5,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d5e03b5226ce535f067b86f5f3ddf0c9fcdb1c746b87b092f19978c1231f9bac",
+      "nonce": "b45aa0d0e8d5a355338a38a26dc7f759",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 6,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "66879a37e595bc926db7fb7b695c260ba378b9d11759e8ca94a1cc0259581276",
+      "nonce": "434f79a0e0663fe3961c255c7d220cf6",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 7,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "82740b82d86cbe949f829fdaab800fe00f35d51804dcb2111f9403d4e9e64d54",
+      "nonce": "6c17c84fcfa0a3730cff9991574d2b25",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 8,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6fbebd08c3365c1aa90db847d4c660cea076a1256baf171147004b838b573805",
+      "nonce": "84e7031d061f2dc7954807b266b00279",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 9,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "8e9f41db67ac4070bb660047a9ca34282b637cdddfdde6e9ccf4e56745af2e00",
+      "nonce": "5516eb0f080b2c97d03cde0a9ef0d46b",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 10,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "78fee417683998e702b2f224ac2d3ad02868b4e4ed6d88ca91a1d05a8abcd67b",
+      "nonce": "79c69f10c21b48cb83d5ad79becc0d24",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 11,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d79da57b3bab13298aba571577dc63087545a38cbc09059e9d955e29314836f3",
+      "nonce": "c202b387e658ebc9b203675ae70b0ab4",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 12,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "aca5f8c6c1991e75edaa14a0ae50ad67dbb6adaac1ec04c12ab84578d95da7a0",
+      "nonce": "7d86384666239b2afd08d9ce7acfa29b",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 13,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "164c70af252b7dde197333677b4993b09aa74a9690e7b5df562cdcee57964aa2",
+      "nonce": "44879c4c0a17d85149c9ea2b9a778170",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 14,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "44b3e0a117944c5d1da3b4d1cc4420d9ee287c2ce4838aca0b4e96a6b7a47446",
+      "nonce": "108a3c4f922ad38f95502852c6ccb780",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 15,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3a82524ecd74e539a80cb65e0e3345a13dc9349bbe819e99e8dc233fc0e6e113",
+      "nonce": "34113d0b2d985d0427af9f565b65967f",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 16,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d6167ab2b3da844d7e1cf5dbee7b9133ce0b60b5c401876eff41aaa20f558d46",
+      "nonce": "a40681cfe6830d05c28ad476cef35888",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 17,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "dfbc60c2c61abe5870f74dc5ea60962e1504462f8057c1f7b032b4094bd4b707",
+      "nonce": "45ad9385d8ca005d09d4ce41cd17ba9d",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 18,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6e5990ce52117b882b4971898397ffcf748024bd4d6930a067d1e65f780ff97f",
+      "nonce": "acf00eb5c7b77db7b3718da373fd922e",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 19,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "f628b015cb11a7a78abf32d5e2d7d98fe1d19b550301a1f432fe1523d2204b51",
+      "nonce": "5a37f15bf166b569195cc37f62d8514d",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 20,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "9abd75792390fdaa27eb0fad636d7948de4341f8d4fccbed28378bcdefb06db8",
+      "nonce": "fa92cdc0e71ed367e53d538dd85235ac",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 21,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "f769d408d82fcfa7ea96824800f9ce2401ee16ef7ea534bd66143bbc7aadb084",
+      "nonce": "65ac8db8a53cd5d69727814f064a10cf",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 22,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "e2a6512e2229012201eda7bc88889a8401ec83a8158cd6648a772a6447b4546e",
+      "nonce": "b0751f66e39e693f6cee2ee191f42c53",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 23,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "0a69f9db442031e23c0f2fad24d1cc70645aa0c2a24fa290681041a70edb5fd7",
+      "nonce": "9f0a10b912c5dae6259c4ed021a9b896",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 24,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "9496e6bfc44b5b56b748f1feb75d6db6df5549468780795297011322e30ad969",
+      "nonce": "f5aaaa80bc9827bd1a7c6196fe3e7455",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 25,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "b42c7cbbc649976ac947ed4857225abc5ddfe7d7ac29f598a3f56d635c861203",
+      "nonce": "bb1db7d1a2013e30380ced6ff74c8a6a",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 26,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "67c12e110bd847ac276a521c60de364df4f81be11f7d58c4e9fad839c03e9e0a",
+      "nonce": "2ea48bb2de0ccce9b1a849281024bd6e",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+        "step": 27,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "e29a33b258d8ed244939b0253a16ad67117244fbe22bc1d00ffe39746c6b4064",
+      "nonce": "bf63cbadb25b508604b80df849ac0dde",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 28,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "958a4ebea8bcb07d12e35bc44d844d47a8866c308572066d05ec28fee02619a3",
+      "nonce": "a3058176d2d81cdb1473969e3951bf10",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 29,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6a87bdd2e7945fe94d2cb4e6b58682a40aa8afd790b1535882620cc22ce9c6ff",
+      "nonce": "a3c0dbee33f5a9c892ee2e421a7a2560",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 30,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "a510a9d9b738e67f66fed03445e842d41bc0efe1f0e1ed9283b15d11fd7ba00a",
+      "nonce": "19e8fdb9ea503fcfeb536793ffaf5259",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 31,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "221459f15a4a7918d4f442b81b9b893c4a76f25c500b6b64defca7459144da2f",
+      "nonce": "448239996c3d125464ca62b7b84c1b40",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 32,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "ee8990f70c41e67666117ca7eb6fa5d88e750e53f13706b7be1eedccf62c639a",
+      "nonce": "2947ea700ec5a49bdc82e0f2a271b9eb",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 33,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3e14f3136d1c251b05ea488f246d0cb3df7a3832081ccde1bc7ea3721002c3fc",
+      "nonce": "525950131d654f94566fba0b7ddc0b69",
+      "payload": {
+        "action": {
+          "move": "STAY",
+          "type": "move"
+        },
+        "hint": "Not moving an inch, promise.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 34,
+        "sub_game": 1,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 1,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+    "ended_at": "2026-08-19T12:51:03+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "ab5cc9236c4ce367da2317abccf264bd8d11c8ef",
+    "group_id": "anrbj666",
+    "opponent_group_id": "najamjad",
+    "opponent_info": {
+      "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+      "identity": {
+        "counted_games_played": 5,
+        "counted_matches_played": 5,
+        "counted_matches_remaining": 5,
+        "git_commit_hash": "77f30a8beff3e43f6ff14dd9d27ba3d497543d45",
+        "github_commit": "77f30a8beff3e43f6ff14dd9d27ba3d497543d45",
+        "group_id": "najamjad",
+        "group_name": "NajAmjad",
+        "llm_model": "deepseek-v4-flash",
+        "mcp_servers": {
+          "cop": "https://cop.4laboratory.com/mcp",
+          "thief": "https://thief.4laboratory.com/mcp"
+        },
+        "members": [
+          "Naji Kayal",
+          "Amjad Abed"
+        ],
+        "opponents_already_counted": [
+          "uoh-ay26",
+          "imreeyal",
+          "vibecode",
+          "MOAAMOHA",
+          "nis-yar1"
+        ],
+        "repos": {
+          "cop": "https://github.com/najikay/najamjad-cop",
+          "thief": "https://github.com/najikay/najamjad-thief"
+        },
+        "spec": {
+          "cpu_cores": 8,
+          "cpu_freq_mhz": 2800,
+          "cpu_model": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "gpu_model": "none detected",
+          "gpu_type": "none detected",
+          "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+          "python": "3.12.3",
+          "ram_gb": 7.5,
+          "vram_gb": 0.0
+        }
+      },
+      "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
+      "nonce": "d21a9b850ee5ffa50e6cd189bf6f52af",
+      "role": "thief",
+      "scent_model_sha256": "81ebee59640e80eae8ca9ee5f86abd26e7edf5cdbb27d15925cb6ee45ca6ddf4",
+      "signature": "d1301e9f99ce6fa39d63c15c6bfa4831d6a2f597fecdbf785bd70db91283e4b8",
+      "sub_game_number": 1,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      }
+    },
+    "opponent_step_zero": {
+      "code_version": "1.00",
+      "github_commit": "77f30a8beff3e43f6ff14dd9d27ba3d497543d45",
+      "group_name": "NajAmjad",
+      "model": "deepseek-v4-flash",
+      "opponent_group_id": "anrbj666",
+      "role": "thief",
+      "spec": {
+        "cpu_cores": 8,
+        "cpu_freq_mhz": 2800,
+        "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+        "gpu_type": "none detected",
+        "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+        "python": "3.12.3",
+        "ram_gb": 7.5,
+        "vram_gb": 0.0
+      },
+      "step": 0,
+      "sub_game": 1,
+      "tokens_total": 0,
+      "type": "system_spec"
+    },
+    "outcome": "survival",
+    "rival_trail_track": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "role": "police",
+    "scent_readings_refused": 0,
+    "started_at": "2026-08-19T12:50:06+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 35,
+    "turns_completed": 35
+  },
+  "wire_shape": "reference"
+}

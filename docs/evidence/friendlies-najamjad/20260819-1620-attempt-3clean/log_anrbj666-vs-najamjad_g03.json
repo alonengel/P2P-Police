@@ -1,0 +1,1547 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "b1146cb21612f0bd5bd64bb2d17c708f6fb931b0dd843c9929692328df1ec05f",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near Central Park."
+      },
+      "nonce": "676fa62faf831375b0afb3f4c70d284f",
+      "payload": {
+        "hint": "You will not find me anywhere near Central Park.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 1,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "493ce0b65d2d22ac1ad2c56c139faec0ef8df0d5bda91c071db7f538adcad0f3",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving north \u2014 the waterfront is behind me now."
+      },
+      "nonce": "d311279f18bcd4a49a0f323cc3b3fe1c",
+      "payload": {
+        "hint": "Still moving north \u2014 the waterfront is behind me now.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 2,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "e392a3de10ca9fbe087f5c8ae6a287895f9c88b85b382fe2e335d3b80a7cd496",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving west \u2014 the waterfront is behind me now."
+      },
+      "nonce": "7a8eba066915c0ba2d702a437e031790",
+      "payload": {
+        "hint": "Still moving west \u2014 the waterfront is behind me now.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 3,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "771edec93ba59499fa50cc52777a09b523f89e6d555a14adc494aeaeb3e85001",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the big clock in the park, come find me."
+      },
+      "nonce": "0b7ac4f314d418c163aaf4e125015feb",
+      "payload": {
+        "hint": "I'm hiding near the big clock in the park, come find me.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 4,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "9301082758031c9f4f6d8fe90e6dcae3df4fe800645477d0e8d91d40eed0ff1f",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past Times Square while you look the wrong way."
+      },
+      "nonce": "d3d7b94390e554b3d2a4364114a62fde",
+      "payload": {
+        "hint": "Slipping past Times Square while you look the wrong way.",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 5,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "d26b8bfed263b9833e018961672e072910c7d390686b67f31b0f6068c317602c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the old pier, watching the boats come in."
+      },
+      "nonce": "1043bc1e541c88c12b3be5a2a1de5f37",
+      "payload": {
+        "hint": "I'm hiding near the old pier, watching the boats come in.",
+        "intent": "lie",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 6,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "4612a962276e3bbe2e6edefb2d6636821870ce4cb5483d113d27bdf353621b0b",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past the waterfront while you look the wrong way."
+      },
+      "nonce": "4e1b9d7f2138067eaa0316607ae39f61",
+      "payload": {
+        "hint": "Slipping past the waterfront while you look the wrong way.",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 7,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "2b4067f001d312d898268adf8f0abf825062d2cb1d2baee9a4e968f7ac97662e",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the Brooklyn Bridge, watching the boats."
+      },
+      "nonce": "58f0baf4aac4a82ac24469989af28c21",
+      "payload": {
+        "hint": "I'm hiding near the Brooklyn Bridge, watching the boats.",
+        "intent": "lie",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 8,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "7680b98eee3ce3b66defc3b263cd7a2da2bd8fcb7d560091671946a49ac5cb6b",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past Wall Street while you look the wrong way."
+      },
+      "nonce": "7cbaa2a67b27477c00463e84370674b2",
+      "payload": {
+        "hint": "Slipping past Wall Street while you look the wrong way.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 9,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "a77eb81de8c53ea2263fe16dfa8aaedb5cfbe1b34ceda26746e599d2e9a89b36",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I am currently somewhere within the five boroughs of New York City."
+      },
+      "nonce": "4cf1d9e2578b612f9cc6332b91fbfaec",
+      "payload": {
+        "hint": "I am currently somewhere within the five boroughs of New York City.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 10,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "712e8f92c0f2c35cb2be67bc220dfa351d4969758be8fff1bd0b6ef6a3d51c83",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past Central Park while you look the wrong way."
+      },
+      "nonce": "f30ddcd6ed38ab0857dfc7461e8f4365",
+      "payload": {
+        "hint": "Slipping past Central Park while you look the wrong way.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 11,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "8ca20d6407723b0d4fa1e002e9a9599b22449071dcbe7afc65db194890e0f8b0",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past the waterfront while you look the wrong way."
+      },
+      "nonce": "fefc4bf10544cead7c035e845bb96ec5",
+      "payload": {
+        "hint": "Slipping past the waterfront while you look the wrong way.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          2,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[2, 4];barriers=[]",
+        "step": 12,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "c513ca868db083a5925a75812cea0c90de30f4634e0eda672ac8d5cd40c8f981",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Taking the long way round by Harlem."
+      },
+      "nonce": "ff51884ebbc6d1e40a8d7b9c968f7982",
+      "payload": {
+        "hint": "Taking the long way round by Harlem.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 13,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "cf26578df913edd81bec84f748784a6ae187a1d002e41edb4864f787b94dbc87",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving through the streets."
+      },
+      "nonce": "d2545f4766c28e04b2395e1f5fa2dea7",
+      "payload": {
+        "hint": "Still moving through the streets.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 14,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "3affc4e150bd4f46139969884498fdd92680f8a69c53b15cb20027d8934e77b8",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near Central Park."
+      },
+      "nonce": "9aab6b4b3c55c188d2f271edf8134ee2",
+      "payload": {
+        "hint": "You will not find me anywhere near Central Park.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 15,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "ada5298ba80371c289c2809435f8e0ff4fd8b8c71bc32bb01d6dc91dbd83cf25",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the Brooklyn Bridge, watching the boats go by."
+      },
+      "nonce": "854a2a52d6f63d16ae050fcd89b70414",
+      "payload": {
+        "hint": "I'm hiding near the Brooklyn Bridge, watching the boats go by.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          2,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[2, 4];barriers=[]",
+        "step": 16,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "63f9a3b73d45c97d9c2363db2b81614b57a9c0b1e9a9aa963599ab8c59cacf0c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving west \u2014 Wall Street is behind me now."
+      },
+      "nonce": "a7196dc0bef3c7a75d60b421065951d6",
+      "payload": {
+        "hint": "Still moving west \u2014 Wall Street is behind me now.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 17,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "5e72544070438fc1df9626e2e8babe9a58bc98aa4f64a4bdc0ba05df074245d8",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the old library on Fifth, watching the crowds."
+      },
+      "nonce": "ff0be7c761cea12452072ff6959c6afd",
+      "payload": {
+        "hint": "I'm hiding near the old library on Fifth, watching the crowds.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 18,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "6ce80f23ef7df351942ee5280527ff49435bbf28214cabdac90d3aef60f096af",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near Harlem."
+      },
+      "nonce": "0595d4973436cdc4d233b6bb2cdffb0f",
+      "payload": {
+        "hint": "You will not find me anywhere near Harlem.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 19,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "f14f5a043538507973a9304fdfdab0bb4b4034349d7ab8977a8566b44146136a",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm heading toward the crowded subway station, you'll never catch me there."
+      },
+      "nonce": "7568e94b0dbd1d34628f62873ec96e87",
+      "payload": {
+        "hint": "I'm heading toward the crowded subway station, you'll never catch me there.",
+        "intent": "lie",
+        "move": "MOVE:W",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 20,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "95a74edf99e989c920261063a4a964f8cd57cb1d010a36d1fac2ec5b3e9bd59e",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past Wall Street while you look the wrong way."
+      },
+      "nonce": "c7f736ad5c19fd0c45772316ae7cd19d",
+      "payload": {
+        "hint": "Slipping past Wall Street while you look the wrong way.",
+        "intent": "lie",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 21,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "1710f5704f4b6f6c9bb258791f6df5793e9fa855ba4d968ac82717a867a30c74",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near the East Village."
+      },
+      "nonce": "74eeb771d6907d99420c9283a4efe13b",
+      "payload": {
+        "hint": "You will not find me anywhere near the East Village.",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 22,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "4814683675789898e92e75b09ed146f5a6a1726595539b9d772fa2b7a31b99e5",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving west \u2014 the waterfront is behind me now."
+      },
+      "nonce": "97e142be4d32a48cf7a6331ff0a8f15b",
+      "payload": {
+        "hint": "Still moving west \u2014 the waterfront is behind me now.",
+        "intent": "lie",
+        "move": "MOVE:N",
+        "position": [
+          2,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[2, 3];barriers=[]",
+        "step": 23,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "0556dd7d47bfdf46b9b464b59ad0884d27237ec240602f4ed59a7b0692c1fc2e",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm by the tall clock near the park, watching the crowd."
+      },
+      "nonce": "3580d0c14f8174dc82899f2e360975ab",
+      "payload": {
+        "hint": "I'm by the tall clock near the park, watching the crowd.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 24,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "112e1727f663f90857de85b077848f68e62811e61da453f57e4310ef6630df17",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving south \u2014 the East Village is behind me now."
+      },
+      "nonce": "d1d58e7a87ae853840e8afb17650fea6",
+      "payload": {
+        "hint": "Still moving south \u2014 the East Village is behind me now.",
+        "intent": "lie",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 25,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "6107f422d560ac16dc3792b1ad8cdf8b8a5e28c1978988d250337fa2dccef6c1",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving through the streets."
+      },
+      "nonce": "8aed780ad232be4dca6496e1a761041e",
+      "payload": {
+        "hint": "Still moving through the streets.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 26,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "8ed2b4f2ea9844d40ba8a612fe0bc21a6b30a477912c0fff773a70d714880c07",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near the waterfront."
+      },
+      "nonce": "83146e66e13bad68c227b6966bf23bdd",
+      "payload": {
+        "hint": "You will not find me anywhere near the waterfront.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 27,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "2bd7c2a4a0293ac7e0540b5f07e2be0c6a9453fc93a25f59705ef6b88a9ce638",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm heading toward the library, but the rain is making me move slow."
+      },
+      "nonce": "e99922fdd32243efa69c5a0391bf15ac",
+      "payload": {
+        "hint": "I'm heading toward the library, but the rain is making me move slow.",
+        "intent": "lie",
+        "move": "MOVE:W",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 28,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "f1ef4a7fe5e19aa6355ec78ed4b9dfcc9ae47ee80331c48cb02436fc43f214f6",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Taking the long way round by Wall Street."
+      },
+      "nonce": "53a2c2bd8aa8de66cb963d884f5cc049",
+      "payload": {
+        "hint": "Taking the long way round by Wall Street.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 29,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "44199cd4939f4f37cffdc29b464b343f87e9029056c8d423b05b7b4a9804b4b9",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past Harlem while you look the wrong way."
+      },
+      "nonce": "3c375188dc3ff50dfbc53e4acae460bb",
+      "payload": {
+        "hint": "Slipping past Harlem while you look the wrong way.",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 30,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "32c26951724003b9eaaa14876f653b7166e185e1dee5058de6d63876fbc2809b",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Still moving north \u2014 Harlem is behind me now."
+      },
+      "nonce": "a999a848c0a574f0730497a8c7da817e",
+      "payload": {
+        "hint": "Still moving north \u2014 Harlem is behind me now.",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 31,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "91d880fc034eac6f6f76456f296bb3a7e63ae2f7e96c3d2c2ab03e37b22d08cd",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the docks, waiting for a boat."
+      },
+      "nonce": "1a10a30af7416876a861e27a8523171c",
+      "payload": {
+        "hint": "I'm hiding near the docks, waiting for a boat.",
+        "intent": "lie",
+        "move": "MOVE:E",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 32,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "cdd1c27dce6878639196bd98e65b7d3e44ad5989fb7c78fe8f853a196114697c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "You will not find me anywhere near the Brooklyn Bridge."
+      },
+      "nonce": "4889cef0fd20d167200b55ceddfb949e",
+      "payload": {
+        "hint": "You will not find me anywhere near the Brooklyn Bridge.",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 33,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "980844b676ff9b5fefe1646944686e4436090cc8051302d10d6d0e2530e8720c",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "I'm hiding near the harbor, watching the boats."
+      },
+      "nonce": "8faba1dff04fa8346f170cc1ca4ce335",
+      "payload": {
+        "hint": "I'm hiding near the harbor, watching the boats.",
+        "intent": "lie",
+        "move": "MOVE:W",
+        "position": [
+          3,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 3];barriers=[]",
+        "step": 34,
+        "sub_game": 3
+      }
+    },
+    {
+      "commit": "630d595879e677e05261a790435343ee7e8948ada0e88cca576b8447b19991bc",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": "Slipping past the waterfront while you look the wrong way."
+      },
+      "nonce": "a1976ef4aa52b4348b5b29d220d6f6e4",
+      "payload": {
+        "hint": "Slipping past the waterfront while you look the wrong way.",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {},
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 35,
+        "sub_game": 3,
+        "win_claim": {
+          "type": "survival"
+        }
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "c52cd5361df01fd07bca047bc3b792c7ce28e3b8479d75a8debda7f4a5ec7535",
+      "nonce": "503377cd7ae149123068508d1ceba743",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-najamjad.json",
+        "github_commit": "ab5cc9236c4ce367da2317abccf264bd8d11c8ef",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 3,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "09edead521925be857ef5e8cf41983ad71f9a593e9aada0c58f430b0643a3082",
+      "nonce": "80539aaf15f58560c9ec67b4f4d95749",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 1,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "43bff6a52f2b5e11fc26e2c45b466b49c27b6efd8cb4c7d98ef53bc022a420bc",
+      "nonce": "5163971afb5d7f253c2c4445b9a3edc7",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 2,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6018756e37cb309bd426ac1416e9f8d80210020cd2fe86d7d29676ecde57142d",
+      "nonce": "1027093c7987f469557c9be17a51a8ea",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 3,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "fa122c86f0d71051a747a20188af0cdf208b15c3487d7b5cde2a938e98abec7d",
+      "nonce": "ef0c94f46a60c23bf4cb8d5896869819",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 4,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "de48f06be8b862696b20726612778ec525d1bdc8aaae92596870be51dfb6ee44",
+      "nonce": "7d8367fbbc731925cba4f9561ef26891",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "9c6d6dfbb46c4e1fe78fa599390a9f255e888192c31d1fb3631e64226cbd97b9",
+        "step": 5,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "c0913d4f186d9707f2af973ab158045bbb46215ef2e7e25cdbbed19c85162d09",
+      "nonce": "11b7a317b60b4d540aaaab2d6cbfcb46",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "afc4c99ab2549d2b590493be906dd363d3eb7d1caf8f50a2ad31db047b5e25a5",
+        "step": 6,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "5d498199581d5be5094d7ed4442554ddd0cca79a8136cc73b1dd2ac3345b113f",
+      "nonce": "b1e26e59e281a5b730499875038bcd97",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "9c6d6dfbb46c4e1fe78fa599390a9f255e888192c31d1fb3631e64226cbd97b9",
+        "step": 7,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "159296193622bcfbe5598ed8eb2159c5bac44759362332f99b1fb0138aef5593",
+      "nonce": "5c69456b6f9db982948924fe87ed15e2",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 8,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "2a7284bd56ec42a7eddea03ed8807ce4e0903faa16cbcdac6d2c3c964d295ead",
+      "nonce": "985439cf07b7c2f87fd3aac69e3c1c2e",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 9,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "893944d3184f87ff010b992fd216a6c4075920aa9f5d6d35aadf361ec8625ae8",
+      "nonce": "64ec82126e7374affc2dc65d8c7ca22c",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 10,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "c07b9a4512a7bce4eb6532e8c4da2f55a2e85242103f883be100e17d8853ed15",
+      "nonce": "07a710931e0a9da2593674aff04fec24",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "9c6d6dfbb46c4e1fe78fa599390a9f255e888192c31d1fb3631e64226cbd97b9",
+        "step": 11,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "a279eca6bb8c13867854c8c26ad5c82b741f4d4d7b6cf3623cfaceaac4e703d4",
+      "nonce": "c3d10045a8adf53c37a0626b997fa9da",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 12,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3fd955185cc516942247e340838a32e251551dec5ca7f673bf2219bfa852de22",
+      "nonce": "a1cc3c473ef7f3382c67a7c4f2c809b9",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 13,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6a2a20a5bd0528df714cdc6d66930bac12972291e0b2b24ce10dc1faecf09a82",
+      "nonce": "c37c92bb87e0ff6401d04f0714598012",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 14,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "825b0f614cd819f970c36542f5eae2a40418819e5de73d04bfe827e961613c08",
+      "nonce": "6bad77c45345dcfec6c435faa1f823b6",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "9c6d6dfbb46c4e1fe78fa599390a9f255e888192c31d1fb3631e64226cbd97b9",
+        "step": 15,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "135d43d0c6afa0c28f143c9849c67d2108491a3cc4135d226a2aacacba0923c4",
+      "nonce": "52e32bdf65ec6798dbddb375e4def2fd",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "864a016687b703f326953eecf4d197d7f5fa49b7fc555a20508444e787abd4ce",
+        "step": 16,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "7dc3332775e179d7829b873e66c44ef225018bbbf340aeeb4faa9a7813025281",
+      "nonce": "31ca1c3f59198d597e734ddee91a282a",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "5db0982617749d6de335f1d30831467020a9eccc4f6e1f8eb2d8fdbb605049bc",
+        "step": 17,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "ea78b53f9b9d4fb530e13a7152f2508e0a124f8f0ee6d7d9e127074dd7ae81f0",
+      "nonce": "091393607a1e4a780d6df75d8875c1d3",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "1d8e04f1e48f4158ce7bc7071771731272eb888dba67153fdb089dfa9061daab",
+        "step": 18,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "1f0fd2208e0fd3df0b71fdf6fee01ba86eb586c98294b44106d9bc04f286c026",
+      "nonce": "163d96f6b770d12eb3f3710baf2619f7",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "64e61c2303445c81f46a1105d94b5801663e8496df3f94720e2329a4df22ea5c",
+        "step": 19,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "c72796642a6ac6dde4b63480cea5d2f4ab67b9717144007a7e12d78aa7bed666",
+      "nonce": "edcc1d32a735cc94bacf52d70a58fc18",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "b5b37ce511eeb6187d7c83b550a205b629309179344b17f7661ba394b545ff4c",
+        "step": 20,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "f7365327ad8401edb28706f3e7f86e72cf2d2d67944f843f4bd7aef798ff19df",
+      "nonce": "00afeddfbe6b441af721bdee0eb5daa1",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 21,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "91fb4c627fa0cc8e652bb6f60ee8ce7ccee46839c4f4b48d83192e6776ff9b0a",
+      "nonce": "47e14c198ad46cff17698475342eaa1a",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 22,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "702a59865d620f2a6a68f2777ceb9fa5345bc1d2d0d75276ee95d3eaf90ddc0a",
+      "nonce": "092318c9218c569a4638b1bd58dd22ce",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "North wind suits me fine today.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 23,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "d931988be924e3a6a2a8dc5edda1e4c38977f00d60c150f3f28efc0242f5adc1",
+      "nonce": "f4ee26b8a7736159567a08fa9a7a550d",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 24,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "bea357b176101ac640e219d3d28abe8e04917d7b58fef457e7f40a6609de33d1",
+      "nonce": "8cb02a2a2c1f1428402fd9eb78021551",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "1c306644757a89f083b37790e001ee75c51fea987ae47776454ea77ac84aa242",
+        "step": 25,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "e830ce17a612681ef05b961c81d70b1f633efb9f1e6f7a915fe251f7f8d4867c",
+      "nonce": "877412c52e81b023377a41666ad29913",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "North wind suits me fine today.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 26,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "9b1ea3e7b12f25b248ac836453b40ae8fcf95d94609c66fc49fdf9bc721c32a9",
+      "nonce": "f203786232d2d23346b387bde6c68cc7",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 27,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3ff26549ce9e3d2bb606d363d8ae10e2ca6407937d65da8796139e59deb66810",
+      "nonce": "a52220d3e1613ffa25ac5527f1477895",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 28,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "571bb7f3812dbeb3746b8085d4b55b74d39cee15f302d979094052671c407758",
+      "nonce": "7ef58f4f315250f2d1e549db9f4c18da",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "642aceb271ffda6562d8e49f6a223728b64219c0f355e4fe2ab7c637042952be",
+        "step": 29,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "993768cb97f08a84b522cb4e5251b2ba8911afca93021ca3df2f9a2bc6b8f742",
+      "nonce": "21ba54f1a1aebef8954e8e8d9bdf6fbf",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "fefcb7c9706e36ebde98f6b4eb869f9cb71e2efebb0f2726328245f2f34b98a3",
+        "step": 30,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "f4e475d45ae1221219cf7e152ca6851079dab2083f2601faa37ca80ca863fd5d",
+      "nonce": "1dbea4898964ab099bffea47a127b64b",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "1c306644757a89f083b37790e001ee75c51fea987ae47776454ea77ac84aa242",
+        "step": 31,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "15a4f9cb7a929694a54bab7c527514facf90422d2048097fe189d157f0bafd92",
+      "nonce": "1f751d220551632d29b9ac7df96e65f7",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "bbf04118cf9d49d9b4b512bfac197b06f240d39eb0de7de98bd98717b3be5dea",
+        "step": 32,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "74066aa051f0fa771a40cadcc753e4a105ef15acf284524159f7f0257f4bfaa5",
+      "nonce": "74420a3b7ce93887c0ce50819fc163a4",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "North wind suits me fine today.",
+        "role": "police",
+        "state_digest": "4b8aa95e480314a81eef86c36e0bbc38cd0d8cd04dbae7426c1feb19bcc6ac3d",
+        "step": 33,
+        "sub_game": 3,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "6a6b888e89760bb7bd35deb2ed179b35374d72c5a4c34be4368364d3a3bc8600",
+      "nonce": "5f7abe624fa212b47774958cdbe8754b",
+      "payload": {
+        "action": {
+          "move": "N",
+          "type": "move"
+        },
+        "hint": "Heading uptown, try to keep up.",
+        "role": "police",
+        "state_digest": "0c5ca9f08652e92f20c81ed58187e277be20384203a4be0748df24fc896aec52",
+        "step": 34,
+        "sub_game": 3,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 3,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "0c5ca9f08652e92f20c81ed58187e277be20384203a4be0748df24fc896aec52",
+    "ended_at": "2026-08-19T13:27:45+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "ab5cc9236c4ce367da2317abccf264bd8d11c8ef",
+    "group_id": "anrbj666",
+    "opponent_group_id": "najamjad",
+    "opponent_info": {
+      "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+      "identity": {
+        "counted_games_played": 5,
+        "counted_matches_played": 5,
+        "counted_matches_remaining": 5,
+        "git_commit_hash": "a8f5f8ecaa11204d94392aff15d8973c25ee4e17",
+        "github_commit": "a8f5f8ecaa11204d94392aff15d8973c25ee4e17",
+        "group_id": "najamjad",
+        "group_name": "NajAmjad",
+        "llm_model": "deepseek-v4-flash",
+        "mcp_servers": {
+          "cop": "https://cop.4laboratory.com/mcp",
+          "thief": "https://thief.4laboratory.com/mcp"
+        },
+        "members": [
+          "Naji Kayal",
+          "Amjad Abed"
+        ],
+        "opponents_already_counted": [
+          "uoh-ay26",
+          "imreeyal",
+          "vibecode",
+          "MOAAMOHA",
+          "nis-yar1"
+        ],
+        "repos": {
+          "cop": "https://github.com/najikay/najamjad-cop",
+          "thief": "https://github.com/najikay/najamjad-thief"
+        },
+        "spec": {
+          "cpu_cores": 8,
+          "cpu_freq_mhz": 2800,
+          "cpu_model": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "gpu_model": "none detected",
+          "gpu_type": "none detected",
+          "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+          "python": "3.12.3",
+          "ram_gb": 7.5,
+          "vram_gb": 0.0
+        }
+      },
+      "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
+      "nonce": "cbc33d00f87513eb2db6abb00c39d2d0",
+      "role": "thief",
+      "scent_model_sha256": "81ebee59640e80eae8ca9ee5f86abd26e7edf5cdbb27d15925cb6ee45ca6ddf4",
+      "signature": "96c62dba01e76d84cd54702f5badaebe1a3aa3f3a75c328a261daea974695d2e",
+      "sub_game_number": 3,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      }
+    },
+    "opponent_step_zero": {
+      "code_version": "1.00",
+      "github_commit": "a8f5f8ecaa11204d94392aff15d8973c25ee4e17",
+      "group_name": "NajAmjad",
+      "model": "deepseek-v4-flash",
+      "opponent_group_id": "anrbj666",
+      "role": "thief",
+      "spec": {
+        "cpu_cores": 8,
+        "cpu_freq_mhz": 2800,
+        "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+        "gpu_type": "none detected",
+        "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+        "python": "3.12.3",
+        "ram_gb": 7.5,
+        "vram_gb": 0.0
+      },
+      "step": 0,
+      "sub_game": 3,
+      "tokens_total": 5116,
+      "type": "system_spec"
+    },
+    "outcome": "survival",
+    "rival_trail_track": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "role": "police",
+    "scent_readings_refused": 0,
+    "started_at": "2026-08-19T13:25:54+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 35,
+    "turns_completed": 35
+  },
+  "wire_shape": "reference"
+}
