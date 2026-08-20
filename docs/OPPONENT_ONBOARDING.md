@@ -1,8 +1,9 @@
 # Opponent onboarding — kit conformance and how a pairing gets verified
 
 Cross-team play is where this project's engineering was actually tested, and
-the league's interop kit (copthief-league-protocol) is the instrument that made
-it testable. This document records two things: our part in building that
+the league's interop kit —
+[copthief-league-protocol](https://github.com/Imreec/copthief-league-protocol)
+— is the instrument that made it testable. This document records two things: our part in building that
 instrument, and the checklist every opponent went through against it before we
 played them. Each step names the real case that proved it necessary.
 

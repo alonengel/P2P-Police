@@ -169,5 +169,8 @@ live in `docs/evidence/`:
 - [x] Truthful hardware declaration (registry VRAM, real CPU freq/GPU) + llm_model names the provider; inbound hint VIEW capped at the signed word limit (audit comparisons untouched)
 - [x] Counted game.json draft ready and rival-reviewed (docs/drafts/game.counted.json - agreed_between anrbj666/imreeyal; adopt byte-identically at T)
 - [x] Rival-repo rulebook audit run (their request-symmetric): disqualification tier clean; findings shared (stale M0 README, fifth-artifact citation, dual game-id residue)
-- [ ] COUNTED series vs imreeyal: T to be named this week (deadline 2026-08-12)
-- [ ] COUNTED series vs team #2: scheduled for the weekend
+- [x] COUNTED series vs imreeyal: played and filed 2026-08-04 — 90-30, 6-0
+- [x] COUNTED series vs team #2 (vibecode): played and filed 2026-08-08 — 75-35, 5-1
+- [x] COUNTED series vs uoh-sqak: played and filed 2026-08-17 — 90-30, 6-0, diversity reward
+- [x] COUNTED series vs best2934: played and filed 2026-08-20 (deadline night) — 90-30, 6-0, diversity reward; digests matched digit-for-digit, filings cross-forwarded
+- [x] League campaign COMPLETE: 4 counted, 4 wins, rule-52 minimum doubled; kit conformance + pairing verification process documented in docs/OPPONENT_ONBOARDING.md (kit: https://github.com/Imreec/copthief-league-protocol)

@@ -166,7 +166,11 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   turn alternation with deadlines makes unbounded loops unrepresentable.
   (MCP is the project's mandated protocol; A2A and ACP are the complementary
   standards worth knowing for lifecycle handoff and zero-trust fleets.)
-- **A cross-team protocol contribution.** Reviewing a rival league team's
+- **A cross-team protocol contribution** — the league interop kit,
+  [copthief-league-protocol](https://github.com/Imreec/copthief-league-protocol),
+  co-developed with team imreeyal and carrying our credited findings
+  throughout its SPEC (see `docs/OPPONENT_ONBOARDING.md` for the full
+  list). It began with this review: examining the rival team's
   draft interop protocol, we identified that per-step commits — strong
   against editing one step — leave a whole log re-forgeable offline, and
   designed the fix: a `prev`/`prev_recv` hash interlock chaining both
@@ -194,8 +198,8 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
-- **League record: THREE counted games, all filed, all won** (rule 52's
-  minimum of two counted games vs different teams — exceeded):
+- **League record: FOUR counted games, all filed, all won** (rule 52's
+  minimum of two counted games vs different teams — doubled):
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
     (league report `19fc9a53c7f458f9`; evidence commit
     [`67741d8`](https://github.com/alonengel/P2P-Police/commit/67741d8));
@@ -209,7 +213,18 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     pairing's agreed inverse parity (our thief opened sub-game 1) after two
     6-0 friendlies the same evening; the first artifact pair in the league
     with both `github_commit` columns populated per window from the sealed
-    step-0s of each side.
+    step-0s of each side;
+  - `anrbj666-vs-best2934` — **90-30, 6-0 + the diversity reward**, filed
+    2026-08-20 on deadline night (league report `1a020b7e99d9d832`;
+    evidence commit
+    [`5020dc0`](https://github.com/alonengel/P2P-Police/commit/5020dc0)),
+    after a seven-series friendly campaign in which five interop defects
+    on the rival's side were found from wire evidence, named to the exact
+    call site, fixed and negative-controlled before the counted — the
+    whole exchange public on
+    [kit issue #49](https://github.com/Imreec/copthief-league-protocol/issues/49);
+    consensus digests matched digit-for-digit and both filed reports were
+    cross-forwarded operator-to-operator.
   All series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
   true` with byte-identical hashes across the two teams' independently
   emitted results, diversity flag earned on all first meetings. Browse

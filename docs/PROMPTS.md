@@ -1419,3 +1419,22 @@ fully complete filed artifact pair (both commit columns populated per window,
 their sealed revision fetchable and byte-verified against play); their prose
 counter slip ("yours 3 going in, filing as 4") caught pre-settlement, filed
 correctly as {3,3}; evidence archived under docs/evidence/counted_games/uoh-sqak/.
+
+## 2026-08-20 — deadline night: the best2934 endgame (counted #4)
+
+Operator-driven session, agent prompts logged in substance: (1) "make sure we
+are ready against best2934 code wise" — full Salah-era config audit caught the
+stale constitution minutes before T; (2) root-causing twelve TAMPERED windows:
+recompute their published artifacts under every registered commit construction
+(19/19 merged vs 0/19 pipe), then pin their step-0 seal to the exact call
+sites (both of them, one fix apart); (3) "does it really sit on their side and
+we don't drift?" — four-way no-drift proof (own records 35/35, their bytes
+19/19 under merged, four passing rivals, their diff not touching the file);
+(4) declared-form verifier shipped on our side (verify under the rival's
+declared construction; refusals name the failed record and expected form);
+(5) counted end-to-end: operator word transcribed, T slid once when their
+readiness comment was late, joint pre-arm check (real loadout, interlock,
+clean trees), 90-30 6-0 + diversity, digests matched digit-for-digit,
+filings cross-forwarded; (6) docs: OPPONENT_ONBOARDING.md (kit co-authorship
++ conformance checklist), README/TODO brought current. Kit thread:
+https://github.com/Imreec/copthief-league-protocol/issues/49
