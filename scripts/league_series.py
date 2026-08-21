@@ -99,7 +99,7 @@ def run_window(window: int, seed_base: int | None, runner,
 
 
 
-def wait_for_previous(window: int, since: float, timeout_sec: float = 600.0) -> bool:
+def wait_for_previous(window: int, since: float, timeout_sec: float = 1800.0) -> bool:
     """Series tempo: window N launches only after sub-game N-1's log exists
     (either repo's results dir, fresher than this run) - the series is ONE
     sequence across both roles, and a window that starts its budget before
