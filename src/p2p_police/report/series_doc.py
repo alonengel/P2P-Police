@@ -9,6 +9,7 @@ declaration file, and this document carries the flat id pair only.
 """
 
 from p2p_police.domain import game_ids
+from p2p_police.report import peer_tokens
 from p2p_police.report.artifacts import symmetric_outcome_signature
 
 _SCHEMA = ("Summary and final result for the WHOLE series between two teams: "
@@ -31,8 +32,9 @@ def _names(summary: dict) -> tuple[str, str, str, str]:
     return me, them, role, other
 
 
-def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
-    """One reference-keyed sub_games[] entry from one settled log."""
+def _entry(parsed: dict, score_table, our_identity: dict, peer_usage) -> dict:
+    """One reference-keyed sub_games[] entry from one settled log;
+    peer_usage: int | None — that window's chain-priced rival spend."""
     summary = parsed["summary"]
     me, them, role, other = _names(summary)
     cop_points, thief_points = score_table.points_for_name(summary["outcome"])
@@ -60,8 +62,11 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
                           them: (summary.get("opponent_step_zero") or {})
                           .get("github_commit")
                           or identity.get("github_commit", "unknown")},
+        # ours from this window's summary meter; THEIRS priced from its
+        # sealed step-zero chain — a tail window with no successor seal is
+        # null, never a fabricated 0 (najamjad diff 2026-08-22)
         "tokens": {me: int(summary.get("tokens_total") or 0),
-                   them: int(identity.get("tokens_total") or 0)},
+                   them: peer_usage},
         "score": score,
         "log_files": {me: parsed["file"], them: parsed["file"]},
         "audit": {"log_verified": summary.get("audit") == "Verified OK",
@@ -69,7 +74,7 @@ def _entry(parsed: dict, score_table, our_identity: dict) -> dict:
     }
 
 
-def _groups(by_slot: dict) -> tuple[list[str], str]:
+def _groups(by_slot: dict) -> tuple[list[str], str, str]:
     """The RESULT file's groups field: the flat id pair, sample-verbatim.
 
     The book's attached example (docs/sample-run/result_*.json) homes team
@@ -78,7 +83,7 @@ def _groups(by_slot: dict) -> tuple[list[str], str]:
     it made two honest reports diff on shape, and the schema already has a
     file for identity (2026-08-01 report-diff with imreeyal)."""
     me, them, _, _ = _names(by_slot[min(by_slot)]["summary"])
-    return [me, them], them
+    return [me, them], me, them
 
 
 def _repo_map(by_slot: dict, our_identity: dict) -> dict:
@@ -110,22 +115,22 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
     """Assemble the full reference-conformant result document. The
     mutual_agreement sha256 is sign-then-insert over the rest of the doc
     (ADR-0004 settlement form); confirmed = every sub-game audit clean."""
-    groups, them = _groups(by_slot)
-    sub_games = [_entry(by_slot[n], score_table, our_identity)
+    groups, me, them = _groups(by_slot)
+    usage = peer_tokens.usage_by_slot(by_slot)
+    sub_games = [_entry(by_slot[n], score_table, our_identity, usage.get(n))
                  for n in sorted(by_slot)]
     totals: dict[str, int] = {}
     won: dict[str, int] = {}
-    tokens: dict[str, int] = {}
     ties = 0
     for entry in sub_games:
         for group, points in entry["score"].items():
             totals[group] = totals.get(group, 0) + points
             won.setdefault(group, 0)
-            tokens[group] = tokens.get(group, 0) + entry["tokens"][group]
         if entry["winner_group"] is None:
             ties += 1
         else:
             won[entry["winner_group"]] += 1
+    tokens = peer_tokens.totals_by_name(sub_games)
     names = sorted(totals)
     series_tie = len(names) == 2 and totals[names[0]] == totals[names[1]]
     if series_tie:
@@ -134,7 +139,6 @@ def build_series_result(game_id: str, game_uid: str, by_slot: dict,
         winner = None
     else:
         winner = max(totals, key=lambda group: totals[group])
-    me = next(g for g in groups if g != them)
 
     # Rules 37-38 declarations, INCLUDING this game: ours from our config's
     # declared count, theirs the largest count any window's handshake declared

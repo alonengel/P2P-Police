@@ -41,7 +41,8 @@ def test_two_game_sweep_totals_winner_and_real_uid(tmp_path: Path) -> None:
     assert final["total_score"] == {"alpha": 10, "beta": 20}
     assert final["winner_group"] == "beta" and not final["series_tie"]
     assert final["sub_games_won"] == {"alpha": 0, "beta": 2}
-    assert final["tokens_total_series"] == {"alpha": 0, "beta": 0}
+    # no step-zero token chain from the peer -> null, never a false zero
+    assert final["tokens_total_series"] == {"alpha": 0, "beta": None}
 
 
 def test_series_tie_pays_tie_score(tmp_path: Path) -> None:
