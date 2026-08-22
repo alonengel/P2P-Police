@@ -35,6 +35,11 @@ def play_tape(seed: int, game: str):
     tape = _TAPES[game]
     engine = GameEngine(7, (0, 0), (3, 3), RULES)
     config = Config.load("config")
+    # Hermetic: the endgame's WALL-CLOCK cap must never decide a recorded
+    # rehearsal — coverage tracing shrinks 150ms of search to a third and
+    # the solver defers mid-hunt (g01surv seed 0 converted at 34 under
+    # --cov, 21 without, 2026-08-22). The node cap still bounds the search.
+    config.private.setdefault("strategy", {}).setdefault("endgame", {})["time_cap_ms"] = 60000
     brain = PoliceBrain(Role.POLICE, random.Random(seed), config)
     percep = Perception.for_peer(Role.POLICE, config)
     moves, hints = tape["moves"], tape["hints"]
