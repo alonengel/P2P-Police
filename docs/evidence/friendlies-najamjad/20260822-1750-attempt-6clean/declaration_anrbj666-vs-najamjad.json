@@ -1,0 +1,89 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "c07f61c925859bbc98c0263ac2f7e5fdf204317d0733d0a25a81ca9f6f0827c8",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-22T14:52:08+00:00",
+  "game_ended_at": "2026-08-22T14:52:08+00:00",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_started_at": "2026-08-22T14:48:07+00:00",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "groups": {
+    "group_1": {
+      "code_version": "1.00",
+      "counted_games_played": 3,
+      "github_commit": "2061d8d08500b153c760974b64ce71bfbd8f843f",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:a9b81db50969e3d2713066792256974cbf4df87eae737d226e255e3e582472ab"
+    },
+    "group_2": {
+      "counted_games_played": 6,
+      "github_commit": "24e902c5859bf3fedf21983cc618eef8127ac342",
+      "group_id": "najamjad",
+      "group_name": "NajAmjad",
+      "hardware_spec": {
+        "cpu_cores": 8,
+        "cpu_freq_mhz": 2800,
+        "cpu_model": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+        "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+        "gpu_model": "none detected",
+        "gpu_type": "none detected",
+        "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+        "python": "3.12.3",
+        "ram_gb": 7.5,
+        "vram_gb": 0.0
+      },
+      "hardware_spec_sha256": "",
+      "llm_model": "deepseek-v4-flash",
+      "mcp_servers": {
+        "cop": "https://cop.4laboratory.com/mcp",
+        "thief": "https://thief.4laboratory.com/mcp"
+      },
+      "members": [
+        "Naji Kayal",
+        "Amjad Abed"
+      ],
+      "repos": {
+        "cop": "https://github.com/najikay/najamjad-cop",
+        "thief": "https://github.com/najikay/najamjad-thief"
+      },
+      "signature": "undeclared"
+    }
+  },
+  "links": {
+    "config": "config_anrbj666-vs-najamjad_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-najamjad.json",
+    "log": "log_anrbj666-vs-najamjad_g<NN>.json",
+    "result": "result_anrbj666-vs-najamjad.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}

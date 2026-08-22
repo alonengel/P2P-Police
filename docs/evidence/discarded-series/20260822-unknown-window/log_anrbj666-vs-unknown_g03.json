@@ -1,0 +1,48 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-unknown",
+  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [],
+  "records": [],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 3,
+  "summary": {
+    "audit": "unavailable (technical loss)",
+    "audit_disclosure": "failed: DeadlineExpiredError: opponent at https://thief.4laboratory.com/mcp unreachable until deadline: Server error '502 Bad Gateway' for url 'https://thief.4laboratory.com/mcp'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502",
+    "digest_match": false,
+    "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+    "ended_at": "2026-08-22T14:09:05+00:00",
+    "failure": "DeadlineExpiredError: opponent at https://thief.4laboratory.com/mcp unreachable until deadline: Server error '502 Bad Gateway' for url 'https://thief.4laboratory.com/mcp'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "2061d8d08500b153c760974b64ce71bfbd8f843f",
+    "group_id": "anrbj666",
+    "opponent_group_id": "unknown",
+    "outcome": "technical_loss",
+    "role": "police",
+    "started_at": "2026-08-22T13:40:36+00:00",
+    "steps_sealed": 0,
+    "turns_completed": 0
+  },
+  "wire_shape": "reference"
+}

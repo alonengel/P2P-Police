@@ -1,0 +1,35 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "agreement": {
+    "config_sha256": "6ce85c0cac1f2a30cb8fded4bd56c3e63faa88ce3371f6e3a0678a05f46096ce",
+    "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9"
+  },
+  "audit": "unavailable (technical loss)",
+  "consensus_signature": "a4e04e1397b99f09eaa94140c595a7b9cfea8db51229ad8b070266ca2485fa7c",
+  "digest_match": false,
+  "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+  "game_id": "anrbj666-vs-unknown",
+  "game_uid": "31449b96-ead2-fe7b-71c6-b7cf0ff64ebc",
+  "github_commit": "2061d8d08500b153c760974b64ce71bfbd8f843f",
+  "group_id": "anrbj666",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "mcp_servers": {
+    "cop": "https://cop-mcp.alon.website/mcp",
+    "thief": "https://thief-mcp.alon.website/mcp"
+  },
+  "opponent_group_id": "unknown",
+  "outcome": "technical_loss",
+  "report_type": "result",
+  "reported_at": "2026-08-22T14:09:05+00:00",
+  "schema_version": "1.00",
+  "score": {
+    "cop": 0,
+    "thief": 0
+  },
+  "tokens_total": 0,
+  "turns_completed": 0,
+  "winner_group": "unknown"
+}
