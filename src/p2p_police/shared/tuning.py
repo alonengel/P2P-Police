@@ -38,7 +38,21 @@ INFO_GAIN_DEFAULTS: dict = {
 }
 
 
+PURSUIT_DEFAULTS: dict = {
+    "w_safe_region": 0.0,          # compression term (strategy/region_race.py,
+    #                                imreeyal-studied): price the believed
+    #                                thief's safe ground beside distance. 0.0
+    #                                keeps the decision stream byte-identical;
+    #                                arm per pairing only after a tape sweep.
+}
+
+
 TRAP_DEFAULTS: dict = {
+    "reserve": 0,                  # barriers held back from the trap gate for
+    #                                the endgame solver's finishing walls
+    #                                (imreeyal's contain_reserve lesson: the
+    #                                2-wall corner seal must stay affordable).
+    #                                0 = historical behavior.
     "escape_limit": 3,             # wall only a thief down to this many exits...
     "range": 3,                    # ...and already this close in BFS steps
     #                                Both were 2 while the posterior was too
@@ -110,9 +124,28 @@ def _merge(defaults: dict, block: dict) -> dict:
     return merged
 
 
+PERCEPTION_DEFAULTS: dict = {
+    "floor_tolerance_eps": 0.006,  # residues at/under this may legally read 0
+    #                                (najamjad 2026-08-22: their serializer
+    #                                floors ~0.005; refusing those frames risks
+    #                                a false latch — peer/floor_tolerance.py)
+}
+
+
 def endgame_table(private: dict) -> dict:
     """[strategy.endgame] from a private-config dict, defaults filled in."""
     return _merge(ENDGAME_DEFAULTS, private.get("strategy", {}).get("endgame", {}))
+
+
+def perception_table(private: dict) -> dict:
+    """[strategy.perception] scent-trust knobs (private, never signed terms)."""
+    return _merge(PERCEPTION_DEFAULTS,
+                  private.get("strategy", {}).get("perception", {}))
+
+
+def pursuit_table(private: dict) -> dict:
+    """[strategy.pursuit] chase-shaping knobs (private, never signed terms)."""
+    return _merge(PURSUIT_DEFAULTS, private.get("strategy", {}).get("pursuit", {}))
 
 
 def info_gain_table(private: dict) -> dict:
