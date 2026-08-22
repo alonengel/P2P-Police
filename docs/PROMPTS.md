@@ -1438,3 +1438,24 @@ clean trees), 90-30 6-0 + diversity, digests matched digit-for-digit,
 filings cross-forwarded; (6) docs: OPPONENT_ONBOARDING.md (kit co-authorship
 + conformance checklist), README/TODO brought current. Kit thread:
 https://github.com/Imreec/copthief-league-protocol/issues/49
+
+## 2026-08-22 afternoon - the token-truth fix (najamjad report diff)
+
+Operator prompt: "lets fix the token bug. and then I'll send the message."
+Agent prompts in substance: (1) locate every token-accounting site - the
+series reader took peer tokens from the negotiate identity (a field that
+never existed there) and coerced the miss to 0, filing najamjad's truthful
+27,866 as zero; (2) decode their wire semantics from today's six logs:
+step-zero tokens_total is CUMULATIVE usage at window start per role
+process - the four checkable chain deltas (5010/4273/5073/4163) reproduce
+their emailed per-window claims digit-for-digit; (3) TDD report/peer_tokens
+- next same-role snapshot minus this one's, chain tails and gaps file null
+(never a fabricated number), series total only when every window is known;
+(4) declare our own side symmetrically - the step-zero seal and the window
+summary now carry the real talk-meter total (we never declared; they filed
+our 0 by assumption); (5) chasing a full-suite-only test failure landed on
+a REAL latent bug unrelated to tokens: the endgame solver's 150ms
+wall-clock cap starves under coverage tracing (seed-0 tape converting at
+34 instead of 21) - the nisyar1 rehearsal now pins the cap out so only the
+node budget bounds it, proven stash-independent before the pin. Paired-port
+to the sibling in the same session.
