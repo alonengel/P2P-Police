@@ -17,11 +17,18 @@ from p2p_police.domain import protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.pathfind import UNREACHABLE, bfs_distances
 from p2p_police.domain.primitives import Cell, Move, Role
-from p2p_police.shared.tuning import endgame_table, info_gain_table, trap_table
+from p2p_police.shared.tuning import (
+    endgame_table,
+    info_gain_table,
+    pursuit_table,
+    trap_table,
+)
+from p2p_police.strategy.arena_thief import ThiefForArena  # noqa: F401 (re-export)
 from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.endgame import EndgameSolver
 from p2p_police.strategy.info_gain import expected_gain
 from p2p_police.strategy.intercept import intercept_target, unit_velocity
+from p2p_police.strategy.region_race import safe_region_size
 
 
 class PoliceBrain(BrainBase):
@@ -33,6 +40,7 @@ class PoliceBrain(BrainBase):
         self.endgame = EndgameSolver(endgame_table(private))
         self.info_gain = info_gain_table(private)
         self.trap = trap_table(private)
+        self.pursuit = pursuit_table(private)
         self._prev_peak: Cell | None = None  # last belief peak, for velocity
         self._prev_vel = None  # last unit velocity, for the steady-heading gate
         self._contact_dwell = 0  # consecutive sharp knife-range turns
@@ -82,25 +90,33 @@ class PoliceBrain(BrainBase):
                 distances = bfs_distances(engine.board, cut)
 
         blend = belief is not None and self.info_gain["enabled"]
-        best_move, best_score = Move.STAY, self._score(me, distances, belief, blend)
+        best_move, best_score = Move.STAY, self._score(me, thief, engine, distances,
+                                                       belief, blend)
         for move in self.rng.sample(list(Move), k=len(Move)):  # tie-break randomly
             target = move.applied_to(me)
             if move is Move.STAY or not engine.board.is_passable(target):
                 continue
-            score = self._score(target, distances, belief, blend)
+            score = self._score(target, thief, engine, distances, belief, blend)
             if score is not None and (best_score is None or score > best_score):
                 best_move, best_score = move, score
         return protocol.move_action(best_move)
 
-    def _score(self, cell: Cell, distances: dict, belief, blend: bool) -> float | None:
+    def _score(self, cell: Cell, thief: Cell, engine: GameEngine, distances: dict,
+               belief, blend: bool) -> float | None:
         """Pursuit score: closer is better; when blind, landings whose scent
-        reading would sharpen the belief earn their information's worth."""
+        reading would sharpen the belief earn their information's worth.
+        Armed w_safe_region additionally prices the thief's SAFE GROUND
+        (region_race): among equal-distance approaches, take the one that
+        removes exits — compression without spending walls."""
         distance = distances.get(cell, UNREACHABLE)
         if distance == UNREACHABLE:
             return None
         score = -float(distance)
         if blend:
             score += self.info_gain["weight"] * expected_gain(belief, cell, self.info_gain)
+        if self.pursuit["w_safe_region"]:
+            score -= self.pursuit["w_safe_region"] * safe_region_size(
+                engine.board, thief, cell)
         return score
 
     def _trap_barrier(self, engine: GameEngine, me: Cell, thief: Cell,
@@ -115,7 +131,9 @@ class PoliceBrain(BrainBase):
         never cornered and never will be; quota spent on it is quota earned
         (live g01 2026-08-11: 14 contact turns, zero walls, survival)."""
         released = dwell >= self.trap["dwell_release"]
-        if len(engine.board.barriers) >= engine.rules.max_barriers:
+        # reserve: walls held back for the endgame solver's finishing seal
+        # (imreeyal's contain_reserve lesson) — 0 keeps historical behavior
+        if len(engine.board.barriers) >= engine.rules.max_barriers - self.trap["reserve"]:
             return None
         if my_distance == UNREACHABLE or my_distance > self.trap["range"]:
             return None
@@ -176,22 +194,3 @@ class _Blocked:
 
     def distance(self, start: Cell, goal: Cell) -> int:
         return bfs_distances(self, start).get(goal, UNREACHABLE)
-
-
-class ThiefForArena(BrainBase):
-    """Evasion sparring partner for OUR self-play arena only (the real thief
-    brain lives in the P2P-Thief repo): maximize BFS distance from the cop."""
-
-    def decide(self, engine: GameEngine, belief=None) -> dict:
-        cop = belief.argmax_cell() if belief is not None else engine.positions[Role.POLICE]
-        me = engine.positions[Role.THIEF]
-        distances = bfs_distances(engine.board, cop)
-        best_move, best = Move.STAY, distances.get(me, 0)
-        for move in self.rng.sample(list(Move), k=len(Move)):
-            target = move.applied_to(me)
-            if move is Move.STAY or not engine.board.is_passable(target):
-                continue
-            distance = distances.get(target, 0)
-            if distance > best:
-                best_move, best = move, distance
-        return protocol.move_action(best_move)

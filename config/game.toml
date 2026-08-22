@@ -99,7 +99,23 @@ tunnel_downtime_seconds = 6.0       # how long the tunnel stays dead before rest
 tunnel_name = "copthief"            # named tunnel (docs/DEPLOYMENT.md); hostnames from [game].mcp_servers
 cloudflared_exe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 
+[strategy.pursuit]              # chase shaping (mechanism studied from imreeyal, re-implemented;
+                                # ADR-0013 + strategy/region_race.py)
+w_safe_region = 0.0             # price the believed thief's SAFE GROUND beside distance:
+                                # among equal-distance approaches take the one removing exits.
+                                # KEEP-GATE VERDICT 2026-08-22 - DEFAULT OFF: the recorded-tape
+                                # sweep loved it (55/55 kept, mean conversion t15.7 -> t12.0 at
+                                # 0.15) but the percher mimics collapse under it (0/10, was 10/10)
+                                # and the live-dodger drill drops 6/15 - against a STATIONARY
+                                # thief the term rewards containment hovering over walking the
+                                # landing in. Same shape as imreeyal's w_intercept verdict: a
+                                # per-pairing option vs pure runner classes, never a default.
+                                # najamjad's endgame PARKS - never arm it for that pairing.
+
 [strategy.trap]                 # barrier gate: when a placement is worth its quota (same keep-gate doc)
+reserve = 2                     # walls held back for the endgame solver's finishing seal
+                                # (imreeyal's contain_reserve lesson: the 2-wall corner pin must
+                                # stay affordable; drill matrix 2026-08-22 below)
 escape_limit = 3                # wall a thief already down to this many escape routes...
 range = 3                       # ...and this close in barrier-aware BFS steps.
                                 # Both were 2 while the posterior was too blunt to justify a

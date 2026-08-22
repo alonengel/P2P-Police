@@ -19,9 +19,30 @@ from p2p_police.domain import protocol
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.pathfind import UNREACHABLE, bfs_distances
 from p2p_police.domain.primitives import Move, Role
+from p2p_police.strategy.brain_base import BrainBase
 from p2p_police.strategy.rl_deep import Mlp
 
 ARENA_WEIGHTS = Path(__file__).resolve().parents[3] / "data" / "arena_thief_weights.json"
+
+
+class ThiefForArena(BrainBase):
+    """Evasion sparring partner for OUR self-play arena only (the real thief
+    brain lives in the P2P-Thief repo): maximize BFS distance from the cop.
+    Home moved from police_brain.py for the 150-line cap (re-exported there)."""
+
+    def decide(self, engine: GameEngine, belief=None) -> dict:
+        cop = belief.argmax_cell() if belief is not None else engine.positions[Role.POLICE]
+        me = engine.positions[Role.THIEF]
+        distances = bfs_distances(engine.board, cop)
+        best_move, best = Move.STAY, distances.get(me, 0)
+        for move in self.rng.sample(list(Move), k=len(Move)):
+            target = move.applied_to(me)
+            if move is Move.STAY or not engine.board.is_passable(target):
+                continue
+            distance = distances.get(target, 0)
+            if distance > best:
+                best_move, best = move, distance
+        return protocol.move_action(best_move)
 
 
 class PerfectEvader:
