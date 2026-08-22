@@ -27,6 +27,10 @@ def seal_step_zero(rt) -> None:
         "role": rt.role.value,
         "sub_game_number": rt.exchange.sub_game,
         "github_commit": git_commit_hash(),
+        # CUMULATIVE usage at seal time (najamjad chain semantics,
+        # 2026-08-22): the rival prices our window as its next same-role
+        # snapshot minus this one — real meter, never a constant (rule 50)
+        "tokens_total": rt.talk.meter.total,
     })
 
 

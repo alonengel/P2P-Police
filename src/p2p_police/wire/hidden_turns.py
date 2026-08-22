@@ -50,10 +50,8 @@ def my_half_turn(rt) -> None:
     rt.deceiver.observe_own(rt.own, claim)
     rt.fsm.transition(GamePhase.VERIFYING)
     rt.fsm.transition(GamePhase.WAITING_FOR_OPPONENT)
-    if captured:
-        rt.own.outcome = Outcome.CAPTURE
-    elif win:
-        rt.own.outcome = Outcome.SURVIVAL
+    if captured or win:
+        rt.own.outcome = Outcome.CAPTURE if captured else Outcome.SURVIVAL
     rt.perception.emit(rt.own, step)
 
 
@@ -160,11 +158,16 @@ def finish(rt) -> dict:
     except GameRuleError:
         verdict = "TAMPERED"  # illegal revealed physics voids the audit
     percep = getattr(rt, "perception", None)
+    talk = getattr(rt, "talk", None)
     return {
         "role": rt.role.value,
         "started_at": getattr(rt, "started_at", None),
         "outcome": rt.own.outcome.value,
         "turns_completed": rt.own.turns_completed,
+        # OUR real spend this window (rule 50): the meter when a talk chain
+        # exists, an honest 0 when none does — the series report's own-side
+        # column reads this key (najamjad diff 2026-08-22)
+        "tokens_total": talk.meter.total if talk else 0,
         "end_state_digest": end_digest,
         "digest_match": digest_match,
         "audit": verdict,

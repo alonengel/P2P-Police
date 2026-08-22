@@ -72,6 +72,22 @@ def test_forged_foreign_reveal_still_renders_tampered() -> None:
     assert report["digest_match"] is False
 
 
+def test_summary_declares_own_token_usage_from_the_meter() -> None:
+    """The window summary carries OUR real spend (rule 50): the talk meter
+    when a chain exists, an honest 0 when none does — the series report's
+    own-side column reads this, never a constant (najamjad diff 2026-08-22:
+    a summary without the key coerced every own row to an unread 0)."""
+    walk = rival_walk()
+    exchange = exchange_with_live_commits(walk)
+    theirs = {"sender": "thief", "records": [reference_spec_record(), *walk],
+              "result_claim": "survival"}
+    metered = stub_runtime(exchange, theirs, [])
+    metered.talk = SimpleNamespace(meter=SimpleNamespace(total=42))
+    assert hidden_turns.finish(metered)["tokens_total"] == 42
+    bare = hidden_turns.finish(stub_runtime(exchange, theirs, []))
+    assert bare["tokens_total"] == 0
+
+
 def test_our_audit_message_is_the_reference_envelope_exactly() -> None:
     walk = rival_walk()
     exchange = exchange_with_live_commits(walk)
