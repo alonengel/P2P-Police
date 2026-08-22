@@ -36,6 +36,7 @@ def test_an_honest_trail_is_never_refused_over_a_whole_game() -> None:
         engine.thief_move(move)
         perception.observe(engine, Role.THIEF, None)
     assert perception.refused_readings == 0
+    assert perception.refused_steps == []  # names every refused rival turn
     assert perception.scent_trusted
 
 
@@ -57,6 +58,9 @@ def test_a_trail_that_breaks_the_movement_model_latches_off() -> None:
     engine.thief_move(Move.STAY)
     perception.observe(engine, Role.THIEF, None)  # honest-looking, still refused
     assert perception.refused_readings == 2
+    # the refusal INDEX log names the exact rival turns (najamjad g05
+    # 2026-08-22: "your unindexed pair" cost a day of cross-attribution)
+    assert perception.refused_steps == [1, 2]
     assert perception.belief.values() != before  # diffusion still runs
 
 

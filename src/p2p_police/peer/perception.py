@@ -60,7 +60,11 @@ class Perception:
         # this path is a self-inflicted denial of service.
         self._anchor = tuple(rival_start) if rival_start is not None else None
         self._anchor_age = 0
-        self.refused_readings = 0  # evidence counter, surfaced in the summary
+        # Evidence surfaced in the summary: how many refusals, and WHICH
+        # rival turns (1-based) — rule-36 evidence must name frames
+        # (najamjad g05 2026-08-22: an unindexed pair cost a day of
+        # cross-attribution both ways)
+        self.refused_readings, self.refused_steps = 0, []
         self.scent_trusted = True  # latches false on a physically impossible reading
         self._previous_field: list | None = None  # last accepted frame
         # law-break streak; unique law-solved emitter; per-turn emitter track
@@ -125,6 +129,7 @@ class Perception:
         self._previous_field = rival_scent.values()
         if broken or not self.scent_trusted:
             self.refused_readings += 1
+            self.refused_steps.append(self._anchor_age)
             return  # belief runs on diffusion, hints and barrier origins only
         self.belief.observe_scent(rival_scent, engine.board)
         # Hint tiers: directional claim first; place-name talk falls through

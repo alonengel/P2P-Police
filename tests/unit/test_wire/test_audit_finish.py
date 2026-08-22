@@ -59,6 +59,7 @@ def test_foreign_schema_rival_half_renders_verified_ok() -> None:
     assert report["audit"] == "Verified OK"
     assert report["digest_match"] is None
     assert report["end_state_digest"] == "ab" * 32  # our own construction stands
+    assert report["scent_refused_steps"] == []  # index log rides every summary
 
 
 def test_forged_foreign_reveal_still_renders_tampered() -> None:

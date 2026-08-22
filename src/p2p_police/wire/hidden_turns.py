@@ -157,8 +157,7 @@ def finish(rt) -> dict:
         pass
     except GameRuleError:
         verdict = "TAMPERED"  # illegal revealed physics voids the audit
-    percep = getattr(rt, "perception", None)
-    talk = getattr(rt, "talk", None)
+    percep, talk = getattr(rt, "perception", None), getattr(rt, "talk", None)
     return {
         "role": rt.role.value,
         "started_at": getattr(rt, "started_at", None),
@@ -176,6 +175,7 @@ def finish(rt) -> dict:
         # readings we refused as physically impossible. Zero on every honest
         # game ever measured; non-zero is a claim a third party can check.
         "scent_readings_refused": getattr(percep, "refused_readings", 0),
+        "scent_refused_steps": getattr(percep, "refused_steps", []),
         # Where the rival's OWN transmitted trail placed it each turn (the
         # emitter that solves its frame transition under the signed update
         # law). Diffed at audit against the positions it reveals: an honest
