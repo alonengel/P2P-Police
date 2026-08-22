@@ -45,6 +45,17 @@ Three mechanisms adopted, each re-implemented in our own idiom:
    in code; armed at 2 in game.toml — full strategy suite green with it
    (every drill, mimic and tape).
 
+## Addendum (2026-08-22 evening): the k-wall cage forecast (sibling)
+
+The rematch replay of the day's najamjad six exposed their cop's new
+11-wall quadrant-cage script (open-loop, byte-identical across three
+games) converting our fielded thief at t27, 0/15. The sibling repo
+adopted imreeyal's k-wall pocket forecast (`strategy/cage_forecast.py`
+there) and armed it at k=4 reach=4 — survives the recorded script 5/5
+with the full thief strategy suite green armed. Cop-side (this repo):
+no change; our own cop already converts their recorded thief walks
+15/15 (t6-t23) on the shipped loadout.
+
 ## Consequences
 
 - Attribution recorded here and in module docstrings; no code crossed

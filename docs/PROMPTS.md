@@ -1475,3 +1475,15 @@ the day's sealed frames: 4 refusals -> 4 floored-notes, 0 refusals),
 safe-region compression term (tape sweep positive on runners but percher mimics 0/10 under it - kept DEFAULT OFF, per-pairing option only; the drill matrix vetoed the sweep), barrier reserve=2 (the endgame seal stays affordable); (3) ADR-
 0013 records adoption + attribution; knobs default off in code, armed in
 game.toml beside the sweep evidence.
+
+## 2026-08-22 night - the rematch check + the cage counter
+
+Operator prompts: "check versus the last games we did against amjad if we
+would win them" / "with the new stuff". Agent work: (1) replayed the
+day's six against our REAL brains: cop side 15/15 captures of their
+recorded thief (t6-t23); thief side LOST 0/15 at t27 - their cop is a
+new 11-wall quadrant-cage script (column 3 then row 3, byte-identical
+across three revealed games = open-loop), the exact builder archetype
+whose counter we had consciously skipped that morning; (2) the counter (k-wall cage forecast) lands in the sibling; cop-side no change needed. Projected
+rematch with the counter: 90-30 us (open-loop caveat: their live cop
+adapts; ours would too).
