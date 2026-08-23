@@ -1,0 +1,69 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "2fcadc016312f0485018e546658daf13f39abb96d00f1e6143e71b2f9ab2a7ae",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-23T07:16:30+00:00",
+  "game_ended_at": "2026-08-23T07:16:30+00:00",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_started_at": "2026-08-23T07:05:03+00:00",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "groups": {
+    "group_1": {
+      "code_version": "1.00",
+      "counted_games_played": 3,
+      "github_commit": "0e3a8096abfb643a1b603121861c8e3d6a92280a",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:a6ef3376d5dfdeae30eb2a980221d28f1e8ea7860e36b736bbae87016b42d870"
+    },
+    "group_2": {
+      "counted_games_played": 0,
+      "github_commit": "unknown",
+      "group_id": "unknown",
+      "group_name": "unknown",
+      "hardware_spec": {},
+      "hardware_spec_sha256": "",
+      "llm_model": "undeclared",
+      "mcp_servers": {},
+      "members": [],
+      "repos": {},
+      "signature": "undeclared"
+    }
+  },
+  "links": {
+    "config": "config_anrbj666-vs-najamjad_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-najamjad.json",
+    "log": "log_anrbj666-vs-najamjad_g<NN>.json",
+    "result": "result_anrbj666-vs-najamjad.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}

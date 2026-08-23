@@ -1,0 +1,1083 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [
+    {
+      "commit": "d69c4d8d03a9aa87b86c5b0c47d925664b524b4f52f0e760381f48dd1fd1a04a",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "baf030c45238454bc87ec81d240182cc",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.04,
+          "1,3": 0.14,
+          "1,4": 0.2,
+          "1,5": 0.14,
+          "1,6": 0.04,
+          "2,2": 0.14,
+          "2,3": 0.42,
+          "2,4": 0.62,
+          "2,5": 0.42,
+          "2,6": 0.14,
+          "3,2": 0.2,
+          "3,3": 0.62,
+          "3,4": 0.9,
+          "3,5": 0.62,
+          "3,6": 0.2,
+          "4,2": 0.14,
+          "4,3": 0.42,
+          "4,4": 0.62,
+          "4,5": 0.42,
+          "4,6": 0.14,
+          "5,2": 0.04,
+          "5,3": 0.14,
+          "5,4": 0.2,
+          "5,5": 0.14,
+          "5,6": 0.04
+        },
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 1,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "6e6fdfb092afd90fee847e9e2ffb419a3adfe08a3831a9a89bd0e1cc795a14ba",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "243ab01e6c784d8f02a2183714f82223",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.036000000000000004,
+          "1,3": 0.12600000000000003,
+          "1,4": 0.18000000000000002,
+          "1,5": 0.12600000000000003,
+          "1,6": 0.036000000000000004,
+          "2,2": 0.16600000000000004,
+          "2,3": 0.518,
+          "2,4": 0.758,
+          "2,5": 0.518,
+          "2,6": 0.16600000000000004,
+          "3,2": 0.32000000000000006,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.32000000000000006,
+          "4,2": 0.32600000000000007,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.32600000000000007,
+          "5,2": 0.17600000000000002,
+          "5,3": 0.546,
+          "5,4": 0.8,
+          "5,5": 0.546,
+          "5,6": 0.17600000000000002,
+          "6,2": 0.04,
+          "6,3": 0.14,
+          "6,4": 0.2,
+          "6,5": 0.14,
+          "6,6": 0.04
+        },
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 2,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "cae102c6741cf6e0daf0fdfd0fc4d8be3128de74eff18fe562c071314bd3c268",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "49394146da8d5e1ecba042321239941e",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:STAY",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.032400000000000005,
+          "1,3": 0.11340000000000003,
+          "1,4": 0.16200000000000003,
+          "1,5": 0.11340000000000003,
+          "1,6": 0.032400000000000005,
+          "2,2": 0.18940000000000004,
+          "2,3": 0.6062000000000001,
+          "2,4": 0.8822000000000001,
+          "2,5": 0.6062000000000001,
+          "2,6": 0.18940000000000004,
+          "3,2": 0.4280000000000001,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.4280000000000001,
+          "4,2": 0.49340000000000006,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.49340000000000006,
+          "5,2": 0.2984,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.2984,
+          "6,2": 0.07600000000000001,
+          "6,3": 0.266,
+          "6,4": 0.38,
+          "6,5": 0.266,
+          "6,6": 0.07600000000000001
+        },
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 3,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "5515908bf8a84ce505cca4dc2f1d7a519646d4011788052fde81d24a64f6dd66",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "fdbd1f09fa0153180f149c37e117bfec",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:STAY",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.029160000000000005,
+          "1,3": 0.10206000000000003,
+          "1,4": 0.14580000000000004,
+          "1,5": 0.10206000000000003,
+          "1,6": 0.029160000000000005,
+          "2,2": 0.21046000000000004,
+          "2,3": 0.6855800000000001,
+          "2,4": 0.9,
+          "2,5": 0.6855800000000001,
+          "2,6": 0.21046000000000004,
+          "3,2": 0.5252000000000001,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.5252000000000001,
+          "4,2": 0.6440600000000001,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.6440600000000001,
+          "5,2": 0.40856000000000003,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.40856000000000003,
+          "6,2": 0.10840000000000002,
+          "6,3": 0.37940000000000007,
+          "6,4": 0.542,
+          "6,5": 0.37940000000000007,
+          "6,6": 0.10840000000000002
+        },
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 4,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "c7545daef4ae02c318b6c067b50df9b235df2e84799d43decf19fbe02920b656",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "f014128c44da644f4a6bb7741251f7f2",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:N",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.06624400000000001,
+          "1,3": 0.23185400000000003,
+          "1,4": 0.33122000000000007,
+          "1,5": 0.23185400000000003,
+          "1,6": 0.06624400000000001,
+          "2,2": 0.32941400000000004,
+          "2,3": 0.9,
+          "2,4": 0.9,
+          "2,5": 0.9,
+          "2,6": 0.32941400000000004,
+          "3,2": 0.6726800000000002,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.6726800000000002,
+          "4,2": 0.7196540000000001,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.7196540000000001,
+          "5,2": 0.407704,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.407704,
+          "6,2": 0.09756000000000002,
+          "6,3": 0.3414600000000001,
+          "6,4": 0.48780000000000007,
+          "6,5": 0.3414600000000001,
+          "6,6": 0.09756000000000002
+        },
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 5,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "8d67ca65674b15f5802a417866bc66f3afc9b297d5a1e9e3c79df043dde1cfd5",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "0081511cbf0acb6d3dd290b341c42fab",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:STAY",
+        "position": [
+          3,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.0996196,
+          "1,3": 0.34866860000000005,
+          "1,4": 0.4980980000000001,
+          "1,5": 0.34866860000000005,
+          "1,6": 0.0996196,
+          "2,2": 0.43647260000000004,
+          "2,3": 0.9,
+          "2,4": 0.9,
+          "2,5": 0.9,
+          "2,6": 0.43647260000000004,
+          "3,2": 0.8054120000000002,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.8054120000000002,
+          "4,2": 0.7876886000000002,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.7876886000000002,
+          "5,2": 0.4069336,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.4069336,
+          "6,2": 0.08780400000000002,
+          "6,3": 0.3073140000000001,
+          "6,4": 0.4390200000000001,
+          "6,5": 0.3073140000000001,
+          "6,6": 0.08780400000000002
+        },
+        "state": "grid=7x7;self=[3, 4];barriers=[]",
+        "step": 6,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "35fe8afcb0d87dde1e5b2978584dfe920e9a45079159a3d381b07191749cbcc0",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "8abb3ba2f7be0517c690b8c0f1f2dd9a",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          4,
+          4
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.08965764000000001,
+          "1,3": 0.31380174000000005,
+          "1,4": 0.4482882000000001,
+          "1,5": 0.31380174000000005,
+          "1,6": 0.08965764000000001,
+          "2,2": 0.43282534,
+          "2,3": 0.9,
+          "2,4": 0.9,
+          "2,5": 0.9,
+          "2,6": 0.43282534,
+          "3,2": 0.8648708000000003,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.8648708000000003,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.9,
+          "5,2": 0.50624024,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.50624024,
+          "6,2": 0.11902360000000003,
+          "6,3": 0.4165826000000001,
+          "6,4": 0.595118,
+          "6,5": 0.4165826000000001,
+          "6,6": 0.11902360000000003
+        },
+        "state": "grid=7x7;self=[4, 4];barriers=[]",
+        "step": 7,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "a4e0af06e50878b29ba56efe0d3e25e813623af28b11d6c394360264d996e564",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "cdf0c3728fe4aac9b8311f96d1b3a021",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.08069187600000001,
+          "1,3": 0.28242156600000007,
+          "1,4": 0.4034593800000001,
+          "1,5": 0.28242156600000007,
+          "1,6": 0.08069187600000001,
+          "2,1": 0.04,
+          "2,2": 0.529542806,
+          "2,3": 0.9,
+          "2,4": 0.9,
+          "2,5": 0.8500000000000001,
+          "2,6": 0.389542806,
+          "3,1": 0.14,
+          "3,2": 0.9,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.9,
+          "3,6": 0.7783837200000002,
+          "4,1": 0.2,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.9,
+          "4,6": 0.81,
+          "5,1": 0.14,
+          "5,2": 0.8756162160000001,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.455616216,
+          "6,1": 0.04,
+          "6,2": 0.24712124000000005,
+          "6,3": 0.5749243400000001,
+          "6,4": 0.6756062,
+          "6,5": 0.41492434000000006,
+          "6,6": 0.10712124000000003
+        },
+        "state": "grid=7x7;self=[4, 3];barriers=[]",
+        "step": 8,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "67a79e8daacefcedd6583c8cc7f08996bf38cacd797006e8a9f9543e83798835",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "a11b17475831079254c239f51d6fb4ea",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:W",
+        "position": [
+          4,
+          2
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.07262268840000001,
+          "1,3": 0.25417940940000006,
+          "1,4": 0.36311344200000006,
+          "1,5": 0.25417940940000006,
+          "1,6": 0.07262268840000001,
+          "2,0": 0.04,
+          "2,1": 0.17600000000000002,
+          "2,2": 0.6765885254,
+          "2,3": 0.9,
+          "2,4": 0.8500000000000001,
+          "2,5": 0.7650000000000001,
+          "2,6": 0.3505885254,
+          "3,0": 0.14,
+          "3,1": 0.546,
+          "3,2": 0.9,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.81,
+          "3,6": 0.7005453480000002,
+          "4,0": 0.2,
+          "4,1": 0.8,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.81,
+          "4,6": 0.7290000000000001,
+          "5,0": 0.14,
+          "5,1": 0.546,
+          "5,2": 0.9,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.81,
+          "5,6": 0.4100545944,
+          "6,0": 0.04,
+          "6,1": 0.17600000000000002,
+          "6,2": 0.4224091160000001,
+          "6,3": 0.6574319060000001,
+          "6,4": 0.6480455800000001,
+          "6,5": 0.37343190600000004,
+          "6,6": 0.09640911600000003
+        },
+        "state": "grid=7x7;self=[4, 2];barriers=[]",
+        "step": 9,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "290dcf3bae303ff995ce641489cca4f5ae6d05d3cae31619863c44950e22d70b",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "f1b8d7d28353f65924046b5902618b01",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          5,
+          2
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.06536041956000001,
+          "1,3": 0.22876146846000006,
+          "1,4": 0.3268020978000001,
+          "1,5": 0.22876146846000006,
+          "1,6": 0.06536041956000001,
+          "2,0": 0.036000000000000004,
+          "2,1": 0.1584,
+          "2,2": 0.60892967286,
+          "2,3": 0.81,
+          "2,4": 0.7650000000000001,
+          "2,5": 0.6885000000000001,
+          "2,6": 0.31552967286,
+          "3,0": 0.16600000000000004,
+          "3,1": 0.6314000000000001,
+          "3,2": 0.9,
+          "3,3": 0.9,
+          "3,4": 0.8500000000000001,
+          "3,5": 0.7290000000000001,
+          "3,6": 0.6304908132000002,
+          "4,0": 0.32000000000000006,
+          "4,1": 0.9,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.7290000000000001,
+          "4,6": 0.6561000000000001,
+          "5,0": 0.32600000000000007,
+          "5,1": 0.9,
+          "5,2": 0.9,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.7290000000000001,
+          "5,6": 0.36904913496,
+          "6,0": 0.17600000000000002,
+          "6,1": 0.5784,
+          "6,2": 0.9,
+          "6,3": 0.9,
+          "6,4": 0.7232410220000002,
+          "6,5": 0.3360887154,
+          "6,6": 0.08676820440000003
+        },
+        "state": "grid=7x7;self=[5, 2];barriers=[[3, 2]]",
+        "step": 10,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "847f6143c9dccc63ba2bd62de9a235d8dae45c7194d8a0b7354819ce33a1b890",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "157efbf6a6215459005004e326d09e32",
+      "payload": {
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:E",
+        "position": [
+          5,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.05882437760400001,
+          "1,3": 0.20588532161400006,
+          "1,4": 0.29412188802000006,
+          "1,5": 0.20588532161400006,
+          "1,6": 0.05882437760400001,
+          "2,0": 0.032400000000000005,
+          "2,1": 0.14256000000000002,
+          "2,2": 0.548036705574,
+          "2,3": 0.7290000000000001,
+          "2,4": 0.6885000000000001,
+          "2,5": 0.6196500000000001,
+          "2,6": 0.283976705574,
+          "3,0": 0.14940000000000003,
+          "3,1": 0.6082600000000001,
+          "3,2": 0.9,
+          "3,3": 0.9,
+          "3,4": 0.9,
+          "3,5": 0.6961000000000002,
+          "3,6": 0.5674417318800002,
+          "4,0": 0.2880000000000001,
+          "4,1": 0.9,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.7961000000000001,
+          "4,6": 0.5904900000000002,
+          "5,0": 0.29340000000000005,
+          "5,1": 0.9,
+          "5,2": 0.9,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.8561000000000001,
+          "5,6": 0.332144221464,
+          "6,0": 0.1584,
+          "6,1": 0.66056,
+          "6,2": 0.9,
+          "6,3": 0.9,
+          "6,4": 0.9,
+          "6,5": 0.44247984386000005,
+          "6,6": 0.07809138396000004
+        },
+        "state": "grid=7x7;self=[5, 3];barriers=[[3, 2]]",
+        "step": 11,
+        "sub_game": 1
+      }
+    },
+    {
+      "commit": "0b3b1b1e8ade9737105eefbec50298b423619dea5c8091ab2181cedd78b10d29",
+      "declared": {
+        "barrier_placed": null,
+        "capture_claim": null,
+        "hint": ""
+      },
+      "nonce": "b959c268807e1c4c6e7ca0e25b311363",
+      "payload": {
+        "claim_response": {
+          "caught": true,
+          "claim": [
+            5,
+            3
+          ]
+        },
+        "hint": "",
+        "intent": "truth",
+        "move": "MOVE:S",
+        "position": [
+          6,
+          3
+        ],
+        "role": "thief",
+        "smell_grid": {
+          "1,2": 0.05294193984360001,
+          "1,3": 0.18529678945260006,
+          "1,4": 0.2647096992180001,
+          "1,5": 0.18529678945260006,
+          "1,6": 0.05294193984360001,
+          "2,0": 0.029160000000000005,
+          "2,1": 0.12830400000000003,
+          "2,2": 0.4932330350166,
+          "2,3": 0.6561000000000001,
+          "2,4": 0.6196500000000001,
+          "2,5": 0.5576850000000001,
+          "2,6": 0.2555790350166,
+          "3,0": 0.13446000000000002,
+          "3,1": 0.5474340000000001,
+          "3,2": 0.81,
+          "3,3": 0.81,
+          "3,4": 0.81,
+          "3,5": 0.6264900000000002,
+          "3,6": 0.5106975586920003,
+          "4,0": 0.2592000000000001,
+          "4,1": 0.8500000000000001,
+          "4,2": 0.9,
+          "4,3": 0.9,
+          "4,4": 0.9,
+          "4,5": 0.7564900000000002,
+          "4,6": 0.5314410000000002,
+          "5,0": 0.2640600000000001,
+          "5,1": 0.9,
+          "5,2": 0.9,
+          "5,3": 0.9,
+          "5,4": 0.9,
+          "5,5": 0.9,
+          "5,6": 0.29892979931760005,
+          "6,0": 0.14256000000000002,
+          "6,1": 0.7945040000000001,
+          "6,2": 0.9,
+          "6,3": 0.9,
+          "6,4": 0.9,
+          "6,5": 0.5982318594740001,
+          "6,6": 0.07028224556400003
+        },
+        "state": "grid=7x7;self=[6, 3];barriers=[[3, 2]]",
+        "step": 12,
+        "sub_game": 1
+      }
+    }
+  ],
+  "records": [
+    {
+      "commit": "61b61677df1099ca4e3fcd47bb5d12c664ad5a20e781024f7af2870197c70327",
+      "nonce": "4b2b40c960c3ef1ca61e3d53ecec9b83",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-najamjad.json",
+        "github_commit": "014a8255db99fb71ede430eac98c6ffef8c49b4d",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 1,
+        "tokens_total": 0,
+        "type": "step_zero"
+      }
+    },
+    {
+      "commit": "e207681db0d6e334c7c6bf68576643b7e08a3d21a058d42e4daea7c719b430f1",
+      "nonce": "9220a1f75d8fa20110b03192ad409444",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "039faeb112612eb5857a37616d686183bd6a2faf8fbd764762145b24d741f602",
+        "step": 1,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "8226b0f46bf8655ebf83f331fdd0df9ff312d3df1120ec2878ab6552dee43470",
+      "nonce": "37cb6fcb5e9453ef3fda802a627bb41e",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "d1b860147d78ddd82ecd1532519a74a26033ce8bff9ddd04a745439a2316e428",
+        "step": 2,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "0dbc976cfb5aa6ab67d0581ab0936df2ec4baae79a42b95355aa68a8dfac3d33",
+      "nonce": "400bd0a77dff3c8543ff6a136a20a86f",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "64e61c2303445c81f46a1105d94b5801663e8496df3f94720e2329a4df22ea5c",
+        "step": 3,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "195600d3fd1d67a8f53d6b649f2719c6f37a02eaa0ae6de79b80aaec0c479b1f",
+      "nonce": "c3ffa4ad93a25e75d180f181c5550c2e",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "b5b37ce511eeb6187d7c83b550a205b629309179344b17f7661ba394b545ff4c",
+        "step": 4,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3de0fd37728fec3288ce58a7bcc34398ddf2d335d573bbbc1543f2ab5f2214b6",
+      "nonce": "73ab108db9d5ae2ef1061989a35cf55b",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "East side alleys are friendly tonight.",
+        "role": "police",
+        "state_digest": "31db007c4819fb6eebe71b21e2c13c67e45202337f73084efcef476d966f6843",
+        "step": 5,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "3a9d3db330d1b382eeeba76cfd9690caefb2cbff67d10f2d0fb2f219d944e9a5",
+      "nonce": "ec94245577845bbe2a5adc38c9c617af",
+      "payload": {
+        "action": {
+          "move": "E",
+          "type": "move"
+        },
+        "hint": "Chasing sunrise eastward.",
+        "role": "police",
+        "state_digest": "6a95f30f8a2c003c3489e0981131388d846134b18022ccb50bf5b5acb36fe7cd",
+        "step": 6,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "33390026b91af6272c0fdc37340e2b789d096ba1d1f8695a8ef0477cf09aa264",
+      "nonce": "a96f01ed432682a7eaa28b04d1a5f9b0",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "376f961c9be32b9164ad805324f969e2cbed9647abc1ddd678678252cda8e4e5",
+        "step": 7,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "58741d03804d1cebe3e2b5f4488204e92d668a27bce36dc70276bd768b244131",
+      "nonce": "b25f31129f0f3da14b564a39ad4d5a2f",
+      "payload": {
+        "action": {
+          "move": "W",
+          "type": "move"
+        },
+        "hint": "Fading west into the park shadows.",
+        "role": "police",
+        "state_digest": "0c5ca9f08652e92f20c81ed58187e277be20384203a4be0748df24fc896aec52",
+        "step": 8,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "4c41a3cb19ff0d2c551a75a36899c6fa86c0172c51f91949379e3cbcf1b8801b",
+      "nonce": "05b8644990627fac109859de60622e43",
+      "payload": {
+        "action": {
+          "cell": [
+            3,
+            2
+          ],
+          "type": "barrier"
+        },
+        "hint": "Comfortable right where I am.",
+        "role": "police",
+        "state_digest": "d097d96caa75a2bef7fb54977655bd41d3ebbb044a3facd982fdda06a8892c3d",
+        "step": 9,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "c8507b66f3c59fde1835f0e90857c50965b93bd64aecd32b37d1fa43f6fc42d3",
+      "nonce": "5d631b31e65c9b453144f1337f312b77",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Downtown crowds hide me well.",
+        "role": "police",
+        "state_digest": "f04a363e6b2fd6f5640cd2aafdad458dade908cd2e8ab5c57ddfb9f04bc02c39",
+        "step": 10,
+        "sub_game": 1,
+        "verdict": true
+      }
+    },
+    {
+      "commit": "815e5a97526b526d8b2c4c94fe5092fcc82f4a7955fccad87514edfcfc7103b6",
+      "nonce": "8c20f7a8b52200c366d63dd0e2b38e67",
+      "payload": {
+        "action": {
+          "move": "S",
+          "type": "move"
+        },
+        "hint": "Slipping south past the docks.",
+        "role": "police",
+        "state_digest": "3dd37e503c5a785fad31e2fb9ad8343da6e6ebf3415d606d810fca61465046be",
+        "step": 11,
+        "sub_game": 1,
+        "verdict": true
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 1,
+  "summary": {
+    "audit": "Verified OK",
+    "digest_match": null,
+    "disputed_capture": null,
+    "end_state_digest": "3dd37e503c5a785fad31e2fb9ad8343da6e6ebf3415d606d810fca61465046be",
+    "ended_at": "2026-08-23T16:46:24+00:00",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "014a8255db99fb71ede430eac98c6ffef8c49b4d",
+    "group_id": "anrbj666",
+    "opponent_group_id": "najamjad",
+    "opponent_info": {
+      "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+      "group_id": "najamjad",
+      "identity": {
+        "counted_games_played": 7,
+        "counted_matches_played": 7,
+        "counted_matches_remaining": 3,
+        "git_commit_hash": "9f740031ccc56d39a5c65488b1fa5455fdbc1d1f",
+        "github_commit": "9f740031ccc56d39a5c65488b1fa5455fdbc1d1f",
+        "group_id": "najamjad",
+        "group_name": "NajAmjad",
+        "llm_model": "deepseek-v4-flash",
+        "mcp_servers": {
+          "cop": "https://cop.4laboratory.com/mcp",
+          "thief": "https://thief.4laboratory.com/mcp"
+        },
+        "members": [
+          "Naji Kayal",
+          "Amjad Abed"
+        ],
+        "opponents_already_counted": [
+          "uoh-ay26",
+          "imreeyal",
+          "vibecode",
+          "MOAAMOHA",
+          "nis-yar1",
+          "ahk-yosi",
+          "yamanagh"
+        ],
+        "repos": {
+          "cop": "https://github.com/najikay/najamjad-cop",
+          "thief": "https://github.com/najikay/najamjad-thief"
+        },
+        "spec": {
+          "cpu_cores": 8,
+          "cpu_freq_mhz": 2800,
+          "cpu_model": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+          "gpu_model": "none detected",
+          "gpu_type": "none detected",
+          "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+          "python": "3.12.3",
+          "ram_gb": 7.5,
+          "vram_gb": 0.0
+        }
+      },
+      "info_mode_sha256": "020947daeeb3f73494af9b04201326791742c7184085456e3517d21981ee1202",
+      "nonce": "dc758483f66b1a6913de4031ba0895a5",
+      "role": "thief",
+      "scent_model_sha256": "934c220d5bf62acaa3297c6c9d723ea954c220260b02292ca17f6d5daef9f4d9",
+      "sender": "thief",
+      "signature": "4af9f3b7580965816c2cf835d15cabea0535c270600fbb3e8a800be9a79478f2",
+      "sub_game_number": 1,
+      "terms": {
+        "axis_origin_corner": "top-left",
+        "axis_start_index": 0,
+        "barriers_max": 14,
+        "board_size": 7,
+        "cop_start": [
+          0,
+          0
+        ],
+        "decay_per_step": 0.1,
+        "emit_intensity": 0.9,
+        "hint_max_words": 15,
+        "max_steps": 35,
+        "min_center_intensity": 0.5,
+        "num_games": 6,
+        "setting": "New York",
+        "smell_grid_size": 5,
+        "thief_start": [
+          3,
+          3
+        ]
+      },
+      "wire_shape_sha256": "229ae6487a418c3fcb6da9be404de2f2533c288ebc228811bff6dedc4164d6f7"
+    },
+    "opponent_step_zero": {
+      "code_version": "1.00",
+      "github_commit": "9f740031ccc56d39a5c65488b1fa5455fdbc1d1f",
+      "group_name": "NajAmjad",
+      "model": "deepseek-v4-flash",
+      "opponent_group_id": "anrbj666",
+      "role": "thief",
+      "spec": {
+        "cpu_cores": 8,
+        "cpu_freq_mhz": 2800,
+        "cpu_type": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+        "gpu_type": "none detected",
+        "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+        "python": "3.12.3",
+        "ram_gb": 7.5,
+        "vram_gb": 0.0
+      },
+      "step": 0,
+      "sub_game": 1,
+      "tokens_total": 0,
+      "type": "system_spec"
+    },
+    "outcome": "capture",
+    "rival_trail_track": [
+      null,
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "role": "police",
+    "scent_readings_refused": 0,
+    "scent_refused_steps": [],
+    "started_at": "2026-08-23T16:45:04+00:00",
+    "step_zero_mismatch": null,
+    "steps_sealed": 12,
+    "tokens_total": 0,
+    "turns_completed": 11
+  },
+  "wire_shape": "reference"
+}

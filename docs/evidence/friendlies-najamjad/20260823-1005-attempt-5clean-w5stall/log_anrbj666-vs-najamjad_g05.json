@@ -1,0 +1,63 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "game_id": "anrbj666-vs-najamjad",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "links": {
+    "cop": "https://github.com/alonengel/P2P-Police",
+    "thief": "https://github.com/alonengel/P2P-Thief"
+  },
+  "opponent_records": [],
+  "records": [
+    {
+      "commit": "ad33054370dcfa1879e0c3be411bae2ac0532fc30cc78bd1972b8ea805caf907",
+      "nonce": "6d1aac26f9b6581ce93466ec107e0e8b",
+      "payload": {
+        "declaration_ref": "declaration_anrbj666-vs-najamjad.json",
+        "github_commit": "0e3a8096abfb643a1b603121861c8e3d6a92280a",
+        "group_id": "anrbj666",
+        "role": "police",
+        "step": 0,
+        "sub_game_number": 5,
+        "tokens_total": 0,
+        "type": "step_zero"
+      }
+    }
+  ],
+  "report_type": "log",
+  "schema_version": "1.00",
+  "sub_game_number": 5,
+  "summary": {
+    "audit": "unavailable (technical loss)",
+    "audit_disclosure": "sent",
+    "digest_match": false,
+    "end_state_digest": "065cd367aa7b1c2e2fa955748107989f33c5a56ed5e0eb41a60d8b2b4c50726e",
+    "ended_at": "2026-08-23T07:16:30+00:00",
+    "failure": "DeadlineExpiredError: deadline expired while waiting for opponent turn 1",
+    "gatekeeper": {
+      "calls_logged": 0,
+      "dos_locked": {
+        "claude": false,
+        "default": false,
+        "email": false,
+        "ollama": false,
+        "openrouter": false
+      },
+      "services": [
+        "claude",
+        "default",
+        "email",
+        "ollama",
+        "openrouter"
+      ]
+    },
+    "github_commit": "0e3a8096abfb643a1b603121861c8e3d6a92280a",
+    "group_id": "anrbj666",
+    "opponent_group_id": "najamjad",
+    "outcome": "technical_loss",
+    "role": "police",
+    "started_at": "2026-08-23T07:06:22+00:00",
+    "steps_sealed": 1,
+    "turns_completed": 0
+  },
+  "wire_shape": "reference"
+}
