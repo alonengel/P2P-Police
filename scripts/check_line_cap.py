@@ -5,7 +5,7 @@ the guidelines measure logic size, not file length. Docstrings count as code
 because they occupy statement positions and grow real file weight.
 
 Usage: uv run python scripts/check_line_cap.py [paths...]
-With no arguments, scans src/ and tests/.
+With no arguments, scans src/, tests/ and scripts/.
 """
 
 import sys
@@ -41,7 +41,8 @@ def count_code_lines(path: Path) -> int:
 
 def collect_targets(args: list[str]) -> list[Path]:
     """Resolve CLI args (files or dirs) to the .py files to check."""
-    roots = [Path(a) for a in args] if args else [Path("src"), Path("tests")]
+    roots = ([Path(a) for a in args] if args else
+             [Path("src"), Path("tests"), Path("scripts")])
     targets: list[Path] = []
     for root in roots:
         if root.is_dir():

@@ -84,11 +84,24 @@ def build_runtime(role: Role, config: Config, transport, inboxes, brain) -> Geom
     return GeometricRuntime(role, config, engine, transport, inboxes, brain)
 
 
-def check_invariants(shared: dict, boxes: dict, mine: GeometricRuntime) -> list[str]:
+def check_invariants(shared: dict, boxes: dict, mine: GeometricRuntime,
+                     timed_out: list | None = None,
+                     budget: float | None = None) -> list[str]:
     failures = []
+    timed_out = timed_out or []
     for name in ("mine", "stub"):
         if "report" not in boxes[name]:
-            failures.append(f"{name} did not complete: {boxes[name].get('error', 'hung')}")
+            if name in timed_out:
+                # Name it for what it is. A thread still RUNNING when the
+                # harness ran out of patience is a budget artifact; calling it
+                # "hung" sent a week of CI failures chasing a physics bug that
+                # was never there.
+                failures.append(
+                    f"{name} exceeded the {budget:.0f}s harness budget "
+                    f"(still running - raise [fuzz] turn_timeout_seconds)")
+            else:
+                failures.append(
+                    f"{name} did not complete: {boxes[name].get('error', 'hung')}")
     if failures:
         return failures
     ours, theirs = boxes["mine"]["report"], boxes["stub"]["report"]

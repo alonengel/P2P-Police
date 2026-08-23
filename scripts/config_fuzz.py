@@ -57,9 +57,19 @@ def run_sample(index: int, shared: dict, net: dict, knobs: dict) -> dict:
     started = time.perf_counter()
     for thread in threads:
         thread.start()
+    # Wall-clock budget, NOT a physics bound. Under coverage (or a debugger)
+    # the interpreter traces every line and an 11x11 fuzz board with the cage
+    # forecast armed runs several times slower, so a fixed budget turned a
+    # SLOW game into "did not complete: hung" and reddened CI for a week with
+    # nothing wrong (2026-08-23: green locally, red on the runner, every time).
+    # A real hang still surfaces - it simply has to outlast an honest budget.
+    budget = float(knobs["turn_timeout_seconds"]) * 4
+    if sys.gettrace() is not None:
+        budget *= 4
     for thread in threads:
-        thread.join(timeout=float(knobs["turn_timeout_seconds"]) * 4)
-    failures = lib.check_invariants(shared, boxes, mine)
+        thread.join(timeout=budget)
+    timed_out = [n for n, t in zip(("mine", "stub"), threads, strict=True) if t.is_alive()]
+    failures = lib.check_invariants(shared, boxes, mine, timed_out, budget)
     limits = shared["movement_and_barriers"]
     return {"sample": index, "grid_size": shared["board_and_agents"]["grid_size"],
             "max_barriers": limits["max_barriers"], "max_moves": limits["max_moves"],
