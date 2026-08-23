@@ -105,3 +105,31 @@ def test_counted_flag_flows_to_every_window_and_the_close(quiet_bookends):
                               runner=fake_runner(journal)) == 0
     assert all("--counted" in c for c in journal)
     assert quiet_bookends == [{"cli": "p2p-police", "counted": True}]
+
+
+def test_resume_plan_never_sweeps_and_accepts_existing_logs():
+    """2026-08-23 w5: a partial re-run archive-swept its own LIVE series,
+    then its tempo gate blocked on the logs it had just moved — the peer
+    never launched and the rival found a dead door. A resume must not
+    sweep, and since=0 lets existing predecessor logs satisfy the gate."""
+    assert league_series.resume_plan(False, 123.4) == (True, 123.4)
+    assert league_series.resume_plan(True, 123.4) == (False, 0.0)
+
+
+def test_resume_flag_runs_the_window(quiet_bookends):
+    journal: list = []
+    assert league_series.main(["--sub-games", "5", "--resume"],
+                              runner=fake_runner(journal)) == 0
+    assert len(journal) == 1  # the replayed window launched
+
+
+def test_tempo_gate_since_zero_accepts_an_existing_predecessor(tmp_path, monkeypatch):
+    import time as _time
+
+    monkeypatch.setattr(league_series, "ROOT", tmp_path)
+    monkeypatch.setattr(league_series, "SIBLING_RESULTS", tmp_path / "sibling")
+    (tmp_path / "results").mkdir(parents=True)
+    (tmp_path / "results" / "log_a-vs-b_g04.json").write_text("{}", encoding="utf-8")
+    assert league_series.wait_for_previous(5, 0.0, timeout_sec=2)  # resume: old log OK
+    assert not league_series.wait_for_previous(  # fresh-run gate still strict
+        5, _time.time() + 999, timeout_sec=0.4)

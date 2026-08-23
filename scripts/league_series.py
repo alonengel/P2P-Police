@@ -50,8 +50,8 @@ def parse_sub_games(spec: str) -> list[int]:
     windows = [int(part) for part in spec.replace(" ", "").split(",") if part]
     wrong = [n for n in windows if n < 1 or n % 2 != PARITY]
     if not windows or wrong:
-        label = "even" if PARITY == 0 else "odd"
-        raise ValueError(f"the {ROLE} repo plays only the {label} sub-games of a "
+        raise ValueError(f"the {ROLE} repo plays only the "
+                         f"{'even' if PARITY == 0 else 'odd'} sub-games of a "
                          f"series (role alternation); got {spec!r}")
     return windows
 
@@ -60,11 +60,10 @@ def acquire_lock(path: Path) -> bool:
     """Single-instance guard: O_EXCL lockfile carrying our pid."""
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        descriptor = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        with open(path, "x", encoding="ascii") as handle:  # x = O_CREAT|O_EXCL
+            handle.write(str(os.getpid()))
     except FileExistsError:
         return False
-    os.write(descriptor, str(os.getpid()).encode("ascii"))
-    os.close(descriptor)
     return True
 
 
@@ -82,10 +81,9 @@ def run_window(window: int, seed_base: int | None, runner,
     command = ["uv", "run", CLI, "peer", "--sub-game", str(window)]
     # LEAGUE_GUI=1 -> watch our local truth live (own view only, rules 8-9)
     command += ["--gui"] if os.environ.get("LEAGUE_GUI") else []
-    if seed_base is not None:
-        command += ["--seed", str(seed_base + window)]
-    if counted:  # arms the CLI half of the lecturer-address interlock
-        command.append("--counted")
+    command += ["--seed", str(seed_base + window)] if seed_base is not None else []
+    # --counted arms the CLI half of the lecturer-address interlock
+    command += ["--counted"] if counted else []
     print(f"[{_stamp()}] window s{window}: launching {' '.join(command)}", flush=True)
     started = time.perf_counter()
     code = int(runner(command, cwd=ROOT).returncode)
@@ -99,6 +97,15 @@ def run_window(window: int, seed_base: int | None, runner,
 
 
 
+def resume_plan(resume: bool, now: float) -> tuple[bool, float]:
+    """(sweep?, tempo-gate `since`). A --resume replays windows of the
+    LIVE series: never sweep it aside, and existing predecessor logs
+    satisfy the gate (2026-08-23 w5: a partial re-run archive-swept its
+    own series, then gated on the logs it had just moved — the peer
+    never launched and the rival's replay found a dead door)."""
+    return (not resume), (0.0 if resume else now)
+
+
 def wait_for_previous(window: int, since: float, timeout_sec: float = 1800.0) -> bool:
     """Series tempo: window N launches only after sub-game N-1's log exists
     (either repo's results dir, fresher than this run) - the series is ONE
@@ -106,17 +113,13 @@ def wait_for_previous(window: int, since: float, timeout_sec: float = 1800.0) ->
     the rival's driver reaches it burns the budget against nobody."""
     if window <= 1:
         return True
-    import glob
-    import time as _time
-    pattern_pair = [str(ROOT / "results" / f"log_*_g{window-1:02d}.json"),
-                    str(SIBLING_RESULTS / f"log_*_g{window-1:02d}.json")]
-    deadline = _time.monotonic() + timeout_sec
-    while _time.monotonic() < deadline:
-        for pattern in pattern_pair:
-            for hit in glob.glob(pattern):
-                if Path(hit).stat().st_mtime >= since:
-                    return True
-        _time.sleep(3)
+    name = f"log_*_g{window - 1:02d}.json"
+    deadline = time.monotonic() + timeout_sec
+    while time.monotonic() < deadline:
+        for base in (ROOT / "results", SIBLING_RESULTS):
+            if any(hit.stat().st_mtime >= since for hit in base.glob(name)):
+                return True
+        time.sleep(3)
     return False
 
 def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
@@ -127,9 +130,10 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
     parser.add_argument("--seed", type=int, default=None,
                         help="base seed; window N runs the peer with seed base+N")
     parser.add_argument("--counted", action="store_true",
-                        help="counted league series: forwards --counted to every peer "
-                             "window and to the closing aggregation (lecturer-address "
-                             "email interlock, CLI half)")
+                        help="counted league series: --counted flows to every peer "
+                             "window and the close (lecturer-address interlock)")
+    parser.add_argument("--resume", action="store_true",
+                        help="replay LIVE-series windows: no sweep; old logs pass the gate")
     args = parser.parse_args(argv)
     try:
         windows = parse_sub_games(args.sub_games)
@@ -146,12 +150,11 @@ def main(argv: list[str] | None = None, runner=subprocess.run) -> int:
               f"{holder}); if that run is truly dead, delete the lockfile and retry")
         return 2
     try:
-        import time as _time
-        if runner is subprocess.run:  # injected runners = tests: touch nothing
+        sweep, run_start = resume_plan(args.resume, time.time())
+        if sweep and runner is subprocess.run:  # injected runners = tests: touch nothing
             # A rehearsal derives the SAME uid as a counted run, so leftovers
             # either deadlock the settlement or get counted: start clean.
             print(archive_for_pairing(ROOT, Config.load(ROOT / "config")))
-        run_start = _time.time()
         rows = []
         for window in windows:
             live = runner is subprocess.run  # injected runners = tests: no tempo wait
