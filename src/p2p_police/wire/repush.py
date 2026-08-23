@@ -62,13 +62,16 @@ def push_agreement(rt, mine: dict, clock=time.monotonic, verify=None) -> dict:
     interval = repush_interval(rt.config)
     theirs, delivered = None, False
     while theirs is None or not delivered:
-        if not delivered:
-            ack = rt.transport.send_agreement(
-                mine, Deadline(rt.config.turn_timeout_seconds))
-            delivered = _acked(ack)
-            if not delivered:
-                _LOG.info("agreement not yet delivered (their door refused "
-                          "retriably: %s) - re-offering on cadence", ack)
+        # Send EVERY interval until the loop exits: an accepted ack is
+        # transport truth, not consumption — a dying peer acks a greeting
+        # into a dead queue (the original swallowed-greeting case), so
+        # only the rival's ARRIVAL proves our push reached a live pair.
+        ack = rt.transport.send_agreement(
+            mine, Deadline(rt.config.turn_timeout_seconds))
+        delivered = delivered or _acked(ack)
+        if not _acked(ack):
+            _LOG.info("agreement not yet delivered (their door refused "
+                      "retriably: %s) - re-offering on cadence", ack)
         if theirs is not None and delivered:
             break
         # ONE paced wait serves both halves: it delivers their agreement,

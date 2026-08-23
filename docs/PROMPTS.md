@@ -1487,3 +1487,13 @@ across three revealed games = open-loop), the exact builder archetype
 whose counter we had consciously skipped that morning; (2) the counter (k-wall cage forecast) lands in the sibling; cop-side no change needed. Projected
 rematch with the counter: 90-30 us (open-loop caveat: their live cop
 adapts; ours would too).
+
+## 2026-08-23 midday - two counted attempts, two voids, the cage arms race
+
+Operator flow: counted words exchanged (T=11:25); attempt 1 voided
+(their thief door 502 mid-w3, clause 2, neither league email fired);
+attempt 2 at T=11:35 (stale-lock refusal caught and cleared - killed
+runners skip their finally-unlink, drill note); g01 our REAL cop
+captured their thief t11, g02 their cage converted our REAL thief t31
+(their counted cop = the identical 11-wall script, wall-for-wall with
+yesterday, open-loop even counted); operator halted mid-w3. Thief-side upgrades land in the sibling (cop side unchanged: t11 counted conversion).
