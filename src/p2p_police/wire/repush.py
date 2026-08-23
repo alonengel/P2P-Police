@@ -35,10 +35,22 @@ def repush_interval(config) -> float:
                  .get("agreement_repush_sec", DEFAULT_REPUSH_SEC))
 
 
+def _acked(response) -> bool:
+    """Did the rival's door accept our delivery? An explicit accepted=False
+    (a retriable busy refusal — najamjad w5, 2026-08-23: our one offer hit
+    their boundary 5.5s early and the old loop never re-sent) means NOT
+    delivered. Any other shape — reference peers ack with whatever they
+    like, or nothing — counts as delivered: conformant-peer behavior stays
+    byte-identical to the pre-fix loop."""
+    return not (isinstance(response, dict) and response.get("accepted") is False)
+
+
 def push_agreement(rt, mine: dict, clock=time.monotonic, verify=None) -> dict:
     """Send our agreement, then RE-SEND `mine` unchanged each interval until
-    the rival's agreement arrives; the overall turn deadline judges the wait
-    (a lapsed deadline is failure, not patience — rule 6).
+    BOTH deliveries hold: the rival's agreement has arrived AND ours was
+    acknowledged accepted — one arrival alone is half a handshake (the w5
+    deadlock: we adopted theirs, stopped pushing, and they starved). The
+    overall turn deadline judges the wait (rule 6).
 
     With `verify(theirs)` given, each arrival is classified in the wait: a
     PairingRefusalError (bystander — wrong sub-game window or role-equal) is
@@ -48,23 +60,57 @@ def push_agreement(rt, mine: dict, clock=time.monotonic, verify=None) -> dict:
     error is a genuine violation and propagates fatally on first offense."""
     deadline = Deadline(rt.config.turn_timeout_seconds, clock=clock)
     interval = repush_interval(rt.config)
-    while True:
-        rt.transport.send_agreement(
-            mine, Deadline(rt.config.turn_timeout_seconds))
+    theirs, delivered = None, False
+    while theirs is None or not delivered:
+        if not delivered:
+            ack = rt.transport.send_agreement(
+                mine, Deadline(rt.config.turn_timeout_seconds))
+            delivered = _acked(ack)
+            if not delivered:
+                _LOG.info("agreement not yet delivered (their door refused "
+                          "retriably: %s) - re-offering on cadence", ack)
+        if theirs is not None and delivered:
+            break
+        # ONE paced wait serves both halves: it delivers their agreement,
+        # drains their duplicate re-offers while we keep pushing ours, and
+        # carries the watchdog beats + the overall deadline check.
         window = max(0.01, min(interval, deadline.remaining()))
         try:
-            theirs = rt._wait(rt.inboxes.agreements, "opponent agreement",
-                              Deadline(window, clock=clock))
+            candidate = rt._wait(rt.inboxes.agreements, "opponent agreement",
+                                 Deadline(window, clock=clock))
         except DeadlineExpiredError:
             deadline.require("opponent agreement")  # re-raises once lapsed
             continue
-        if verify is None:
-            return theirs
+        if theirs is not None:
+            continue  # a re-offer duplicate drained; cadence tick complete
         try:
-            verify(theirs)
+            if verify is not None:
+                verify(candidate)
         except PairingRefusalError as refusal:
             _LOG.info("agreement refused: wrong game, not you (%s) - "
                       "still waiting for the real counterpart", refusal)
             deadline.require("opponent agreement")  # bystanders never extend it
             continue
-        return theirs
+        theirs = candidate
+    rt.my_agreement = mine  # answer_reoffers re-sends this on late offers
+    return theirs
+
+
+def answer_reoffers(rt) -> None:
+    """A rival's agreement arriving AFTER negotiate means it still lacks
+    ours (its door refused our push and it is re-offering on a cadence):
+    drain the late offers and send ours again — dedup-safe (same nonce),
+    one send per drain batch, silent when the queue is empty."""
+    mine = getattr(rt, "my_agreement", None)
+    if mine is None:
+        return  # negotiate still running: ITS wait owns this queue - no drain
+    drained = 0
+    try:
+        while True:
+            rt.inboxes.agreements.get_nowait()
+            drained += 1
+    except Exception:  # queue.Empty ends the drain; inbox always queue-like
+        pass
+    if drained:
+        _LOG.info("late agreement re-offer heard (%d) - re-sending ours", drained)
+        rt.transport.send_agreement(mine, Deadline(rt.config.turn_timeout_seconds))

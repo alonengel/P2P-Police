@@ -84,6 +84,7 @@ class HiddenRuntime:
         while True:
             self.watchdog.beat()  # polling IS liveness; deadlines guard rivals
             hidden_resume.handle_controls(self)  # a restarted rival's offer
+            repush.answer_reoffers(self)  # a re-offering rival still lacks ours
             deadline.require(what)
             try:
                 return inbox.get(timeout=min(0.25, max(0.01, deadline.remaining())))
