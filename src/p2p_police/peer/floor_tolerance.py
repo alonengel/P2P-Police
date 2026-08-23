@@ -69,6 +69,17 @@ def law_verdict(percep, rival_scent, board) -> bool:
         percep.scent_frames_empty += 1
         return False
     percep.scent_frames_seen += 1
+    if percep.rival_scent_law != "book":
+        # A pairing whose rival DECLARED a foreign scent model (the reference's
+        # subtractive_chebyshev_v1 is the league's other branch) emits frames
+        # this solver cannot verify: under subtraction a cell legally falls
+        # below (1-rho) times its previous value, so the gate breaks on every
+        # frame and the latch blinds us by turn four against an HONEST peer.
+        # Consume the field as belief evidence and verify nothing: no emitter
+        # pin is claimed (the trail head is only sound under our own law), and
+        # the census still books every frame that arrived.
+        percep._last_emitter = None
+        return False
     if percep._previous_field is None:
         return False  # nothing to compare the first frame against
     emitters, floored = solve_with_tolerance(

@@ -31,7 +31,8 @@ class Perception:
     """
 
     def __init__(self, role: Role, grid_size: int, rival_start=None,
-                 hint_cap: int = 15, floor_eps: float = 0.006) -> None:
+                 hint_cap: int = 15, floor_eps: float = 0.006,
+                 rival_scent_law: str = "book") -> None:
         self.role = role
         self.belief = BeliefMap(grid_size)
         self.last_hint = ""
@@ -42,6 +43,8 @@ class Perception:
         # floor_eps: the floored-residue tolerance threshold (peer/
         # floor_tolerance.py; [strategy.perception] floor_tolerance_eps).
         self._hint_cap, self.floor_eps = int(hint_cap), float(floor_eps)
+        # Which law verifies the RIVAL's frames (peer/floor_tolerance.py).
+        self.rival_scent_law = str(rival_scent_law)
         self.on_snapshot = None  # optional live-GUI feed
         self.profiler = OpponentProfiler()
         self.opponent_id = "unknown"
@@ -85,9 +88,11 @@ class Perception:
         from p2p_police.shared.tuning import perception_table
 
         rival_start = config.thief_start if role is Role.POLICE else config.cop_start
+        table = perception_table(config.private)
         return cls(role, config.grid_size, rival_start=rival_start,
                    hint_cap=int(config.shared["world"].get("hint_max_words", 15)),
-                   floor_eps=perception_table(config.private)["floor_tolerance_eps"])
+                   floor_eps=table["floor_tolerance_eps"],
+                   rival_scent_law=table["rival_scent_law"])
 
     def observe(
         self, engine: GameEngine, rival: Role, hint_text: str | None,

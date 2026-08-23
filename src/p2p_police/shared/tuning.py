@@ -129,6 +129,11 @@ PERCEPTION_DEFAULTS: dict = {
     #                                (najamjad 2026-08-22: their serializer
     #                                floors ~0.005; refusing those frames risks
     #                                a false latch — peer/floor_tolerance.py)
+    "rival_scent_law": "book",     # which law verifies the RIVAL's frames.
+    #                                "book" = our multiplicative kernel law
+    #                                (the only one we can solve). Set "foreign"
+    #                                for a pairing whose declared scent model
+    #                                is not ours — see peer/floor_tolerance.py.
 }
 
 
