@@ -38,6 +38,12 @@ def test_an_honest_trail_is_never_refused_over_a_whole_game() -> None:
     assert perception.refused_readings == 0
     assert perception.refused_steps == []  # names every refused rival turn
     assert perception.scent_trusted
+    # Scent-presence census (rule-36 evidence): a scented rival counts as
+    # transmitting; silence is legal but must be VISIBLE in the summary —
+    # a rival that scented every validation game and goes silent in the
+    # counted changed wire behavior (najamjad clause, 2026-08-23).
+    assert perception.scent_frames_seen == len(walk)
+    assert perception.scent_frames_empty == 0
 
 
 def test_a_trail_that_breaks_the_movement_model_latches_off() -> None:

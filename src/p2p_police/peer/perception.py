@@ -16,11 +16,8 @@ moving a step per turn could have reached is refused WHOLE for that turn
 from p2p_police.domain.belief import BeliefMap
 from p2p_police.domain.engine import GameEngine
 from p2p_police.domain.primitives import Outcome, Role
-from p2p_police.domain.trail_forensics import (
-    credible_cells,
-    incredible_saturation,
-    transition_emitters,
-)
+from p2p_police.domain.trail_forensics import credible_cells, incredible_saturation
+from p2p_police.peer import floor_tolerance
 from p2p_police.strategy.hints import landmark_region, parse_claim, parse_move_echo
 from p2p_police.strategy.profiler import OpponentProfiler
 
@@ -34,7 +31,7 @@ class Perception:
     """
 
     def __init__(self, role: Role, grid_size: int, rival_start=None,
-                 hint_cap: int = 15) -> None:
+                 hint_cap: int = 15, floor_eps: float = 0.006) -> None:
         self.role = role
         self.belief = BeliefMap(grid_size)
         self.last_hint = ""
@@ -42,7 +39,9 @@ class Perception:
         # never consume more words than the rival signed for; the MESSAGE
         # stays untouched — the audit's live-vs-sealed hint check must
         # compare originals (imreeyal parity hardening, 2026-08-03).
-        self._hint_cap = int(hint_cap)
+        # floor_eps: the floored-residue tolerance threshold (peer/
+        # floor_tolerance.py; [strategy.perception] floor_tolerance_eps).
+        self._hint_cap, self.floor_eps = int(hint_cap), float(floor_eps)
         self.on_snapshot = None  # optional live-GUI feed
         self.profiler = OpponentProfiler()
         self.opponent_id = "unknown"
@@ -60,11 +59,18 @@ class Perception:
         # this path is a self-inflicted denial of service.
         self._anchor = tuple(rival_start) if rival_start is not None else None
         self._anchor_age = 0
-        # Evidence surfaced in the summary: how many refusals, and WHICH
+        # Evidence surfaced in the summary: how many refusals, WHICH
         # rival turns (1-based) — rule-36 evidence must name frames
         # (najamjad g05 2026-08-22: an unindexed pair cost a day of
-        # cross-attribution both ways)
+        # cross-attribution both ways) — and which turns were tolerated
+        # as floored serialization noise (peer/floor_tolerance.py).
         self.refused_readings, self.refused_steps = 0, []
+        self.floored_steps: list[int] = []
+        # Scent-presence census: non-empty vs empty rival frames. Silence
+        # is legal (declared-lock convention) but must be VISIBLE — a
+        # rival scenting every validation game then going silent in the
+        # counted changed wire behavior (najamjad clause, 2026-08-23).
+        self.scent_frames_seen, self.scent_frames_empty = 0, 0
         self.scent_trusted = True  # latches false on a physically impossible reading
         self._previous_field: list | None = None  # last accepted frame
         # law-break streak; unique law-solved emitter; per-turn emitter track
@@ -76,9 +82,12 @@ class Perception:
         rival's AGREED start cell. That cell is not local truth leaking - it
         is a public term both sides committed to, and it is what makes the
         very first forged reading checkable instead of merely plausible."""
+        from p2p_police.shared.tuning import perception_table
+
         rival_start = config.thief_start if role is Role.POLICE else config.cop_start
         return cls(role, config.grid_size, rival_start=rival_start,
-                   hint_cap=int(config.shared["world"].get("hint_max_words", 15)))
+                   hint_cap=int(config.shared["world"].get("hint_max_words", 15)),
+                   floor_eps=perception_table(config.private)["floor_tolerance_eps"])
 
     def observe(
         self, engine: GameEngine, rival: Role, hint_text: str | None,
@@ -110,7 +119,7 @@ class Perception:
         self._anchor_age += 1
         allowed = credible_cells(engine.board, self._anchor,
                                  self._anchor_age, self.grid_size)
-        broken = self._breaks_the_law(rival_scent, engine.board)
+        broken = floor_tolerance.law_verdict(self, rival_scent, engine.board)
         if self.scent_trusted and incredible_saturation(
             rival_scent, engine.board, self.grid_size, allowed
         ):
@@ -176,44 +185,6 @@ class Perception:
             # an agreeing (non-echo) claim is FRESHER than the lag-1 emitter
             fresh = claim_cell is not None and not echo and near(tuple(claim_cell), head)
             self.belief.observe_claimed_cell(tuple(claim_cell) if fresh else head)
-
-    def _breaks_the_law(self, rival_scent, board) -> bool:
-        """Do two consecutive frames admit NO single emitter (ADR-0010)?
-
-
-        This is the check that closes the gap the reachability envelope leaves:
-        a forgery can walk its decoy one legal step per turn, but the update law
-        binds the whole board, so it would also have to move its own HISTORY -
-        and a cell may never fall below (1-rho) times its previous value.
-
-        EVERY break refuses the frame - a reading the law cannot explain never
-        reaches belief, which is the same rule we ask of anyone else. The
-        LATCH is separate and needs three in a row, because a single transient
-        frame necessarily poisons two comparisons (itself, and the honest one
-        paired against it); latching at two would make every glitch permanent.
-        """
-        if self._previous_field is None:
-            return False  # nothing to compare the first frame against
-        if not any(any(row) for row in rival_scent.values()):
-            # An EMPTY field is absence of data, not impossible data. A peer
-            # honouring a lock that says the trail is not transmitted sends
-            # nothing to check, and refusing that would latch us against a peer
-            # doing exactly what the declared lock asks. (Under book-v1 an
-            # empty field explains no emitter at all, so without this the
-            # checker refuses every frame of such a game.)
-            return False
-        if emitters := transition_emitters(self._previous_field,
-                                           rival_scent.values(), board,
-                                           self.grid_size):
-            # A SINGLE law-consistent emitter is the rival's position, solved
-            # from its own physics — stashed for the trail-head pin.
-            self._law_breaks, self._last_emitter = 0, (
-                emitters[0] if len(emitters) == 1 else None)
-            return False
-        self._law_breaks += 1
-        if self._law_breaks >= 3:
-            self.scent_trusted = False
-        return True
 
     def emit(self, engine: GameEngine, turn_index: int) -> None:
         if self.on_snapshot is None:

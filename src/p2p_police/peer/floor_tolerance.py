@@ -61,13 +61,16 @@ def law_verdict(percep, rival_scent, board) -> bool:
     frame necessarily poisons two comparisons. Floored-residue frames
     are re-solved with lawful decay restored (module docstring) and
     recorded on percep.floored_steps — accepted, never silent."""
-    if percep._previous_field is None:
-        return False  # nothing to compare the first frame against
     field = rival_scent.values()
     if not any(any(row) for row in field):
         # An EMPTY field is absence of data, not impossible data (a peer
-        # honouring a no-trail lock sends nothing to check).
+        # honouring a no-trail lock sends nothing to check) — but the
+        # census books it: silence must be visible in the summary.
+        percep.scent_frames_empty += 1
         return False
+    percep.scent_frames_seen += 1
+    if percep._previous_field is None:
+        return False  # nothing to compare the first frame against
     emitters, floored = solve_with_tolerance(
         percep._previous_field, field, board, percep.grid_size,
         percep.floor_eps)
@@ -90,4 +93,6 @@ def scent_evidence(percep) -> dict:
         "scent_readings_refused": getattr(percep, "refused_readings", 0),
         "scent_refused_steps": getattr(percep, "refused_steps", []),
         "scent_floored_steps": getattr(percep, "floored_steps", []),
+        "scent_frames_seen": getattr(percep, "scent_frames_seen", 0),
+        "scent_frames_empty": getattr(percep, "scent_frames_empty", 0),
     }

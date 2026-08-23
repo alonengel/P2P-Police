@@ -49,6 +49,32 @@ def test_najamjad_floor_single_cell_is_tolerated_and_recorded() -> None:
     assert floored == [(6, 1)]  # and the event is evidence, not silence
 
 
+def test_scent_silence_is_counted_never_refused() -> None:
+    """An all-empty rival field stays legal (the declared-lock convention)
+    but the census must book it: frames_empty climbs, nothing refuses,
+    and the summary carries the asymmetry a scent-silent counted rival
+    would otherwise hide (najamjad wire-freeze clause, 2026-08-23)."""
+    from types import SimpleNamespace
+
+    from p2p_police.domain.primitives import Role
+    from p2p_police.peer.perception import Perception
+
+    class _Empty:
+        def values(self):
+            return [[0.0] * 7 for _ in range(7)]
+
+    percep = Perception(Role.POLICE, 7, rival_start=(3, 3))
+    percep._previous_field = [[0.0] * 7 for _ in range(7)]
+    from p2p_police.peer.floor_tolerance import law_verdict
+
+    for _ in range(3):
+        assert law_verdict(percep, _Empty(), BOARD) is False  # legal silence
+    assert percep.scent_frames_empty == 3
+    assert percep.scent_frames_seen == 0
+    assert percep.refused_readings == 0 and percep.scent_trusted
+    assert SimpleNamespace  # anchor import used
+
+
 def test_large_cell_zeroing_is_still_refused() -> None:
     # Zeroing a cell whose lawful next value EXCEEDS the epsilon is real
     # physics violation — the tolerance must not launder it.
