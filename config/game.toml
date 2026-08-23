@@ -13,7 +13,7 @@ opponent_group_id = "uoh-sqak"   # the peer expected this session: lets us DECLA
 #                                  # for a whole series (both-declare: omission never refuses)
 sub_game_number = 1
 members = ["Alon Engel", "Renat Karimov"]
-counted_games_played = 4    # UPDATE before every counted game (rules 37-38): imreeyal 2026-08-04, vibecode 2026-08-08, uoh-sqak 2026-08-17, best2934 2026-08-20
+counted_games_played = 5    # UPDATE before every counted game (rules 37-38): imreeyal 2026-08-04, vibecode 2026-08-08, uoh-sqak 2026-08-17, best2934 2026-08-20, najamjad 2026-08-23
 repos = { cop = "https://github.com/alonengel/P2P-Police", thief = "https://github.com/alonengel/P2P-Thief" }
 mcp_servers = { cop = "https://cop-mcp.alon.website/mcp", thief = "https://thief-mcp.alon.website/mcp" }
 
