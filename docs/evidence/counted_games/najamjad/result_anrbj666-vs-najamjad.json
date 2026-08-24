@@ -1,0 +1,253 @@
+{
+  "_schema": "Summary and final result for the WHOLE series between two teams: per-sub-game scores + aggregate; identity lives in the declaration.",
+  "final_result": {
+    "diversity_reward_applied": {
+      "anrbj666": false,
+      "najamjad": false
+    },
+    "first_meeting_between_groups": true,
+    "games_played_including_this": {
+      "anrbj666": 5,
+      "najamjad": 8
+    },
+    "series_tie": true,
+    "sub_games_won": {
+      "anrbj666": 3,
+      "najamjad": 3
+    },
+    "ties": 0,
+    "tokens_total_series": {
+      "anrbj666": 0,
+      "najamjad": null
+    },
+    "total_score": {
+      "anrbj666": 77,
+      "najamjad": 77
+    },
+    "winner_group": null
+  },
+  "game_id": "anrbj666-vs-najamjad",
+  "game_uid": "7c6319a5-6bb8-47dc-a42b-523ec5c0b6ba",
+  "groups": [
+    "anrbj666",
+    "najamjad"
+  ],
+  "links": {
+    "config": "config_anrbj666-vs-najamjad_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-najamjad.json",
+    "github": {
+      "anrbj666": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "najamjad": {
+        "cop": "https://github.com/najikay/najamjad-cop",
+        "thief": "https://github.com/najikay/najamjad-thief"
+      }
+    },
+    "log": "log_anrbj666-vs-najamjad_g<NN>.json",
+    "result": "result_anrbj666-vs-najamjad.json"
+  },
+  "mutual_agreement": {
+    "confirmed": true,
+    "sha256": "a3645e1f1f554cce75cf419ebe089efa8e93ccd5af1c87b22d5c3f5d8529b597"
+  },
+  "num_sub_games": 6,
+  "report_type": "final_game_result",
+  "schema_version": "1.1",
+  "sub_games": [
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:48:21+00:00",
+      "github_commit": {
+        "anrbj666": "014a8255db99fb71ede430eac98c6ffef8c49b4d",
+        "najamjad": "928ac029e53f1253e17dce38087e1290d45dbf21"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g01.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g01.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "najamjad": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "najamjad": 5
+      },
+      "started_at": "2026-08-23T17:48:08+00:00",
+      "sub_game_number": 1,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:48:46+00:00",
+      "github_commit": {
+        "anrbj666": "d15f0f17d3db6f076e40708492efbee5a7bb3ff0",
+        "najamjad": "2f3fca08a55ebb8c1387ebc83efa0bdba3cd5996"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g02.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g02.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "thief",
+        "najamjad": "police"
+      },
+      "score": {
+        "anrbj666": 5,
+        "najamjad": 20
+      },
+      "started_at": "2026-08-23T17:48:25+00:00",
+      "sub_game_number": 2,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": 0
+      },
+      "winner_group": "najamjad"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:49:04+00:00",
+      "github_commit": {
+        "anrbj666": "014a8255db99fb71ede430eac98c6ffef8c49b4d",
+        "najamjad": "928ac029e53f1253e17dce38087e1290d45dbf21"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g03.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g03.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "najamjad": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "najamjad": 5
+      },
+      "started_at": "2026-08-23T17:48:51+00:00",
+      "sub_game_number": 3,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": 0
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:49:27+00:00",
+      "github_commit": {
+        "anrbj666": "d15f0f17d3db6f076e40708492efbee5a7bb3ff0",
+        "najamjad": "2f3fca08a55ebb8c1387ebc83efa0bdba3cd5996"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g04.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g04.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "thief",
+        "najamjad": "police"
+      },
+      "score": {
+        "anrbj666": 5,
+        "najamjad": 20
+      },
+      "started_at": "2026-08-23T17:49:08+00:00",
+      "sub_game_number": 4,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": 0
+      },
+      "winner_group": "najamjad"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:49:47+00:00",
+      "github_commit": {
+        "anrbj666": "014a8255db99fb71ede430eac98c6ffef8c49b4d",
+        "najamjad": "928ac029e53f1253e17dce38087e1290d45dbf21"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g05.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g05.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "police",
+        "najamjad": "thief"
+      },
+      "score": {
+        "anrbj666": 20,
+        "najamjad": 5
+      },
+      "started_at": "2026-08-23T17:49:31+00:00",
+      "sub_game_number": 5,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": null
+      },
+      "winner_group": "anrbj666"
+    },
+    {
+      "audit": {
+        "log_verified": true,
+        "tampered": false
+      },
+      "ended_at": "2026-08-23T17:50:14+00:00",
+      "github_commit": {
+        "anrbj666": "d15f0f17d3db6f076e40708492efbee5a7bb3ff0",
+        "najamjad": "2f3fca08a55ebb8c1387ebc83efa0bdba3cd5996"
+      },
+      "log_files": {
+        "anrbj666": "log_anrbj666-vs-najamjad_g06.json",
+        "najamjad": "log_anrbj666-vs-najamjad_g06.json"
+      },
+      "result": "capture",
+      "roles": {
+        "anrbj666": "thief",
+        "najamjad": "police"
+      },
+      "score": {
+        "anrbj666": 5,
+        "najamjad": 20
+      },
+      "started_at": "2026-08-23T17:49:52+00:00",
+      "sub_game_number": 6,
+      "tie": false,
+      "tokens": {
+        "anrbj666": 0,
+        "najamjad": null
+      },
+      "winner_group": "najamjad"
+    }
+  ],
+  "timezone": "Asia/Jerusalem"
+}

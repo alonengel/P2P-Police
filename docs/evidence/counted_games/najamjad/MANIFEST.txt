@@ -1,0 +1,10 @@
+sha256 (of the exact bytes committed here)  |  anrbj666-vs-najamjad counted series
+--------------------------------------------------------------------
+38c69b9c7426e14c  config_anrbj666-vs-najamjad_g01.json
+4cf8407e0b0fa52d  config_anrbj666-vs-najamjad_g03.json
+a8ed9ace1a986b29  config_anrbj666-vs-najamjad_g05.json
+b5823d08a5c0fe62  declaration_anrbj666-vs-najamjad.json
+386ba51553692345  log_anrbj666-vs-najamjad_g01.json
+35932affc721bb4a  log_anrbj666-vs-najamjad_g03.json
+0e54a11e94625e30  log_anrbj666-vs-najamjad_g05.json
+8373fb0a0067a74c  result_anrbj666-vs-najamjad.json
