@@ -75,6 +75,7 @@ class FlappyProxy:
         self._listener: socket.socket | None = None
         self._served = False  # once bound, the port is fixed for heal-on-same-port
         self._conns: list[socket.socket] = []
+        self._silent = False  # blackhole: bound, accepting, answering nothing
         self._lock = threading.Lock()
 
     def start(self) -> None:
@@ -118,10 +119,29 @@ class FlappyProxy:
                     sock.close()
             self._conns.clear()
 
+    def blackhole(self) -> None:
+        """Stay BOUND but answer nothing: the peer meets silence, not a
+        refusal. Closing the listener is not the same fault on every OS -
+        Linux refuses a connect to a closed port instantly (httpx raises
+        ConnectError) while Windows leaves it hanging, so a drill that means
+        to exercise the DEADLINE classified two different things depending on
+        the runner and failed only in CI (2026-08-23). Silence is the fault
+        we actually mean, and every platform renders it identically."""
+        with self._lock:
+            self._silent = True
+            for sock in self._conns:
+                with contextlib.suppress(OSError):
+                    sock.close()
+            self._conns.clear()
+
     def _accept_loop(self, listener: socket.socket) -> None:
         while True:
             try:
                 client, _ = listener.accept()
+                if self._silent:  # accepted, then never answered
+                    with self._lock:
+                        self._conns.append(client)
+                    continue
                 upstream = socket.create_connection((self.host, self.target_port), timeout=5)
             except OSError:
                 return  # listener closed by stop()

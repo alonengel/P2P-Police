@@ -26,7 +26,10 @@ def _flap(net: dict, chaos: dict, evidence: EvidenceLog, name: str,
         inject_at["at_full_turn"] = engine.turns_completed
         evidence.event(name, "inject", fault="endpoint_down", heal_planned=heal,
                        at_full_turn=engine.turns_completed)
-        net["proxy"].stop()
+        # heal=False is a PERMANENT outage: blackhole it so the peer meets
+        # silence and the deadline is what classifies, identically on every
+        # OS. A healing flap still closes and re-opens the listener.
+        net["proxy"].stop() if heal else net["proxy"].blackhole()
         if heal:
             time.sleep(chaos["flap_seconds"])
             net["proxy"].start()
