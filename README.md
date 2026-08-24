@@ -198,20 +198,27 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
-- **League record: SIX counted series, all filed — five won, one drawn**
-  (rule 52's minimum of two counted games vs different teams — tripled).
-  Scores are ours first; every row is the filed result, and the totals are
-  the sum of the archived artifacts rather than a claim:
+- **League record: SIX counted series, all filed — five won, one drawn;
+  562 points accumulated** (rule 52's minimum of two counted games vs
+  different teams — tripled). Scores are ours first; every row is the filed
+  result, and the totals are summed from the archived artifacts, not claimed:
 
-  | Series | Date | Head-to-head | **Our points** | Sub-games | Result | Diversity | League report |
-  |---|---|---:|---:|---:|---|---|---|
-  | `anrbj666-vs-imreeyal` | 2026-08-03 | 90–30 | **90** | 6–0 | WIN | yes | `19fc9a53c7f458f9` |
-  | `anrbj666-vs-vibecode` | 2026-08-08 | 75–35 | **75** | 5–1 | WIN | yes | `19fe2cdf49a26b0d` |
-  | `anrbj666-vs-uoh-sqak` | 2026-08-17 | 90–30 | **90** | 6–0 | WIN | yes | `1a0115fdd83f0f4c` |
-  | `anrbj666-vs-best2934` | 2026-08-20 | 90–30 | **90** | 6–0 | WIN | yes | `1a020b7e99d9d832` |
-  | `anrbj666-vs-najamjad` | 2026-08-23 | 77–77 | **77** | 3–3 | DRAW | — | `1a02fbeaafacc715` |
-  | `SMNGRP05-vs-anrbj666` | 2026-08-24 | 90–30 | **90** | 6–0 | WIN | yes | `1a034414faea1066` |
-  | **TOTAL — 6 series** | | 512–232 | **512** | **32–4** | **5W 0L 1D** | 5 of 6 | all filed |
+  | Series | Date | Head-to-head | Play points | Diversity | **Our points** | Sub-games | Result | League report |
+  |---|---|---:|---:|---:|---:|---:|---|---|
+  | `anrbj666-vs-imreeyal` | 2026-08-03 | 90–30 | 90 | +10 | **100** | 6–0 | WIN | `19fc9a53c7f458f9` |
+  | `anrbj666-vs-vibecode` | 2026-08-08 | 75–35 | 75 | +10 | **85** | 5–1 | WIN | `19fe2cdf49a26b0d` |
+  | `anrbj666-vs-uoh-sqak` | 2026-08-17 | 90–30 | 90 | +10 | **100** | 6–0 | WIN | `1a0115fdd83f0f4c` |
+  | `anrbj666-vs-best2934` | 2026-08-20 | 90–30 | 90 | +10 | **100** | 6–0 | WIN | `1a020b7e99d9d832` |
+  | `anrbj666-vs-najamjad` | 2026-08-23 | 77–77 | 77 | — | **77** | 3–3 | DRAW | `1a02fbeaafacc715` |
+  | `SMNGRP05-vs-anrbj666` | 2026-08-24 | 90–30 | 90 | +10 | **100** | 6–0 | WIN | `1a034414faea1066` |
+  | **TOTAL — 6 series** | | 512–232 | **512** | **+50** | **562** | **32–4** | **5W 0L 1D** | all filed |
+
+  The Diversity Incentive (book §9.2.1, `diversity_reward: 10`) is earned on a
+  **win over an opponent not played before** — five of six; the draw earns none
+  because the rule requires a victory. Our filed reports deliberately carry the
+  play score with `diversity_reward_applied` as a flag rather than folding the
+  +10 in, so neither team scores its own bonus in a document the other
+  co-signs; the league applies it. **512 from play + 50 = 562 accumulated.**
 
   Thirty-six sub-games played, thirty-two won. The detail behind each row:
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
