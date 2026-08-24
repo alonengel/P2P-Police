@@ -1,0 +1,84 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "5a96a9360a7f012ca80274fcbe360f89e2d60abebef573a5cd31c0ec5862d956",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-17T20:18:05+00:00",
+  "game_ended_at": "2026-08-17T20:18:05+00:00",
+  "game_id": "anrbj666-vs-uoh-sqak",
+  "game_started_at": "2026-08-17T20:14:08+00:00",
+  "game_uid": "f2765c2f-604d-5a53-b42a-6e5e7245c222",
+  "groups": {
+    "group_1": {
+      "code_version": "1.00",
+      "counted_games_played": 2,
+      "github_commit": "2db31179e9308cdf892b812a04a472226d8243e2",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:e9f4aed80c942d108c48190b55527aefc270431ce6ee10286733b3aff1b5cc69"
+    },
+    "group_2": {
+      "counted_games_played": 2,
+      "github_commit": "unknown",
+      "group_id": "uoh-sqak",
+      "group_name": "uoh-sqak",
+      "hardware_spec": {
+        "cpu": "arm",
+        "cpu_count": 8,
+        "gpu": "Apple Silicon",
+        "os": "Darwin 25.2.0",
+        "python": "3.13.12",
+        "ram_gb": 8.6
+      },
+      "hardware_spec_sha256": "",
+      "llm_model": "template",
+      "mcp_servers": {
+        "police": "https://5794-176-229-164-109.ngrok-free.app/mcp"
+      },
+      "members": [
+        "Salah Qadah:323039974",
+        "Andalus Kalash:211435797"
+      ],
+      "repos": {
+        "cop": "https://github.com/salah-dev-stu/uoh-sqak-cop",
+        "thief": "https://github.com/salah-dev-stu/uoh-sqak-thief"
+      },
+      "signature": "undeclared"
+    }
+  },
+  "links": {
+    "config": "config_anrbj666-vs-uoh-sqak_g<NN>.json",
+    "declaration": "declaration_anrbj666-vs-uoh-sqak.json",
+    "log": "log_anrbj666-vs-uoh-sqak_g<NN>.json",
+    "result": "result_anrbj666-vs-uoh-sqak.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}

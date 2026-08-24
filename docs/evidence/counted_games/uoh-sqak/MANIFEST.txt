@@ -1,0 +1,10 @@
+sha256 (of the exact bytes committed here)  |  anrbj666-vs-uoh-sqak counted series
+--------------------------------------------------------------------
+0693b2798b8f8990  config_anrbj666-vs-uoh-sqak_g02.json
+508b8d22c0aa5a02  config_anrbj666-vs-uoh-sqak_g04.json
+b76dfa7a1633cd63  config_anrbj666-vs-uoh-sqak_g06.json
+1f12e2037d8bb5d1  declaration_anrbj666-vs-uoh-sqak.json
+85f9db0c51e3628e  log_anrbj666-vs-uoh-sqak_g02.json
+a1ee0bc5de7e5a9d  log_anrbj666-vs-uoh-sqak_g04.json
+f0c1fa0bf8adf861  log_anrbj666-vs-uoh-sqak_g06.json
+993d0288eeba414c  result_anrbj666-vs-uoh-sqak.json
