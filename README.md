@@ -198,10 +198,10 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
-- **League record: FIVE counted series, all filed — four won, one drawn**
-  (rule 52's minimum of two counted games vs different teams — more than
-  doubled). Scores are ours first; every row is the filed result, and the
-  totals are the sum of the archived artifacts rather than a claim:
+- **League record: SIX counted series, all filed — five won, one drawn**
+  (rule 52's minimum of two counted games vs different teams — tripled).
+  Scores are ours first; every row is the filed result, and the totals are
+  the sum of the archived artifacts rather than a claim:
 
   | Series | Date | Head-to-head | **Our points** | Sub-games | Result | Diversity | League report |
   |---|---|---:|---:|---:|---|---|---|
@@ -210,9 +210,10 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   | `anrbj666-vs-uoh-sqak` | 2026-08-17 | 90–30 | **90** | 6–0 | WIN | yes | `1a0115fdd83f0f4c` |
   | `anrbj666-vs-best2934` | 2026-08-20 | 90–30 | **90** | 6–0 | WIN | yes | `1a020b7e99d9d832` |
   | `anrbj666-vs-najamjad` | 2026-08-23 | 77–77 | **77** | 3–3 | DRAW | — | `1a02fbeaafacc715` |
-  | **TOTAL — 5 series** | | 422–202 | **422** | **26–4** | **4W 0L 1D** | 4 of 5 | all filed |
+  | `SMNGRP05-vs-anrbj666` | 2026-08-24 | 90–30 | **90** | 6–0 | WIN | yes | `1a034414faea1066` |
+  | **TOTAL — 6 series** | | 512–232 | **512** | **32–4** | **5W 0L 1D** | 5 of 6 | all filed |
 
-  Thirty sub-games played, twenty-six won. The detail behind each row:
+  Thirty-six sub-games played, thirty-two won. The detail behind each row:
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
     (league report `19fc9a53c7f458f9`; evidence commit
     [`67741d8`](https://github.com/alonengel/P2P-Police/commit/67741d8));
@@ -251,6 +252,20 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     defect where a saturated rival trail routed every decision to the
     exact-information scorer and bypassed the armed cage doctrine, fixed
     the same night with a live-faithful regression harness;
+  - `SMNGRP05-vs-anrbj666` — **90-30, 6-0**, filed 2026-08-24 (league report
+    `1a034414faea1066`), the cleanest series we have played: six sub-games in
+    95 seconds, our thief surviving t35 in all three of its windows and our
+    cop converting at t6 in all three of its own. It was won before the first
+    move by closing an interop trap that had killed another pairing outright:
+    they declare the reference branch's `subtractive_chebyshev_v1` where we
+    declare the book's `multiplicative_book_v1`, and declared-and-different is
+    a hard refusal, so we omitted ours and let their lone declaration govern.
+    Reading their field then cost us the emitter pin until we solved THEIR
+    published law (`peer/foreign_scent.py`) — measured against their own peer
+    at 81/81 emitters matching the positions they revealed. Both sides ran the
+    same brains they had shown each other, both declared their commit pair
+    before T, and both filed; the pairing is documented in
+    [docs/evidence/counted_games/SMNGRP05/](docs/evidence/counted_games/SMNGRP05/);
   All series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
   true` with byte-identical hashes across the two teams' independently
   emitted results, diversity flag earned on all first meetings. Browse

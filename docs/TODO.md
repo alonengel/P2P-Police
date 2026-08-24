@@ -86,7 +86,7 @@ Definition of done per stage = the binary milestone from PRD.md §7.
 - [x] Series support: --sub-game override + series-result aggregator (per-group totals, sub-games won, tie at tie_score); 2-sub-game local series proven end-to-end
 - [x] notebooks/analysis.ipynb + docs/COST.md (see Phase 8 status)
 - [ ] v1.0-submission annotated tags (AFTER the real league games)
-- [x] REAL league games: FIVE counted vs five different teams, all filed - four won, one drawn (imreeyal, vibecode, uoh-sqak, best2934, najamjad 3-3) - rule-52 minimum more than doubled; 422-202 on points, 26-4 on sub-games
+- [x] REAL league games: SIX counted vs six different teams, all filed - five won, one drawn (imreeyal, vibecode, uoh-sqak, best2934, najamjad 3-3, SMNGRP05 6-0) - rule-52 minimum tripled; 512-232 on points, 32-4 on sub-games
 
 ## Final tri-audit fixes (2026-07-13, full PDF re-validation)
 - [x] BLOCKER: technical loss now still emits artifacts + email (rules 32/35)
@@ -173,4 +173,4 @@ live in `docs/evidence/`:
 - [x] COUNTED series vs team #2 (vibecode): played and filed 2026-08-08 — 75-35, 5-1
 - [x] COUNTED series vs uoh-sqak: played and filed 2026-08-17 — 90-30, 6-0, diversity reward
 - [x] COUNTED series vs best2934: played and filed 2026-08-20 — 90-30, 6-0, diversity reward; digests matched digit-for-digit, filings cross-forwarded
-- [x] League campaign COMPLETE: 5 counted, 4 wins + 1 draw (422-202), rule-52 minimum more than doubled; kit conformance + pairing verification process documented in docs/OPPONENT_ONBOARDING.md (kit: https://github.com/Imreec/copthief-league-protocol)
+- [x] League campaign COMPLETE: 6 counted, 5 wins + 1 draw (512-232), rule-52 minimum tripled; kit conformance + pairing verification process documented in docs/OPPONENT_ONBOARDING.md (kit: https://github.com/Imreec/copthief-league-protocol)

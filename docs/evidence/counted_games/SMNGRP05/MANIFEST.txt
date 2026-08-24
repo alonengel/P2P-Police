@@ -1,0 +1,10 @@
+sha256 (of the exact bytes committed here)  |  SMNGRP05-vs-anrbj666 counted series
+--------------------------------------------------------------------
+ef7837a14cde2a7c  config_SMNGRP05-vs-anrbj666_g02.json
+b80bfceae7d6037a  config_SMNGRP05-vs-anrbj666_g04.json
+e51170f7956c6068  config_SMNGRP05-vs-anrbj666_g06.json
+b96c96a1edf5df40  declaration_SMNGRP05-vs-anrbj666.json
+89324f771f66562f  log_SMNGRP05-vs-anrbj666_g02.json
+2d3effb0e5db177c  log_SMNGRP05-vs-anrbj666_g04.json
+9df6bc2d44fb109d  log_SMNGRP05-vs-anrbj666_g06.json
+b09a388e91fa37ad  result_SMNGRP05-vs-anrbj666.json
