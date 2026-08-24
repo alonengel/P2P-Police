@@ -198,8 +198,21 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     ../P2P-Thief/results/log_anrbj666-vs-anrbj666_g03.json    # overall : Verified OK
   ```
 
-- **League record: FOUR counted games, all filed, all won** (rule 52's
-  minimum of two counted games vs different teams — doubled):
+- **League record: FIVE counted series, all filed — four won, one drawn**
+  (rule 52's minimum of two counted games vs different teams — more than
+  doubled). Scores are ours first; every row is the filed result, and the
+  totals are the sum of the archived artifacts rather than a claim:
+
+  | Series | Date | Score | Sub-games | Result | Diversity | League report |
+  |---|---|---:|---:|---|---|---|
+  | `anrbj666-vs-imreeyal` | 2026-08-03 | **90–30** | 6–0 | WIN | yes | `19fc9a53c7f458f9` |
+  | `anrbj666-vs-vibecode` | 2026-08-08 | **75–35** | 5–1 | WIN | yes | `19fe2cdf49a26b0d` |
+  | `anrbj666-vs-uoh-sqak` | 2026-08-17 | **90–30** | 6–0 | WIN | yes | `1a0115fdd83f0f4c` |
+  | `anrbj666-vs-best2934` | 2026-08-20 | **90–30** | 6–0 | WIN | yes | `1a020b7e99d9d832` |
+  | `anrbj666-vs-najamjad` | 2026-08-23 | **77–77** | 3–3 | DRAW | — | `1a02fbeaafacc715` |
+  | **TOTAL** | 5 series | **422–202** | **26–4** | **4W 0L 1D** | 4 of 5 | all filed |
+
+  Thirty sub-games played, twenty-six won. The detail behind each row:
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
     (league report `19fc9a53c7f458f9`; evidence commit
     [`67741d8`](https://github.com/alonengel/P2P-Police/commit/67741d8));
@@ -225,6 +238,19 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
     [kit issue #49](https://github.com/Imreec/copthief-league-protocol/issues/49);
     consensus digests matched digit-for-digit and both filed reports were
     cross-forwarded operator-to-operator.
+  - `anrbj666-vs-najamjad` — **77-77, 3-3, a drawn mirror**, filed
+    2026-08-23 (league report `1a02fbeaafacc715`), after three attempts
+    voided by a session-lifecycle fault on the rival's client that our
+    server logs isolated to transport rather than play (one processed
+    negotiate against 130/247/318 empty transports); they fixed it, we
+    re-ran, and the fourth attempt settled six sub-games in 127 seconds.
+    Our cop converted at t11 in all three of its windows and their
+    upgraded cop converted ours at t31 in all three of theirs — neither
+    side broke the mirror, so the diversity reward went to nobody. The
+    loss is documented rather than dressed up: it exposed a thief-side
+    defect where a saturated rival trail routed every decision to the
+    exact-information scorer and bypassed the armed cage doctrine, fixed
+    the same night with a live-faithful regression harness;
   All series: 6/6 audits `Verified OK`, `mutual_agreement.confirmed:
   true` with byte-identical hashes across the two teams' independently
   emitted results, diversity flag earned on all first meetings. Browse

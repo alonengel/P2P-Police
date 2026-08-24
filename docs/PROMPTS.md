@@ -1497,3 +1497,59 @@ runners skip their finally-unlink, drill note); g01 our REAL cop
 captured their thief t11, g02 their cage converted our REAL thief t31
 (their counted cop = the identical 11-wall script, wall-for-wall with
 yesterday, open-loop even counted); operator halted mid-w3. Thief-side upgrades land in the sibling (cop side unchanged: t11 counted conversion).
+
+## 2026-08-24 — SMNGRP05 pairing, the other scent branch, and the evidence record
+
+**Prompt (operator):** prepare for a series against SMNGRP05 — go over their
+repos and logs, see how we beat them, change anything we need, and make sure
+we are ready with no debugging on game day. Later: fix the failing CI; check
+whether the counted archives and the docs are complete.
+
+**What it produced.**
+
+*Their play, from their source rather than from tape alone.* Their cop builds
+a row-3 cut and their thief refuses corners since a fix they shipped after
+losing 0-6 to imreeyal. Two blind spots we could use: their own benchmark puts
+their officer at 0.00-0.02 capture against a careful thief, and their thief's
+solver allows the officer only ONE wall reply, so it cannot see a cage needing
+two or three more — the same blindness our k-wall counter was built against.
+
+*The interop finding that mattered more than the strategy.* They declare
+`scent_model_sha256 = 81ebee59` (subtractive_chebyshev_v1); we declare the
+book's `934c220d`. Declared-and-different is a hard refusal on our side and had
+already killed six windows of another pairing in seconds. We omit ours for this
+pairing — omission never refuses — and their lone declaration governs.
+
+*Reading a rival on the other branch.* Under subtraction a cell legally falls
+below (1-rho) times its previous value, so our law solver finds NO emitter in
+any HONEST frame of theirs: three frames latch scent trust off and we play
+blind against a truthful peer. First fix tolerated their field without
+verifying it, which cost the emitter pin and left the rule-36 trail track empty
+(35 nulls per window). Second fix solves THEIR published law instead
+(peer/foreign_scent.py) — strictly additive, so a modelling error can only
+cost a pin, never blind us. Measured live against their own peer: 0 non-null
+to 33/34, and every solved emitter matched the position they revealed for that
+step, 81/81, no misses.
+
+*CI, red for a week, four real harness defects.* A fuzz timeout whose root
+cause was our own cage forecast being quadratic in board area off the signed
+7x7; a chaos drill that classified a DIFFERENT fault per OS (Linux refuses a
+connect to a closed port, Windows hangs) now blackholed so silence is the fault
+everywhere; an EADDRINUSE heal race; and a first attempt at the timing fix that
+scaled the injected outage along with the deadline and made things worse — the
+retry backoff does not scale with the fault. Budgets scale now, outages do not.
+
+*The evidence record.* najamjad — our fifth counted series — lived only in
+results/, which the next counted series would have overwritten. Archived, along
+with the configs, declarations and manifests missing from the uoh-sqak and
+best2934 archives (all recovered from tracked bytes, not reconstructed). Two
+archives also held a per-sub-game report where the series aggregate belongs,
+because the thief runner owned the closing window and only its results dir
+received the aggregate. All five now audit clean, both halves agreeing on the
+mutual-agreement digest. README carries the league table with totals.
+
+**Lesson worth keeping:** an armed pairing overlay silently changes any test
+that loads the live config — `rival_scent_law = "foreign"` made the nis-yar1
+survival tests fail 0/5 while the code was correct. And a suite piped to
+`tail` reports the pipe's exit code, not pytest's, which is how those failures
+stayed invisible.
