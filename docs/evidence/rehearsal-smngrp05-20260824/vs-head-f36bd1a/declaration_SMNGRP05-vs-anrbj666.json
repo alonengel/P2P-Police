@@ -1,0 +1,88 @@
+{
+  "_schema": "p2p-police-artifacts",
+  "consensus_signature": "ee1feb01873622ec22215c8c67662fdf9bdf4bad2b23cb219de477825e16c391",
+  "declaration_type": "pre_game_declaration",
+  "declared_at": "2026-08-24T08:04:08+00:00",
+  "game_ended_at": "2026-08-24T08:04:08+00:00",
+  "game_id": "SMNGRP05-vs-anrbj666",
+  "game_started_at": "2026-08-24T08:02:47+00:00",
+  "game_uid": "fdeee45d-6d82-b4c8-3491-0fa35930a348",
+  "groups": {
+    "group_1": {
+      "counted_games_played": 6,
+      "github_commit": "unknown",
+      "group_id": "SMNGRP05",
+      "group_name": "SMNGRP05",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": null,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_type": null,
+        "machine": "AMD64",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": null,
+        "vram_gb": null
+      },
+      "hardware_spec_sha256": "",
+      "llm_model": "template-zero-token",
+      "mcp_servers": {
+        "cop": "http://127.0.0.1:8802/mcp",
+        "thief": "http://127.0.0.1:8802/mcp"
+      },
+      "members": [
+        "Afaf Gharra",
+        "Reem Awawdy"
+      ],
+      "repos": {
+        "cop": "https://github.com/afaf-gharra/SMNGRP05-police",
+        "thief": "https://github.com/afaf-gharra/SMNGRP05-thief"
+      },
+      "signature": "undeclared"
+    },
+    "group_2": {
+      "code_version": "1.00",
+      "counted_games_played": 5,
+      "github_commit": "98e0dd829e6d455250ee7295e7efe8c189b88832",
+      "group_id": "anrbj666",
+      "group_name": "anrbj666",
+      "hardware_spec": {
+        "cpu_cores": 24,
+        "cpu_freq_mhz": 3418,
+        "cpu_type": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "gpu_model": "AMD Radeon RX 7900 XTX",
+        "os": "Windows 10",
+        "python": "3.13.13",
+        "ram_gb": 32,
+        "vram_gb": 24
+      },
+      "hardware_spec_sha256": "d4670742542f762632b21714a435943bf7da70685edbba30aec421ec725115a0",
+      "llm_model": "template",
+      "mcp_servers": {
+        "cop": "https://cop-mcp.alon.website/mcp",
+        "thief": "https://thief-mcp.alon.website/mcp"
+      },
+      "members": [
+        "Alon Engel",
+        "Renat Karimov"
+      ],
+      "repos": {
+        "cop": "https://github.com/alonengel/P2P-Police",
+        "thief": "https://github.com/alonengel/P2P-Thief"
+      },
+      "signature": "sha256:cda03cc4b3cdf8b67747d873e41b895522fd247a764a1395a71c226c44eeec9b"
+    }
+  },
+  "links": {
+    "config": "config_SMNGRP05-vs-anrbj666_g<NN>.json",
+    "declaration": "declaration_SMNGRP05-vs-anrbj666.json",
+    "log": "log_SMNGRP05-vs-anrbj666_g<NN>.json",
+    "result": "result_SMNGRP05-vs-anrbj666.json"
+  },
+  "max_tokens_per_game": 200000,
+  "num_sub_games": 6,
+  "report_type": "declaration",
+  "schema_version": "1.00",
+  "timezone": "Asia/Jerusalem",
+  "token_budget_per_series": 200000
+}
