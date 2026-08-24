@@ -63,6 +63,10 @@ def start_inbox_server(name: str) -> tuple[PeerInboxes, int]:
     return inboxes, port
 
 
+HEAL_ATTEMPTS = 12      # a heal re-binds the SAME port; the kernel may lag
+HEAL_BACKOFF_SEC = 0.25
+
+
 class FlappyProxy:
     """TCP forwarder in front of the stub server; stop() refuses new
     connections AND severs live ones, start() heals on the SAME port."""
@@ -92,7 +96,7 @@ class FlappyProxy:
         caller reads `url` after `start()`.
         """
         healing = self._served
-        for _ in range(1 if healing else PORT_ATTEMPTS):
+        for attempt in range(HEAL_ATTEMPTS if healing else PORT_ATTEMPTS):
             listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # heal-on-same-port: without SO_REUSEADDR the severed listener's
             # TIME_WAIT blocks the re-bind on Linux (EADDRINUSE; CI runners)
@@ -102,7 +106,16 @@ class FlappyProxy:
             except OSError:
                 listener.close()
                 if healing:
-                    raise
+                    # SO_REUSEADDR clears TIME_WAIT, not a port the kernel has
+                    # not finished releasing: closing a listener while another
+                    # thread sits in accept() does not free it synchronously on
+                    # Linux, so a heal can lose a race it will win a moment
+                    # later (CI, EADDRINUSE, 2026-08-24). Give the OS that
+                    # moment before calling the heal a failure.
+                    if attempt == HEAL_ATTEMPTS - 1:
+                        raise
+                    time.sleep(HEAL_BACKOFF_SEC)
+                    continue
                 self.port = free_port()  # somebody took it in the gap
                 self.url = f"http://{self.host}:{self.port}/mcp"
                 continue
