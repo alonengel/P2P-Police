@@ -21,6 +21,7 @@ the tolerance launders noise and only noise.
 """
 
 from p2p_police.domain.trail_forensics import transition_emitters
+from p2p_police.peer import foreign_scent
 
 DECAY_KEEP = 0.9  # (1 - rho): the signed retention factor per turn
 
@@ -70,15 +71,24 @@ def law_verdict(percep, rival_scent, board) -> bool:
         return False
     percep.scent_frames_seen += 1
     if percep.rival_scent_law != "book":
-        # A pairing whose rival DECLARED a foreign scent model (the reference's
-        # subtractive_chebyshev_v1 is the league's other branch) emits frames
-        # this solver cannot verify: under subtraction a cell legally falls
-        # below (1-rho) times its previous value, so the gate breaks on every
-        # frame and the latch blinds us by turn four against an HONEST peer.
-        # Consume the field as belief evidence and verify nothing: no emitter
-        # pin is claimed (the trail head is only sound under our own law), and
-        # the census still books every frame that arrived.
+        # The rival DECLARED the league's other branch (the reference's
+        # subtractive_chebyshev_v1). Our own law cannot verify those frames -
+        # under subtraction a cell legally falls below (1-rho) times its
+        # previous value, so the gate would break on every frame and the latch
+        # would blind us by turn four against an HONEST peer.
+        #
+        # Solve THEIR published law instead (peer/foreign_scent.py). Strictly
+        # additive: a solved transition yields the emitter pin (and with it the
+        # rule-36 trail track), an unsolved one yields nothing. It never
+        # refuses and never latches, because an error in OUR model of THEIR
+        # physics must not be able to blind us - the exact failure this path
+        # exists to prevent.
         percep._last_emitter = None
+        if percep._previous_field is not None:
+            found = foreign_scent.foreign_emitters(
+                percep._previous_field, field, percep.grid_size)
+            if len(found) == 1:
+                percep._last_emitter = found[0]
         return False
     if percep._previous_field is None:
         return False  # nothing to compare the first frame against
@@ -100,10 +110,17 @@ def law_verdict(percep, rival_scent, board) -> bool:
 def scent_evidence(percep) -> dict:
     """The summary's scent-trust evidence block (rule 36): counts, the
     exact refused rival turns, and the tolerated floored turns."""
+    law = getattr(percep, "rival_scent_law", "book")
     return {
         "scent_readings_refused": getattr(percep, "refused_readings", 0),
         "scent_refused_steps": getattr(percep, "refused_steps", []),
         "scent_floored_steps": getattr(percep, "floored_steps", []),
         "scent_frames_seen": getattr(percep, "scent_frames_seen", 0),
         "scent_frames_empty": getattr(percep, "scent_frames_empty", 0),
+        # Names WHY rival_trail_track may be empty. Under a foreign law we
+        # consume the rival's field without solving it, so no emitter is
+        # pinned and the track is null by construction - an absence we
+        # declare, never a check we silently skipped.
+        "rival_scent_law": law,
+        "rival_trail_solved": law == "book",
     }
