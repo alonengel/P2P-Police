@@ -26,13 +26,16 @@ from p2p_police.shared.config import Config
 ROOT = Path(__file__).resolve().parents[1]
 
 
-#: Wall-clock knobs that must scale TOGETHER. The drills assert ratios - "an
-#: outage SHORTER than the deadline heals without a technical loss" - and the
-#: shipped seconds leave only ~2.5s of slack. Coverage instrumentation inflates
-#: everything except these constants, so on a traced CI runner the deadline
-#: expired mid-outage and d3 reported a technical loss that was pure harness
-#: (2026-08-24). Scaling all of them preserves every ratio the drills test.
-_WALL_CLOCK_KNOBS = ("turn_timeout_seconds", "watchdog_timeout_sec", "flap_seconds")
+#: BUDGETS that coverage instrumentation eats into - never the injected fault
+#: itself. The drills assert "an outage SHORTER than the deadline heals", and
+#: the shipped seconds leave ~2.5s of slack, which a traced CI runner spends
+#: before the heal lands. Scaling the budgets buys that room back.
+#:
+#: flap_seconds is deliberately NOT here. Lengthening the OUTAGE does not help
+#: the drill survive - the client's retry backoff does not scale with it, so a
+#: longer outage simply exhausts the retries before the heal arrives, which is
+#: how a first attempt at this fix made d3 fail harder (2026-08-24).
+_WALL_CLOCK_KNOBS = ("turn_timeout_seconds", "watchdog_timeout_sec")
 _TRACED_SCALE = 4.0
 
 
