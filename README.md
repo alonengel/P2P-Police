@@ -203,14 +203,14 @@ Each peer is simultaneously an MCP **server** (four dumb-door tools: `negotiate`
   doubled). Scores are ours first; every row is the filed result, and the
   totals are the sum of the archived artifacts rather than a claim:
 
-  | Series | Date | Score | Sub-games | Result | Diversity | League report |
-  |---|---|---:|---:|---|---|---|
-  | `anrbj666-vs-imreeyal` | 2026-08-03 | **90–30** | 6–0 | WIN | yes | `19fc9a53c7f458f9` |
-  | `anrbj666-vs-vibecode` | 2026-08-08 | **75–35** | 5–1 | WIN | yes | `19fe2cdf49a26b0d` |
-  | `anrbj666-vs-uoh-sqak` | 2026-08-17 | **90–30** | 6–0 | WIN | yes | `1a0115fdd83f0f4c` |
-  | `anrbj666-vs-best2934` | 2026-08-20 | **90–30** | 6–0 | WIN | yes | `1a020b7e99d9d832` |
-  | `anrbj666-vs-najamjad` | 2026-08-23 | **77–77** | 3–3 | DRAW | — | `1a02fbeaafacc715` |
-  | **TOTAL** | 5 series | **422–202** | **26–4** | **4W 0L 1D** | 4 of 5 | all filed |
+  | Series | Date | Head-to-head | **Our points** | Sub-games | Result | Diversity | League report |
+  |---|---|---:|---:|---:|---|---|---|
+  | `anrbj666-vs-imreeyal` | 2026-08-03 | 90–30 | **90** | 6–0 | WIN | yes | `19fc9a53c7f458f9` |
+  | `anrbj666-vs-vibecode` | 2026-08-08 | 75–35 | **75** | 5–1 | WIN | yes | `19fe2cdf49a26b0d` |
+  | `anrbj666-vs-uoh-sqak` | 2026-08-17 | 90–30 | **90** | 6–0 | WIN | yes | `1a0115fdd83f0f4c` |
+  | `anrbj666-vs-best2934` | 2026-08-20 | 90–30 | **90** | 6–0 | WIN | yes | `1a020b7e99d9d832` |
+  | `anrbj666-vs-najamjad` | 2026-08-23 | 77–77 | **77** | 3–3 | DRAW | — | `1a02fbeaafacc715` |
+  | **TOTAL — 5 series** | | 422–202 | **422** | **26–4** | **4W 0L 1D** | 4 of 5 | all filed |
 
   Thirty sub-games played, twenty-six won. The detail behind each row:
   - `anrbj666-vs-imreeyal` — **90-30, 6-0**, filed 2026-08-04
